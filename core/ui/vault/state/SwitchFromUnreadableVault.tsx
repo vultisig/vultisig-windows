@@ -1,3 +1,4 @@
+import { useCore } from '@core/ui/state/core'
 import {
   useCurrentVaultId,
   useSetCurrentVaultIdMutation,
@@ -18,6 +19,7 @@ import { useTranslation } from 'react-i18next'
  */
 export const SwitchFromUnreadableVault = () => {
   const { t } = useTranslation()
+  const { goHome } = useCore()
   const currentVaultId = useCurrentVaultId()
   const otherVaults = useVaults().filter(
     vault => getVaultId(vault) !== currentVaultId
@@ -45,7 +47,7 @@ export const SwitchFromUnreadableVault = () => {
               key={getVaultId(vault)}
               vault={vault}
               onSelect={() => {
-                setCurrentVaultId(getVaultId(vault))
+                setCurrentVaultId(getVaultId(vault), { onSuccess: goHome })
                 setIsOpen(false)
               }}
             />

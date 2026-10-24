@@ -30,7 +30,7 @@ export const UnreadableVaultRecovery = ({
 }: UnreadableVaultRecoveryProps) => {
   const { t } = useTranslation()
   const { goBack } = useCore()
-  const canImportBackup = useOptionalNavigationHistory() !== undefined
+  const hasNavigationStack = useOptionalNavigationHistory() !== undefined
   const [isNoBackupExpanded, setIsNoBackupExpanded] = useState(false)
 
   return (
@@ -44,7 +44,7 @@ export const UnreadableVaultRecovery = ({
         )}`}
         action={
           <VStack gap={8} fullWidth>
-            {canImportBackup ? (
+            {hasNavigationStack ? (
               <>
                 <ImportVaultBackupButton />
                 <SwitchFromUnreadableVault />

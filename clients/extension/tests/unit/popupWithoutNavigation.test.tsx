@@ -40,10 +40,12 @@ vi.mock('@core/ui/chain/providers/WalletCoreProvider', () => ({
 
 const goBack = vi.hoisted(() => vi.fn())
 const setCurrentVaultId = vi.hoisted(() => vi.fn(async () => {}))
+const goHome = vi.hoisted(() => vi.fn())
 
 vi.mock('@core/ui/state/core', () => ({
   useCore: () => ({
     goBack,
+    goHome,
     openUrl: () => {},
     version: 'test',
     getPasscodeEncryption: async () => null,
@@ -146,6 +148,7 @@ beforeEach(() => {
   readVaultAllKeyShares.mockReset()
   goBack.mockReset()
   setCurrentVaultId.mockClear()
+  goHome.mockReset()
 })
 
 describe('RootCurrentVaultProvider without a NavigationProvider', () => {
@@ -207,6 +210,7 @@ describe('switching away from an unreadable vault', () => {
     await vi.waitFor(() =>
       expect(setCurrentVaultId).toHaveBeenCalledWith(getVaultId(otherVault))
     )
+    await vi.waitFor(() => expect(goHome).toHaveBeenCalledTimes(1))
   })
 
   it('offers no switch when this is the only vault', async () => {
