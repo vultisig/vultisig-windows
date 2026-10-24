@@ -2081,6 +2081,19 @@ export const it = {
   share_qr_code: 'Condividi il codice QR',
   share_qr_image: "Condividi l'immagine QR",
   failed_to_save_image: "Impossibile salvare l'immagine",
+  add_maya_lp: 'Aggiungi MayaChain LP',
+  maya_lp_checking_position:
+    'Controllo della posizione del tuo MayaChain in questo pool ...',
+  maya_lp_position_unavailable:
+    'Impossibile leggere la posizione del tuo MayaChain in questo pool , pertanto questo deposito non può essere verificato. Riprova più tardi.',
+  maya_lp_paired_with_other_address:
+    'La tua posizione {{pool}} è associata a un indirizzo diverso. MayaChain rimborserebbe questo deposito.',
+  maya_lp_pending_address_mismatch:
+    'Un deposito in sospeso su {{pool}} utilizza un CACAO o un indirizzo di asset che non corrisponde a questo vault. MayaChain rimborserebbe questo deposito.',
+  maya_lp_cacao_alone:
+    'Questo aggiunge CACAO da solo, senza alcun asset associato.',
+  maya_lp_cacao_only_position:
+    'La tua posizione {{pool}} contiene solo CACAO. MayaChain rimborsa un deposito associato a questa posizione, quindi aggiungi invece solo CACAO.',
   custom_message_unsupported_format:
     'Questo messaggio non è in un formato di firma riconosciuto, pertanto non può essere firmato.',
   custom_message_unsupported_method:

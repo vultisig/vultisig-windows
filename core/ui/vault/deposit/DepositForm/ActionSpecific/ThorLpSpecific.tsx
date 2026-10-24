@@ -3,24 +3,17 @@ import {
   useCurrentVaultAddress,
   useCurrentVaultAddresses,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { Opener } from '@lib/ui/base/Opener'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { HStack } from '@lib/ui/layout/Stack'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { Text } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getThorchainLpPool } from '@vultisig/core-chain/chains/cosmos/thor/thorchainLp'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { midgardBaseUrl } from '../../../../defi/chain/queries/constants'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
-import { AssetRequiredLabel, Container } from '../DepositForm.styled'
-import { ThorLpPoolExplorer } from './ThorLpPoolExplorer'
+import { LpPoolSelector } from './LpPoolSelector'
 
 type MidgardPool = {
   asset: string
@@ -39,7 +32,6 @@ export const ThorLpSpecific = () => {
   const [coin] = useDepositCoin()
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
   const vaultAddresses = useCurrentVaultAddresses()
-  const { t } = useTranslation()
 
   const isRuneSide = coin.chain === Chain.THORChain
   const poolsQuery = useThorchainLpPoolsQuery()
@@ -77,35 +69,10 @@ export const ThorLpSpecific = () => {
   const poolOptions = (poolsQuery.data ?? []).map(p => p.asset)
 
   return (
-    <Opener
-      renderOpener={({ onOpen }) => (
-        <Container onClick={onOpen}>
-          <HStack alignItems="center" gap={4}>
-            <Text weight="400" family="mono" size={16}>
-              {selectedPool || t('select_pool')}
-            </Text>
-            {!selectedPool && (
-              <AssetRequiredLabel as="span" color="danger" size={14}>
-                *
-              </AssetRequiredLabel>
-            )}
-          </HStack>
-          <IconWrapper style={{ fontSize: 20 }}>
-            <ChevronRightIcon />
-          </IconWrapper>
-        </Container>
-      )}
-      renderContent={({ onClose }) => (
-        <ThorLpPoolExplorer
-          pools={poolOptions}
-          activePool={selectedPool}
-          onPoolClick={pool => {
-            setSelectedPool(pool)
-            onClose()
-          }}
-          onClose={onClose}
-        />
-      )}
+    <LpPoolSelector
+      value={selectedPool}
+      onChange={setSelectedPool}
+      pools={poolOptions}
     />
   )
 }

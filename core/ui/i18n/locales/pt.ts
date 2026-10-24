@@ -2077,6 +2077,19 @@ export const pt = {
   share_qr_code: 'Compartilhar código QR',
   share_qr_image: 'Compartilhar imagem QR',
   failed_to_save_image: 'Falha ao salvar a imagem',
+  add_maya_lp: 'Adicionar MayaChain LP',
+  maya_lp_checking_position:
+    'Verificando a posição do seu MayaChain neste pool …',
+  maya_lp_position_unavailable:
+    'Não foi possível ler a sua posição MayaChain neste pool , portanto este depósito não pode ser verificado. Tente novamente mais tarde.',
+  maya_lp_paired_with_other_address:
+    'Sua posição {{pool}} está associada a um endereço diferente. MayaChain reembolsaria esse depósito.',
+  maya_lp_pending_address_mismatch:
+    'Um depósito pendente em {{pool}} usa um endereço de ativo ou CACAO que não corresponde a este cofre. MayaChain reembolsaria este depósito.',
+  maya_lp_cacao_only_position:
+    'Sua posição {{pool}} contém apenas CACAO. MayaChain reembolsa um depósito pareado, portanto, adicione apenas CACAO.',
+  maya_lp_cacao_alone:
+    'Isso adiciona apenas CACAO, sem nenhum ativo associado.',
   custom_message_unsupported_format:
     'Esta mensagem não está em um formato de assinatura reconhecido, portanto não pode ser assinada.',
   custom_message_unsupported_method:
