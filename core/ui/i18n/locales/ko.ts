@@ -2035,4 +2035,15 @@ export const ko = {
   share_qr_code: 'QR 코드 공유',
   share_qr_image: 'QR 이미지 공유',
   failed_to_save_image: '이미지 저장에 실패했습니다',
+  add_maya_lp: 'MayaChain LP를 추가하세요',
+  maya_lp_checking_position: 'pool 에서 MayaChain 의 위치를 ​​확인합니다…',
+  maya_lp_position_unavailable:
+    'pool 에서 MayaChain 위치를 읽을 수 없으므로 이 입금을 확인할 수 없습니다. 나중에 다시 시도해 주세요.',
+  maya_lp_cacao_only_position:
+    '현재 {{pool}} 포지션에는 CACAO 만 포함되어 있습니다. MayaChain 해당 포지션에 대한 쌍으로 된 입금을 환불하는 토큰이므로, CACAO 만 단독으로 추가하세요.',
+  maya_lp_paired_with_other_address:
+    '귀하의 {{pool}} 포지션은 다른 주소와 연결되어 있습니다. MayaChain 해당 입금액이 환불됩니다.',
+  maya_lp_pending_address_mismatch:
+    '보류 중인 {{pool}} 입금이 다른 주소에서 대기 중입니다. MayaChain 이 입금액을 환불할 것입니다.',
+  maya_lp_cacao_alone: '이는 쌍을 이루는 자산 없이 CACAO 만 추가합니다.',
 }

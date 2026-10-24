@@ -2076,4 +2076,15 @@ export const es = {
   share_qr_code: 'Compartir código QR',
   share_qr_image: 'Compartir imagen QR',
   failed_to_save_image: 'No se pudo guardar la imagen.',
+  add_maya_lp: 'Agregar MayaChain LP',
+  maya_lp_checking_position: 'Comprobando su posición MayaChain en este pool …',
+  maya_lp_position_unavailable:
+    'No se pudo leer su posición MayaChain en este pool , por lo que no se puede verificar este depósito. Inténtelo de nuevo más tarde.',
+  maya_lp_cacao_only_position:
+    'Su posición {{pool}} contiene únicamente CACAO . MayaChain reembolsa un depósito asociado, por lo que debe agregar solo CACAO .',
+  maya_lp_paired_with_other_address:
+    'Su posición {{pool}} está asociada a una dirección diferente. MayaChain le reembolsará este depósito.',
+  maya_lp_pending_address_mismatch:
+    'Un depósito pendiente {{pool}} está esperando en una dirección diferente. MayaChain reembolsará este depósito.',
+  maya_lp_cacao_alone: 'Esto agrega CACAO solo, sin ningún activo asociado.',
 }

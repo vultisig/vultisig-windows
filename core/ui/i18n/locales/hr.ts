@@ -2045,4 +2045,16 @@ export const hr = {
   share_qr_code: 'Podijeli QR kod',
   share_qr_image: 'Podijeli QR sliku',
   failed_to_save_image: 'Spremanje slike nije uspjelo',
+  add_maya_lp: 'Dodaj MayaChain LP',
+  maya_lp_checking_position:
+    'Provjeravam vašu poziciju MayaChain u ovom pool …',
+  maya_lp_position_unavailable:
+    'Nije moguće pročitati vašu poziciju MayaChain u ovom pool , tako da ovaj depozit nije moguće provjeriti. Pokušajte ponovno kasnije.',
+  maya_lp_cacao_only_position:
+    'Vaša pozicija {{pool}} sadrži samo CACAO . MayaChain vraća upareni depozit, stoga umjesto toga dodajte samo CACAO .',
+  maya_lp_paired_with_other_address:
+    'Vaša pozicija {{pool}} je uparena s drugom adresom. MayaChain bi vratio ovaj depozit.',
+  maya_lp_pending_address_mismatch:
+    'Uplata na čekanju {{pool}} čeka na drugoj adresi. MayaChain bi vratio ovu uplatu.',
+  maya_lp_cacao_alone: 'Ovo dodaje CACAO samostalno, bez uparene imovine.',
 }

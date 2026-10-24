@@ -1908,4 +1908,15 @@ export const zh = {
   share_qr_code: '分享二维码',
   share_qr_image: '分享二维码图片',
   failed_to_save_image: '图像保存失败',
+  add_maya_lp: '添加MayaChain LP',
+  maya_lp_checking_position: '检查MayaChain在此pool中的位置……',
+  maya_lp_position_unavailable:
+    '无法读取您在pool中的MayaChain位置，因此无法核实此次存款。请稍后再试。',
+  maya_lp_cacao_only_position:
+    '您的{{pool}}仓位仅持有CACAO MayaChain配对存款退还到该仓位，因此请单独添加CACAO 。',
+  maya_lp_paired_with_other_address:
+    '您的{{pool}}仓位与另一个地址配对MayaChain将退还这笔押金。',
+  maya_lp_pending_address_mismatch:
+    '一笔待处理的{{pool}}存款正在等待到账MayaChain地址不同。MayaChain 将退还这笔存款。',
+  maya_lp_cacao_alone: '这将单独添加CACAO ，不包含任何配对资产。',
 }

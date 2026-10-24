@@ -73,6 +73,12 @@ import {
   SolanaStakingAction,
   solanaStakingActions,
 } from '../ChainAction'
+import {
+  getMayaLpChainCode,
+  getMayaLpPool,
+  mayaLpChains,
+} from '../mayaLp/config'
+import { getOpenMayaLpInbound } from '../mayaLp/inbound'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
   BruneInput,
@@ -214,6 +220,11 @@ export const buildDepositKeysignPayload = async ({
 
   const isNonThorChainLp =
     action === 'add_thor_lp' && coin.chain !== Chain.THORChain
+  const isMayaAssetSideLp =
+    action === 'add_maya_lp' && coin.chain !== Chain.MayaChain
+  // The asset side of an LP add is a plain transfer to the protocol's inbound
+  // vault; the RUNE/CACAO side is a MsgDeposit.
+  const isInboundLp = isNonThorChainLp || isMayaAssetSideLp
 
   // Address the vault before the fee lookup below: the TRON fee resolver
   // queries the recipient account and rejects an empty address (#5150).
@@ -263,10 +274,50 @@ export const buildDepositKeysignPayload = async ({
     })
   }
 
+  if (action === 'add_maya_lp') {
+    const pool = shouldBePresent(
+      asOptionalString(depositData['pool']),
+      'Pool name'
+    )
+
+    if (isMayaAssetSideLp) {
+      const chain = coin.chain
+      if (!isOneOf(chain, mayaLpChains)) {
+        throw new Error(`${chain} cannot fund a MayaChain LP`)
+      }
+      // The memo names the pool; the funds go to this chain's inbound. They
+      // must agree, or the deposit lands in the wrong pool or nowhere.
+      if (pool !== getMayaLpPool(chain)) {
+        throw new Error(`${pool} is not the MayaChain pool of ${chain}`)
+      }
+
+      const inbound = shouldBePresent(
+        await getOpenMayaLpInbound({
+          chainCode: getMayaLpChainCode(chain),
+          amount: {
+            units: BigInt(shouldBePresent(amountUnits, 'Amount')),
+            decimals: coin.decimals,
+          },
+        }),
+        `MayaChain inbound address for ${chain}`
+      )
+
+      keysignPayload = create(KeysignPayloadSchema, {
+        ...keysignPayload,
+        toAddress: inbound.address,
+      })
+    } else {
+      const [chainCode] = pool.split('.')
+      await getOpenMayaLpInbound({
+        chainCode: shouldBePresent(chainCode, 'Pool chain'),
+      })
+    }
+  }
+
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
     walletCore,
-    isDeposit: !isNonThorChainLp,
+    isDeposit: !isInboundLp,
     transactionType,
   })
 
@@ -491,8 +542,8 @@ export const buildDepositKeysignPayload = async ({
     }
   }
 
-  if (action === 'add_thor_lp') {
-    if (isNonThorChainLp) {
+  if (isOneOf(action, ['add_thor_lp', 'add_maya_lp'])) {
+    if (isInboundLp) {
       return keysignPayload
     }
 
