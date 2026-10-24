@@ -125,6 +125,7 @@ describe('Keplr proxy bridge frame isolation', () => {
   describe('messages from an embedded frame', () => {
     const postAsFrame = async (data: unknown) => {
       const frame = document.createElement('iframe')
+      frame.srcdoc = '<!doctype html>'
       document.body.appendChild(frame)
       const frameWindow = frame.contentWindow
       expect(frameWindow).toBeTruthy()

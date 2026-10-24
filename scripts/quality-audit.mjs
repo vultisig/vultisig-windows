@@ -50,6 +50,16 @@ const suppressions = [
     owner: 'vultisig/windows',
     reviewBy: '2027-01-01',
   },
+  {
+    id: 1243066,
+    advisory: 'GHSA-mrhx-c7xc-m3w5',
+    package: 'zod',
+    path: 'eslint-plugin-react-compiler > zod; @ton/ton > zod',
+    reason:
+      'Memory exhaustion when zod validates oversized constrained collections. The 3.x line (3.25.76) is the latest and has no patched release; the fix exists only in 4.6.6+, whose API drops z.function().args that eslint-plugin-react-compiler relies on, so forcing 4.x breaks lint. Direct zod usage in this repo is already on 4.6.7+. The 3.x copies validate only lint config and TON SDK responses, never untrusted bulk input.',
+    owner: 'vultisig/windows',
+    reviewBy: '2027-01-01',
+  },
 ]
 
 const args = [
