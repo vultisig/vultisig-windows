@@ -15,6 +15,8 @@ type BuildManualCustomMessagePayloadInput = {
  * Custom-message keysign payload for a message the user typed in. A
  * `personal_sign` message is wrapped in its EIP-191 envelope here, as the dApp
  * popup does, because co-signers sign the payload message's hash as-is.
+ * No dApp asked for it, so `dappMetadata` stays unset and co-signers show no
+ * "request from" banner.
  */
 export const buildManualCustomMessagePayload = ({
   method,
