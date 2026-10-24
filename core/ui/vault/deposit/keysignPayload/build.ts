@@ -73,12 +73,6 @@ import {
   SolanaStakingAction,
   solanaStakingActions,
 } from '../ChainAction'
-import {
-  getMayaLpChainCode,
-  getMayaLpPool,
-  mayaLpChains,
-} from '../mayaLp/config'
-import { getOpenMayaLpInbound } from '../mayaLp/inbound'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
   BruneInput,
@@ -97,6 +91,7 @@ import {
   toEncodeObjects,
 } from './cosmosStaking/encodeStakingMsgs'
 import { scaleCosmosStakingFee } from './cosmosStaking/scaleCosmosStakingFee'
+import { applyMayaLpInbound } from './mayaLp/applyMayaLpInbound'
 import { applyGovVoteSignData } from './vote/applyGovVoteSignData'
 
 export type BuildDepositKeysignPayloadInput = {
@@ -275,43 +270,12 @@ export const buildDepositKeysignPayload = async ({
   }
 
   if (action === 'add_maya_lp') {
-    const pool = shouldBePresent(
-      asOptionalString(depositData['pool']),
-      'Pool name'
-    )
-
-    if (isMayaAssetSideLp) {
-      const chain = coin.chain
-      if (!isOneOf(chain, mayaLpChains)) {
-        throw new Error(`${chain} cannot fund a MayaChain LP`)
-      }
-      // The memo names the pool; the funds go to this chain's inbound. They
-      // must agree, or the deposit lands in the wrong pool or nowhere.
-      if (pool !== getMayaLpPool(chain)) {
-        throw new Error(`${pool} is not the MayaChain pool of ${chain}`)
-      }
-
-      const inbound = shouldBePresent(
-        await getOpenMayaLpInbound({
-          chainCode: getMayaLpChainCode(chain),
-          amount: {
-            units: BigInt(shouldBePresent(amountUnits, 'Amount')),
-            decimals: coin.decimals,
-          },
-        }),
-        `MayaChain inbound address for ${chain}`
-      )
-
-      keysignPayload = create(KeysignPayloadSchema, {
-        ...keysignPayload,
-        toAddress: inbound.address,
-      })
-    } else {
-      const [chainCode] = pool.split('.')
-      await getOpenMayaLpInbound({
-        chainCode: shouldBePresent(chainCode, 'Pool chain'),
-      })
-    }
+    keysignPayload = await applyMayaLpInbound({
+      coin,
+      pool: shouldBePresent(asOptionalString(depositData['pool']), 'Pool'),
+      amountUnits,
+      keysignPayload,
+    })
   }
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
