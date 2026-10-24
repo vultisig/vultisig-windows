@@ -85,7 +85,9 @@ test('unreadable shares fail closed and route to backup import', async ({
 
   await expect(
     extensionPage
-      .getByText(`"Bricked vault" can't be opened on this device`)
+      .getByText(`"Bricked vault" can't be opened on this device`, {
+        exact: true,
+      })
       .first()
   ).toBeVisible()
   await expect(
@@ -98,7 +100,9 @@ test('unreadable shares fail closed and route to backup import', async ({
   ).not.toBeVisible()
 
   await extensionPage.getByText('Show exact error').click()
-  await expect(extensionPage.getByText('Error message')).toBeVisible()
+  await expect(
+    extensionPage.getByText('Error message', { exact: true })
+  ).toBeVisible()
   await expect(
     extensionPage.getByText(malformedShare, { exact: false })
   ).not.toBeVisible()
