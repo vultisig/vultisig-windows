@@ -2062,6 +2062,18 @@ export const nl = {
   share_qr_code: 'Deel de QR-code',
   share_qr_image: 'Deel de QR-afbeelding',
   failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
+  add_maya_lp: 'Voeg MayaChain LP toe',
+  maya_lp_checking_position:
+    'Uw MayaChain positie in deze pool wordt gecontroleerd...',
+  maya_lp_position_unavailable:
+    'Uw MayaChain positie in deze pool kon niet worden gelezen, waardoor deze storting niet kan worden gecontroleerd. Probeer het later opnieuw.',
+  maya_lp_paired_with_other_address:
+    'Uw {{pool}} positie is gekoppeld aan een ander adres. MayaChain zou deze storting terugbetalen.',
+  maya_lp_pending_address_mismatch:
+    'Een lopende storting op {{pool}} maakt gebruik van een CACAO of activa-adres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugbetalen.',
+  maya_lp_cacao_alone: 'Dit voegt alleen CACAO toe, zonder gekoppelde activa.',
+  maya_lp_cacao_only_position:
+    'Uw {{pool}} positie bevat alleen CACAO. MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',
   custom_message_unsupported_format:
     'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
   custom_message_unsupported_method:

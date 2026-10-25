@@ -2052,6 +2052,17 @@ export const ru = {
   share_qr_code: 'Поделиться QR-кодом',
   share_qr_image: 'Поделиться QR-изображением',
   failed_to_save_image: 'Не удалось сохранить изображение',
+  add_maya_lp: 'Добавить MayaChain LP',
+  maya_lp_checking_position: 'Проверка позиции вашего MayaChain в этом pool …',
+  maya_lp_position_unavailable:
+    'Не удалось прочитать вашу позицию MayaChain в этом pool , поэтому проверить этот депозит невозможно. Попробуйте позже.',
+  maya_lp_paired_with_other_address:
+    'Ваша позиция {{pool}} связана с другим адресом. MayaChain вернет этот депозит.',
+  maya_lp_pending_address_mismatch:
+    'Ожидающий депозит в {{pool}} использует адрес CACAO или адрес актива, не соответствующий этому хранилищу. MayaChain вернет этот депозит.',
+  maya_lp_cacao_only_position:
+    'Ваша позиция {{pool}} содержит только CACAO. MayaChain возвращает на неё парный депозит, поэтому вместо этого добавьте только CACAO.',
+  maya_lp_cacao_alone: 'Это добавляет только CACAO, без парного актива.',
   custom_message_unsupported_format:
     'Это сообщение не имеет общепринятого формата для подписания, поэтому его нельзя подписать.',
   custom_message_unsupported_method:

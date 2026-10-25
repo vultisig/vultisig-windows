@@ -1718,6 +1718,17 @@ export const en = {
   remove_cacao_pool: 'Remove from CACAO Pool',
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
+  add_maya_lp: 'Add MayaChain LP',
+  maya_lp_checking_position: 'Checking your MayaChain position in this pool…',
+  maya_lp_position_unavailable:
+    "Couldn't read your MayaChain position in this pool, so this deposit can't be checked. Try again later.",
+  maya_lp_cacao_only_position:
+    'Your {{pool}} position holds CACAO only. MayaChain refunds a paired deposit to it, so add CACAO alone instead.',
+  maya_lp_paired_with_other_address:
+    'Your {{pool}} position is paired with a different address. MayaChain would refund this deposit.',
+  maya_lp_pending_address_mismatch:
+    "A pending deposit to {{pool}} uses a CACAO or asset address that doesn't match this vault. MayaChain would refund this deposit.",
+  maya_lp_cacao_alone: 'This adds CACAO alone, with no paired asset.',
   open_trust_line: 'Open Trust Line',
   activate: 'Activate',
   trust_line: 'Trust Line',

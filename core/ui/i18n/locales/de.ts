@@ -2093,6 +2093,19 @@ export const de = {
   share_qr_code: 'QR-Code teilen',
   share_qr_image: 'QR-Bild teilen',
   failed_to_save_image: 'Bild konnte nicht gespeichert werden',
+  add_maya_lp: 'Füge MayaChain LP hinzu',
+  maya_lp_checking_position:
+    'Ihre MayaChain-Position in diesem Pool wird überprüft …',
+  maya_lp_position_unavailable:
+    'Ihre MayaChain-Position in diesem Pool konnte nicht gelesen werden, daher kann diese Einzahlung nicht überprüft werden. Bitte versuchen Sie es später erneut.',
+  maya_lp_paired_with_other_address:
+    'Ihre Position {{pool}} ist mit einer anderen Adresse verknüpft. MayaChain würde diese Einzahlung zurückerstatten.',
+  maya_lp_pending_address_mismatch:
+    'Eine ausstehende Einzahlung an {{pool}} verwendet eine CACAO oder Asset-Adresse, die nicht mit diesem Tresor übereinstimmt. MayaChain würde diese Einzahlung erstatten.',
+  maya_lp_cacao_alone:
+    'Dadurch wird nur CACAO hinzugefügt, ohne zugehöriges Asset.',
+  maya_lp_cacao_only_position:
+    'Ihre {{pool}}-Position enthält nur CACAO. MayaChain erstattet eine gepaarte Einzahlung darauf zurück, fügen Sie daher stattdessen nur CACAO hinzu.',
   custom_message_unsupported_format:
     'Diese Nachricht liegt nicht in einem anerkannten Signaturformat vor und kann daher nicht signiert werden.',
   custom_message_unsupported_method:
