@@ -6,9 +6,11 @@ import {
   getTronStakingDisplay,
   tronStakingTitleKey,
 } from '@core/ui/chain/tx/getTronStakingDisplay'
+import { TxOverviewEvmMemo } from '@core/ui/chain/tx/TxOverviewEvmMemo'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { getTronContractCall } from '@core/ui/chain/tx/utils/getTronContractCall'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
 import { VerifyTransactionOverview } from '@core/ui/mpc/keysign/verify/VerifyTransactionOverview'
@@ -96,16 +98,20 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   // (and the unlimited-approval warning) the initiator shows on its pre-sign popup.
   // The query shares its memo-keyed react-query cache with the initiator's path,
   // so we don't refetch the 4byte signature.
+  // A Tron dApp contract call is signed from the contract's data, not the memo,
+  // and targets the contract rather than the reviewed recipient (a TRC-20
+  // transfer names its recipient in the data), so that call is decoded instead.
   const getCoin = useGetCoin()
+  const tronContractCall = getTronContractCall(value)
   const contractCallQuery = useEvmContractCallInfoQuery({
-    memo,
-    enabled: isChainOfKind(coin.chain, 'evm'),
+    memo: tronContractCall?.data ?? memo,
+    enabled: isChainOfKind(coin.chain, 'evm') || !!tronContractCall,
   })
   const tokenPair = contractCallQuery.data
     ? extractTokenAndAmount(
         contractCallQuery.data.functionSignature,
         contractCallQuery.data.functionArguments,
-        toAddress
+        tronContractCall?.contractAddress ?? toAddress
       )
     : null
   const tokenQuery = useQuery({
@@ -227,6 +233,11 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
                 </Text>
               )
             }
+          />
+        )}
+        {tronContractCall && (
+          <ListItem
+            title={<TxOverviewEvmMemo value={tronContractCall.data} />}
           />
         )}
         {memoValue && (

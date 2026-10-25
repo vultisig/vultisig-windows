@@ -10,6 +10,7 @@ import {
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import { NetworkFeeSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { SwapAmountDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/SwapAmountDisplay'
+import { TronContractCallSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/TronContractCallSection'
 import { ParsedTx } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/parsedTx'
 import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/gasEstimation/getGasEstimationQuery'
 import { getNonNativeDappCosmosFeeDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/dappCosmosFee'
@@ -620,6 +621,7 @@ export const SendTxOverview = ({
                           title={t('network')}
                         />
                       </List>
+                      <TronContractCallSection value={keysignPayload} />
                       <MemoSection memo={keysignPayload.memo} chain={chain} />
                       <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
