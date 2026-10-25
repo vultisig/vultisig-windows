@@ -1,4 +1,5 @@
 import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
+import { isSignableCustomMessage } from '@core/ui/mpc/keysign/customMessage/isSignableCustomMessage'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
@@ -103,6 +104,24 @@ describe('getRawSignMessagePayload', () => {
         })
       )
     })
+  })
+
+  it.each([
+    ['a v2 message', { message: 'Sign in to example.com', isV2: true }],
+    [
+      'a v1 message under the TRON header',
+      { message: 'ab'.repeat(32), useTronHeader: true },
+    ],
+    ['a v1 message under the Ethereum header', { message: 'ab'.repeat(32) }],
+    ['a short v1 message', { message: 'abcd', useTronHeader: true }],
+  ])('builds %s that the keysign accepts', (_, input) => {
+    expect(
+      isSignableCustomMessage({
+        chain: OtherChain.Tron,
+        method: 'sign_message',
+        message: getRawSignMessagePayload({ chain: OtherChain.Tron, ...input }),
+      })
+    ).toBe(true)
   })
 
   it('passes a Solana text message through unchanged', () => {
