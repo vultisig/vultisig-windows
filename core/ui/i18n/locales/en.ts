@@ -1621,7 +1621,7 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
-  vault_cannot_be_opened: "This vault can't be opened on this device",
+  vault_cannot_be_opened: `"{{name}}" can't be opened on this device`,
   vault_cannot_be_opened_backup_description:
     'Your .vult backup is the way back. Import it and this vault works again.',
   vault_cannot_be_opened_description:

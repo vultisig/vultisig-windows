@@ -1060,7 +1060,7 @@ export const it = {
   },
   vault_already_exists: 'Il caveau "{{name}}" esiste già',
   vault_cannot_be_opened:
-    'Questo vault non può essere aperto su questo dispositivo',
+    'Il vault "{{name}}" non può essere aperto su questo dispositivo',
   vault_cannot_be_opened_backup_description:
     'Il tuo backup .vult è la via del ritorno. Importalo e questo vault tornerà a funzionare.',
   vault_cannot_be_opened_description:

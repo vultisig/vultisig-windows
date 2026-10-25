@@ -1045,7 +1045,8 @@ export const nl = {
     version: 'Versie {{latestVersion}}',
   },
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
-  vault_cannot_be_opened: 'Deze vault kan niet op dit apparaat worden geopend',
+  vault_cannot_be_opened:
+    'De vault "{{name}}" kan niet op dit apparaat worden geopend',
   vault_cannot_be_opened_backup_description:
     'Je .vult-back-up is de weg terug. Importeer hem en deze vault werkt weer.',
   vault_cannot_be_opened_description:

@@ -1056,7 +1056,8 @@ export const pt = {
     version: 'Versão {{latestVersion}}',
   },
   vault_already_exists: 'O Vault "{{name}}" já existe.',
-  vault_cannot_be_opened: 'Este vault não pode ser aberto neste dispositivo',
+  vault_cannot_be_opened:
+    'O vault "{{name}}" não pode ser aberto neste dispositivo',
   vault_cannot_be_opened_backup_description:
     'A sua cópia de segurança .vult é o caminho de volta. Importe-a e este vault volta a funcionar.',
   vault_cannot_be_opened_description:

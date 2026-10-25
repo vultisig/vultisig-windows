@@ -1050,7 +1050,8 @@ export const hr = {
     version: 'Verzija {{latestVersion}}',
   },
   vault_already_exists: 'Trezor "{{name}}" već postoji',
-  vault_cannot_be_opened: 'Ovaj se vault ne može otvoriti na ovom uređaju',
+  vault_cannot_be_opened:
+    'Vault „{{name}}“ ne može se otvoriti na ovom uređaju',
   vault_cannot_be_opened_backup_description:
     'Vaša .vult sigurnosna kopija je put natrag. Uvezite je i ovaj će vault ponovno raditi.',
   vault_cannot_be_opened_description:
