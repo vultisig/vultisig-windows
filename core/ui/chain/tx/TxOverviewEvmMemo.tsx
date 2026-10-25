@@ -7,7 +7,10 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useQuery } from '@tanstack/react-query'
-import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
+import {
+  EvmContractCallInfo,
+  getEvmContractCallInfo,
+} from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -21,6 +24,8 @@ const CalldataCard = styled(VStack)`
 
 type TxOverviewEvmMemoProps = ValueProp<string> & {
   withinDetailsSection?: boolean
+  /** Rewrites the decoded call for display, e.g. a TRON call's addresses. */
+  formatInfo?: (info: EvmContractCallInfo) => EvmContractCallInfo
 }
 
 /**
@@ -34,6 +39,7 @@ type TxOverviewEvmMemoProps = ValueProp<string> & {
 export const TxOverviewEvmMemo = ({
   value,
   withinDetailsSection,
+  formatInfo,
 }: TxOverviewEvmMemoProps) => {
   const query = useQuery({
     queryKey: ['evmContractCallInfo', value],
@@ -53,7 +59,9 @@ export const TxOverviewEvmMemo = ({
           return <TxOverviewPlainMemo value={value} />
         }
 
-        const { functionSignature, functionArguments } = info
+        const { functionSignature, functionArguments } = formatInfo
+          ? formatInfo(info)
+          : info
 
         const body = (
           <>

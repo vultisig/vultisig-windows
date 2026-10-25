@@ -9,7 +9,9 @@ import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractAppr
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { getTronContractCall } from '@core/ui/chain/tx/utils/getTronContractCall'
 import { lookupKnownEvmContract } from '@core/ui/chain/tx/utils/knownEvmContracts'
+import { toTronContractCallInfo } from '@core/ui/chain/tx/utils/toTronContractCallInfo'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { fromChainAmountNumber } from '@core/ui/chain/utils/fromChainAmountNumber'
 import {
@@ -123,17 +125,28 @@ export const TxSuccess = ({
       chain: coin.chain,
     })
 
+  // A Tron dApp contract call is signed from the contract's data, not the
+  // memo, and targets the contract rather than the reviewed recipient, so
+  // that call is the one named here.
+  const tronContractCall = getTronContractCall(value)
+  const contractCalldata = tronContractCall?.data ?? memo
+  const callTarget = tronContractCall?.contractAddress ?? value.toAddress
+
   const functionQuery = useQuery({
-    queryKey: ['evmContractCallInfo', memo],
-    queryFn: () => getEvmContractCallInfo(memo!),
+    queryKey: ['evmContractCallInfo', contractCalldata],
+    queryFn: () => getEvmContractCallInfo(contractCalldata!),
     enabled:
-      isContractExecution &&
+      (isContractExecution || !!tronContractCall) &&
       !isUniversalRouterPending &&
       !universalRouterSwap &&
-      !!memo &&
-      memo.length > 2,
+      !!contractCalldata &&
+      contractCalldata.length > 2,
     staleTime: Infinity,
   })
+  const functionInfo =
+    functionQuery.data && tronContractCall
+      ? toTronContractCallInfo(functionQuery.data)
+      : functionQuery.data
 
   // A TRON freeze/unfreeze is signed as a staking contract, so name the
   // operation rather than reporting the staked amount as sent.
@@ -149,7 +162,7 @@ export const TxSuccess = ({
   )
 
   const rawFunctionName =
-    functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
+    functionInfo?.functionSignature?.split('(')[0] ?? undefined
   const usesDecodedTitle =
     !tronStaking && !rawFunctionName && decodedDoneTitleKey !== undefined
   const resolvedLabel = tronStaking
@@ -161,11 +174,11 @@ export const TxSuccess = ({
         : undefined
 
   const resolvedToken = useMemo(() => {
-    if (!functionQuery.data) return null
+    if (!functionInfo) return null
     const pair = extractTokenAndAmount(
-      functionQuery.data.functionSignature,
-      functionQuery.data.functionArguments,
-      value.toAddress
+      functionInfo.functionSignature,
+      functionInfo.functionArguments,
+      callTarget
     )
     if (!pair) return null
 
@@ -201,14 +214,7 @@ export const TxSuccess = ({
           ? `${t('unlimited')} ${knownCoin.ticker}`
           : undefined,
     }
-  }, [
-    functionQuery.data,
-    vaultCoins,
-    coin.chain,
-    value.toAddress,
-    rawFunctionName,
-    t,
-  ])
+  }, [functionInfo, vaultCoins, coin.chain, callTarget, rawFunctionName, t])
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
@@ -274,8 +280,8 @@ export const TxSuccess = ({
     ? lookupKnownEvmContract({ address: value.toAddress, chain: evmChain })
     : null
   const approvalCounterparty =
-    evmChain && functionQuery.data
-      ? extractApprovalCounterparty(functionQuery.data)
+    (evmChain || tronContractCall) && functionInfo
+      ? extractApprovalCounterparty(functionInfo)
       : null
 
   return (
@@ -335,6 +341,14 @@ export const TxSuccess = ({
                 title={t(approvalCounterparty.labelKey)}
               />
             )}
+          </List>
+        )}
+        {tronContractCall && approvalCounterparty && (
+          <List>
+            <ListItem
+              description={approvalCounterparty.address}
+              title={t(approvalCounterparty.labelKey)}
+            />
           </List>
         )}
         <List>
