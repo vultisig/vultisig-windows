@@ -1,6 +1,8 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
+import { chainActionsRecord } from '@core/ui/vault/deposit/ChainAction'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import {
   tssMessageSchema,
   TssType,
@@ -31,6 +33,13 @@ type DeeplinkParams = DeeplinkSharedData & {
   vault: string
 }
 
+type DepositDeeplinkParams = {
+  assetChain: string
+  assetTicker?: string
+  amount?: string
+  memo?: string
+}
+
 type SendDeeplinkParams = {
   assetChain: string
   assetTicker: string
@@ -57,12 +66,58 @@ export type SendDeeplinkData = {
   memo?: string
 }
 
+/** A deposit (MsgDeposit) the link asks to prefill on the Custom action. */
+export type DepositDeeplinkData = {
+  chain: Chain
+  ticker: string
+  amount?: string
+  memo?: string
+}
+
 export type ParsedDeeplink =
   | { newVault: NewVaultData }
   | { signTransaction: SignTransactionData }
   | { send: SendDeeplinkData }
+  | { deposit: DepositDeeplinkData }
+
+const customDepositChains = Object.entries(chainActionsRecord)
+  .filter(([, actions]) => actions.includes('custom'))
+  .map(([chain]) => chain)
+
+const decimalAmountPattern = /^\d+(\.\d+)?$/
+
+const parseDepositDeeplink = (url: string): DepositDeeplinkData => {
+  const { assetChain, assetTicker, amount, memo } =
+    getRawQueryParams<DepositDeeplinkParams>(url)
+
+  const chain = shouldBePresent(
+    Object.values(Chain).find(
+      chain =>
+        areLowerCaseEqual(chain, assetChain) &&
+        customDepositChains.includes(chain)
+    ),
+    'chain'
+  )
+
+  if (amount !== undefined && !decimalAmountPattern.test(amount)) {
+    throw new Error(`Invalid deeplink amount: ${amount}`)
+  }
+
+  return {
+    chain,
+    ticker: assetTicker
+      ? decodeURIComponent(assetTicker)
+      : chainFeeCoin[chain].ticker,
+    amount,
+    memo: memo ? decodeURIComponent(memo) : undefined,
+  }
+}
 
 export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
+  if (/:\/\/deposit\?/.test(url)) {
+    return { deposit: parseDepositDeeplink(url) }
+  }
+
   if (/:\/\/send\?/.test(url)) {
     const queryParams = getRawQueryParams<SendDeeplinkParams>(url)
 
