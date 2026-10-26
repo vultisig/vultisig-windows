@@ -20,10 +20,8 @@ type DeeplinkVaultSelectProps = {
 }
 
 /**
- * Lets the user pick which vault a deeplink acts on, among the vaults that
- * hold exactly one coin with the ticker it names on its chain (a ticker two
- * coins share cannot say which one the link means), and makes that vault
- * current before handing back the coin.
+ * Lets the user pick the vault a deeplink acts on, among vaults holding
+ * exactly one coin with its chain and ticker, and makes that vault current.
  */
 export const DeeplinkVaultSelect = ({
   title,
