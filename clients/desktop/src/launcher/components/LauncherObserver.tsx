@@ -28,8 +28,21 @@ export const LauncherObserver = () => {
       }
     }
 
-    const unsubscribe = EventsOn(launchArgsEvent, openLaunchArgs)
-    void GetOSArgs().then(openLaunchArgs)
+    // Opens that arrive while the launch arguments are still loading are
+    // replayed after them, so the newest link is the one left on screen.
+    let pending: string[][] | null = []
+    const unsubscribe = EventsOn(launchArgsEvent, (args: string[]) => {
+      if (pending) {
+        pending.push(args)
+      } else {
+        openLaunchArgs(args)
+      }
+    })
+    void GetOSArgs().then(launchArgs => {
+      openLaunchArgs(launchArgs)
+      pending?.forEach(openLaunchArgs)
+      pending = null
+    })
 
     return unsubscribe
   }, [navigate])
