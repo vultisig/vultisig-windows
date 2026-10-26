@@ -92,6 +92,10 @@ func main() {
 			installMarkerService,
 		},
 		EnumBind: []interface{}{},
+		SingleInstanceLock: &options.SingleInstanceLock{
+			UniqueId:               "com.vultisig.desktop",
+			OnSecondInstanceLaunch: app.onSecondInstanceLaunch,
+		},
 		LogLevel: logger.ERROR,
 		Windows:  &windows.Options{},
 		Mac: &mac.Options{
@@ -99,6 +103,8 @@ func main() {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  false,
 			DisableZoom:          false,
+			OnUrlOpen:            app.onURLOpen,
+			OnFileOpen:           app.onFileOpen,
 			About: &mac.AboutInfo{
 				Title:   "Vultisig",
 				Message: "Vultisig Application",
