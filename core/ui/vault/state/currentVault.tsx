@@ -311,6 +311,9 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   useEffect(() => {
     if (provided && !isLocked) {
       heldValue.current = provided
+    } else if (!provided && settled?.status === 'unreadable') {
+      // The recovery page replaced the tree, so no setup flow is left to hold.
+      heldValue.current = null
     }
   })
 
