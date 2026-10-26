@@ -21,8 +21,9 @@ type DeeplinkVaultSelectProps = {
 
 /**
  * Lets the user pick which vault a deeplink acts on, among the vaults that
- * hold the coin it names, and makes that vault current before handing back
- * the coin.
+ * hold exactly one coin with the ticker it names on its chain (a ticker two
+ * coins share cannot say which one the link means), and makes that vault
+ * current before handing back the coin.
  */
 export const DeeplinkVaultSelect = ({
   title,
@@ -34,8 +35,11 @@ export const DeeplinkVaultSelect = ({
   const vaults = useVaults()
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 
-  const vaultsWithCoin = vaults.filter(({ coins }) =>
-    coins.some(coin => coin.chain === chain && coin.ticker === ticker)
+  const isLinkedCoin = (coin: AccountCoin) =>
+    coin.chain === chain && coin.ticker === ticker
+
+  const vaultsWithCoin = vaults.filter(
+    ({ coins }) => coins.filter(isLinkedCoin).length === 1
   )
 
   if (vaults.length === 0) {
@@ -78,11 +82,7 @@ export const DeeplinkVaultSelect = ({
                 key={vaultId}
                 vault={vault}
                 onSelect={() => {
-                  const coin = shouldBePresent(
-                    vault.coins.find(
-                      coin => coin.chain === chain && coin.ticker === ticker
-                    )
-                  )
+                  const coin = shouldBePresent(vault.coins.find(isLinkedCoin))
                   setCurrentVaultId(vaultId, {
                     onSuccess: () => onSelect(coin),
                   })

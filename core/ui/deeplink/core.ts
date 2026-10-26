@@ -86,6 +86,12 @@ const customDepositChains = Object.entries(chainActionsRecord)
 
 const decimalAmountPattern = /^\d+(\.\d+)?$/
 
+const tickerPattern = /^[A-Za-z0-9.-]{1,15}$/
+
+/** Matches a link whose host is `route`, e.g. `vultisig://deposit?…`. */
+export const deeplinkRoutePattern = (route: 'send' | 'deposit') =>
+  new RegExp(`^[a-z]+://${route}\\?`, 'i')
+
 const parseDepositDeeplink = (url: string): DepositDeeplinkData => {
   const { assetChain, assetTicker, amount, memo } =
     getRawQueryParams<DepositDeeplinkParams>(url)
@@ -103,18 +109,20 @@ const parseDepositDeeplink = (url: string): DepositDeeplinkData => {
     throw new Error(`Invalid deeplink amount: ${amount}`)
   }
 
+  if (assetTicker !== undefined && !tickerPattern.test(assetTicker)) {
+    throw new Error('Invalid deeplink ticker')
+  }
+
   return {
     chain,
-    ticker: assetTicker
-      ? decodeURIComponent(assetTicker)
-      : chainFeeCoin[chain].ticker,
+    ticker: assetTicker ?? chainFeeCoin[chain].ticker,
     amount,
     memo: memo ? decodeURIComponent(memo) : undefined,
   }
 }
 
 export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
-  if (/:\/\/deposit\?/.test(url)) {
+  if (deeplinkRoutePattern('deposit').test(url)) {
     return { deposit: parseDepositDeeplink(url) }
   }
 
