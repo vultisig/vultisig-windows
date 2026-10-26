@@ -1,3 +1,4 @@
+import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { NotificationData } from '@core/ui/notifications/NotificationChannel'
 import {
   fetchVapidPublicKey,
@@ -374,34 +375,27 @@ type StoredVault = {
   localPartyId: string
 }
 
-const mapStoredVaultsToRegistrationInfos = async (
+const mapStoredVaultsToRegistrationInfos = (
   vaults: StoredVault[]
-): Promise<VaultRegistrationInfo[]> => {
-  const { computeNotificationVaultId } = await import('@vultisig/sdk')
-  const { shouldBePresent } =
-    await import('@vultisig/lib-utils/assert/shouldBePresent')
-
-  const eligible = vaults.filter(v => {
-    if (!v.hexChainCode) {
+): VaultRegistrationInfo[] =>
+  vaults.flatMap(({ publicKeys, hexChainCode, localPartyId }) => {
+    if (!hexChainCode) {
       console.warn(
         '[Extension Push] Vault missing hexChainCode; skipping push registration for party',
-        v.localPartyId
+        localPartyId
       )
-      return false
+      return []
     }
-    return true
+    return [
+      {
+        vaultId: computeNotificationVaultId({
+          ecdsaPublicKey: publicKeys.ecdsa,
+          hexChainCode,
+        }),
+        localPartyId,
+      },
+    ]
   })
-
-  return Promise.all(
-    eligible.map(async v => ({
-      vaultId: await computeNotificationVaultId(
-        v.publicKeys.ecdsa,
-        shouldBePresent(v.hexChainCode)
-      ),
-      localPartyId: v.localPartyId,
-    }))
-  )
-}
 
 const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   if (await getPushVaultIdMigrationCompleted()) return
@@ -414,6 +408,9 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
 
   const result = await chrome.storage.local.get('vaults')
   const vaults = (result.vaults ?? []) as StoredVault[]
+  // Work out the new IDs before dropping the old ones, so a vault is never
+  // left unregistered because its new ID could not be computed.
+  const vaultInfos = mapStoredVaultsToRegistrationInfos(vaults)
 
   let legacyUnregisterFailed = false
 
@@ -439,21 +436,18 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
 
   await clearAllPushNotificationRegistrations()
 
-  if (vaults.length > 0) {
-    const vaultInfos = await mapStoredVaultsToRegistrationInfos(vaults)
+  if (vaultInfos.length > 0) {
     await registerVaults(vaultInfos)
 
-    if (vaultInfos.length > 0) {
-      const registrations = await getPushNotificationRegistrations()
-      const missing = vaultInfos.filter(v => !(v.vaultId in registrations))
-      if (missing.length > 0) {
-        console.error(
-          '[Extension Push] Migration incomplete: push registration failed for',
-          missing.length,
-          'vault(s); will retry on next startup'
-        )
-        return
-      }
+    const registrations = await getPushNotificationRegistrations()
+    const missing = vaultInfos.filter(v => !(v.vaultId in registrations))
+    if (missing.length > 0) {
+      console.error(
+        '[Extension Push] Migration incomplete: push registration failed for',
+        missing.length,
+        'vault(s); will retry on next startup'
+      )
+      return
     }
   }
 
