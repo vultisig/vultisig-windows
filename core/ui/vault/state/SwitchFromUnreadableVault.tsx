@@ -24,7 +24,9 @@ export const SwitchFromUnreadableVault = () => {
   const otherVaults = useVaults().filter(
     vault => getVaultId(vault) !== currentVaultId
   )
-  const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
+  const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation({
+    onSuccess: goHome,
+  })
   const [isOpen, setIsOpen] = useState(false)
 
   if (otherVaults.length === 0) {
@@ -47,7 +49,7 @@ export const SwitchFromUnreadableVault = () => {
               key={getVaultId(vault)}
               vault={vault}
               onSelect={() => {
-                setCurrentVaultId(getVaultId(vault), { onSuccess: goHome })
+                setCurrentVaultId(getVaultId(vault))
                 setIsOpen(false)
               }}
             />
