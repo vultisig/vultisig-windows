@@ -34,7 +34,7 @@ type DeeplinkParams = DeeplinkSharedData & {
 }
 
 type DepositDeeplinkParams = {
-  assetChain?: string
+  assetChain: string
   assetTicker?: string
   amount?: string
   memo?: string
