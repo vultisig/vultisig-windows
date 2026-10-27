@@ -8,5 +8,4 @@ import { deeplinkRoutePattern } from './core'
  */
 export const isKeysignDeeplinkUrl = (url: string) =>
   !deeplinkRoutePattern('send').test(url) &&
-  !deeplinkRoutePattern('deposit').test(url) &&
   getRawQueryParams<{ type?: string }>(url).type === 'SignTransaction'

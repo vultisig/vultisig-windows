@@ -18,7 +18,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getRawQueryParams } from '@vultisig/lib-utils/query/getRawQueryParams'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
-type DeeplinkType = 'NewVault' | 'SignTransaction' | 'send'
+type DeeplinkType = 'NewVault' | 'SignTransaction' | 'Deposit' | 'send'
 
 type DeeplinkSharedData = {
   jsonData: string
@@ -34,7 +34,7 @@ type DeeplinkParams = DeeplinkSharedData & {
 }
 
 type DepositDeeplinkParams = {
-  assetChain: string
+  assetChain?: string
   assetTicker?: string
   amount?: string
   memo?: string
@@ -71,7 +71,7 @@ export type DepositDeeplinkData = {
   chain: Chain
   ticker: string
   amount?: string
-  memo?: string
+  memo: string
 }
 
 export type ParsedDeeplink =
@@ -88,14 +88,16 @@ const decimalAmountPattern = /^\d+(\.\d+)?$/
 
 const tickerPattern = /^[A-Za-z0-9.-]{1,15}$/
 
-/** Matches a link whose host is `route`, e.g. `vultisig://deposit?…`. */
-export const deeplinkRoutePattern = (route: 'send' | 'deposit') =>
+/** Matches a link whose host is `route`, e.g. `vultisig://send?…`. */
+export const deeplinkRoutePattern = (route: 'send') =>
   new RegExp(`^[a-z]+://${route}\\?`, 'i')
 
-const parseDepositDeeplink = (url: string): DepositDeeplinkData => {
-  const { assetChain, assetTicker, amount, memo } =
-    getRawQueryParams<DepositDeeplinkParams>(url)
-
+const parseDepositDeeplink = ({
+  assetChain,
+  assetTicker,
+  amount,
+  memo,
+}: DepositDeeplinkParams): DepositDeeplinkData => {
   const chain = shouldBePresent(
     Object.values(Chain).find(
       chain =>
@@ -113,20 +115,21 @@ const parseDepositDeeplink = (url: string): DepositDeeplinkData => {
     throw new Error('Invalid deeplink ticker')
   }
 
+  const decodedMemo = memo ? decodeURIComponent(memo) : ''
+  if (!decodedMemo.trim()) {
+    throw new Error('Missing deeplink memo')
+  }
+
   return {
     chain,
     ticker: assetTicker ?? chainFeeCoin[chain].ticker,
     amount,
-    memo: memo ? decodeURIComponent(memo) : undefined,
+    memo: decodedMemo,
   }
 }
 
 export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
-  if (deeplinkRoutePattern('deposit').test(url)) {
-    return { deposit: parseDepositDeeplink(url) }
-  }
-
-  if (/:\/\/send\?/.test(url)) {
+  if (deeplinkRoutePattern('send').test(url)) {
     const queryParams = getRawQueryParams<SendDeeplinkParams>(url)
 
     const chain = shouldBePresent(
@@ -152,6 +155,14 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
   const queryParams = getRawQueryParams<DeeplinkParams>(url)
 
   const { type, jsonData } = queryParams
+
+  if (type === 'Deposit') {
+    return {
+      deposit: parseDepositDeeplink(
+        getRawQueryParams<DepositDeeplinkParams>(url)
+      ),
+    }
+  }
   const payload = await decompressQrPayload(jsonData)
 
   if (type === 'NewVault') {

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { DepositDeeplinkData } from '../core'
 import { DeeplinkVaultSelect } from './DeeplinkVaultSelect'
 
-/** Opens the Custom deposit form prefilled from a `vultisig://deposit` link. */
+/** Opens the Custom deposit form prefilled from a `type=Deposit` link. */
 export const ProcessDeposit = ({ value }: ValueProp<DepositDeeplinkData>) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
