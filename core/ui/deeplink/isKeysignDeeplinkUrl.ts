@@ -7,4 +7,4 @@ import { getDeeplinkQueryParams } from './getDeeplinkQueryParams'
  */
 export const isKeysignDeeplinkUrl = (url: string) =>
   !deeplinkRoutePattern('send').test(url) &&
-  getDeeplinkQueryParams<{ type?: string }>(url).type === 'SignTransaction'
+  getDeeplinkQueryParams(url).type === 'SignTransaction'

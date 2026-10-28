@@ -5,7 +5,7 @@ import { getDeeplinkQueryParams } from './getDeeplinkQueryParams'
 describe('getDeeplinkQueryParams', () => {
   it('keeps everything after the first = in a value', () => {
     expect(
-      getDeeplinkQueryParams<{ memo: string; amount: string }>(
+      getDeeplinkQueryParams(
         'vultisig://vultisig.com?type=Deposit&memo==:ETH.ETH:0xabc:1=2&amount=1'
       )
     ).toMatchObject({ memo: '=:ETH.ETH:0xabc:1=2', amount: '1' })
