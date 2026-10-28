@@ -1,6 +1,5 @@
-import { getRawQueryParams } from '@vultisig/lib-utils/query/getRawQueryParams'
-
 import { deeplinkRoutePattern } from './core'
+import { getDeeplinkQueryParams } from './getDeeplinkQueryParams'
 
 /**
  * Tells whether a pushed payload is a keysign link. Push notifications only
@@ -8,4 +7,4 @@ import { deeplinkRoutePattern } from './core'
  */
 export const isKeysignDeeplinkUrl = (url: string) =>
   !deeplinkRoutePattern('send').test(url) &&
-  getRawQueryParams<{ type?: string }>(url).type === 'SignTransaction'
+  getDeeplinkQueryParams<{ type?: string }>(url).type === 'SignTransaction'

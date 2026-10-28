@@ -15,8 +15,9 @@ import {
   KeysignMessageSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { getRawQueryParams } from '@vultisig/lib-utils/query/getRawQueryParams'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
+
+import { getDeeplinkQueryParams } from './getDeeplinkQueryParams'
 
 type DeeplinkType = 'NewVault' | 'SignTransaction' | 'Deposit' | 'send'
 
@@ -130,7 +131,7 @@ const parseDepositDeeplink = ({
 
 export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
   if (deeplinkRoutePattern('send').test(url)) {
-    const queryParams = getRawQueryParams<SendDeeplinkParams>(url)
+    const queryParams = getDeeplinkQueryParams<SendDeeplinkParams>(url)
 
     const chain = shouldBePresent(
       Object.values(Chain).find(chain =>
@@ -152,14 +153,14 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
     }
   }
 
-  const queryParams = getRawQueryParams<DeeplinkParams>(url)
+  const queryParams = getDeeplinkQueryParams<DeeplinkParams>(url)
 
   const { type, jsonData } = queryParams
 
   if (type === 'Deposit') {
     return {
       deposit: parseDepositDeeplink(
-        getRawQueryParams<DepositDeeplinkParams>(url)
+        getDeeplinkQueryParams<DepositDeeplinkParams>(url)
       ),
     }
   }
