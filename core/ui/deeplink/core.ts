@@ -19,6 +19,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
+import { deeplinkRoutePattern } from './deeplinkRoutePattern'
 import {
   DeeplinkQueryParams,
   getDeeplinkQueryParams,
@@ -63,10 +64,6 @@ const customDepositChains = Object.entries(chainActionsRecord)
 const decimalAmountPattern = /^\d+(\.\d+)?$/
 
 const tickerPattern = /^[A-Za-z0-9.-]{1,15}$/
-
-/** Matches a link whose host is `route`, e.g. `vultisig://send?…`. */
-export const deeplinkRoutePattern = (route: 'send') =>
-  new RegExp(`^[a-z]+://${route}\\?`, 'i')
 
 const tssTypes = getRecordKeys(tssMessageSchema)
 

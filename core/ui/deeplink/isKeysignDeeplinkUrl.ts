@@ -1,4 +1,4 @@
-import { deeplinkRoutePattern } from './core'
+import { deeplinkRoutePattern } from './deeplinkRoutePattern'
 import { getDeeplinkQueryParams } from './getDeeplinkQueryParams'
 
 /**
