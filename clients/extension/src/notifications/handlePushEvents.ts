@@ -1,3 +1,4 @@
+import { isKeysignDeeplinkUrl } from '@core/ui/deeplink/isKeysignDeeplinkUrl'
 import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { NotificationData } from '@core/ui/notifications/NotificationChannel'
 import {
@@ -562,7 +563,10 @@ const focusReloadExtensionTab = async (
 const openExtensionFromPushNotificationClick = async (input: {
   qrCodeData: string | undefined
 }): Promise<void> => {
-  const { qrCodeData } = input
+  const qrCodeData =
+    input.qrCodeData && isKeysignDeeplinkUrl(input.qrCodeData)
+      ? input.qrCodeData
+      : undefined
   const extensionId = chrome.runtime.id
   const extensionUrl = extensionIndexPageUrl(extensionId)
 
