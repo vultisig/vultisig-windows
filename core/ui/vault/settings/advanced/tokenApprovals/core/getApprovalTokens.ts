@@ -3,11 +3,12 @@ import { getEvmNumericChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 import { Coin, Token } from '@vultisig/core-chain/coin/Coin'
 import { toBatches } from '@vultisig/lib-utils/array/toBatches'
-import { attempt } from '@vultisig/lib-utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { erc20Abi, getAddress } from 'viem'
 
 import { concurrentRequests, mapInBatches } from './mapInBatches'
 import { queryOneInchApi } from './queryOneInchApi'
+import { shortenEvmAddress } from './shortenEvmAddress'
 
 type OneInchCustomToken = {
   address: string
@@ -23,11 +24,19 @@ type ReadErc20MetadataInput = {
 
 // Read straight from the contract rather than through getTokenMetadata, whose
 // logo lookup has no timeout and retries 429s without limit.
+// A token whose symbol() is unreadable (bytes32 symbols, non-standard
+// contracts) is still listed under its shortened address, so an active
+// allowance is never hidden; only an unreadable decimals() drops it.
 const readErc20Metadata = async ({ chain, id }: ReadErc20MetadataInput) => {
   const client = getEvmClient(chain)
   const address = getAddress(id)
   const [ticker, decimals] = await Promise.all([
-    client.readContract({ address, abi: erc20Abi, functionName: 'symbol' }),
+    withFallback(
+      attempt(() =>
+        client.readContract({ address, abi: erc20Abi, functionName: 'symbol' })
+      ),
+      shortenEvmAddress(address)
+    ),
     client.readContract({ address, abi: erc20Abi, functionName: 'decimals' }),
   ])
   return { ticker, decimals }

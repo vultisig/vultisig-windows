@@ -2062,10 +2062,8 @@ export const hr = {
     'Ova poruka nije u prepoznatom formatu za potpisivanje, stoga se ne može potpisati.',
   custom_message_unsupported_method:
     'Nepodržana metoda potpisivanja. Koristite personal_sign ili eth_signTypedData_v4.',
-  revoke: 'Opozvati',
+  revoke: 'Opoziv pristupa',
   token_approvals: 'Odobrenja tokena',
-  token_approvals_count_one: 'Odobrenje {{count}}',
-  token_approvals_count_other: 'Odobrenja {{count}}',
   token_approvals_description:
     'Pregledajte i opozovite ugovore koji mogu trošiti vaše tokene',
   token_approvals_disconnect_note:
@@ -2074,13 +2072,14 @@ export const hr = {
     'Ugovori kojima dopustite trošenje vaših tokena na ovoj mreži prikazat će se ovdje.',
   token_approvals_empty_title: 'Nema aktivnih odobrenja na {{chain}}',
   token_approvals_not_supported: 'Nije podržano',
-  token_approvals_switch_network: 'Promijeni mrežu',
-  token_approvals_unlimited_count: '{{count}} neograničeno',
+  token_approvals_switch_network: 'Odaberite drugu mrežu',
+  token_approvals_unlimited_count: 'Neograničeno: {{count}}',
   token_approvals_unsupported_description:
-    'Odobrenja se još ne mogu navesti na ovoj mreži. Prebacite se na drugu mrežu da biste ih pregledali.',
+    'Odobrenja tokena na ovoj mreži još se ne mogu prikazati. Odaberite drugu mrežu da biste ih pregledali.',
   token_approvals_unsupported_title: 'Nije dostupno na {{chain}}',
-  revoke_approval: 'Poništi odobrenje',
+  revoke_approval: 'Opozovi pristup',
   revoke_approval_explanation:
     'Postavlja dopuštenu količinu za ovaj ugovor na 0, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
-  revoke_approval_new_allowance: 'Novi dodatak',
+  revoke_approval_new_allowance: 'Novo ograničenje potrošnje',
+  token_approvals_count: 'Odobrenja: {{count}}',
 }

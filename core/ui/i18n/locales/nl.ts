@@ -2079,10 +2079,8 @@ export const nl = {
     'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
   custom_message_unsupported_method:
     'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
-  revoke: 'Herroepen',
+  revoke: 'Toegang intrekken',
   token_approvals: 'Tokengoedkeuringen',
-  token_approvals_count_one: '{{count}} goedkeuring',
-  token_approvals_count_other: '{{count}} goedkeuringen',
   token_approvals_description:
     'Controleer en trek contracten in die uw tokens kunnen uitgeven.',
   token_approvals_disconnect_note:
@@ -2091,13 +2089,14 @@ export const nl = {
     'Contracten die u toestaat uw tokens op dit netwerk uit te geven, worden hier weergegeven.',
   token_approvals_empty_title: 'Geen actieve goedkeuringen voor {{chain}}',
   token_approvals_not_supported: 'Niet ondersteund',
-  token_approvals_switch_network: 'Netwerk schakelen',
-  token_approvals_unlimited_count: '{{count}} onbeperkt',
+  token_approvals_switch_network: 'Kies een ander netwerk',
+  token_approvals_unlimited_count: 'Onbeperkt: {{count}}',
   token_approvals_unsupported_description:
-    'Goedkeuringen kunnen nog niet op dit netwerk worden weergegeven. Schakel over naar een ander netwerk om ze te bekijken.',
+    'De goedgekeurde tokens op dit netwerk kunnen nog niet worden weergegeven. Kies een ander netwerk om ze te bekijken.',
   token_approvals_unsupported_title: 'Niet beschikbaar op {{chain}}',
-  revoke_approval: 'Goedkeuring intrekken',
+  revoke_approval: 'Toegang intrekken',
   revoke_approval_explanation:
     'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het token niet langer vanuit uw kluis kan worden verplaatst. U betaalt netwerkkosten.',
-  revoke_approval_new_allowance: 'Nieuwe toeslag',
+  revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
+  token_approvals_count: 'Goedkeuringen: {{count}}',
 }

@@ -2050,10 +2050,8 @@ export const ko = {
     '이 메시지는 인식된 서명 형식이 아니므로 서명할 수 없습니다.',
   custom_message_unsupported_method:
     '지원되지 않는 서명 방식입니다. personal_sign 또는 eth_signTypedData_v4를 사용하십시오.',
-  revoke: '취소',
+  revoke: '접근 권한 취소',
   token_approvals: '토큰 승인',
-  token_approvals_count_one: '{{count}} 승인',
-  token_approvals_count_other: '{{count}} 승인',
   token_approvals_description:
     '토큰을 사용할 수 있는 계약을 검토하고 취소하세요.',
   token_approvals_disconnect_note:
@@ -2062,13 +2060,14 @@ export const ko = {
     '이 네트워크에서 토큰 사용을 허용한 계약 목록이 여기에 표시됩니다.',
   token_approvals_empty_title: '{{chain}} 에 대한 활성 승인이 없습니다.',
   token_approvals_not_supported: '지원되지 않음',
-  token_approvals_switch_network: '스위치 네트워크',
-  token_approvals_unlimited_count: '{{count}} 무제한',
+  token_approvals_switch_network: '다른 네트워크를 선택하세요',
+  token_approvals_unlimited_count: '무제한: {{count}}',
   token_approvals_unsupported_description:
-    '이 네트워크에서는 아직 승인 내역을 확인할 수 없습니다. 다른 네트워크로 이동하여 확인하세요.',
+    '이 네트워크의 토큰 승인 내역은 아직 표시할 수 없습니다. 다른 네트워크를 선택하여 확인하세요.',
   token_approvals_unsupported_title: '{{chain}} 에서는 사용할 수 없습니다.',
-  revoke_approval: '승인 취소',
+  revoke_approval: '접근 권한 취소',
   revoke_approval_explanation:
     '이 계약의 허용량을 0으로 설정하여 더 이상 해당 토큰을 사용자의 볼트에서 이동할 수 없도록 합니다. 네트워크 수수료가 부과됩니다.',
-  revoke_approval_new_allowance: '새로운 수당',
+  revoke_approval_new_allowance: '새로운 지출 한도',
+  token_approvals_count: '승인: {{count}}',
 }

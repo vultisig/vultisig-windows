@@ -4,7 +4,7 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { decodeFunctionData, erc20Abi, isHex } from 'viem'
 
 /** The allowance a revoke payload clears. */
-type KeysignApprovalRevoke = {
+export type KeysignApprovalRevoke = {
   chain: EvmChain
   owner: string
   token: string

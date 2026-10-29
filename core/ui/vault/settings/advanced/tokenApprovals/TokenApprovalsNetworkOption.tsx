@@ -24,11 +24,11 @@ export const TokenApprovalsNetworkOption = ({
 
   return (
     <Container
+      as="button"
+      type="button"
       alignItems="center"
       justifyContent="space-between"
       gap={12}
-      role="button"
-      tabIndex={0}
       onClick={onClick}
     >
       <HStack alignItems="center" gap={12}>
@@ -52,6 +52,10 @@ export const TokenApprovalsNetworkOption = ({
 const Container = styled(HStack)`
   ${panel()};
   border-radius: 0;
+  border: 0;
+  width: 100%;
+  font: inherit;
+  text-align: start;
   cursor: pointer;
   padding: 12px 20px;
 
