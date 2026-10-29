@@ -1,6 +1,7 @@
 import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
+import { useReturnToTokenApprovals } from '@core/ui/vault/settings/advanced/tokenApprovals/revoke/useReturnToTokenApprovals'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
@@ -41,6 +42,7 @@ export const KeysignTxDoneScreen = ({
   const navigate = useCoreNavigate()
   const { goHome, isLimited } = useCore()
   const [areTxDetailsOpen, { toggle: toggleTxDetails }] = useBoolean(false)
+  const returnToTokenApprovals = useReturnToTokenApprovals(value)
 
   return (
     <>
@@ -89,7 +91,10 @@ export const KeysignTxDoneScreen = ({
                 {t('track')}
               </Button>
             ) : null}
-            <Button data-testid="tx-success-done" onClick={goHome}>
+            <Button
+              data-testid="tx-success-done"
+              onClick={returnToTokenApprovals ?? goHome}
+            >
               {t('done')}
             </Button>
           </VStack>

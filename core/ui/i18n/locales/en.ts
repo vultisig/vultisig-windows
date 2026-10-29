@@ -969,6 +969,11 @@ export const en = {
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
+  revoke: 'Revoke',
+  revoke_approval: 'Revoke Approval',
+  revoke_approval_explanation:
+    "Sets this contract's allowance to 0, so it can no longer move this token from your vault. You pay a network fee.",
+  revoke_approval_new_allowance: 'New allowance',
   ripple_transaction_summary: 'Transaction summary',
   ripple_undecoded_notice:
     'This transaction could not be decoded. Review the raw details below before approving.',
@@ -1412,6 +1417,22 @@ export const en = {
   today: 'Today',
   token: 'Token',
   token_approval: 'Token Approval',
+  token_approvals: 'Token Approvals',
+  token_approvals_count_one: '{{count}} approval',
+  token_approvals_count_other: '{{count}} approvals',
+  token_approvals_description:
+    'Review and revoke contracts that can spend your tokens',
+  token_approvals_disconnect_note:
+    'Disconnecting a dApp doesn’t remove these approvals. Each revoke is a separate on-chain transaction with a network fee.',
+  token_approvals_empty_description:
+    'Contracts you allow to spend your tokens on this network will show up here.',
+  token_approvals_empty_title: 'No active approvals on {{chain}}',
+  token_approvals_not_supported: 'Not supported',
+  token_approvals_switch_network: 'Switch network',
+  token_approvals_unlimited_count: '{{count}} unlimited',
+  token_approvals_unsupported_description:
+    'Approvals can’t be listed on this network yet. Switch to another network to review them.',
+  token_approvals_unsupported_title: 'Not available on {{chain}}',
   token_info: 'Token Info',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',

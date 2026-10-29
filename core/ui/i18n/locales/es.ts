@@ -2092,4 +2092,25 @@ export const es = {
     'Este mensaje no está en un formato de firma reconocido, por lo que no se puede firmar.',
   custom_message_unsupported_method:
     'Método de firma no compatible. Utilice personal_sign o eth_signTypedData_v4.',
+  revoke: 'Revocar',
+  token_approvals: 'Aprobaciones de tokens',
+  token_approvals_count_one: 'Aprobación {{count}}',
+  token_approvals_count_other: 'Aprobaciones {{count}}',
+  token_approvals_description:
+    'Revisa y revoca los contratos que pueden gastar tus tokens.',
+  token_approvals_disconnect_note:
+    'Desconectar un dApp no elimina estas aprobaciones. Cada revocación es una transacción independiente en la cadena de bloques con una comisión de red.',
+  token_approvals_empty_description:
+    'Los contratos a los que autorices a gastar tus tokens en esta red aparecerán aquí.',
+  token_approvals_empty_title: 'No hay aprobaciones activas en {{chain}}',
+  token_approvals_not_supported: 'No compatible',
+  token_approvals_switch_network: 'Conmutador de red',
+  token_approvals_unlimited_count: '{{count}} ilimitado',
+  token_approvals_unsupported_description:
+    'Las aprobaciones aún no se pueden mostrar en esta red. Cambie a otra red para revisarlas.',
+  token_approvals_unsupported_title: 'No disponible en {{chain}}',
+  revoke_approval: 'Revocar la aprobación',
+  revoke_approval_explanation:
+    'Establece el límite de este contrato en 0, por lo que ya no podrá mover este token de tu bóveda. Se aplica una tarifa de red.',
+  revoke_approval_new_allowance: 'Nueva asignación',
 }

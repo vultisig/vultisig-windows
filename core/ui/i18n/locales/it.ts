@@ -2098,4 +2098,25 @@ export const it = {
     'Questo messaggio non è in un formato di firma riconosciuto, pertanto non può essere firmato.',
   custom_message_unsupported_method:
     'Metodo di firma non supportato. Utilizzare personal_sign o eth_signTypedData_v4.',
+  revoke: 'Revocare',
+  token_approvals: 'Approvazioni dei token',
+  token_approvals_count_one: 'Approvazione {{count}}',
+  token_approvals_count_other: 'approvazioni {{count}}',
+  token_approvals_description:
+    'Esamina e revoca i contratti che possono spendere i tuoi token',
+  token_approvals_disconnect_note:
+    'La disconnessione di un dApp non rimuove queste approvazioni. Ogni revoca è una transazione on-chain separata con una commissione di rete.',
+  token_approvals_empty_description:
+    "I contratti a cui autorizzi l'utilizzo dei tuoi token su questa rete verranno visualizzati qui.",
+  token_approvals_empty_title: 'Nessuna approvazione attiva su {{chain}}',
+  token_approvals_not_supported: 'Non supportato',
+  token_approvals_switch_network: 'rete di commutazione',
+  token_approvals_unlimited_count: '{{count}} illimitato',
+  token_approvals_unsupported_description:
+    "Le approvazioni non possono ancora essere visualizzate su questa rete. Passa a un'altra rete per visualizzarle.",
+  token_approvals_unsupported_title: 'Non disponibile su {{chain}}',
+  revoke_approval: "Revoca l'approvazione",
+  revoke_approval_explanation:
+    'Imposta a 0 la quota consentita per questo contratto, impedendogli di spostare il token dal tuo vault. Dovrai pagare una commissione di rete.',
+  revoke_approval_new_allowance: 'Nuova indennità',
 }
