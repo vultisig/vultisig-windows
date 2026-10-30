@@ -1040,7 +1040,8 @@ export const ru = {
     version: 'Версия {{latestVersion}}',
   },
   vault_already_exists: 'Хранилище "{{name}}" уже существует',
-  vault_cannot_be_opened: 'Это хранилище нельзя открыть на этом устройстве',
+  vault_cannot_be_opened:
+    'Хранилище «{{name}}» нельзя открыть на этом устройстве',
   vault_cannot_be_opened_backup_description:
     'Резервная копия .vult поможет вернуть доступ. Импортируйте её, и это хранилище снова заработает.',
   vault_cannot_be_opened_description:
@@ -2052,8 +2053,39 @@ export const ru = {
   share_qr_code: 'Поделиться QR-кодом',
   share_qr_image: 'Поделиться QR-изображением',
   failed_to_save_image: 'Не удалось сохранить изображение',
+  add_maya_lp: 'Добавить MayaChain LP',
+  maya_lp_checking_position: 'Проверка позиции вашего MayaChain в этом pool …',
+  maya_lp_position_unavailable:
+    'Не удалось прочитать вашу позицию MayaChain в этом pool , поэтому проверить этот депозит невозможно. Попробуйте позже.',
+  maya_lp_paired_with_other_address:
+    'Ваша позиция {{pool}} связана с другим адресом. MayaChain вернет этот депозит.',
+  maya_lp_pending_address_mismatch:
+    'Ожидающий депозит в {{pool}} использует адрес CACAO или адрес актива, не соответствующий этому хранилищу. MayaChain вернет этот депозит.',
+  maya_lp_cacao_only_position:
+    'Ваша позиция {{pool}} содержит только CACAO. MayaChain возвращает на неё парный депозит, поэтому вместо этого добавьте только CACAO.',
+  maya_lp_cacao_alone: 'Это добавляет только CACAO, без парного актива.',
   custom_message_unsupported_format:
     'Это сообщение не имеет общепринятого формата для подписания, поэтому его нельзя подписать.',
   custom_message_unsupported_method:
     'Неподдерживаемый метод подписи. Используйте personal_sign или eth_signTypedData_v4.',
+  revoke: 'Отменить доступ',
+  token_approvals: 'Подтверждение токенов',
+  token_approvals_description:
+    'Просматривайте и отзывайте контракты, позволяющие тратить ваши токены.',
+  token_approvals_disconnect_note:
+    'Отключение dApp не отменяет эти подтверждения. Каждое аннулирование представляет собой отдельную транзакцию в блокчейне с сетевой комиссией.',
+  token_approvals_empty_description:
+    'Контракты, которым вы разрешили тратить ваши токены в этой сети, будут отображаться здесь.',
+  token_approvals_empty_title: 'Нет активных разрешений для {{chain}}',
+  token_approvals_not_supported: 'Не поддерживается',
+  token_approvals_switch_network: 'Выберите другую сеть',
+  token_approvals_unlimited_count: 'Без ограничений: {{count}}',
+  token_approvals_unsupported_description:
+    'Пока что подтверждение токенов в этой сети не отображается. Выберите другую сеть, чтобы просмотреть его.',
+  token_approvals_unsupported_title: 'Недоступно для {{chain}}',
+  revoke_approval: 'Отменить доступ',
+  revoke_approval_explanation:
+    'Устанавливает лимит этого контракта на 0, поэтому он больше не сможет перемещать этот токен из вашего хранилища. Вы платите комиссию сети.',
+  revoke_approval_new_allowance: 'Новый лимит расходов',
+  token_approvals_count: 'Подтверждения: {{count}}',
 }

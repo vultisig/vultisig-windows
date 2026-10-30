@@ -113,7 +113,7 @@ const lpActionsByChain: Record<string, LpActionConfig> = {
     removeAction: 'remove_thor_lp',
   },
   [Chain.MayaChain]: {
-    addAction: 'bond_with_lp',
+    addAction: 'add_maya_lp',
     removeAction: 'unbond_with_lp',
   },
 }

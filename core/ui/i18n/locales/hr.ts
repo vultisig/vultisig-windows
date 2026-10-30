@@ -1050,7 +1050,8 @@ export const hr = {
     version: 'Verzija {{latestVersion}}',
   },
   vault_already_exists: 'Trezor "{{name}}" već postoji',
-  vault_cannot_be_opened: 'Ovaj se vault ne može otvoriti na ovom uređaju',
+  vault_cannot_be_opened:
+    'Vault „{{name}}“ ne može se otvoriti na ovom uređaju',
   vault_cannot_be_opened_backup_description:
     'Vaša .vult sigurnosna kopija je put natrag. Uvezite je i ovaj će vault ponovno raditi.',
   vault_cannot_be_opened_description:
@@ -2045,8 +2046,40 @@ export const hr = {
   share_qr_code: 'Podijeli QR kod',
   share_qr_image: 'Podijeli QR sliku',
   failed_to_save_image: 'Spremanje slike nije uspjelo',
+  add_maya_lp: 'Dodaj MayaChain LP',
+  maya_lp_checking_position:
+    'Provjeravam vašu poziciju MayaChain u ovom pool …',
+  maya_lp_position_unavailable:
+    'Nije moguće pročitati vašu poziciju MayaChain u ovom pool , tako da ovaj depozit nije moguće provjeriti. Pokušajte ponovno kasnije.',
+  maya_lp_paired_with_other_address:
+    'Vaša pozicija {{pool}} je uparena s drugom adresom. MayaChain bi vratio ovaj depozit.',
+  maya_lp_pending_address_mismatch:
+    'Uplata na čekanju za {{pool}} koristi CACAO ili adresu imovine koja se ne podudara s ovim trezorom. MayaChain bi vratio ovaj depozit.',
+  maya_lp_cacao_alone: 'Ovo dodaje CACAO samostalno, bez uparene imovine.',
+  maya_lp_cacao_only_position:
+    'Vaša pozicija {{pool}} sadrži samo CACAO. MayaChain vraća upareni depozit, stoga umjesto toga dodajte samo CACAO.',
   custom_message_unsupported_format:
     'Ova poruka nije u prepoznatom formatu za potpisivanje, stoga se ne može potpisati.',
   custom_message_unsupported_method:
     'Nepodržana metoda potpisivanja. Koristite personal_sign ili eth_signTypedData_v4.',
+  revoke: 'Opoziv pristupa',
+  token_approvals: 'Odobrenja tokena',
+  token_approvals_description:
+    'Pregledajte i opozovite ugovore koji mogu trošiti vaše tokene',
+  token_approvals_disconnect_note:
+    'Prekidanje veze s dApp ne uklanja ova odobrenja. Svako opoziv je zasebna transakcija na lancu s mrežnom naknadom.',
+  token_approvals_empty_description:
+    'Ugovori kojima dopustite trošenje vaših tokena na ovoj mreži prikazat će se ovdje.',
+  token_approvals_empty_title: 'Nema aktivnih odobrenja na {{chain}}',
+  token_approvals_not_supported: 'Nije podržano',
+  token_approvals_switch_network: 'Odaberite drugu mrežu',
+  token_approvals_unlimited_count: 'Neograničeno: {{count}}',
+  token_approvals_unsupported_description:
+    'Odobrenja tokena na ovoj mreži još se ne mogu prikazati. Odaberite drugu mrežu da biste ih pregledali.',
+  token_approvals_unsupported_title: 'Nije dostupno na {{chain}}',
+  revoke_approval: 'Opozovi pristup',
+  revoke_approval_explanation:
+    'Postavlja dopuštenu količinu za ovaj ugovor na 0, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
+  revoke_approval_new_allowance: 'Novo ograničenje potrošnje',
+  token_approvals_count: 'Odobrenja: {{count}}',
 }

@@ -9,6 +9,7 @@ import {
 } from '@vultisig/core-mpc/vault/Vault'
 import { Keyshare as MldsaKeyshare } from '@vultisig/lib-mldsa/vs_wasm'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import {
   encryptedEncoding,
   plainTextEncoding,
@@ -146,14 +147,21 @@ export class LegacyVaultKeyShareValidatorUnavailableError extends Error {
   }
 }
 
+const invalidLegacyKeyShare = () => new Error('Invalid legacy keyshare')
+
 /**
  * Validates the plaintext legacy keyshare shape and its public-key identity.
+ * Failures carry a fixed message: JSON.parse errors quote their input, and the
+ * input is key material.
  */
 const assertLegacyKeyShareReadable = (
   value: string,
   expectedPublicKey: string
 ): void => {
-  const parsed: unknown = JSON.parse(value)
+  const parsed: unknown = withFallback(
+    attempt(() => JSON.parse(value)),
+    undefined
+  )
 
   if (
     !parsed ||
@@ -165,7 +173,7 @@ const assertLegacyKeyShareReadable = (
     !('keygen_committee_keys' in parsed) ||
     !Array.isArray(parsed.keygen_committee_keys)
   ) {
-    throw new Error('Invalid legacy keyshare')
+    throw invalidLegacyKeyShare()
   }
 }
 
@@ -257,7 +265,9 @@ export const assertVaultKeySharesReadable = async ({
 
       assertLegacyKeyShareReadable(keyShares.ecdsa, publicKeys.ecdsa)
       assertLegacyKeyShareReadable(keyShares.eddsa, publicKeys.eddsa)
-      await validateLegacyVaultKeyShares(keyShares)
+      await validateLegacyVaultKeyShares(keyShares).catch(() => {
+        throw invalidLegacyKeyShare()
+      })
     } else {
       if (
         !getAllKeyShareValues({
@@ -366,21 +376,33 @@ export const readVaultAllKeyShares = async ({
       validateLegacyVaultKeyShares,
     })
     return decrypted
-  } catch {
+  } catch (decryptedReadError) {
     // Disabling a passcode writes plaintext shares before it clears the
     // encryption proof. If the app stops between those two durable writes, a
     // later unlock still sees the stale proof. Accept the stored values only
     // when their MPC public-key identity proves they are already plaintext;
     // ciphertext and malformed values continue to fail this validation.
-    await assertVaultKeySharesReadable({
-      ...allKeyShares,
-      libType,
-      publicKeys,
-      chainPublicKeys,
-      publicKeyMldsa,
-      validateLegacyVaultKeyShares,
-    })
-    return allKeyShares
+    const storedRead = await attempt(() =>
+      assertVaultKeySharesReadable({
+        ...allKeyShares,
+        libType,
+        publicKeys,
+        chainPublicKeys,
+        publicKeyMldsa,
+        validateLegacyVaultKeyShares,
+      })
+    )
+    if ('data' in storedRead) {
+      return allKeyShares
+    }
+    if (!(storedRead.error instanceof UnreadableVaultKeySharesError)) {
+      throw storedRead.error
+    }
+    // Stored ciphertext never parses as a share, so the decrypted read's
+    // failure is the one that says why the vault cannot be opened.
+    throw decryptedReadError instanceof UnreadableVaultKeySharesError
+      ? decryptedReadError
+      : new UnreadableVaultKeySharesError(decryptedReadError)
   }
 }
 
