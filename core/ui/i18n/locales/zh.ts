@@ -1923,4 +1923,23 @@ export const zh = {
     '此消息格式不符合认可的签名格式，因此无法签名。',
   custom_message_unsupported_method:
     '不支持的签名方法。请使用personal_sign或eth_signTypedData_v4。',
+  revoke: '撤销访问权限',
+  token_approvals: '代币审批',
+  token_approvals_description: '审核并撤销可以花费您代币的合约',
+  token_approvals_disconnect_note:
+    '断开dApp连接并不会移除这些批准。每次撤销都是一笔单独的链上交易，并会产生网络费用。',
+  token_approvals_empty_description:
+    '您允许在此网络上使用您的代币的合约将显示在此处。',
+  token_approvals_empty_title: '{{chain}}没有有效的审批。',
+  token_approvals_not_supported: '不支持',
+  token_approvals_switch_network: '选择其他网络',
+  token_approvals_unlimited_count: '无限： {{count}}',
+  token_approvals_unsupported_description:
+    '此网络上的代币审批信息暂无法显示。请选择其他网络查看。',
+  token_approvals_unsupported_title: '{{chain}}不可用',
+  revoke_approval: '撤销访问权限',
+  revoke_approval_explanation:
+    '将此合约的授权额度设置为 0，使其无法再从您的金库中转移此代币。您需要支付网络费用。',
+  revoke_approval_new_allowance: '新的消费限额',
+  token_approvals_count: '批准： {{count}}',
 }

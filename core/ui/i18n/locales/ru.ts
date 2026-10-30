@@ -2068,4 +2068,24 @@ export const ru = {
     'Это сообщение не имеет общепринятого формата для подписания, поэтому его нельзя подписать.',
   custom_message_unsupported_method:
     'Неподдерживаемый метод подписи. Используйте personal_sign или eth_signTypedData_v4.',
+  revoke: 'Отменить доступ',
+  token_approvals: 'Подтверждение токенов',
+  token_approvals_description:
+    'Просматривайте и отзывайте контракты, позволяющие тратить ваши токены.',
+  token_approvals_disconnect_note:
+    'Отключение dApp не отменяет эти подтверждения. Каждое аннулирование представляет собой отдельную транзакцию в блокчейне с сетевой комиссией.',
+  token_approvals_empty_description:
+    'Контракты, которым вы разрешили тратить ваши токены в этой сети, будут отображаться здесь.',
+  token_approvals_empty_title: 'Нет активных разрешений для {{chain}}',
+  token_approvals_not_supported: 'Не поддерживается',
+  token_approvals_switch_network: 'Выберите другую сеть',
+  token_approvals_unlimited_count: 'Без ограничений: {{count}}',
+  token_approvals_unsupported_description:
+    'Пока что подтверждение токенов в этой сети не отображается. Выберите другую сеть, чтобы просмотреть его.',
+  token_approvals_unsupported_title: 'Недоступно для {{chain}}',
+  revoke_approval: 'Отменить доступ',
+  revoke_approval_explanation:
+    'Устанавливает лимит этого контракта на 0, поэтому он больше не сможет перемещать этот токен из вашего хранилища. Вы платите комиссию сети.',
+  revoke_approval_new_allowance: 'Новый лимит расходов',
+  token_approvals_count: 'Подтверждения: {{count}}',
 }

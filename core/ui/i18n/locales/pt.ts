@@ -2095,4 +2095,24 @@ export const pt = {
     'Esta mensagem não está em um formato de assinatura reconhecido, portanto não pode ser assinada.',
   custom_message_unsupported_method:
     'Método de assinatura não suportado. Use personal_sign ou eth_signTypedData_v4.',
+  revoke: 'Revogar acesso',
+  token_approvals: 'Aprovações de tokens',
+  token_approvals_description:
+    'Analise e revogue contratos que possam gastar seus tokens.',
+  token_approvals_disconnect_note:
+    'Desconectar um dApp não remove essas aprovações. Cada revogação é uma transação on-chain separada com uma taxa de rede.',
+  token_approvals_empty_description:
+    'Os contratos que você autorizar a gastar seus tokens nesta rede aparecerão aqui.',
+  token_approvals_empty_title: 'Não há aprovações ativas em {{chain}}',
+  token_approvals_not_supported: 'Não suportado',
+  token_approvals_switch_network: 'Escolha outra rede',
+  token_approvals_unlimited_count: 'Ilimitado: {{count}}',
+  token_approvals_unsupported_description:
+    'As aprovações de tokens nesta rede ainda não podem ser exibidas. Escolha outra rede para analisá-las.',
+  token_approvals_unsupported_title: 'Não disponível em {{chain}}',
+  revoke_approval: 'Revogar acesso',
+  revoke_approval_explanation:
+    'Define a permissão deste contrato como 0, impedindo que ele mova este token do seu cofre. Você paga uma taxa de rede.',
+  revoke_approval_new_allowance: 'Novo limite de gastos',
+  token_approvals_count: 'Aprovações: {{count}}',
 }

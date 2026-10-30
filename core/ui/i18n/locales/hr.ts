@@ -2062,4 +2062,24 @@ export const hr = {
     'Ova poruka nije u prepoznatom formatu za potpisivanje, stoga se ne može potpisati.',
   custom_message_unsupported_method:
     'Nepodržana metoda potpisivanja. Koristite personal_sign ili eth_signTypedData_v4.',
+  revoke: 'Opoziv pristupa',
+  token_approvals: 'Odobrenja tokena',
+  token_approvals_description:
+    'Pregledajte i opozovite ugovore koji mogu trošiti vaše tokene',
+  token_approvals_disconnect_note:
+    'Prekidanje veze s dApp ne uklanja ova odobrenja. Svako opoziv je zasebna transakcija na lancu s mrežnom naknadom.',
+  token_approvals_empty_description:
+    'Ugovori kojima dopustite trošenje vaših tokena na ovoj mreži prikazat će se ovdje.',
+  token_approvals_empty_title: 'Nema aktivnih odobrenja na {{chain}}',
+  token_approvals_not_supported: 'Nije podržano',
+  token_approvals_switch_network: 'Odaberite drugu mrežu',
+  token_approvals_unlimited_count: 'Neograničeno: {{count}}',
+  token_approvals_unsupported_description:
+    'Odobrenja tokena na ovoj mreži još se ne mogu prikazati. Odaberite drugu mrežu da biste ih pregledali.',
+  token_approvals_unsupported_title: 'Nije dostupno na {{chain}}',
+  revoke_approval: 'Opozovi pristup',
+  revoke_approval_explanation:
+    'Postavlja dopuštenu količinu za ovaj ugovor na 0, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
+  revoke_approval_new_allowance: 'Novo ograničenje potrošnje',
+  token_approvals_count: 'Odobrenja: {{count}}',
 }

@@ -2110,4 +2110,25 @@ export const de = {
     'Diese Nachricht liegt nicht in einem anerkannten Signaturformat vor und kann daher nicht signiert werden.',
   custom_message_unsupported_method:
     'Nicht unterstützte Signaturmethode. Verwenden Sie personal_sign oder eth_signTypedData_v4.',
+  revoke: 'Zugriff entziehen',
+  token_approvals: 'Token-Genehmigungen',
+  token_approvals_description:
+    'Verträge prüfen und widerrufen, die Ihre Token ausgeben können.',
+  token_approvals_disconnect_note:
+    'Das Trennen eines dApp entfernt diese Genehmigungen nicht. Jeder Widerruf ist eine separate On-Chain-Transaktion mit einer Netzwerkgebühr.',
+  token_approvals_empty_description:
+    'Verträge, denen Sie die Verwendung Ihrer Token in diesem Netzwerk gestatten, werden hier angezeigt.',
+  token_approvals_empty_title:
+    'Für {{chain}} liegen keine aktiven Genehmigungen vor.',
+  token_approvals_not_supported: 'Nicht unterstützt',
+  token_approvals_switch_network: 'Wählen Sie ein anderes Netzwerk',
+  token_approvals_unlimited_count: 'Unbegrenzt: {{count}}',
+  token_approvals_unsupported_description:
+    'Token-Genehmigungen in diesem Netzwerk können noch nicht angezeigt werden. Wählen Sie ein anderes Netzwerk, um sie einzusehen.',
+  token_approvals_unsupported_title: 'Nicht verfügbar auf {{chain}}',
+  revoke_approval: 'Zugriff widerrufen',
+  revoke_approval_explanation:
+    'Setzt das Kontingent dieses Vertrags auf 0, sodass dieser Token nicht mehr aus Ihrem Tresor transferiert werden kann. Es fällt eine Netzwerkgebühr an.',
+  revoke_approval_new_allowance: 'Neue Ausgabenobergrenze',
+  token_approvals_count: 'Genehmigungen: {{count}}',
 }
