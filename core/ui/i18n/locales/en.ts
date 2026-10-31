@@ -399,7 +399,7 @@ export const en = {
   enter_vault_name: 'Enter Vault Name',
   enter_your_email: 'Enter your email',
   enter_your_email_description:
-    'This email is used for cloud backup and shared with no third party',
+    "Used once to send your vault backup. We don't store it.",
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
@@ -496,8 +496,7 @@ export const en = {
       wellDone: 'Well done',
     },
     connectingWithServer: 'Connecting with server...',
-    emailSetupTitle:
-      'This email is used for cloud backup and shared with no third party',
+    emailSetupTitle: "Used once to send your vault backup. We don't store it.",
     enterEmail: 'Enter your email',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
     passwordTooltip:
@@ -951,9 +950,9 @@ export const en = {
   reshare_threshold_not_met_description:
     "You're trying to reduce the number of devices from <w>{{from}} to {{to}}</w>, but this vault <w>requires {{count}} active signers</w> to stay secure.",
   plugin_store_compatible: 'Plugin Store compatible',
-  reshare_backup_old_backups_wont_work: "Old backups won't work",
+  reshare_backup_old_backups_wont_work: 'Make fresh backups',
   reshare_backup_old_backups_wont_work_description:
-    "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",
+    "Backups from before this reshare can't be combined with the new ones. Old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
   reshare_min_devices_required: 'At least {{count}} devices required',
   reshare_vault_description: 'Reshare vault with a new committee',
   reshare_vault_subtitle:
@@ -961,9 +960,9 @@ export const en = {
   reshare_warning_cosigners_title: 'All co-signers must be online',
   reshare_warning_cosigners_description:
     'Every current device in your vault needs to participate in the reshare session.',
-  reshare_warning_old_backups_title: 'Old backups will stop working',
+  reshare_warning_old_backups_title: 'Make fresh backups',
   reshare_warning_old_backups_description:
-    "Any existing .vult files become invalid. You'll need to create fresh backups after resharing.",
+    "Backups from before this reshare can't be combined with the new ones. Old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
   reshare_success_title: 'Vault reshared',
   reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',
