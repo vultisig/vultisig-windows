@@ -2057,6 +2057,14 @@ export const nl = {
     'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
   send_insufficient_balance_for_fee:
     'Onvoldoende saldo om de netwerkkosten te betalen.',
+  send_receiver_name_lookup_failed:
+    'De naamserver kon niet worden bereikt om {{name}} op te zoeken. Controleer uw verbinding en probeer het opnieuw.',
+  send_receiver_name_no_address_for_chain:
+    'Er is geen {{chain}} adres geregistreerd voor {{name}} .',
+  send_receiver_name_not_found:
+    '{{name}} is niet geregistreerd. Controleer de naam en probeer het opnieuw.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} kan niet worden gebruikt op {{chain}} . Voer in plaats daarvan een {{chain}} -adres in.',
   failed_to_copy_tx_hash: 'Het kopiëren van de transactiehash is mislukt.',
   tx_hash_copied: 'Transactiehash gekopieerd',
   copy_link: 'Link kopiëren',

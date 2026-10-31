@@ -6,6 +6,7 @@ import { SendInputContainer } from '@core/ui/vault/send/components/SendInputCont
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useSendReceiverAddress } from '@core/ui/vault/send/state/receiverResolution'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -15,9 +16,14 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+/**
+ * The receiver field folded away: what the user entered (an address or a
+ * name), with a check once it gives the send a valid address.
+ */
 export const ManageAddressesInputFieldCollapsed = () => {
   const { t } = useTranslation()
   const [address] = useSendReceiver()
+  const receiverAddress = useSendReceiverAddress()
 
   const [{ field }, setFocusedSendField] = useSendFormFieldState()
 
@@ -25,7 +31,8 @@ export const ManageAddressesInputFieldCollapsed = () => {
   const addressError = data?.receiverAddress
 
   const isOpen = field === 'address'
-  const isChecked = address && !isOpen && !addressError
+  // A typed name earns the check only once it has resolved to an address.
+  const isChecked = receiverAddress && !isOpen && !addressError
 
   return (
     <CollapsedCoinInputContainer

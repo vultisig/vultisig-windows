@@ -2075,6 +2075,14 @@ export const it = {
     "Inserisci prima l'indirizzo del destinatario per utilizzare i pulsanti percentuali",
   send_insufficient_balance_for_fee:
     'Saldo insufficiente per pagare la tariffa di rete.',
+  send_receiver_name_lookup_failed:
+    'Impossibile raggiungere il servizio di risoluzione dei nomi per cercare {{name}} . Verifica la connessione e riprova.',
+  send_receiver_name_no_address_for_chain:
+    'Nessun indirizzo {{chain}} è registrato per {{name}} .',
+  send_receiver_name_not_found:
+    '{{name}} non è registrato. Verifica il nome e riprova.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} non può essere utilizzato su {{chain}} . Inserire invece un indirizzo {{chain}} .',
   failed_to_copy_tx_hash: "Impossibile copiare l'hash della transazione",
   tx_hash_copied: 'Hash della transazione copiato',
   copy_link: 'Copia collegamento',

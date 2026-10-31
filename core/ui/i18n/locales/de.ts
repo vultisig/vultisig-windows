@@ -2087,6 +2087,14 @@ export const de = {
     'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
   send_insufficient_balance_for_fee:
     'Nicht genügend Guthaben zur Zahlung der Netzwerkgebühr',
+  send_receiver_name_lookup_failed:
+    'Der Namensdienst konnte nicht erreicht werden, um {{name}} aufzulösen. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+  send_receiver_name_no_address_for_chain:
+    'Für {{name}} ist keine {{chain}} -Adresse registriert.',
+  send_receiver_name_not_found:
+    '{{name}} ist nicht registriert. Überprüfen Sie den Namen und versuchen Sie es erneut.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} kann nicht für {{chain}} verwendet werden. Geben Sie stattdessen eine {{chain}} -Adresse ein.',
   failed_to_copy_tx_hash: 'Fehler beim Kopieren des Transaktions-Hashs',
   tx_hash_copied: 'Transaktions-Hash kopiert',
   copy_link: 'Link kopieren',

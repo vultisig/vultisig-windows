@@ -8,7 +8,7 @@ import { getNearSendLimits } from '@vultisig/core-chain/chains/near/sendLimits'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 
-import { useSendReceiver } from '../state/receiver'
+import { useSendReceiverAddress } from '../state/receiverResolution'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendBalanceQuery } from './useSendBalanceQuery'
 
@@ -32,7 +32,7 @@ export const getNearLimitsReceiver = (receiver: string): string =>
  */
 export const useNearSendLimitsQuery = () => {
   const coin = useCurrentSendCoin()
-  const [receiver] = useSendReceiver()
+  const receiver = useSendReceiverAddress()
   const balance = useSendBalanceQuery(extractAccountCoinKey(coin)).data
   const limitsReceiver = getNearLimitsReceiver(receiver)
 
