@@ -1,5 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+const mockOpenInSidePanel = vi.hoisted(() => vi.fn())
+
+vi.mock('./inSidePanel', () => ({
+  openInSidePanel: (...args: unknown[]) => mockOpenInSidePanel(...args),
+}))
+
 import { inNewWindow } from './inNewWindow'
 
 type WindowFixture = Pick<
@@ -74,6 +80,7 @@ const stubChrome = (lastFocused: WindowFixture = {}): ChromeStub => {
 describe('inNewWindow', () => {
   beforeEach(async () => {
     vi.clearAllMocks()
+    mockOpenInSidePanel.mockResolvedValue(undefined)
     // Badge renders are queued, so let the previous test's renders land on the
     // stub they were scheduled against instead of the next one.
     await new Promise(resolve => setTimeout(resolve, 0))
@@ -90,6 +97,53 @@ describe('inNewWindow', () => {
       focused: true,
       drawAttention: true,
     })
+  })
+
+  it('shows the request in the side panel of the dApp window instead of a popup', async () => {
+    const stub = stubChrome()
+    const abortSignal = new AbortController().signal
+    const release = vi.fn()
+    mockOpenInSidePanel.mockResolvedValue({
+      abortSignal,
+      close: () => undefined,
+      release,
+    })
+    const execute = vi.fn(async () => 'done')
+
+    await expect(
+      inNewWindow({ url: 'popup.html', windowId: 1, execute })
+    ).resolves.toBe('done')
+
+    expect(mockOpenInSidePanel).toHaveBeenCalledWith({
+      windowId: 1,
+      url: 'popup.html',
+    })
+    expect(execute).toHaveBeenCalledWith(
+      expect.objectContaining({ abortSignal })
+    )
+    expect(stub.created).toEqual([])
+    expect(release).toHaveBeenCalled()
+  })
+
+  it('opens a popup when no side panel takes the request', async () => {
+    const stub = stubChrome()
+
+    await inNewWindow({
+      url: 'popup.html',
+      windowId: 1,
+      execute: async () => 'done',
+    })
+
+    expect(stub.created).toHaveLength(1)
+  })
+
+  it('opens a popup without asking the side panel for a request from outside a tab', async () => {
+    const stub = stubChrome()
+
+    await inNewWindow({ url: 'popup.html', execute: async () => 'done' })
+
+    expect(mockOpenInSidePanel).not.toHaveBeenCalled()
+    expect(stub.created).toHaveLength(1)
   })
 
   it('anchors the popup to the top right of the browser window', async () => {
