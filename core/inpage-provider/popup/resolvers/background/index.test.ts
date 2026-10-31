@@ -210,6 +210,23 @@ describe('callPopupFromBackground', () => {
     await expect(call).rejects.toBe(PopupError.SigningFailed)
   })
 
+  it('shows the request for the browser window of the dApp tab', async () => {
+    mockInNewWindow.mockResolvedValue({ appSession: undefined })
+
+    await callPopupFromBackground({
+      call: { grantVaultAccess: { chain: Chain.Ethereum } },
+      options: {},
+      context: {
+        requestOrigin: 'https://window.example.com',
+        requestWindowId: 4,
+      },
+    })
+
+    expect(mockInNewWindow).toHaveBeenCalledWith(
+      expect.objectContaining({ windowId: 4 })
+    )
+  })
+
   it('drops the stored call once the popup has answered', async () => {
     mockInNewWindow.mockResolvedValue({ appSession: undefined })
 

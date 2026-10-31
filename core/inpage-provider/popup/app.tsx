@@ -9,6 +9,7 @@ import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUni
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useEffect } from 'react'
 
+import { dismissSidePanelPopup, isPopupInSidePanel } from './sidePanel/dismiss'
 import { usePopupCallId, useResolvePopupCallMutation } from './view/core/call'
 import { VaultsOnly } from './view/flow/VaultsOnly'
 import { PopupResolvers } from './view/resolvers'
@@ -16,6 +17,16 @@ import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
 import { PopupContextProvider } from './view/state/context'
 import { PopupInputProvider } from './view/state/input'
 
+// The side panel stays open: leaving the request there returns it to the wallet.
+const leavePopup = isPopupInSidePanel()
+  ? dismissSidePanelPopup
+  : () => window.close()
+
+/**
+ * The popup page for a single dApp request, shown in a popup window or in the
+ * side panel. Leaving it closes the window, or takes the side panel back to
+ * the wallet.
+ */
 export const PopupApp = () => {
   const { mutateAsync: resolvePopupCall } = useResolvePopupCallMutation()
   const callId = usePopupCallId()
@@ -54,11 +65,11 @@ export const PopupApp = () => {
 
         return (
           <ExtensionCoreApp
-            goBack={() => window.close()}
-            goHome={() => window.close()}
+            goBack={leavePopup}
+            goHome={leavePopup}
             popNavigationHistory={() => {
-              // No navigation stack in this popup; ignore steps and close.
-              window.close()
+              // No navigation stack in this popup; ignore steps and leave.
+              leavePopup()
             }}
             targetVaultId={context?.appSession?.vaultId}
             isLimited={true}

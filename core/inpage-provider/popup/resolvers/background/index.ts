@@ -25,6 +25,7 @@ export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
         url: chrome.runtime.getURL(
           addQueryParams('popup.html', { [callIdQueryParam]: callId })
         ),
+        windowId: context.requestWindowId,
         execute: ({ abortSignal, close }) =>
           new Promise<any>((resolve, reject) => {
             const handleMessage = (response: any) => {
