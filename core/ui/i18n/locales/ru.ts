@@ -3,6 +3,8 @@ export const ru = {
   action: 'Действие',
   active: 'Активно',
   active_chains_found_one: 'Мы нашли {{count}} активную сеть',
+  active_chains_found_few: 'Мы нашли {{count}} активные сети',
+  active_chains_found_many: 'Мы нашли {{count}} активных сетей',
   active_chains_found_other: 'Мы нашли {{count}} активных сетей',
   active_chains_warning:
     'Каждая дополнительная сеть увеличивает время генерации вашего хранилища и вероятность тайм-аута.',
@@ -42,7 +44,7 @@ export const ru = {
   amount_must_be_non_negative: 'Сумма не может быть отрицательной',
   amount_must_be_positive: 'Сумма должна быть положительной',
   amount_required: 'Сумма обязательна',
-  amount_to_unstake: 'Сумма для unstake',
+  amount_to_unstake: 'Сумма для вывода из стейкинга',
   app_lock_passcode: 'Пин-код блокировки приложения',
   app_lock_passcode_description:
     'Добавьте дополнительный уровень безопасности, требуя пин-код для разблокировки приложения.',
@@ -53,7 +55,7 @@ export const ru = {
   approve: 'Подтвердить',
   reject: 'Отклонить',
   asset: 'Актив',
-  assets: 'активы',
+  assets: 'Активы',
   at_least_one_device: 'Минимум одно устройство',
   at_least_one_device_subtitle:
     'Подойдёт любое устройство, способное запускать {{productName}}.',
@@ -65,15 +67,14 @@ export const ru = {
     '<highlight>Резервные копии,</highlight> ваш новый метод восстановления',
   backupsDescription:
     'Резервные копии защищают ваше хранилище. У каждого устройства есть <w>собственная</w> резервная копия. Одна резервная копия не может перемещать средства; она нужна только для восстановления. Импортируйте и восстановите любое потерянное устройство.',
-  backupEachDevice: 'Создайте резервные копии каждого устройства.',
+  backupEachDevice: 'Главное — ваше устройство',
   backupEachDeviceDescription:
     'Резервная копия устройства <w>и</w> пароль являются ключами. Сервер только совместно подписывает, а резервную копию можно запросить.',
   storeBackupsSeparately: 'Храните резервные копии отдельно.',
   storeBackupsSeparatelyDescription:
     'Храните каждую резервную копию в отдельном месте. Если одна из них будет скомпрометирована, ваши средства останутся в безопасности.',
   backup_description: 'Сохраните долю хранилища в предпочтительное место',
-  backup_email_description:
-    'Введите адрес электронной почты, чтобы получить доступ к хранилищу.',
+  backup_email_description: 'Введите e-mail, на который придёт доля хранилища.',
   backup_password: 'Пароль резервной копии',
   backup_password_description:
     'Введите пароль, который вы установили при создании этого хранилища.',
@@ -103,21 +104,21 @@ export const ru = {
   swap_limit_filled_so_far: 'Исполнено на данный момент',
   swap_limit_minimum_received: 'Минимум к получению',
   swap_limit_no_orders: 'Лимитных ордеров пока нет.',
-  swap_limit_order_status: 'Статус заказа',
+  swap_limit_order_status: 'Статус ордера',
   swap_limit_orders_title: 'Лимитные ордера',
   swap_limit_progress_filled: 'Исполнено {{percent}}%',
   swap_limit_status_cancelled: 'Отменено',
-  swap_limit_status_expired: 'Истекший',
+  swap_limit_status_expired: 'Истёк',
   swap_limit_status_filled: 'Исполнен',
   swap_limit_status_in_progress: 'В ходе выполнения',
   swap_limit_status_pending: 'Размещается',
   swap_limit_status_refunded: 'Возврат средств',
-  swap_limit_status_rejected: 'Отклоненный',
+  swap_limit_status_rejected: 'Отклонён',
   swap_limit_status_resting: 'Открыт',
   transaction_scanned_by: 'Транзакция проверена {{provider}}',
-  broadcasted: 'Транслировалось',
-  bond: 'Bond',
-  bond_with_lp: 'Bond Maya',
+  broadcasted: 'Отправлено в сеть',
+  bond: 'Внести бонд',
+  bond_with_lp: 'Бонд Maya',
   bronze: 'Бронза',
   diamond: 'Алмаз',
   buy: 'Купить',
@@ -167,13 +168,13 @@ export const ru = {
     'Если вам нужна дополнительная защита, выберите пароль. <b>Пароль восстановить будет невозможно.</b> <info />',
   choose_backup_method: 'Выбрать способ резервного копирования',
   choose_payout_asset: 'Выбрать актив для выплат',
-  choose_chains: 'Выбирайте цепочки',
+  choose_chains: 'Выбрать сети',
   choose_tokens: 'Выбрать токены',
   choose_vaults: 'Выберите хранилища',
   deposited: 'Внесено',
   circle: {
     banner_text:
-      'Средства полностью остаются под контролем вашего хранилища. Аккаунты Circle — self-custodial, а доход формируется через безопасные офчейн-казначейства.',
+      'Средства полностью остаются под контролем вашего хранилища. Аккаунты Circle некастодиальные, а доход формируется через надёжные офчейн-казначейства.',
     open_account: 'Открыть аккаунт',
     withdraw: 'Вывести',
     withdraw_header: 'Вывести из Circle',
@@ -189,7 +190,7 @@ export const ru = {
   defi_token_required: '{{ticker}} отсутствует в этом хранилище',
   adding_coin_to_vault: 'Добавление монеты в хранилище...',
   defi_token_required_description:
-    'Добавьте {{ticker}} в это хранилище через «Управление токенами», чтобы stаke/unstake/bond.',
+    'Добавьте {{ticker}} в это хранилище через «Управление токенами», чтобы стейкать, выводить из стейкинга или вносить бонд.',
   defi_add: 'Добавить',
   defi_remove: 'Удалить',
   defi_lp_pool_title: 'Пул {{pool}}',
@@ -201,7 +202,7 @@ export const ru = {
   complete: 'Завершить',
   congrats: 'Поздравляю!',
   confirm: 'Подтвердить',
-  confirmed: 'Подтвержденный',
+  confirmed: 'Подтверждено',
   confirm_automation_creation: 'Подтвердить создание автоматизации',
   confirm_new_passcode: 'Подтвердить новый пин-код',
   confirm_passcode: 'Подтвердить пин-код',
@@ -218,14 +219,14 @@ export const ru = {
   copy_address: 'Копировать адрес',
   create_new_vault: 'Создать новое хранилище',
   create_vault: 'Создать хранилище',
-  create_referral_form: 'Создать referral',
-  create_referral_title: 'Создать referral',
-  create_referral: 'Создать referral',
+  create_referral_form: 'Создать реферальный код',
+  create_referral_title: 'Создать реферальный код',
+  create_referral: 'Создать реферальный код',
   create_referral_desc:
-    'Создайте свой собственный код и зарабатывайте!<c> 20%</c> по референтным свопам',
+    'Создайте свой код и получайте <c>20%</c> с обменов приглашённых друзей',
   save_referral: 'Сохранить реферальную ссылку',
   save_referral_desc:
-    'Сохраните реферальный код друга и получите скидку.<c> 10%</c> по свопам.',
+    'Сохраните реферальный код друга и экономьте <c>10%</c> при обмене.',
   creating_vault: 'Создание хранилища',
   currency: 'Валюта',
   current_expiry: 'Текущий срок',
@@ -237,8 +238,8 @@ export const ru = {
   deeplink: 'Диплинк',
   defi: 'DeFi',
   defiChainTabs: {
-    bonded: 'Bonded',
-    staked: 'Staked',
+    bonded: 'В бонде',
+    staked: 'В стейкинге',
     lps: 'LPs',
     governance: 'Управление',
     earn: 'Зарабатывать',
@@ -275,15 +276,15 @@ export const ru = {
   done: 'Готово',
   earn: 'Доход',
   edit_address: 'Редактировать адрес',
-  edit_friends_referral: 'Редактировать referral друга',
-  edit_referral: 'Редактировать referral',
+  edit_friends_referral: 'Изменить реферальный код друга',
+  edit_referral: 'Изменить реферальный код',
   remove_friends_referral: 'Удалить реферал',
   edit_vaults: 'Редактировать хранилища',
   email: 'E-mail',
   email_placeholder: 'Введите свой адрес электронной почты',
   email_required: 'E-mail обязателен',
   evm_chains: 'EVM-сети',
-  enable: 'Давать возможность',
+  enable: 'Включить',
   enable_all: 'Включить все',
   enable_dkls: 'Включить DKLS',
   enable_tss_batching: 'Включить пакетную обработку TSS',
@@ -292,7 +293,7 @@ export const ru = {
     'Сгенерируйте постквантовый (MLDSA) ключ для этого хранилища.',
   enable_token_instruction:
     'Включите минимум один токен, чтобы видеть балансы и управлять позициями.',
-  enter: 'Входить',
+  enter: 'Войти',
   enter_address: 'Введите адрес',
   enter_address_here: 'Введите адрес здесь',
   enter_amount: 'Введите сумму',
@@ -303,18 +304,18 @@ export const ru = {
   enter_password: 'Введите пароль',
   enter_number_placeholder: 'Введите число',
   enter_percentage: 'Введите процент',
-  enter_referral_code_placeholder: 'Введите referral-код',
+  enter_referral_code_placeholder: 'Введите реферальный код',
   enter_up_to_4_characters_placeholder: 'Введите до 4 символов',
   enter_vault_name: 'Введите имя хранилища',
   enter_your_email: 'Введите свой адрес электронной почты',
   enter_your_email_description:
-    'Этот email используется для облачного резервного копирования и не передаётся третьим лицам',
+    'Используется один раз, чтобы отправить резервную копию хранилища. Мы его не храним.',
   enter_your_password: 'Введите ваш пароль',
   entity_not_scanned: '{{entity}} не просканировано <provider></provider>',
   entity_scanned: '{{entity}} просканировано <provider></provider>',
   est_network_fee: 'Оценка комиссии сети',
   expand_view: 'Развернуть',
-  open_as_side_panel: 'Открывается как боковая панель',
+  open_as_side_panel: 'Открыть в боковой панели',
   opened_in_new_tab: 'Открыто в новой вкладке',
   push_notifications: 'Push-уведомления',
   push_notifications_description:
@@ -333,7 +334,7 @@ export const ru = {
     'В расширение можно импортировать только DKLS-хранилища',
   fallback_swap_warning:
     'Мы не смогли симулировать эту транзакцию. Действуйте с осторожностью.',
-  failed: 'Неуспешный',
+  failed: 'Ошибка',
   failed_to_connect_with_server: 'Не удалось подключиться к серверу',
   failed_to_copy_address: 'Не удалось скопировать адрес',
   failed_to_copy_link: 'Не удалось скопировать ссылку',
@@ -347,7 +348,7 @@ export const ru = {
   failed_to_join_keysign: 'Не удалось присоединиться к Keysign',
   failed_to_join_session: 'Не удалось присоединиться к сессии',
   failed_to_load: 'Не удалось загрузить',
-  failed_to_migrate_storage: 'Не удалось мигрировать хранилище',
+  failed_to_migrate_storage: 'Не удалось перенести данные',
   failed_to_load_transactions: 'Не удалось загрузить транзакции.',
   failed_to_process_transaction: 'Не удалось обработать транзакцию',
   failed_to_process_url: 'Не удалось обработать URL',
@@ -355,7 +356,7 @@ export const ru = {
   failed_to_save_vault: 'Не удалось сохранить хранилище',
   faq: 'FAQ',
   faq_comparison_content:
-    'Основано на MPC-технологии, которая устраняет необходимость seed phrase и поддерживает несколько блокчейнов, делая {{productName}} гибким и chain-agnostic.',
+    'Он построен на технологии MPC, которая избавляет от сид-фраз и поддерживает множество блокчейнов, поэтому {{productName}} гибкий и не зависит от конкретной сети.',
   faq_comparison_title:
     'Чем {{productName}} отличается от других multisig-кошельков?',
   faq_data_protection_content:
@@ -373,14 +374,14 @@ export const ru = {
     '{{productName}} бесплатен. При отправке действуют только стандартные сетевые комиссии. Для свопов и мостов взимается комиссия 0,5% (50 bps).',
   faq_recover_assets_title: 'Какие комиссии и расходы?',
   faq_secure_crypto_vault_content:
-    'Да, если вы сохранили и имеете доступ к резервным копиям при создании хранилища. Вы можете импортировать эти резервные копии на новом устройстве и восстановить доступ к активам.',
+    'Да, если при создании хранилища вы сохранили резервные копии и у вас есть к ним доступ. Импортируйте их на новом устройстве, чтобы вернуть доступ к активам.',
   faq_secure_crypto_vault_title:
     'Могу ли я восстановить активы при потере устройства?',
   faq_setup_crypto_vault_content:
-    'Это безопасный кошелёк с многофакторной аутентификацией на базе MPC для управления цифровыми активами. Транзакции требуют подтверждения несколькими устройствами.',
+    'Это безопасный кошелёк на базе технологии MPC для управления цифровыми активами. Транзакции требуют подтверждения с нескольких устройств.',
   faq_setup_crypto_vault_title: 'Что такое {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    '{{productName}} даёт повышенную безопасность через multi-device аутентификацию, поддержку многих блокчейнов, простое восстановление, и отсутствие seed phrases и трекинга.',
+    '{{productName}} даёт повышенную безопасность: подтверждение на нескольких устройствах, поддержка многих блокчейнов, простое восстановление, без сид-фраз и отслеживания.',
   faq_supported_cryptocurrencies_title: 'В чём преимущества {{productName}}?',
   faq_vultisig_make_money_content:
     '{{productName}} безопасно хранит и управляет цифровыми активами. Все действия, такие как отправка или своп, требуют подписи пороговым числом устройств.',
@@ -393,8 +394,7 @@ export const ru = {
     'Подтвердите транзакцию, введя пароль вашей серверной доли.',
   fastVaultSetup: {
     backup: {
-      codeInfo:
-        'Этот код подтвердит, что вы получили долю хранилища 1 по e-mail',
+      codeInfo: 'Это активирует сервер-соподписант',
       enterCode: 'Введите 4-значный код из письма',
       sentTo: 'Отправлено на {{email}}.',
       setNewStandard:
@@ -404,15 +404,15 @@ export const ru = {
     },
     connectingWithServer: 'Подключение к серверу...',
     emailSetupTitle:
-      'Этот email используется для облачного резервного копирования и не передаётся третьим лицам',
+      'Используется один раз, чтобы отправить резервную копию хранилища. Мы его не храним.',
     enterEmail: 'Введите email',
     passwordCannotBeRecovered: 'Пароль нельзя сбросить или восстановить',
     passwordTooltip:
       'Это происходит потому, что пароль используется для локального шифрования файла резервной копии, аналогично тому, как шифруется жесткий диск. На следующем шаге у вас есть возможность добавить подсказку.',
     referralModalTitle: 'Реферальный код',
     referralModalSubtitle:
-      'Введите здесь свой реферальный код. <b>Получите скидку 10% на каждую покупку.</b>',
-    applyReferral: 'Подать заявку на реферальную программу',
+      'Введите свой реферальный код. <b>Скидка 10% на каждую транзакцию.</b>',
+    applyReferral: 'Применить код',
     referralAdded: 'Добавлен реферальный код',
     takeMinute: 'Это займёт всего секунду',
   },
@@ -430,10 +430,10 @@ export const ru = {
   buy_vult_banner_caption: 'Купить $VULT',
   follow_banner_caption: 'Vultisig строится вместе с вами',
   follow_banner_title: 'Подписывайтесь на нас в X',
-  rujira_banner_caption: 'Ставьте и зарабатывайте',
-  rujira_banner_title: 'Ставки Rujira доступны прямо сейчас',
+  rujira_banner_caption: 'Стейкайте и зарабатывайте',
+  rujira_banner_title: 'Стейкинг Rujira уже доступен',
   vault_backup_banner_caption: 'Создайте резервную копию своего хранилища.',
-  vault_backup_banner_title: 'Запросить полное хранение в хранилище',
+  vault_backup_banner_title: 'Запросить полный контроль над хранилищем',
   referral_banner_caption: 'Не упустите награды!',
   referral_banner_title: 'Введите свой реферальный код',
   kamino_banner_caption: 'Новое на Солане',
@@ -465,7 +465,7 @@ export const ru = {
   grant_camera_permission: 'Разрешить доступ к камере',
   gwei: 'GWEI',
   header_tooltip_content:
-    'Реферальная программа применяется к свопам THORChain на best-effort основе. Чтобы использовать referral {{productName}}, нужно зарегистрировать THORName. Стоимость регистрации — 10 RUNE и 1 RUNE за каждый год, оплачивается сети THORChain.',
+    'Реферальная программа действует для обменов THORChain и работает без гарантий. Чтобы пользоваться реферальной программой {{productName}}, зарегистрируйте THORName. Регистрация стоит 10 RUNE плюс 1 RUNE за каждый год, оплата идёт сети THORChain.',
   header_tooltip_title: 'Реферальная программа',
   having_trouble_scanning_help: 'Помощь по сканированию QR',
   having_trouble_scanning: 'Проблемы со сканированием?',
@@ -488,27 +488,27 @@ export const ru = {
   i_understand_save_backup: 'Я понимаю, как сохранить эту резервную копию.',
   import: 'Импорт',
   import_key: 'Импорт ключа',
-  import_seedphrase: 'Импорт seed phrase',
+  import_seedphrase: 'Импорт сид-фразы',
   seedPhraseImportTip:
     'Совет: Вы можете использовать браузер в качестве устройства.',
-  enter_your_seedphrase: 'Введите вашу seed phrase',
+  enter_your_seedphrase: 'Введите сид-фразу',
   enter_seedphrase_subtitle:
     'Оставляйте пробел между словами. Поддерживаемые длины:<h> 12, 15, 18, 21 или 24 слова</h>',
   mnemonic_placeholder: 'Введите 12, 15, 18, 21 или 24 слова вашей сид-фразы.',
   seedphrase_word_count_error:
-    'Вы ввели {{count}} слов. Начальная фраза должна состоять из 12, 15, 18, 21 или 24 слов.',
-  seedphrase_invalid_error: 'Seed phrase неверна, проверьте все слова.',
+    'Введено слов: {{count}}. Сид-фраза должна состоять из 12, 15, 18, 21 или 24 слов.',
+  seedphrase_invalid_error: 'Неверная сид-фраза, проверьте все слова.',
   seedphrase_duplicate_vault_error:
-    'Эта сид-фраза уже импортирована в хранилище как &quot;{{vaultName}}&quot;. Пожалуйста, импортируйте другую сид-фразу.',
+    'Эта сид-фраза уже импортирована как хранилище «{{vaultName}}». Импортируйте другую сид-фразу.',
   fast_vault_exists_warning_title: 'Хранилище уже существует',
   fast_vault_exists_warning_description:
-    'Эта сид-фраза уже была импортирована как быстрое хранилище на другом устройстве. Если продолжить, серверная доля будет заменена, и другое устройство перестанет работать.',
+    'Эта сид-фраза уже импортирована как Fast Vault на другом устройстве. Если продолжить, серверная доля будет заменена, и другое устройство перестанет работать.',
   fast_vault_exists_warning_hint:
-    'Если вы хотите, чтобы оба устройства работали, используйте безопасное хранилище.',
+    'Чтобы оба устройства продолжили работать, используйте Secure Vault.',
   import_seedphrase_description:
     'Введите её, создайте хранилище и не оглядывайтесь назад.',
   import_seedphrase_onboarding_title:
-    'Вы входите в новую эпоху, <g>оставляя старые seed phrases позади.</g> Вам понадобится:',
+    'Вы входите в новую эпоху, <g>оставляя сид-фразы в прошлом.</g> Вам понадобится:',
   import_vault: 'Импорт хранилища',
   import_vult_backup: 'Импортировать резервную копию .vult',
   import_vault_share: 'Импорт доли хранилища',
@@ -530,7 +530,7 @@ export const ru = {
   send_memo_not_supported:
     'Переводы {{chain}} не поддерживают memo. Удалите memo, чтобы продолжить.',
   insufficient_native_balance_for_fee:
-    'Недостаточно средств на балансе собственных токенов для оплаты комиссии за транзакцию.',
+    'Недостаточно нативного токена для оплаты комиссии',
   insufficient_gas_limit: 'Недостаточный лимит gas',
   insufficient_gas_limit_description:
     'Оценка gas: {{estimated}}. Лимит gas: {{limit}}. Транзакция может завершиться неудачно из-за недостатка gas.',
@@ -542,10 +542,10 @@ export const ru = {
   join_keygen: 'Присоединиться к Keygen',
   join_keysign: 'Присоединиться к Keysign',
   join_transaction: 'Присоединиться к транзакции',
-  foreground_notification_generic: 'Сделка ожидает одобрения.',
+  foreground_notification_generic: 'Транзакция ожидает подтверждения',
   foreground_notification_send: 'Отправить {{amount}}',
-  foreground_notification_swap: 'Своп {{from}} → {{to}}',
-  join_reshare: 'Присоединиться к Reshare',
+  foreground_notification_swap: 'Обмен {{from}} → {{to}}',
+  join_reshare: 'Присоединиться к перераспределению',
   join_session: 'Присоединиться к сессии',
   joining_keygen: 'Подключение к Keygen',
   joining_keysign: 'Подключение к Keysign',
@@ -586,6 +586,8 @@ export const ru = {
   method_required: 'Метод подписи обязателен',
   mint: 'Mint',
   minute_one: '{{count}} минута',
+  minute_few: '{{count}} минуты',
+  minute_many: '{{count}} минут',
   minute_other: '{{count}} минут',
   missing_destination_address: 'Отсутствует адрес получателя',
   missing_devices_for_migration:
@@ -597,8 +599,8 @@ export const ru = {
   name_your_vault: 'Назовите ваше хранилище',
   network: 'Сеть',
   network_fee: 'Комиссия сети',
-  network_rate: 'Сетевой курс',
-  network_rate_required: 'Сетевой курс обязателен',
+  network_rate: 'Ставка комиссии сети',
+  network_rate_required: 'Укажите ставку комиссии сети',
   notification_sent_successfully: 'Уведомление успешно отправлено!',
   notifications: 'Уведомления',
   not_now: 'Не сейчас',
@@ -607,8 +609,7 @@ export const ru = {
   next: 'Далее',
   new_passcode: 'Новый пин-код',
   no_active_chains_found: 'Активные сети не найдены',
-  no_active_chains_found_description:
-    'Мы не обнаружили активы по этой seed phrase.',
+  no_active_chains_found_description: 'Мы не нашли активов по этой сид-фразе.',
   no_chains_enabled: 'Нет включённых сетей',
   no_chains_enabled_description:
     'Вы отключили все сети. Убедитесь, что включена хотя бы одна сеть.',
@@ -616,7 +617,7 @@ export const ru = {
   no_connected_dapps: 'Нет подключённых dApps',
   no_connected_dapps_desc:
     'dApps появятся здесь, когда вы будете с ними взаимодействовать',
-  no_referral_yet: 'Пока нет referral.',
+  no_referral_yet: 'Реферального кода пока нет',
   no_token_found: 'Токен не найден',
   no_transactions_yet: 'Пока нет транзакций.',
   no_tokens_found: 'Токены не найдены',
@@ -624,18 +625,18 @@ export const ru = {
   no_positions_selected: 'Позиции не выбраны',
   no_positions_selected_description:
     'Вы отключили все позиции для этой сети. Включите хотя бы одну позицию, чтобы видеть балансы и управлять действиями.',
-  total_bonded: 'Всего Bonded {{ticker}}',
+  total_bonded: 'Всего в бонде {{ticker}}',
   active_nodes: 'Активные ноды',
   vulti_node: 'VultiNode',
   available_nodes: 'Доступные ноды',
-  request_to_bond: 'Запрос на bond',
+  request_to_bond: 'Запрос на бонд',
   wait_until_node_churned: 'Дождитесь, пока нода будет выведена (churned out)',
-  unstake_available_on: 'Unstake доступен с {{date}}',
-  bond_to_node: 'Bond к ноде',
+  unstake_available_on: 'Вывод из стейкинга доступен с {{date}}',
+  bond_to_node: 'Внести бонд в узел',
   liquidity_pools: 'Пулы ликвидности',
   apr: 'APR',
   apy: 'APY',
-  bonded: 'Bonded',
+  bonded: 'В бонде',
   next_payout: 'Следующая выплата',
   estimated_reward: 'Оценочная награда',
   next_churn: 'Следующий churn',
@@ -653,13 +654,13 @@ export const ru = {
   off: 'Выкл',
   on: 'Вкл',
   onboarding_description_1:
-    '{{productName}} — безопасное multi-device криптохранилище, совместимое со всеми основными блокчейнами и 10 000+ токенами. {{productName}} полностью self-custodial.',
+    '{{productName}} — безопасное криптохранилище на нескольких устройствах, совместимое со всеми основными блокчейнами и 10 000+ токенов. {{productName}} полностью некастодиальный.',
   onboarding_description_2:
     '{{productName}} не отслеживает вашу активность и не требует регистрации. {{productName}} полностью open source, обеспечивая прозрачность и доверие.',
   onboarding_description_3:
-    '{{productName}} изначально multi-device приложение. Требуется минимум два устройства для создания безопасного хранилища: одно основное и одно для сопряжения.',
+    '{{productName}} изначально работает на нескольких устройствах: для безопасного хранилища нужно минимум два — инициирующее и подключаемое.',
   onboarding_description_4:
-    '{{productName}} — кошелёк без seed phrase. Вместо этого используются удобные доли хранилища. У каждого устройства своя доля, которую нужно отдельно резервировать.',
+    '{{productName}} — кошелёк без сид-фразы. Вместо неё используются удобные доли хранилища. У каждого устройства своя доля, и для каждой нужна отдельная резервная копия.',
   operator_fee: 'Комиссия оператора',
   basis_points: 'Базисные пункты',
   optionalDevice: 'Необязательное устройство',
@@ -676,8 +677,8 @@ export const ru = {
   pending: 'В ожидании',
   percentage: 'Процент',
   percentage_limit: 'Процент должен быть 0–100',
-  percentage_to_unstake: 'Процент для unstake',
-  pick_referral_code: 'Выбрать referral-код',
+  percentage_to_unstake: 'Процент для вывода из стейкинга',
+  pick_referral_code: 'Выберите реферальный код',
   platinum: 'Платина',
   plugin_info: 'Информация о приложении',
   automation_info: 'Информация об автоматизации',
@@ -703,7 +704,7 @@ export const ru = {
     'Пожалуйста, дайте доступ к камере для сканирования QR-кода',
   provider: 'Провайдер',
   route: 'Маршрут',
-  qbtc_claim_title: 'Заявка на QBTC',
+  qbtc_claim_title: 'Получение QBTC',
   qbtc_claim_no_claimable_utxos:
     'Для этого адреса не найдено доступных для активации UTXO.',
   qbtc_claim_disabled_notice:
@@ -712,39 +713,39 @@ export const ru = {
     'Не удалось загрузить доступные для активации UTXO.',
   qbtc_claim_proving: 'Создание доказательств…',
   qbtc_claim_proving_hint: 'Это может занять несколько минут.',
-  qbtc_claim_broadcasting: 'Broadcasting заявки…',
+  qbtc_claim_broadcasting: 'Отправка заявки в сеть…',
   qbtc_claim_success_title: 'Заявка успешно подана',
   qbtc_claim_utxos_claimed: 'UTXOs заявлены',
   qbtc_claim_utxos_skipped: 'UTXO пропущены',
   qbtc_claim_done: 'Готово',
   qbtc_claim_failed: 'Заявка не прошла. Пожалуйста, попробуйте еще раз.',
   qbtc_claim_password_description:
-    'Введите свой пароль от Fast Vault, чтобы подписать транзакцию по заявке.',
+    'Введите пароль от Fast Vault, чтобы подписать транзакцию получения.',
   receive: 'Получить',
   redeem: 'Погасить',
   reenter_password: 'Повторите пароль',
   recover_vault_or_convert_seedphrase:
-    'Восстановите хранилище или конвертируйте seed phrase в хранилище',
-  referral_annual_fee: 'Ежегодная комиссия referral',
-  referral_code: 'Referral-код',
+    'Восстановите хранилище или превратите сид-фразу в хранилище',
+  referral_annual_fee: 'Ежегодная плата за реферальный код',
+  referral_code: 'Реферальный код',
   referral_code_no_whitespace: 'Пробелы запрещены',
-  referral_code_required: 'Требуется валидированный referral-код',
+  referral_code_required: 'Требуется проверенный реферальный код',
   referral_costs: 'Затраты',
   referral_expiration_maximum: 'Максимум 1000 лет',
   referral_expiration_minimum: 'Минимум 1 год',
-  referral_extension_fee: 'Комиссия продления referral',
+  referral_extension_fee: 'Плата за продление реферального кода',
   referral_fee_amount_minimum: 'Минимум {{amount}} RUNE',
   referral_landing_title:
     'Приглашайте друзей. <g> Получайте вознаграждения. </g> Экономьте на комиссиях.',
   referral_program: 'Реферальная программа',
   referral_reg_fee: 'Регистрационная комиссия',
   referral_status: 'Статус',
-  manage_referral_title: 'Рекомендации {{productName}}',
-  referrals_default_title: 'Referral',
+  manage_referral_title: 'Реферальная программа {{productName}}',
+  referrals_default_title: 'Реферальный код',
   referrals_summary: {
     item_1: {
       description: 'Выберите короткий код и настройте выплату наград.',
-      title: 'Создайте referral-код',
+      title: 'Создайте реферальный код',
     },
     item_2: {
       description: 'Пригласите друзей использовать ваш код при свопах.',
@@ -757,7 +758,7 @@ export const ru = {
     },
     item_4: {
       description: 'Используйте код друга и экономьте на комиссиях свопа.',
-      title: 'Использовать referral-код',
+      title: 'Использовать реферальный код',
     },
   },
   remove_token: 'Удалить токен',
@@ -769,9 +770,10 @@ export const ru = {
   required_node_address: 'Адрес ноды обязателен',
   resend_notification: 'Повторная отправка уведомления',
   resend_notification_in: 'Повторно отправить уведомление через {{time}}',
-  reshare: 'Reshare',
-  reshare_vault_description: 'Reshare хранилища с новым комитетом',
-  reshare_your_vault: 'Reshare вашего хранилища',
+  reshare: 'Перераспределение',
+  reshare_vault_description:
+    'Перераспределение долей хранилища на новый состав устройств',
+  reshare_your_vault: 'Перераспределите доли хранилища',
   resource: 'Ресурс',
   retry: 'Повторить',
   review_vault_devices_subtitle:
@@ -797,7 +799,7 @@ export const ru = {
   save_backup_to_cloud: 'Сохраните резервную копию в облаке.',
   save_code: 'Сохранить код',
   save_swap_fees_with_referral:
-    'Сэкономьте <blue>10%</blue> на свопах — добавьте referral',
+    'Сэкономьте <blue>10%</blue> при обмене — добавьте реферальный код',
   saving_vault: 'Сохранение хранилища...',
   scan_qr: 'Сканировать QR',
   scan_with_device_index: 'Сканировать устройством {{index}}',
@@ -805,12 +807,14 @@ export const ru = {
   scanning: 'сканирование...',
   scanning_for_chains: 'Сканирование сетей...',
   scanning_for_chains_subtitle:
-    'Мы проверяем, какие блокчейны имеют активные адреса для вашей seed phrase. <highlight>Процесс может занять до 2 минут.</highlight>',
+    'Мы проверяем, в каких блокчейнах есть активные адреса для вашей сид-фразы. <highlight>Это может занять до 2 минут.</highlight>',
   search: 'Поиск',
   search_field_placeholder: 'Поиск',
   secure: 'Надёжно',
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: 'Добавьте как минимум ещё {{count}} устройство',
+    addAtLeastMoreDevices_few: 'Добавьте как минимум ещё {{count}} устройства',
+    addAtLeastMoreDevices_many: 'Добавьте как минимум ещё {{count}} устройств',
     addAtLeastMoreDevices_other:
       'Добавьте как минимум ещё {{count}} устройства',
     devicePosition: '{{current}} из {{total}}',
@@ -827,19 +831,19 @@ export const ru = {
     'Это происходит потому, что пароль используется для локального шифрования файла резервной копии, аналогично шифрованию диска. На следующем шаге можно добавить подсказку.',
   secure_backup_each_device: 'Создайте резервные копии каждого устройства.',
   secure_backup_each_device_description:
-    'Всего будет создано {{count}} резервных копий. Это нужно будет сделать на каждом устройстве.',
+    'Всего резервных копий: {{count}}. Их нужно создать на каждом устройстве.',
   secure_store_backups_separately_description:
     'Сохраняйте каждую резервную копию в отдельном облачном сервисе или с разным паролем. В случае утечки данных ваши средства останутся в безопасности.',
-  secure_notifications_are_here: 'Защищенные уведомления находятся здесь.',
+  secure_notifications_are_here: 'Защищённые уведомления уже доступны',
   secure_notifications_description:
     'Получайте оповещения, когда другое устройство запрашивает подключение к вашему хранилищу или когда требуется ваша подпись.',
   security: 'Безопасность',
   select: 'Выбрать',
   select_asset: 'Выбрать актив',
   select_backup_file: 'Импортировать долю хранилища',
-  select_vault_backup_share: 'Выберите общий доступ к хранилищу',
+  select_vault_backup_share: 'Выберите долю хранилища',
   select_vault_backup_share_description:
-    'Эта резервная копия содержит несколько общих папок хранилища. Выберите папку для этого устройства.',
+    'Эта резервная копия содержит несколько долей хранилища. Выберите долю для этого устройства.',
   unsupported_vault_backup_file:
     'Этот файл не похож на резервную копию хранилища {{productName}}. Выберите файл с расширением `.vult` или `.vult.zip`, экспортированный из приложения {{productName}}.',
   select_chain: 'Выбрать сеть',
@@ -851,6 +855,8 @@ export const ru = {
   compounded_token: 'Скомпаундено {{ticker}}',
   select_destination_chain: 'Выбрать сеть назначения',
   select_n_devices_one: 'Выбрать {{count}} устройство',
+  select_n_devices_few: 'Выбрать {{count}} устройства',
+  select_n_devices_many: 'Выбрать {{count}} устройств',
   select_n_devices_other: 'Выбрать {{count}} устройства',
   select_pool: 'Выберите пул',
   select_token: 'Выбрать токен',
@@ -866,7 +872,7 @@ export const ru = {
   send_receiver_address_same_as_sender:
     'Адрес получателя не может совпадать с адресом отправителя',
   send_receiver_dangerous_address:
-    'Этот адрес не может получать средства. Это {{reason}}.',
+    'Этот адрес не может получать средства. Причина: {{reason}}.',
   send_terms_0: 'Я отправляю на правильный адрес',
   send_terms_1: 'Сумма указана верно',
   send_to: 'Отправить на',
@@ -880,7 +886,7 @@ export const ru = {
   share: 'Поделиться',
   share_app: 'Поделиться приложением',
   share_description:
-    'Поделитесь своим уникальным referral-кодом, чтобы пригласить друзей. Они получат скидку, а чем больше они торгуют, тем больше вы зарабатываете — напрямую в ваш кошелёк.',
+    'Поделитесь своим реферальным кодом, чтобы пригласить друзей. Они получат скидку, а чем больше они торгуют, тем больше зарабатываете вы — прямо в ваше хранилище.',
   shares: 'Доли',
   show_balance: 'Показать баланс',
   show_total_balance: 'Показать общий баланс',
@@ -901,7 +907,7 @@ export const ru = {
   signing_error: 'Ошибка подписи. Попробуйте ещё раз.',
   keysign_malicious_party_error: 'Обнаружен вредоносный подписант',
   keysign_malicious_party_error_description:
-    'Keysign остановлен, потому что один из подписантов вел себя вредоносно. Не используйте этого подписанта для Keysign снова.',
+    'Подпись остановлена: один из подписантов действовал злонамеренно. Больше не используйте его для подписи.',
   signing_method: 'Метод подписи',
   silver: 'Серебро',
   site: 'Сайт',
@@ -921,20 +927,20 @@ export const ru = {
   raw_payload: 'Необработанная полезная нагрузка',
   transferred: 'Переведено',
   staked_amount: 'Застейканная сумма',
-  spender: 'Спендер',
+  spender: 'Получатель разрешения',
   operator: 'Оператор',
   contract: 'Контракт',
-  start_reshare: 'Начать Reshare',
+  start_reshare: 'Начать перераспределение',
   status: 'Статус',
   support: 'Поддержка',
-  swap: 'Своп',
-  swaps: 'Свопы',
+  swap: 'Обмен',
+  swaps: 'Обмены',
   swap_discount: 'Скидка на обмен',
-  swap_fee: 'Комиссия свопа',
-  swap_overview: 'Обзор свопа',
+  swap_fee: 'Комиссия за обмен',
+  swap_overview: 'Обзор обмена',
   swap_same_asset: 'Невозможно обменять один и тот же актив.',
   swap_terms: {
-    input: 'Сумма свопа указана верно',
+    input: 'Сумма обмена указана верно',
     output: 'Я согласен(на) с мин. суммой, которую получу',
   },
   switchToInternet: 'Вернуться в интернет-режим',
@@ -947,24 +953,24 @@ export const ru = {
   this_vault_only: 'Только это хранилище',
   thorchain_address_required_for_referrals:
     'Чтобы использовать реферальную программу, нужен THORChain-адрес',
-  tns_alnum_only: 'Referral-код должен содержать только буквы и цифры',
-  tns_max_4_chars: 'Referral-код должен быть не длиннее 4 символов',
-  tns_missing_thor_alias: 'Referral-код должен иметь THOR-chain alias',
-  tns_not_found: 'Referral-код не найден',
+  tns_alnum_only: 'Реферальный код должен содержать только буквы и цифры',
+  tns_max_4_chars: 'Реферальный код должен быть не длиннее 4 символов',
+  tns_missing_thor_alias: 'Реферальный код должен иметь алиас THORChain',
+  tns_not_found: 'Реферальный код не найден',
   to: 'Кому',
   to_min_payout: 'мин. выплата',
   today: 'Сегодня',
   token_not_found_description:
     'Возможные причины: неверный контракт, неподдерживаемая сеть или токен удалён из реестров.',
-  token_not_found_invalid: 'Неверный адрес договора',
+  token_not_found_invalid: 'Неверный адрес контракта',
   total_fee: 'Итого комиссий',
   track: 'Отслеживать',
   transaction: 'Транзакция',
   transaction_details: 'Детали транзакции',
   transaction_has_risk:
     'Транзакция с риском {{riskLevel}} обнаружена <provider></provider>',
-  transaction_failed: 'Сделка<error> неуспешный</error>',
-  transaction_pending: 'Сделка находится в процессе обработки...',
+  transaction_failed: 'Транзакция <error>не удалась</error>',
+  transaction_pending: 'Транзакция обрабатывается...',
   transaction_successful: 'Транзакция <g>успешно выполнена</g>',
   raw_transaction_data: 'Сырые данные транзакции',
   transaction_history: 'История транзакций',
@@ -974,29 +980,29 @@ export const ru = {
   accounts: 'Аккаунты',
   data_length: 'Длина данных',
   bytes: 'bytes',
-  tron_bandwidth: 'Bandwidth',
-  tron_energy: 'Energy',
-  tron_freeze_button: 'Freeze',
-  tron_freeze_title: 'TRON Freeze',
-  tron_frozen_label: 'Frozen',
-  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_bandwidth: 'Пропускная способность',
+  tron_energy: 'Энергия',
+  tron_freeze_button: 'Заморозить',
+  tron_freeze_title: 'Заморозка TRON',
+  tron_frozen_label: 'Заморожено',
+  tron_pending_withdrawals: 'Ожидающие выводы',
   tron_ready_to_claim: 'Готово к получению',
   withdraw_expire_unfreeze: 'Получить',
-  tron_unfreeze_button: 'Unfreeze',
+  tron_unfreeze_button: 'Разморозить',
   tron_bandwidth_and_energy: 'Пропускная способность и энергия',
   tron_bandwidth_description:
-    'Bandwidth Points необходимы для каждой транзакции в сети TRON, включая как стандартную отправку токенов, так и взаимодействие со смарт-контрактами. Каждый пользователь TRON ежедневно получает 600 бесплатных Bandwidth Points, которых хватает примерно на две базовые отправки. Кроме того, вы можете получить дополнительные Bandwidth Points, застейкав TRX, увеличивая свой ежедневный баланс для поддержки большего числа транзакций. Если у вас достаточно Bandwidth Points, вы можете отправлять токены, стейкать TRX или взаимодействовать со смарт-контрактами, не платя TRX в виде комиссии за gas.',
+    'Единицы пропускной способности (Bandwidth) нужны для каждой транзакции в сети TRON — и для обычной отправки токенов, и для работы со смарт-контрактами. Каждый пользователь TRON ежедневно получает 600 бесплатных единиц, которых хватает примерно на две простые отправки. Застейкав TRX, вы получите дополнительные единицы для большего числа транзакций. Если единиц достаточно, можно отправлять токены, стейкать TRX и работать со смарт-контрактами, не платя TRX за газ.',
   tron_energy_description:
     'Снижает стоимость смарт-контрактов. При нехватке энергии комиссию покрывает TRX. Зелёный индикатор показывает ежедневную энергию от застейканного TRX. Чем больше застейкано TRX, тем больше энергии. Пополняется каждые 24 часа. Неудачные транзакции сжигают больше энергии и не возвращаются.',
   try_again: 'Попробовать снова',
   turn_your_vault_into_rewards_machine:
-    'Превратите своё хранилище в машину наград. Создайте referral сейчас и начните зарабатывать.',
+    'Превратите своё хранилище в машину наград. Создайте реферальный код и начните зарабатывать.',
   twitter: 'Twitter',
   tx_hash: 'Хэш транзакции',
   type: 'Тип',
   type_here: 'Введите здесь',
-  unbond: 'Unbond',
-  unbond_with_lp: 'Unbond Maya',
+  unbond: 'Вывести из бонда',
+  unbond_with_lp: 'Вывести бонд Maya',
   ultimate: 'Ultimate',
   unlock_discount_tier: 'Разблокировать уровень <b>{{tier}}</b>',
   unlock_discount_tier_description:
@@ -1004,11 +1010,11 @@ export const ru = {
   unlock_discount_tier_description_ultimate:
     'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>полную отмену комиссии Vultisig</b> для всех свопов.',
   unlock_tier: 'Разблокировать уровень',
-  unfreeze: 'Unfreeze',
+  unfreeze: 'Разморозить',
   unknown: 'Неизвестно',
   unlimited: 'Без ограничений',
-  unstake: 'Unstake',
-  unstake_share_token_label: 'Unstake {{ticker}}',
+  unstake: 'Вывести из стейкинга',
+  unstake_share_token_label: 'Вывести {{ticker}} из стейкинга',
   upgrade: 'Апгрейд',
   upgrade_all_devices:
     'Убедитесь, что <b>все исходные устройства</b> присутствуют при апгрейде',
@@ -1024,9 +1030,8 @@ export const ru = {
   upload_qr_code_image: 'Загрузить QR-код',
   upload_qr_code_to_join_keysign: 'Загрузить QR-код для Keysign',
   upload_qr_code_with_address: 'Загрузить QR-код с адресом',
-  use_referral_code: 'Использовать referral-код',
-  used_referral_error:
-    'Используемый referral-код не может совпадать с вашим referral-кодом',
+  use_referral_code: 'Использовать реферальный код',
+  used_referral_error: 'Чужой реферальный код не может совпадать с вашим',
   validator_address: 'Адрес валидатора',
   value: 'Значение',
   vault: 'Хранилище',
@@ -1055,19 +1060,21 @@ export const ru = {
     'Необязательная защита паролем вашего хранилища',
   vault_backup_page_submit_loading_button_text: 'Сохранение...',
   vault_count_one: '{{count}} хранилище',
+  vault_count_few: '{{count}} хранилища',
+  vault_count_many: '{{count}} хранилищ',
   vault_count_other: '{{count}} хранилища',
   vault_delete_page_button: 'Удалить хранилище',
   vault_delete_page_device_id: 'ID устройства',
   vault_delete_page_ecdsa_key: 'Ключ ECDSA',
   vault_delete_page_eddsa_key: 'Ключ EdDSA',
   vault_delete_page_header_subtitle:
-    'Вы навсегда удаляете свою часть хранилища из этого приложения',
+    'Вы навсегда удаляете долю хранилища из этого приложения',
   vault_delete_page_header_title: 'Удалить хранилище',
   vault_delete_page_term_1: 'Я понимаю, что хранилище будет удалено навсегда',
   vault_delete_page_term_2: 'Я понимаю, что могу потерять средства',
   vault_delete_page_term_3:
     'Я сделал(а) резервную копию хранилища для последующего восстановления',
-  vault_delete_page_vault_part: 'Часть хранилища',
+  vault_delete_page_vault_part: 'Доля хранилища',
   vault_details_description: 'Посмотреть имя хранилища, часть и тип',
   vault_details_edit_vault_description: 'Редактировать имя хранилища',
   vault_details_page_signer_word: 'Подписант',
@@ -1136,16 +1143,16 @@ export const ru = {
   remove_cacao_pool: 'Удалить из пула CACAO',
   add_thor_lp: 'Добавить THORChain LP',
   remove_thor_lp: 'Удалить THORChain LP',
-  pool: 'Pool',
+  pool: 'Пул',
   paired_address: 'Парный адрес',
   yesterday: 'Вчера',
-  you_are_bonding: 'Вы выполняете bond',
-  you_are_unbonding: 'Вы выполняете unbond',
+  you_are_bonding: 'Вы вносите бонд',
+  you_are_unbonding: 'Вы выводите бонд',
   you_are_sending: 'Вы отправляете',
-  you_are_staking: 'Вы выполняете stake',
-  you_are_unstaking: 'Вы выполняете unstake',
-  you_are_minting: "You're minting",
-  you_are_redeeming: "You're redeeming",
+  you_are_staking: 'Вы стейкаете',
+  you_are_unstaking: 'Вы выводите из стейкинга',
+  you_are_minting: 'Вы выпускаете',
+  you_are_redeeming: 'Вы погашаете',
   signed_tx_you_are_rebonding: 'Вы перепривязываете',
   signed_tx_you_are_merging: 'Вы объединяете',
   signed_tx_you_are_unmerging: 'Вы разделяете',
@@ -1157,9 +1164,9 @@ export const ru = {
   vaultSetupOverview: {
     title: 'Настройка вашего хранилища',
     fast: {
-      badgeTitle: 'Быстрое хранилище',
+      badgeTitle: 'Fast Vault',
       badgeSubtitle: 'настройка двух устройств',
-      feature1Title: '1. Подписание устройства',
+      feature1Title: 'Подпись на одном устройстве',
       feature1Description:
         'Удобная подпись на одном устройстве в любое время и в любом месте. Идеально подходит для ежедневных транзакций или обмена небольшими суммами.',
       feature2Title: 'Быстрая и безопасная настройка',
@@ -1167,23 +1174,23 @@ export const ru = {
         'Никакой сложной настройки. Только ваш адрес электронной почты и пароль, а также две резервные копии.',
       feature3Title: 'Вы сохраняете контроль.',
       feature3Description:
-        'Поручитель никогда не может инициировать сделки; он лишь помогает их подписать.',
+        'Соподписант никогда не может инициировать транзакции — он лишь помогает их подписать.',
     },
     secure2: {
-      badgeTitle: 'Безопасное хранилище',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'хранилище на 2 устройства',
-      feature1Title: 'Подписание двух устройств',
+      feature1Title: 'Подпись с двух устройств',
       feature1Description:
         'Для каждой транзакции требуется подтверждение с обоих ваших устройств.',
       feature2Title: 'Отсутствие единой точки отказа',
       feature2Description:
         'Одно устройство само по себе не может перемещать средства. Если устройство потеряно или скомпрометировано, оно не сможет подтвердить транзакцию самостоятельно.',
-      feature3Title: 'Идеально подходит для простого хранения в холодильнике.',
+      feature3Title: 'Идеально для простого холодного хранения',
       feature3Description:
         'Идеальный вариант для пользователей, имеющих всего 2 устройства.',
     },
     secure3: {
-      badgeTitle: 'Безопасное хранилище',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'хранилище на 3 устройства',
       feature1Title: 'Подписание на двух устройствах',
       feature1Description:
@@ -1191,16 +1198,16 @@ export const ru = {
       feature2Title: 'Отсутствие единой точки отказа',
       feature2Description:
         'Одно устройство само по себе не может перемещать средства. Если устройство потеряно или скомпрометировано, оно не сможет подтвердить транзакцию самостоятельно.',
-      feature3Title: 'Идеально подходит для хранения в холодильнике.',
+      feature3Title: 'Идеально для холодного хранения',
       feature3Description:
         'Идеальный баланс для большинства пользователей. 2 устройства для подписи и 1 резервное устройство. Храните активы без лишних хлопот.',
     },
     secure4: {
-      badgeTitle: 'Безопасное хранилище',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'хранилище для 4+ устройств',
       feature1Title: 'Подписание на 3 или более устройствах',
       feature1Description:
-        'Для того чтобы хранилище могло подписать транзакцию, необходимо, чтобы 67% устройств имели на нем доступ. Можно указать любое количество подписантов.',
+        'Для подписи транзакции нужно 67% устройств хранилища. Подписантов может быть сколько угодно.',
       feature2Title: 'Динамическое управление устройствами',
       feature2Description:
         'Добавьте столько устройств, сколько хотите, и получите безопасность институционального уровня.',
@@ -1210,12 +1217,12 @@ export const ru = {
     },
   },
   your_friends_referral_code: 'Реферальный код вашего друга',
-  your_referral_code: 'Ваш referral-код',
-  your_referrals: 'Ваши referrals',
-  your_seedphrase: 'Ваша seed phrase',
+  your_referral_code: 'Ваш реферальный код',
+  your_referrals: 'Ваши приглашения',
+  your_seedphrase: 'Ваша сид-фраза',
   your_seedphrase_subtitle:
     'Введите её, создайте хранилище и не оглядывайтесь назад',
-  youre_swapping: 'Вы выполняете своп',
+  youre_swapping: 'Вы обмениваете',
   account: 'Аккаунт',
   session_history: 'История сессий',
   vultibot: 'VultiBot',
@@ -1223,7 +1230,7 @@ export const ru = {
   new_chat: 'Новый чат',
   failed_to_load_session_history: 'Не удалось загрузить историю сессий.',
   agent_history_load_error_description:
-    'Пожалуйста, попробуйте еще раз. Если проблема не исчезнет, ​​откройте чат, который вы видели минуту назад, или начните новый.',
+    'Попробуйте ещё раз. Если проблема не исчезнет, откройте чат заново или начните новый.',
   agent_history_empty_title: 'Пока нет чатов',
   agent_history_empty_description:
     'Начните новый чат, и ваши последние сообщения отобразятся здесь.',
@@ -1238,11 +1245,9 @@ export const ru = {
   ask_about_plugins_policies: 'Уточните информацию о плагинах и политиках...',
   approve_transaction: 'Одобрить транзакцию',
   enter_vault_password: 'Введите пароль хранилища',
-  password_required_for_operation:
-    'Пожалуйста, введите свой пароль для {{operation}}.',
+  password_required_for_operation: 'Введите пароль, чтобы {{operation}}.',
   confirm_action: 'Подтвердить действие',
-  confirm_action_description:
-    'Пожалуйста, подтвердите, что вы хотите выполнить {{action}}.',
+  confirm_action_description: 'Подтвердите, что хотите {{action}}.',
   agent_chat_render_error: 'Произошла ошибка при отображении чата.',
   agent_operation_sign_in: 'войти',
   agent_session_expired:
@@ -1253,19 +1258,19 @@ export const ru = {
   agent_delete_chat_session: 'Удалить сессию чата',
   agent_signing_in: 'Вход в систему...',
   agent_tool_label: 'Инструмент: {{tool}}',
-  agent_tx_confirmed: 'Подтвержденный',
-  agent_tx_failed: 'Неуспешный',
+  agent_tx_confirmed: 'Подтверждено',
+  agent_tx_failed: 'Ошибка',
   agent_tx_pending: 'В ожидании',
   agent_tx_type_approval: 'Одобрение',
   agent_tx_type_contract_call: 'Вызов контракта',
   agent_tx_type_contract_execute: 'Исполнение контракта',
   agent_tx_type_deposit: 'Вклад',
-  agent_tx_type_send: 'Отправлять',
-  agent_tx_type_swap: 'Своп',
+  agent_tx_type_send: 'Отправка',
+  agent_tx_type_swap: 'Обмен',
   agent_tx_type_transfer: 'Передача',
-  agent_tx_view: 'Вид',
+  agent_tx_view: 'Посмотреть',
   agent_analyzing: 'Анализ...',
-  agent_analyzed_for: 'Проанализировано на {{duration}}s',
+  agent_analyzed_for: 'Анализ занял {{duration}} с',
   agent_analyzed: 'Проанализировано',
   welcome_to_vulti_agent: 'Добро пожаловать в Vulti Agent!',
   agent_welcome_description:
@@ -1277,10 +1282,10 @@ export const ru = {
   authorize: 'Авторизовать',
   invalid_validator_address: 'Недействительный адрес валидатора',
   unnamed_validator: 'Безымянный',
-  select_delegation: 'Выберите делегацию',
+  select_delegation: 'Выберите делегирование',
   select_delegation_to_unstake:
     'Выберите делегирование для вывода средств из стейкинга',
-  select_delegation_to_move: 'Выберите делегацию для перемещения',
+  select_delegation_to_move: 'Выберите делегирование для перемещения',
   failed_to_load_delegations: 'Не удалось загрузить делегации.',
   source_validator: 'Исходный валидатор',
   destination_validator: 'Целевой валидатор',
@@ -1292,7 +1297,7 @@ export const ru = {
   claim_rewards: 'Получить награды',
   select_validator: 'Выберите валидатора',
   delegate_to_new_validator: 'Делегировать новому валидатору',
-  active_delegations: 'Активные делегации',
+  active_delegations: 'Активные делегирования',
   total_staked: 'Всего в стейкинге {{ticker}}',
   staked_label: 'В стейкинге: {{amount}} {{ticker}}',
   unbonding_lock_label: '{{days}}-дневная блокировка вывода',
@@ -1308,7 +1313,7 @@ export const ru = {
   you_are_moving: 'Вы перемещаете',
   you_are_claiming: 'Вы получаете',
   commission: 'комиссия',
-  claim_n_validators: 'Получить от {{count}} валидаторов',
+  claim_n_validators: 'Получить от валидаторов: {{count}}',
   approval_amount: 'Сумма одобрения',
   approval_expires: 'Срок действия одобрения истекает.',
   deadline: 'Крайний срок',
@@ -1317,10 +1322,10 @@ export const ru = {
   primary_type: 'Основной тип',
   qbtc_claim_banner_title: 'Тот же Биткойн. Квантово-безопасный.',
   qbtc_claim_banner_subtitle: 'Получите свой QBTC',
-  qbtc_claim_banner_cta: 'Заявите сейчас',
-  qbtc_claim_section_cta: 'Заявка QBTC',
+  qbtc_claim_banner_cta: 'Получить сейчас',
+  qbtc_claim_section_cta: 'Получить QBTC',
   qbtc_claim_card_title: 'QBTC можно получить',
-  qbtc_claim_tab: 'Требовать',
+  qbtc_claim_tab: 'Получить',
   qbtc_onboarding_title: 'Новая квантовая безопасность',
   qbtc_onboarding_subtitle:
     'Классические ключи могут быть взломаны квантовыми компьютерами. Для активации QBTC требуется сгенерировать новую пару ключей.',
@@ -1330,41 +1335,42 @@ export const ru = {
     '{{productName}} запускает локальную церемонию MPC на ваших устройствах хранилища для создания новой пары ключей.',
   qbtc_onboarding_feature_link_title: 'Свяжите его с существующим хранилищем.',
   qbtc_onboarding_feature_link_description:
-    'Квантовый ключ привязан к вашей текущей структуре доступа к хранилищу. Перераспределение доступа не требуется.',
-  qbtc_onboarding_feature_claim_title:
-    'Заявить права на токены и совершить транзакцию в QBTC',
+    'Квантовый ключ привязан к текущей структуре долей хранилища. Перераспределение долей не требуется.',
+  qbtc_onboarding_feature_claim_title: 'Получайте QBTC и совершайте транзакции',
   qbtc_onboarding_feature_claim_description:
-    'После генерации ваши подходящие токены BTC и UTXOs будут отображаться как доступные для получения токены QBTC в соотношении 1:1.',
+    'После генерации ваши подходящие BTC UTXO отобразятся как QBTC, доступные для получения, в соотношении 1:1.',
   qbtc_onboarding_get_started: 'Начать',
   qbtc_claim_description:
-    'QBTC — это квантово-устойчивая версия BTC. Ваши существующие BTC и UTXOs могут быть использованы в качестве QBTC в соотношении 1:1. Выберите, какой UTXOs использовать для получения, ниже.',
-  qbtc_claim_eligible_utxos: 'Подходящий UTXOs',
-  qbtc_claim_confirmed_blocks_ago: 'Подтверждено · {{count}} блоков назад',
+    'QBTC — квантово-устойчивая версия BTC. Ваши BTC UTXO можно получить в виде QBTC в соотношении 1:1. Выберите ниже, какие UTXO получить.',
+  qbtc_claim_eligible_utxos: 'Подходящие UTXO',
+  qbtc_claim_confirmed_blocks_ago: 'Подтверждено · блоков назад: {{count}}',
   qbtc_claim_pending_confirmation: 'Ожидается подтверждение',
   qbtc_claim_all: 'Забрать все',
-  qbtc_claim_count: 'Заявка {{count}} на {{total}}',
+  qbtc_claim_count: 'Получить {{count}} из {{total}}',
   raw_message: 'Исходное сообщение',
   token: 'Токен',
   token_approval: 'Подтверждение токена',
-  skip_for_now: 'Пропустите пока что',
+  skip_for_now: 'Пока пропустить',
   station_migration_title: 'Перенести кошельки Station',
   station_migration_review_title: 'Проверка старых кошельков Station',
   station_migration_review_description:
-    'Введите свой пароль Station для локальной расшифровки поддерживаемых кошельков. Хранилище Station, созданное ранее, остается нетронутым.',
+    'Введите пароль Station, чтобы локально расшифровать поддерживаемые кошельки. Старые данные Station останутся нетронутыми.',
   station_migration_settings_title: 'Перенести кошельки Station',
   station_migration_settings_description:
     'Просмотрите старые кошельки Station, обнаруженные на этом устройстве.',
   station_migration_set_up_without_migrating: 'Настройка без миграции.',
   station_migration_no_wallets_found:
     'В хранилище этого расширения не обнаружено устаревших кошельков Station.',
-  station_migration_summary_total_one: 'Кошелек {{count}}',
-  station_migration_summary_total_other: 'Кошельки {{count}}',
+  station_migration_summary_total_one: '{{count}} кошелёк',
+  station_migration_summary_total_few: '{{count}} кошелька',
+  station_migration_summary_total_many: '{{count}} кошельков',
+  station_migration_summary_total_other: '{{count}} кошелька',
   station_migration_status_supported: 'Поддерживается',
   station_migration_status_unsupported: 'Неподдерживаемый',
   station_migration_status_corrupt: 'Неверный',
   station_migration_status_needs_review: 'Требуется пересмотр',
   station_migration_wallet_type_mnemonic:
-    'Зашифрованное начальное значение и мнемоническое правило',
+    'Зашифрованный сид и мнемоническая фраза',
   station_migration_wallet_type_seed: 'Зашифрованное начальное значение',
   station_migration_wallet_type_private_key: 'Зашифрованный закрытый ключ',
   station_migration_wallet_type_interchain_private_key:
@@ -1374,7 +1380,7 @@ export const ru = {
   station_migration_wallet_type_ledger: 'Аппаратный кошелек Ledger',
   station_migration_wallet_type_multisig: 'Кошелек с мультиподписью',
   station_migration_wallet_type_unknown: 'Неизвестный формат кошелька Station',
-  station_migration_wallet_type_corrupt_storage: 'Недопустимое хранилище',
+  station_migration_wallet_type_corrupt_storage: 'Повреждённые данные',
   station_migration_wallet_type_corrupt_wallet: 'Неверная запись в кошельке',
   station_migration_reason_supported_mnemonic:
     'Зашифрованные данные кошелька присутствуют для будущей миграции, при которой потребуется пароль Station.',
@@ -1407,7 +1413,7 @@ export const ru = {
   station_migration_reason_unsupported_fallback:
     'Перед переносом данных из этого кошелька требуется его проверка.',
   station_migration_status_ready: 'Готовый',
-  station_migration_status_failed: 'Неуспешный',
+  station_migration_status_failed: 'Ошибка',
   station_migration_password_title: 'Разблокируйте поддерживаемые кошельки',
   station_migration_password_description:
     'Ваш пароль Station хранится на этом устройстве и используется только для расшифровки старых данных кошелька Station.',
@@ -1417,7 +1423,7 @@ export const ru = {
   station_migration_check_wallets: 'Проверьте кошельки',
   station_migration_migrate_wallet: 'Мигрировать',
   station_migration_ready_source: 'Проверено на основе {{source}}.',
-  station_migration_source_mnemonic: 'мнемоническое правило',
+  station_migration_source_mnemonic: 'мнемоническая фраза',
   station_migration_source_seed: 'начальные байты',
   station_migration_source_private_key: 'закрытый ключ',
   station_migration_failure_incorrect_password:
@@ -1435,12 +1441,12 @@ export const ru = {
   station_migration_failure_split_interchain_private_keys:
     'Этот кошелек имеет отдельные приватные ключи Terra и Terra Classic. В рамках этой миграции можно импортировать только совпадающие ключи семейства Terra.',
   station_migration_status_importing: 'Импорт',
-  station_migration_status_migrated: 'Мигрировал',
+  station_migration_status_migrated: 'Перенесено',
   station_migration_status_skipped: 'Пропущено',
   station_migration_status_reason_importing:
     'Импорт начат. Вернитесь сюда после завершения настройки, если эта строка не обновится.',
   station_migration_status_reason_migrated:
-    'Этот кошелек был импортирован в {{productName}}. Старое хранилище Station сохранено.',
+    'Этот кошелёк импортирован в {{productName}}. Старые данные Station сохранены.',
   station_migration_status_reason_skipped:
     'Этот кошелек был пропущен. Вы можете разблокировать его снова, когда будете готовы.',
   station_migration_status_reason_vault_import_failed:
@@ -1449,7 +1455,7 @@ export const ru = {
     'Импорт хранилища завершен, но сохранение хранилища {{productName}} не удалось. Разблокируйте этот кошелек еще раз, чтобы повторить попытку.',
   station_migration_reason_ledger_public_metadata_only:
     'Station хранит только общедоступные метаданные Ledger. Он не хранит закрытые ключи, которые можно преобразовать в хранилище {{productName}}.',
-  paired: 'Создать пару',
+  paired: 'В паре',
   plugin_marketplace_signin_description:
     'Войдите в систему, используя свой {{productName}} Vault, чтобы получить доступ к приложениям для автоматизации управления цифровыми активами.',
   plugin_marketplace_welcome:
@@ -1470,7 +1476,7 @@ export const ru = {
   sui_call_coin_from_balance: 'Обернуть баланс в монеты',
   sui_call_coin_into_balance: 'Распаковать монету в баланс',
   sui_call_coin_join: 'Слияние монет',
-  sui_call_coin_split: 'Разделенная монета',
+  sui_call_coin_split: 'Разделить монету',
   sui_call_coin_value: 'Узнайте стоимость монеты',
   sui_call_coin_zero: 'Создать пустую монету',
   sui_call_transfer_freeze_object: 'Заморозить объект',
@@ -1483,11 +1489,11 @@ export const ru = {
   sui_gas_price: 'Цена газа',
   sui_input_pure: 'Чистый',
   sui_inputs: 'Входные данные ({{count}})',
-  sui_make_move_vec: 'Сделать перемещение вектора',
+  sui_make_move_vec: 'Создать вектор Move',
   sui_merge_coins: 'Слияние монет',
   sui_merge_into: 'Объединить источники {{count}} в {{destination}}',
   sui_modules: 'Модули',
-  sui_move_call: 'Переместить вызов',
+  sui_move_call: 'Вызов Move',
   sui_object_clock: 'Часы',
   sui_object_deny_list: 'DenyList',
   sui_object_random: 'Случайный',
@@ -1507,11 +1513,11 @@ export const ru = {
   sui_transaction_summary: 'Сводка по транзакции',
   sui_transfer_objects: 'Переместить объекты',
   sui_type_arguments: 'Тип аргументов',
-  sui_upgrade: 'Пакет обновления',
+  sui_upgrade: 'Обновить пакет',
   advanced_description:
-    'Повторно делиться сообщениями, управлять безопасностью или подписывать сообщения.',
+    'Перераспределение долей, безопасность и подпись сообщений.',
   advanced_settings: 'Расширенные настройки',
-  advanced_swap: 'Расширенный своп',
+  advanced_swap: 'Расширенный обмен',
   auto: 'Авто',
   custom_rpc: 'Пользовательские RPC',
   custom_rpc_chip_custom: 'Пользовательский',
@@ -1530,7 +1536,7 @@ export const ru = {
   custom_rpc_testing: 'Тестирование…',
   custom_rpc_unreachable: 'Конечная точка недоступна',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_wrong_chain: 'Этот конечный пункт обслуживает другую цепочку.',
+  custom_rpc_wrong_chain: 'Эта конечная точка обслуживает другую сеть',
   send_to_different_address: 'Отправить на другой адрес',
   slippage_custom: 'Пользовательский',
   slippage_helper:
@@ -1545,7 +1551,7 @@ export const ru = {
   custom_rpc_gate_description:
     'Направьте {{productName}} на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
   feature_gate_requires: 'Требует',
-  feature_gate_requires_tier: '$VULT {{tier}} Уровень или выше',
+  feature_gate_requires_tier: 'Уровень $VULT {{tier}} или выше',
   feature_gate_hold_at_least:
     'Храните в своем хранилище как минимум {{amount}}.',
   feature_gate_your_balance: 'Ваш баланс',
@@ -1572,13 +1578,13 @@ export const ru = {
   qbtc_claim_cosign_success:
     'Вы подписали совместно запрос QBTC. Другое устройство завершит его и передаст дальше.',
   qbtc_onboarding_key_warning:
-    'Включение QBTC создает новый квантовый ключ и адрес QBTC. Если в этом хранилище уже был квантовый ключ на другом устройстве или при импорте, средства QBTC, полученные ранее, могут быть недоступны по новому адресу. После создания хранилища сделайте его резервную копию.',
+    'Включение QBTC создаёт новый квантовый ключ и адрес QBTC. Если у этого хранилища уже был квантовый ключ на другом устройстве или при импорте, ранее полученные QBTC могут быть недоступны с нового адреса. После генерации ключа сделайте резервную копию хранилища.',
   qbtc_gov: {
     status: {
-      passed: 'Прошедший',
+      passed: 'Принято',
       voting: 'Голосование',
-      rejected: 'Отклоненный',
-      failed: 'Неуспешный',
+      rejected: 'Отклонено',
+      failed: 'Не прошло',
       deposit: 'Вклад',
       unspecified: 'Неизвестный',
     },
@@ -1609,16 +1615,16 @@ export const ru = {
     weighted_vote_cta: 'Взвешенное голосование',
     weighted_vote_title: 'Взвешенное голосование',
     weighted_total: 'Общий',
-    submit_weighted_vote: 'Предоставить взвешенное голосование',
+    submit_weighted_vote: 'Отправить взвешенный голос',
     your_vote: 'Ваш голос',
     confirm_vote: 'Подтвердить голос',
     enable_qbtc_to_vote:
       'Включите токены QBTC в этом хранилище для голосования.',
-    ends_in_days_hours: 'Заканчивается на {{days}} d {{hours}} h',
-    ends_in_hours_minutes: 'Заканчивается на {{hours}} h {{minutes}} m',
-    ends_in_minutes: 'Заканчивается на {{minutes}} m',
+    ends_in_days_hours: 'Завершится через {{days}} д {{hours}} ч',
+    ends_in_hours_minutes: 'Завершится через {{hours}} ч {{minutes}} мин',
+    ends_in_minutes: 'Завершится через {{minutes}} мин',
   },
-  camera_permission_required: 'Разрешение на съемку не предоставлено.',
+  camera_permission_required: 'Нет доступа к камере',
   camera_permission_required_description:
     'Для продолжения требуется разрешение на использование камеры. Пожалуйста, включите его в настройках.',
   swap_insufficient_funds:
@@ -1626,85 +1632,83 @@ export const ru = {
   keygen_failed_description:
     'Создание хранилища замедлилось из-за плохого соединения. Вы можете повторить попытку или дождаться восстановления соединения.',
   same_vault_share_description:
-    'Пожалуйста, измените общий доступ на подпись. Два устройства не могут использовать один и тот же общий доступ к хранилищу для совместной подписи.',
+    'Выберите другую долю для подписи. Два устройства не могут использовать одну и ту же долю хранилища для совместной подписи.',
   vault_is_not_loaded: 'Хранилище не загружено',
   vault_is_not_loaded_description: 'Пожалуйста, импортируйте правильную долю.',
-  ton_nominator_pool: 'Номинатор Pool',
-  ton_stake_title: 'Ставка {{ticker}}',
-  ton_stake_cta: 'Ставка {{ticker}}',
-  ton_stake_select_pool: 'Выберите Pool',
+  ton_nominator_pool: 'Пул номинаторов',
+  ton_stake_title: 'Застейкать {{ticker}}',
+  ton_stake_cta: 'Застейкать {{ticker}}',
+  ton_stake_select_pool: 'Выберите пул',
   ton_stake_min: 'Минимальный {{amount}}',
   ton_stake_below_minimum: 'Сумма должна быть не менее {{amount}} {{ticker}}',
-  ton_stake_insufficient_balance: 'Недостаточный баланс для этой ставки.',
-  ton_stake_no_pools: 'Пулы для размещения ставок недоступны.',
+  ton_stake_insufficient_balance: 'Недостаточно средств для стейкинга',
+  ton_stake_no_pools: 'Нет доступных пулов для стейкинга',
   ton_stake_empty_title: 'Получайте вознаграждения с помощью вашего {{ticker}}',
   ton_stake_empty_description:
-    'Вложите {{ticker}} в номинатор pool чтобы получить вознаграждение за стейкинг.',
-  ton_stake_chain_not_enabled: 'Разрешить стейкинг для TON .',
+    'Застейкайте {{ticker}} в пул номинаторов, чтобы получать награды за стейкинг.',
+  ton_stake_chain_not_enabled: 'Включите TON, чтобы стейкать.',
   ton_stake_unsupported_pool:
     'Данная реализация pool не поддерживается для стейкинга.',
   ton_unstake_unsupported_pool:
     'Данная реализация pool не поддерживается для вывода средств из стейкинга.',
   ton_withdrawal_pending: 'Ожидается вывод средств — разблокирует {{date}}',
-  ton_stake_pool_picker_header: 'Pool',
+  ton_stake_pool_picker_header: 'Пул',
   broadcast_error: 'Сеть отклонила эту транзакцию.',
   broadcast_error_description:
     'Ваши устройства подписали транзакцию, но сеть её отклонила. Ознакомьтесь с причиной отклонения в блокчейне ниже, затем подпишите транзакцию ещё раз, чтобы повторить попытку.',
-  solana_unstake: 'Вывести средства',
-  solana_withdraw: 'Отзывать',
-  solana_staking_stake_account: 'Счет для размещения ставок',
+  solana_unstake: 'Вывести из стейкинга',
+  solana_withdraw: 'Вывести',
+  solana_staking_stake_account: 'Стейк-аккаунт',
   solana_staking_unstake_notice:
-    'Деактивация запускает период ожидания — ваши средства остаются заблокированными примерно на {{days}} дней, прежде чем вы сможете их вывести.',
+    'Деактивация запускает период ожидания — средства будут заблокированы примерно {{days}} дн., прежде чем их можно будет вывести.',
   solana_staking_withdrawable_amount: 'Сумма, доступная для снятия',
-  solana_staking_withdraw_ready_notice: 'Остыл и готов к извлечению.',
+  solana_staking_withdraw_ready_notice:
+    'Период ожидания завершён, можно выводить.',
   solana_move_stake: 'Переместить',
   solana_finish_move: 'Завершить перемещение',
   solana_staking_move_notice:
-    'Перемещение стейка занимает несколько этапов и охватывает эпохи: сейчас происходит деактивация аккаунта, и начинается период ожидания примерно в {{days}} дней. После его окончания завершите перемещение стейка к выбранному вами валидатору.',
+    'Перемещение стейка проходит в несколько этапов и занимает несколько эпох: сейчас аккаунт деактивируется и начинается период ожидания около {{days}} дн. После него завершите перемещение к выбранному валидатору.',
   solana_staking_finish_move_notice:
     'Это повторно делегирует охлажденный стейк-аккаунт новому валидатору и завершит перемещение.',
   external_recipient_tooltip_content:
-    'Отправьте переведенные средства на другой адрес кошелька, а не на свой собственный.',
+    'Средства после обмена будут отправлены на другой адрес кошелька, а не на ваш.',
   blockaid_simulation_pending: 'Имитация транзакции…',
   malicious_dapp_detected: 'Обнаружен вредоносный dApp',
   malicious_dapp_detected_description:
     '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
-  before_you_reshare: 'Прежде чем поделиться записью,',
+  before_you_reshare: 'Перед перераспределением долей',
   before_you_reshare_subtitle:
-    'Повторный доступ восстанавливает ваши общие ресурсы хранилища. Однако, прежде чем делиться ими, необходимо знать несколько важных моментов.',
+    'Перераспределение заново создаёт доли хранилища. Сначала стоит знать несколько вещей.',
   i_understand: 'Я понимаю',
   join_reshare_description:
-    'Вы получили запрос на повторную публикацию с другого устройства.',
+    'Вы получили запрос на перераспределение долей с другого устройства.',
   reshare_vault_subtitle:
-    'Обновите настройки хранилища. Добавьте или удалите устройства, или обновите общие ресурсы.',
-  reshare_warning_cosigners_title: 'Все поручители должны быть онлайн.',
+    'Обновите настройки хранилища: добавьте или удалите устройства либо обновите доли.',
+  reshare_warning_cosigners_title: 'Все соподписанты должны быть онлайн',
   reshare_warning_cosigners_description:
-    'Каждое устройство, находящееся в вашем хранилище, должно участвовать в сеансе повторного доступа.',
-  reshare_warning_old_backups_title:
-    'Старые резервные копии перестанут работать.',
+    'Каждое текущее устройство хранилища должно участвовать в сеансе перераспределения.',
+  reshare_warning_old_backups_title: 'Создайте новые резервные копии',
   reshare_warning_old_backups_description:
-    'Все существующие файлы с расширением .vult становятся недействительными. После повторного предоставления доступа вам потребуется создать новые резервные копии.',
-  start_reshare_description:
-    'Вы изменяете настройки устройства этого хранилища.',
-  reshare_success_title: 'Хранилище повторно доступно',
+    'Резервные копии, созданные до этого перераспределения долей, нельзя объединить с новыми. Старые резервные копии по-прежнему работают вместе, поэтому храните их в надёжном месте или удалите. Если устройство было потеряно или скомпрометировано, переведите средства в новое хранилище.',
+  start_reshare_description: 'Вы меняете состав устройств этого хранилища.',
+  reshare_success_title: 'Доли хранилища перераспределены',
   reshare_success_title_highlight: 'успешно',
-  reshare_backup_old_backups_wont_work:
-    'Старые резервные копии работать не будут.',
+  reshare_backup_old_backups_wont_work: 'Создайте новые резервные копии',
   reshare_backup_old_backups_wont_work_description:
-    'Резервные копии, созданные в ходе предыдущих настроек хранилища, использовать нельзя. Действительны только резервные копии, созданные в ходе данной настройки.',
-  reshare_min_devices_required: 'Требуется как минимум {{count}} устройств.',
+    'Резервные копии, созданные до этого перераспределения долей, нельзя объединить с новыми. Старые резервные копии по-прежнему работают вместе, поэтому храните их в надёжном месте или удалите. Если устройство было потеряно или скомпрометировано, переведите средства в новое хранилище.',
+  reshare_min_devices_required: 'Нужно устройств: не менее {{count}}',
   reshare_more_devices_required: 'Требуется больше устройств',
   reshare_threshold_not_met: 'Пороговое значение не достигнуто',
   reshare_threshold_not_met_description:
-    'Вы пытаетесь уменьшить количество устройств из<w> {{from}} в {{to}}</w> но это хранилище<w> требуется активные подписанты {{count}}</w> для обеспечения безопасности.',
-  solana_delegate: 'Ставка',
+    'Вы пытаетесь уменьшить число устройств <w>с {{from}} до {{to}}</w>, но для безопасности этому хранилищу <w>нужно активных подписантов: {{count}}</w>.',
+  solana_delegate: 'Застейкать',
   solana_staking_total_staked: 'Всего в стейкинге {{ticker}}',
   solana_staking_delegate_new_validator: 'Делегировать новому валидатору',
-  solana_staking_stake_accounts: 'Счета ставок',
+  solana_staking_stake_accounts: 'Стейк-аккаунты',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Резерв на арендную плату',
   solana_staking_min_delegation:
-    'Минимальный объем делегированных полномочий: {{amount}} {{ticker}}',
+    'Минимальное делегирование: {{amount}} {{ticker}}',
   solana_staking_state_active: 'Активный',
   solana_staking_state_activating: 'Активация',
   solana_staking_state_deactivating: 'Деактивация',
@@ -1712,21 +1716,21 @@ export const ru = {
   solana_staking_activating_notice:
     'Активация — приносит награды из следующей эпохи.',
   solana_staking_deactivating_notice:
-    'Деактивация — охлаждение перед извлечением.',
-  solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
+    'Деактивация — период ожидания перед выводом.',
+  solana_staking_inactive_notice:
+    'Неактивен — период ожидания завершён, можно выводить.',
   validator_commission_short: '{{value}} % комиссия',
-  reshare_failed:
-    'Ошибка при повторной отправке. Пожалуйста, попробуйте еще раз.',
+  reshare_failed: 'Ошибка перераспределения. Попробуйте ещё раз.',
   reshare_failed_description:
-    'Повторная публикация данных замедлилась из-за плохого соединения. Вы можете повторить попытку или дождаться восстановления соединения.',
+    'Перераспределение замедлилось из-за плохого соединения. Повторите попытку или дождитесь восстановления связи.',
   plugin_store_compatible: 'Совместимость с магазином плагинов',
-  open_trust_line: 'Открытая линия доверия',
+  open_trust_line: 'Открыть линию доверия',
   trust_line: 'Линия доверия',
   trust_line_limit: 'Лимит доверия',
   trust_line_issuer: 'Эмитент',
   trust_line_currency: 'Валюта',
   trust_line_custom_token: 'Пользовательский токен',
-  trust_line_issuer_placeholder: 'Адрес эмитента (р...)',
+  trust_line_issuer_placeholder: 'Адрес эмитента (r...)',
   trust_line_currency_placeholder: 'Код валюты (например, RLUSD)',
   trust_line_reserve_warning:
     'Открытие доверительной линии блокирует токены {{amount}} {{ticker}} в качестве резерва владельца учетной записи до тех пор, пока линия не будет удалена.',
@@ -1756,7 +1760,7 @@ export const ru = {
   ripple_field_offer_sequence: 'Последовательность предложений',
   ripple_field_issuer: 'Эмитент',
   ripple_undecoded_notice:
-    'Данная транзакция не может быть расшифрована. Перед подтверждением ознакомьтесь с приведенными ниже данными.',
+    'Не удалось декодировать эту транзакцию. Перед подтверждением проверьте исходные данные ниже.',
   swap_expected_payout: 'ожидаемая выплата',
   send_receiver_format_hint_cardano:
     'Введите адрес Cardano, начинающийся с addr1.',
@@ -1784,15 +1788,14 @@ export const ru = {
     'Создайте новое хранилище, чтобы добавить его сюда.',
   no_results_found: 'Результаты не найдены',
   folder_active_vault: '«{{name}}» Активен',
-  swap_limit_asset: 'Объект',
+  swap_limit_asset: 'Актив',
   swap_limit_buy: 'Купить',
   swap_limit_execute_when: 'Выполнить при',
   swap_limit_sell: 'Продавать',
   swap_limit_blocker_chain_unavailable:
-    'Данная цепочка временно остановлена ​​на THORChain',
+    'Эта сеть временно остановлена в THORChain',
   swap_limit_blocker_insufficient_balance: 'Сумма превышает ваш баланс.',
-  swap_limit_blocker_memo_invalid:
-    'Этот заказ не может быть оформлен в том виде, в котором он был введен.',
+  swap_limit_blocker_memo_invalid: 'Этот ордер нельзя разместить в таком виде',
   swap_limit_blocker_no_amount: 'Введите сумму для продажи',
   swap_limit_blocker_no_market_price:
     'Торговать этой валютной парой на THORChain в данный момент невозможно. Выберите другой актив.',
@@ -1806,15 +1809,15 @@ export const ru = {
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
   swap_limit_confirm: 'Данные заказа верны.',
-  swap_limit_expiry_label: 'Срок годности',
-  swap_limit_place_order: 'Оформить заказ',
+  swap_limit_expiry_label: 'Срок действия',
+  swap_limit_place_order: 'Разместить ордер',
   swap_limit_review_heading: 'Вы размещаете лимитный ордер.',
   swap_limit_review_target_price: 'Целевая цена',
   swap_limit_price_market: 'Рынок',
   swap_limit_warning_at_or_below_market:
     'Эта цена соответствует рыночной или ниже, поэтому заказ может быть исполнен немедленно.',
   swap_limit_warning_far_above_market:
-    'Эта цена значительно выше рыночной и может остаться нереализованной.',
+    'Цена намного выше рыночной — ордер может истечь неисполненным',
   chain_address_copied: 'Адрес {{chain}} скопирован',
   native: 'Нативный',
   activate: 'Активировать',
@@ -1863,7 +1866,7 @@ export const ru = {
   chart_range_month: '1M',
   chart_range_week: '1W',
   chart_range_year: '1Y',
-  circulating_supply: 'Циркулирующее предложение',
+  circulating_supply: 'В обращении',
   contract_address_copied: 'Адрес контракта скопирован',
   decimals: 'Десятичные знаки',
   fully_diluted_valuation: 'Оценка с учетом полного разводнения',
@@ -1872,7 +1875,7 @@ export const ru = {
   market_cap: 'Рыночная капитализация',
   market_cap_rank: 'Ранг',
   market_stats: 'Рыночная статистика',
-  max_supply: 'Максимальное предложение',
+  max_supply: 'Макс. эмиссия',
   price_range: 'Ценовой диапазон',
   token_info: 'Информация о токене',
   volume_24h: 'Объём за 24 ч',
@@ -1893,7 +1896,7 @@ export const ru = {
     'Данная транзакция представляет собой частичную оплату: указанная сумма — это максимальная сумма, которая может быть доставлена, а не гарантированная. Получатель может получить меньшую сумму. Сумма, которую вы потратите, ограничена отдельно максимальной суммой отправки, а комиссия сети взимается дополнительно.',
   ripple_warning_custom_paths:
     'На сайте были предоставлены варианты маршрутов для этой оплаты. Сеть решает, какой из них использовать, а также может использовать прямой маршрут.',
-  price_impact: 'Влияние цены',
+  price_impact: 'Влияние на цену',
   swap_fee_included_in_rate: 'Включено в указанный обменный курс',
   swap_protocol_fee: 'Протокольный сбор',
   select_route: 'Выберите маршрут',
@@ -1909,21 +1912,21 @@ export const ru = {
   kamino_earn_risk_private_credit: 'Частный кредит',
   kamino_earn_below_minimum:
     'В это хранилище принимаются депозиты в размере {{amount}} или более.',
-  kamino_earn_deposit: 'Внести в хранилище',
+  kamino_earn_deposit: 'Внести в хранилище Kamino',
   kamino_earn_deposit_to: 'Внести депозит',
   kamino_earn_minimum_deposit: 'Минимальный депозит',
   kamino_earn_amount_unavailable:
     'В данный момент конвертация этой суммы невозможна. Попробуйте позже.',
   kamino_earn_available_to_withdraw: 'Доступно для вывода средств',
   kamino_earn_delayed_liquidity:
-    'Это больше, чем вмещает хранилище в данный момент жидкости, поэтому для оседания может потребоваться больше времени.',
+    'Это больше, чем сейчас есть в хранилище в ликвидной форме, поэтому вывод может занять больше времени.',
   kamino_earn_receive_estimate:
     'Окончательная сумма устанавливается при расчете вывода средств и может незначительно отличаться.',
   kamino_earn_releases_from_farm:
     'Часть этой позиции заблокирована, поэтому при выводе средств сначала освобождается именно она.',
-  kamino_earn_shares_burned: 'Сгорели акции',
-  kamino_earn_withdraw: 'Извлечь из хранилища',
-  kamino_earn_withdraw_from: 'Выйти из',
+  kamino_earn_shares_burned: 'Сожжено паёв',
+  kamino_earn_withdraw: 'Вывести из хранилища Kamino',
+  kamino_earn_withdraw_from: 'Вывести из',
   kamino_earn_you_receive: 'Вы получаете',
   kamino_earn_no_solana_address:
     'У этого хранилища нет адреса на Солане, поэтому Kamino Earn недоступен.',
@@ -1931,7 +1934,7 @@ export const ru = {
   kamino_earn_strands_wrapped_sol_rent:
     'Этот депозит открывает счет в виде «обернутых» SOL, на котором хранится небольшая сумма SOL до момента вывода средств.',
   kamino_earn_unreadable_description:
-    'Оно достигает хранилища Камино, но это приложение не может прочитать его содержимое, поэтому оно не будет подписано.',
+    'Транзакция обращается к хранилищу Kamino, но приложение не может разобрать её действия, поэтому не подпишет её.',
   kamino_earn_unreadable_title: 'Данная транзакция не может быть подтверждена.',
   kamino_earn_card_deposit: 'Внести',
   kamino_earn_card_withdraw: 'Вывести',
@@ -1941,9 +1944,9 @@ export const ru = {
   kamino_earn_protocol: 'Kamino',
   on_chain: 'на {{chain}}',
   max_total_fee: 'Максимальная общая сумма комиссии',
-  broadcast_refused: 'Трансляция не подтверждена',
+  broadcast_refused: 'Отправка в сеть не подтверждена',
   broadcast_refused_description:
-    'Ваши устройства подписали эту транзакцию, но это устройство отказалось передавать её после окончательной проверки безопасности. Возможно, другое устройство, передающее транзакцию, всё равно её передало — следите за статусом ниже и подтвердите результат, прежде чем подписывать её снова.',
+    'Ваши устройства подписали транзакцию, но это устройство отказалось отправлять её в сеть после финальной проверки. Другое подписывающее устройство могло всё же её отправить — проверьте статус ниже, прежде чем подписывать снова.',
   not_seen_onchain: 'Пока не обнаружено в сети.',
   some_balances_failed_to_load: 'Не удалось загрузить некоторые балансы.',
   swap_limit_chart_title: 'График цен',
@@ -1954,10 +1957,10 @@ export const ru = {
   swap_limit_chart_not_reached:
     'В этот период здесь ничего не торговалось — максимум был {{price}}',
   swap_quote_expired:
-    'Срок действия этого предложения истек. Обновите страницу, чтобы узнать актуальную цену.',
+    'Котировка устарела. Обновите её, чтобы получить актуальную цену.',
   swap_failed_slippage: 'Цена превысила допустимый уровень проскальзывания.',
   swap_failed_slippage_description:
-    'Цена изменилась до завершения этого свопа, поэтому выплата была бы меньше допустимого вами проскальзывания, и сеть отменила бы это изменение. Увеличьте допустимое проскальзывание или попробуйте снова.',
+    'Цена изменилась до исполнения обмена: выплата оказалась бы ниже допустимого проскальзывания, и сеть отменила обмен. Увеличьте допустимое проскальзывание или попробуйте снова.',
   swap_applied_discounts: 'Примененные скидки:',
   swap_add_custom_token: '+ Добавить пользовательский токен',
   swap_no_token_found: 'Токен не найден',
@@ -1988,14 +1991,14 @@ export const ru = {
   ton_tx_failure_action_partially_failed:
     'Кошелек не смог осуществить как минимум один перевод в этой транзакции, но другие переводы могли пройти. Комиссия сети все равно была списана. Проверьте историю транзакций перед повторной отправкой.',
   ton_simulation_will_fail:
-    'Предварительный просмотр транзакции предполагает, что она завершится неудачей. Подписание её в любом случае, скорее всего, приведёт к уплате сетевой комиссии без её завершения.',
+    'Предпросмотр показывает, что транзакция не пройдёт. Если всё же подписать её, комиссия сети, скорее всего, будет списана без результата.',
   token_verification_unverified: 'Непроверено',
   token_verification_unverified_hint:
     'Этот токен отсутствует в списке проверенных. Перед тем как доверять ему, проверьте адрес его контракта.',
   token_verification_scam: 'МОШЕННИЧЕСТВО',
   token_verification_scam_hint:
     'Этот токен копирует имя проверенного токена, но находится по другому адресу контракта. Это подделка — не доверяйте ей.',
-  solana_blockhash_expired: 'Сделка истекла до того, как была подтверждена.',
+  solana_blockhash_expired: 'Транзакция истекла до подтверждения',
   solana_blockhash_expired_description:
     'Ваши устройства подписали транзакцию, но сеть Solana не подтвердила её до истечения срока действия хеша блока, поэтому она не прошла. Подпишите её ещё раз, чтобы отправить с новым хешем блока.',
   no_tokens_selected: 'Токены не выбраны',
@@ -2003,7 +2006,7 @@ export const ru = {
     'Вы отключили все токены. Убедитесь, что нужный вам токен включен.',
   enable_ton_w5_wallet: 'Используйте кошелек TON W5',
   enable_ton_w5_wallet_description:
-    'При определении адресов TON для этого хранилища используйте контракт W5 (v5r1) вместо V4R2. Это изменит адрес, который будет использовать кошелек, и каждый контракт будет представлять собой отдельный адрес со своим собственным балансом — средства на нем не перемещаются, поэтому все, что хранится на другом адресе, останется там до тех пор, пока вы его не отправите.',
+    'Использовать контракт W5 (v5r1) вместо V4R2 для адресов TON этого хранилища. Это меняет адрес кошелька; у каждого контракта свой адрес и баланс. Средства не переносятся — всё, что лежит на другом адресе, останется там, пока вы это не отправите.',
   ton_gasless_pay_fee_in_token: 'Оплатите комиссию сети в {{ticker}}',
   ton_gasless_description:
     'GRAM не требуется: ретранслятор оплачивает сетевой газ и вместо этого взимает небольшую комиссию {{ticker}} .',
@@ -2013,11 +2016,11 @@ export const ru = {
   swap_failed_refunded_description:
     'Обмен не удалось завершить, поэтому провайдер отправил ваши средства обратно на ваш кошелек вместо запрошенного вами актива. Обмен не был завершен. Попробуйте еще раз, чтобы получить новое предложение.',
   substrate_account_may_be_reaped:
-    'Отправитель допустил обнуление счета в результате этого перевода: если остаток средств окажется меньше необходимого депозита, он будет аннулирован, а счет деактивирован.',
+    'Отправитель разрешил этому переводу обнулить счёт: если остаток окажется меньше экзистенциального депозита, он сгорит, а счёт будет деактивирован.',
   review_not_enough_funds:
     'Похоже, в вашем хранилище недостаточно средств для этой транзакции. Измените сумму и попробуйте снова.',
   risk_level: {
-    medium: 'Середина',
+    medium: 'Средний',
     high: 'Высокий',
   },
   tx_failed_expired: 'Срок действия истек до подтверждения.',
@@ -2030,11 +2033,11 @@ export const ru = {
     'Мы не обнаружили никаких активов в проверенных нами блокчейнах.',
   unscanned_chains_warning:
     'Мы не смогли проверить балансы в этих блокчейнах. Если у вас есть средства на них, выберите их вручную:',
-  substrate_allow_death_toggle: 'Очистите счет',
+  substrate_allow_death_toggle: 'Обнулить счёт',
   substrate_allow_death_description:
-    'Переводит весь баланс за вычетом сетевой комиссии и закрывает счет. Все средства, оставшиеся ниже суммы депозита, уничтожаются.',
+    'Переводит весь баланс за вычетом сетевой комиссии и закрывает счёт. Всё, что останется ниже экзистенциального депозита, сгорит.',
   substrate_allow_death_review_warning:
-    'Этот перевод опустошит ваш счет. Счет будет деактивирован, и любой остаток средств, не достигший необходимой суммы, будет уничтожен.',
+    'Этот перевод обнулит ваш счёт. Счёт будет деактивирован, а остаток ниже экзистенциального депозита сгорит.',
   next_reward: 'Следующая награда',
   last_reward: 'Последняя награда',
   total_rewards_earned: 'Общая сумма полученных вознаграждений',
@@ -2054,9 +2057,9 @@ export const ru = {
   share_qr_image: 'Поделиться QR-изображением',
   failed_to_save_image: 'Не удалось сохранить изображение',
   add_maya_lp: 'Добавить MayaChain LP',
-  maya_lp_checking_position: 'Проверка позиции вашего MayaChain в этом pool …',
+  maya_lp_checking_position: 'Проверяем вашу позицию MayaChain в этом пуле…',
   maya_lp_position_unavailable:
-    'Не удалось прочитать вашу позицию MayaChain в этом pool , поэтому проверить этот депозит невозможно. Попробуйте позже.',
+    'Не удалось прочитать вашу позицию MayaChain в этом пуле, поэтому проверить депозит невозможно. Попробуйте позже.',
   maya_lp_paired_with_other_address:
     'Ваша позиция {{pool}} связана с другим адресом. MayaChain вернет этот депозит.',
   maya_lp_pending_address_mismatch:

@@ -2,7 +2,7 @@ export const pt = {
   accept_continue: 'Aceitar e continuar',
   action: 'Ação',
   active: 'Ativo',
-  active_chains_found_one: 'Encontramos {{count}} cadeias ativas',
+  active_chains_found_one: 'Encontramos {{count}} chain ativa',
   active_chains_found_other: 'Encontramos {{count}} cadeias ativas',
   active_chains_warning:
     'Cada cadeia adicional aumenta o tempo necessário para gerar seu cofre e a possibilidade de um tempo limite excedido.',
@@ -11,7 +11,7 @@ export const pt = {
   add_friends_referral: 'Adicionar indicação de amigo',
   add_memo: 'Adicionar MEMO',
   add_new_vault: 'Adicionar novo cofre',
-  add_referral: 'Adicionar referência',
+  add_referral: 'Adicionar indicação',
   add_referral_code: 'Salvar código de indicação',
   add_to_address_book: 'Adicionar à agenda de endereços',
   add_suggested_token: 'Adicionar token sugerido',
@@ -19,12 +19,12 @@ export const pt = {
   chain_id: 'ID da cadeia',
   fee_currency: 'Moeda da taxa',
   rest_endpoint: 'Endpoint REST',
-  rpc_endpoint: 'Ponto final RPC',
+  rpc_endpoint: 'Endpoint RPC',
   site_wants_to_add_token:
     '{{site}} deseja adicionar este token à sua carteira.',
   suggest_chain_subtitle:
     '{{site}} deseja adicionar esta cadeia à sua carteira.',
-  suggest_chain_title: 'Adicionar corrente sugerida',
+  suggest_chain_title: 'Adicionar chain sugerida',
   add_token: 'Adicionar token {{ticker}}',
   add_vaults_to_folder: 'Selecione os cofres',
   adding_token: 'Adicionando Token...',
@@ -38,18 +38,18 @@ export const pt = {
   address_book_vault: 'Meus Cofres',
   adjust_search_query: 'Tente ajustar seus critérios de pesquisa.',
   advanced: 'Avançado',
-  advanced_gas_fee: 'Taxa de gás antecipada',
+  advanced_gas_fee: 'Taxa de gás avançada',
   all_vaults: 'Todos os cofres',
   amount: 'Quantia',
   amount_must_be_non_negative: 'O valor não pode ser negativo.',
   amount_must_be_positive: 'O valor deve ser positivo.',
   amount_required: 'É necessário informar o valor.',
   amount_to_unstake: 'Valor a retirar do staking',
-  app_lock_passcode: 'Senha de bloqueio do aplicativo',
+  app_lock_passcode: 'Código de acesso do app',
   app_lock_passcode_description:
-    'Adicione uma camada extra de segurança exigindo uma senha para desbloquear o aplicativo.',
+    'Adicione uma camada extra de segurança exigindo um código de acesso para desbloquear o aplicativo.',
   app_locked: 'Aplicativo bloqueado',
-  app_locked_description: 'Digite sua senha para continuar.',
+  app_locked_description: 'Digite seu código de acesso para continuar.',
   app_permissions: 'Permissões do aplicativo',
   approval_tx: 'Aprovação Tx',
   approve: 'Aprovar',
@@ -67,16 +67,15 @@ export const pt = {
     '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
   backupsDescription:
     'Os backups protegem seu cofre. Cada dispositivo tem seu backup <w>próprio</w>. Um backup sozinho não pode mover fundos; ele serve apenas para recuperação. Importe e recupere qualquer dispositivo perdido.',
-  backupEachDevice: 'Faça backup de cada dispositivo',
+  backupEachDevice: 'Seu dispositivo está no comando',
   backupEachDeviceDescription:
     'O backup do dispositivo <w>e</w> a senha são as chaves. O servidor apenas coassina, e um backup pode ser solicitado.',
   storeBackupsSeparately: 'Armazene os backups separadamente.',
   storeBackupsSeparatelyDescription:
     'Guarde cada backup em um local diferente. Se um deles for comprometido, seus fundos permanecerão seguros.',
   backup_description:
-    'Faça backup do seu Vault Share em um local de sua preferência.',
-  backup_email_description:
-    'Insira o endereço de e-mail para receber a partilha do cofre.',
+    'Faça backup da parte do seu cofre no local de sua preferência.',
+  backup_email_description: 'Insira o e-mail que receberá a parte do cofre.',
   backup_password: 'Senha de backup',
   backup_password_description:
     'Digite a senha que você definiu ao criar este cofre.',
@@ -87,8 +86,8 @@ export const pt = {
   backup_password_info_encrypt_with_password:
     'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
   backup_password_info_secure_without_password:
-    'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena os compartilhamentos do Vault em locais diferentes.',
-  backup_share_sent: 'Compartilhamento de backup enviado!',
+    'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena as partes do cofre em locais diferentes.',
+  backup_share_sent: 'Parte do backup enviada!',
   backup_share_sent_description:
     'Acabamos de enviar o seu backup para o seu e-mail. Caso não o encontre, verifique a sua caixa de spam.',
   backup_with_password: 'Backup com senha',
@@ -127,9 +126,9 @@ export const pt = {
   by_vultisig: 'por {{productName}}',
   camera_access_blocked:
     'O acesso à câmera está bloqueado. Por favor, habilite-o nas configurações do seu navegador.',
-  cache_password_for_5_min: 'Lembre-se da senha por 5 minutos.',
+  cache_password_for_5_min: 'Lembrar a senha por 5 minutos',
   cancel: 'Cancelar',
-  chain: 'Corrente',
+  chain: 'Chain',
   chainFunctions: {
     amountExceeded: 'O valor excede o saldo disponível.',
     custom: {
@@ -159,27 +158,27 @@ export const pt = {
     },
   },
   chain_message_deposit: 'depósito de mensagem {{chain}}',
-  chains: 'Correntes',
+  chains: 'Chains',
   change: 'Alterar',
   change_passcode: 'Alterar código de acesso',
   change_your_friends_referral:
-    'Alterar amigos Código de indicação usado para trocas',
+    'Alterar o código de indicação de amigos usado em swaps',
   check_for_update: 'Verifique se há atualizações',
   choose_a_password: 'Escolha uma senha',
   choose_a_password_description:
     'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b> <info />',
   choose_backup_method: 'Escolha o método de backup',
   choose_payout_asset: 'Escolha o ativo de pagamento',
-  choose_chains: 'Escolha correntes',
+  choose_chains: 'Escolha as chains',
   choose_tokens: 'Escolha tokens',
   choose_vaults: 'Escolha cofres',
   deposited: 'Depositado',
   circle: {
     banner_text:
-      'Os fundos permanecem totalmente sob o controle do seu cofre. O rendimento do Circle é gerado por meio de tesourarias seguras fora da blockchain. Saque a qualquer momento após a liquidação.',
+      'Os fundos permanecem totalmente sob o controle do seu cofre. As contas Circle são autocustodiais e o rendimento vem de tesourarias seguras fora da blockchain.',
     open_account: 'Abrir conta',
     withdraw: 'Retirar',
-    withdraw_header: 'Retirar-se do Círculo',
+    withdraw_header: 'Sacar da Circle',
     verify_withdraw: 'Verificar Saque',
     apy_approx: 'APY (aprox.)',
     apy_tooltip: 'As recompensas são creditadas automaticamente em seu saldo.',
@@ -193,8 +192,8 @@ export const pt = {
   adding_coin_to_vault: 'Adicionando moeda ao cofre...',
   defi_token_required_description:
     'Adicione {{ticker}} em Gerenciar tokens para fazer stake, unstake ou bond.',
-  defi_add: 'Add',
-  defi_remove: 'Remove',
+  defi_add: 'Adicionar',
+  defi_remove: 'Remover',
   defi_lp_pool_title: 'Pool {{pool}}',
   position_label: 'Posição',
   defi_lp_position_form_title:
@@ -206,8 +205,8 @@ export const pt = {
   confirm: 'Confirmar',
   confirmed: 'Confirmado',
   confirm_automation_creation: 'Confirme a criação da automação.',
-  confirm_new_passcode: 'Confirmar nova senha',
-  confirm_passcode: 'Confirme a senha.',
+  confirm_new_passcode: 'Confirmar novo código de acesso',
+  confirm_passcode: 'Confirmar código de acesso',
   connect: 'Conectar',
   connect_dapp: 'Conectar dApp',
   connect_to_site: 'Conecte-se ao {{site}}',
@@ -221,7 +220,7 @@ export const pt = {
   copy_address: 'Copiar endereço',
   create_new_vault: 'Criar novo cofre',
   create_vault: 'Criar cofre',
-  create_referral_form: 'Criar referência',
+  create_referral_form: 'Criar indicação',
   create_referral_title: 'Criar indicação',
   create_referral: 'Criar indicação',
   create_referral_desc:
@@ -232,10 +231,10 @@ export const pt = {
   creating_vault: 'Criando um cofre',
   currency: 'Moeda',
   current_expiry: 'Validade atual',
-  current_passcode: 'Senha atual',
+  current_passcode: 'Código de acesso atual',
   custom: 'Ação personalizada',
   custom_token: 'Token personalizado',
-  customize_chains: 'Personalize correntes',
+  customize_chains: 'Personalizar chains',
   date: 'Data',
   deeplink: 'Link direto',
   defi: 'DeFi',
@@ -279,12 +278,12 @@ export const pt = {
   earn: 'Ganhar',
   edit_address: 'Editar endereço',
   edit_friends_referral: 'Editar Indicação de Amigo',
-  edit_referral: 'Editar encaminhamento',
-  remove_friends_referral: 'Remover encaminhamento',
+  edit_referral: 'Editar indicação',
+  remove_friends_referral: 'Remover indicação',
   edit_vaults: 'Editar Cofres',
   email: 'E-mail',
   email_placeholder: 'Insira seu endereço de e-mail',
-  email_required: 'É necessário enviar um e-mail.',
+  email_required: 'O e-mail é obrigatório',
   evm_chains: 'Cadeias EVM',
   enable: 'Habilitar',
   enable_all: 'Ativar tudo',
@@ -302,7 +301,7 @@ export const pt = {
   enter_folder_name: 'Digite o nome da pasta',
   enter_memo: 'Inserir memorando',
   enter_new_passcode: 'Digite o novo código de acesso',
-  enter_passcode: 'Digite a senha',
+  enter_passcode: 'Digite o código de acesso',
   enter_password: 'Digite a senha',
   enter_number_placeholder: 'Digite um número',
   enter_percentage: 'Insira a porcentagem',
@@ -311,7 +310,7 @@ export const pt = {
   enter_vault_name: 'Digite o nome do cofre',
   enter_your_email: 'Insira seu e-mail',
   enter_your_email_description:
-    'Este email é utilizado para backup na nuvem e não é compartilhado com terceiros',
+    'Usado uma única vez para enviar o backup do seu cofre. Não o armazenamos.',
   enter_your_password: 'Digite sua senha',
   entity_not_scanned: '{{entity}} não foi escaneado por <provider></provider>',
   entity_scanned: '{{entity}} escaneado por <provider></provider>',
@@ -379,7 +378,7 @@ export const pt = {
     'O {{productName}} é gratuito. Apenas as taxas de rede padrão se aplicam ao envio. Para swaps e bridges, há uma taxa de 0,5% (50 bps).',
   faq_recover_assets_title: 'Quais são as taxas e os custos?',
   faq_secure_crypto_vault_content:
-    'Sim, desde que você tenha salvo e tenha acesso aos seus backups ao criar o cofre. Você pode importar esses backups em um novo dispositivo para recuperar o acesso aos seus arquivos.',
+    'Sim, desde que você tenha salvo seus backups ao criar o cofre e ainda tenha acesso a eles. Importe-os em um novo dispositivo para recuperar o acesso aos seus ativos.',
   faq_secure_crypto_vault_title:
     'Posso recuperar meus bens se perder um dispositivo?',
   faq_setup_crypto_vault_content:
@@ -390,18 +389,17 @@ export const pt = {
   faq_supported_cryptocurrencies_title:
     'Quais são os benefícios de usar o {{productName}}?',
   faq_vultisig_make_money_content:
-    'A {{productName}} armazena e gerencia ativos digitais com segurança. Todas as ações, como envio ou troca, exigem que os dispositivos assinem as transações.',
+    'O {{productName}} armazena e gerencia ativos digitais com segurança. Todas as ações, como envio ou swap, exigem que o número mínimo de dispositivos assine as transações.',
   faq_vultisig_make_money_title: 'Como se utiliza o {{productName}}?',
   fast: 'Rápido',
   fast_vault_session_conflict: 'Incompatibilidade na parte do cofre',
   fast_vault_session_conflict_description:
     'Sua parte local do cofre não corresponde à armazenada no Vultiserver. Isso pode acontecer se a mesma frase-semente foi importada em outro dispositivo.',
   fast_vault_password_start_keysign_description:
-    'Confirme a transação inserindo a senha do seu compartilhamento de servidor.',
+    'Confirme a transação digitando a senha da parte do servidor.',
   fastVaultSetup: {
     backup: {
-      codeInfo:
-        'Este código confirmará que você recebeu sua primeira parcela do cofre por e-mail.',
+      codeInfo: 'Isso ativará o coassinante',
       enterCode: 'Digite o código de 4 dígitos que enviamos por e-mail.',
       sentTo: 'Enviado para {{email}}.',
       setNewStandard: 'Você está pronto para usar um novo padrão de carteira.',
@@ -410,14 +408,14 @@ export const pt = {
     },
     connectingWithServer: 'Conectando com o servidor...',
     emailSetupTitle:
-      'Este email é utilizado para backup na nuvem e não é compartilhado com terceiros',
+      'Usado uma única vez para enviar o backup do seu cofre. Não o armazenamos.',
     enterEmail: 'Insira seu email',
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada.',
     passwordTooltip:
       'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. Na próxima etapa, você terá a opção de adicionar uma dica.',
     referralModalTitle: 'Código de indicação',
     referralModalSubtitle:
-      'Insira seu código de indicação aqui. <b>Aproveite 10% de desconto em todas as compras.</b>',
+      'Insira seu código de indicação aqui. <b>Ganhe 10% de desconto em todas as transações.</b>',
     applyReferral: 'Aplicar indicação',
     referralAdded: 'Indicação adicionada',
     takeMinute: 'Isso deve levar apenas um segundo.',
@@ -435,8 +433,8 @@ export const pt = {
   buy_vult_banner_caption: 'Comprar $VULT',
   follow_banner_caption: 'Vultisig está sendo construído com você.',
   follow_banner_title: 'Siga-nos no X',
-  rujira_banner_caption: 'Aposte e ganhe',
-  rujira_banner_title: 'Apostas em Rujira já estão disponíveis.',
+  rujira_banner_caption: 'Faça stake e ganhe',
+  rujira_banner_title: 'Staking na Rujira já disponível',
   vault_backup_banner_caption: 'Faça backup do seu cofre',
   vault_backup_banner_title: 'Solicitar custódia total do cofre.',
   referral_banner_caption: 'Não perca as recompensas',
@@ -471,17 +469,16 @@ export const pt = {
   gwei: 'GWEI',
   header_tooltip_content:
     'O programa de indicação é aplicado em swaps THORChain e funciona com base no princípio do melhor esforço. Você precisa registrar um THORName para usar o programa de indicação {{productName}}. A taxa de registro é de 10 RUNE e 1 RUNE por ano, paga à rede THORChain.',
-  header_tooltip_title: 'Programa de Encaminhamento',
+  header_tooltip_title: 'Programa de indicação',
   having_trouble_scanning_help: 'Ajuda para digitalizar QR',
   having_trouble_scanning: 'Problemas para escanear?',
-  having_trouble_scanning_desc:
-    'Se o codigo QR nao estiver escaneando imediatamente:',
+  having_trouble_scanning_desc: 'Se o código QR não for lido de imediato:',
   having_trouble_scanning_tip_1:
     'Mova o telefone um pouco mais perto ou mais longe da tela',
   having_trouble_scanning_tip_2:
     'Certifique-se de que a tela esteja bem iluminada e sem brilho',
   having_trouble_scanning_tip_3:
-    'Mantenha ambos os dispositivos estaveis por um momento',
+    'Mantenha os dois dispositivos estáveis por um momento',
   hide_balance: 'Ocultar saldo',
   hide_total_balance: 'Ocultar saldo total',
   how_it_works: 'Como funciona',
@@ -493,7 +490,7 @@ export const pt = {
   id: 'ID',
   i_understand_save_backup: 'Eu sei como salvar esse backup.',
   import: 'Importar',
-  import_key: 'Chave de importação',
+  import_key: 'Importar chave',
   import_seedphrase: 'Importar frase-semente',
   seedPhraseImportTip: 'Dica: Você pode usar um navegador como dispositivo',
   enter_your_seedphrase: 'Insira sua frase mnemônica',
@@ -506,21 +503,21 @@ export const pt = {
   seedphrase_invalid_error:
     'A frase-semente está incorreta. Por favor, verifique todas as palavras.',
   seedphrase_duplicate_vault_error:
-    'Esta frase mnemônica já foi importada como o cofre &quot;{{vaultName}}&quot;. Importe outra frase mnemônica.',
+    'Esta frase-semente já foi importada como o cofre “{{vaultName}}”. Importe outra frase-semente.',
   fast_vault_exists_warning_title: 'O cofre já existe',
   fast_vault_exists_warning_description:
-    'Esta frase-semente já foi importada como cofre rápido em outro dispositivo. Se continuar, a parte do servidor será substituída e o outro dispositivo deixará de funcionar.',
+    'Esta frase-semente já foi importada como Fast Vault em outro dispositivo. Se continuar, a parte do servidor será substituída e o outro dispositivo deixará de funcionar.',
   fast_vault_exists_warning_hint:
-    'Se deseja que ambos os dispositivos continuem funcionando, use um cofre seguro.',
+    'Se quiser que os dois dispositivos continuem funcionando, use um Secure Vault.',
   import_seedphrase_description:
     'Entre, crie um cofre e nunca mais olhe para trás.',
   import_seedphrase_onboarding_title:
-    'Você está entrando em uma nova era, <g> para trás </g> antigas frases de recuperação. Você precisará de:',
-  import_vault: 'Cofre de Importação',
+    'Você está entrando em uma nova era, <g>deixando as frases-semente para trás.</g> Você vai precisar de:',
+  import_vault: 'Importar cofre',
   import_vult_backup: 'Importar cópia .vult',
-  import_vault_share: 'Compartilhamento do cofre de importação',
+  import_vault_share: 'Importar parte do cofre',
   import_vault_share_description:
-    'Utilize uma pasta compartilhada do cofre para recuperar seu cofre.',
+    'Use uma parte do cofre para recuperar seu cofre.',
   import_vault_share_supported_files:
     'Tipos de arquivo suportados: .bak e .vult',
   importing_vault: 'Importando o Vault...',
@@ -544,8 +541,8 @@ export const pt = {
   invalid_email: 'Por favor, insira um endereço de e-mail válido.',
   invalid_file_format: 'Formato de arquivo inválido',
   invalid_node_address: 'O endereço do nó é inválido.',
-  incorrect_passcode: 'Senha incorreta.',
-  invalid_passcode: 'Senha inválida',
+  incorrect_passcode: 'Código de acesso incorreto.',
+  invalid_passcode: 'Código de acesso inválido',
   join_keygen: 'Junte-se ao Keygen',
   join_keysign: 'Junte-se à Keysign',
   join_transaction: 'Participar da transação',
@@ -559,12 +556,12 @@ export const pt = {
   joining_session: 'Participando da sessão...',
   keygen: 'Gerador de chaves',
   keygen_devices_requirements_info:
-    'Escaneie o QR Code com outro dispositivo. {{recommended}} - configuração de dispositivo recomendada, {{min}} é suficiente.',
+    'Escaneie o QR com outro dispositivo. Recomendamos {{recommended}} dispositivos; {{min}} é suficiente.',
   keygen_failed: 'Erro na geração da chave. Tente novamente.',
   keys: 'Chaves',
   keysign: 'Keysign',
   label: 'Rótulo',
-  language: 'Linguagem',
+  language: 'Idioma',
   learnMore: 'Saber mais',
   leave: 'Deixar',
   left_pool: 'Pool abandonado',
@@ -589,7 +586,7 @@ export const pt = {
   max_4_characters: 'Máximo de 4 caracteres',
   memo: 'Memorando',
   message: 'Mensagem',
-  message_required: 'É necessário enviar uma mensagem.',
+  message_required: 'A mensagem é obrigatória',
   message_to_sign: 'Mensagem para assinar',
   method: 'Método',
   method_required: 'É necessário um método de assinatura.',
@@ -614,14 +611,14 @@ export const pt = {
   never: 'Nunca',
   new: 'Novo',
   next: 'Próximo',
-  new_passcode: 'Nova senha',
+  new_passcode: 'Novo código de acesso',
   no_active_chains_found: 'Nenhuma cadeia ativa encontrada',
   no_active_chains_found_description:
-    'Não detectamos nenhum recurso associado a essa frase inicial.',
+    'Não detectamos nenhum ativo nesta frase-semente.',
   no_chains_enabled: 'Nenhuma cadeia habilitada',
   no_chains_enabled_description:
     'Você desabilitou todas as cadeias. Certifique-se de que pelo menos uma cadeia esteja habilitada.',
-  no_chains_found: 'Nenhuma corrente encontrada',
+  no_chains_found: 'Nenhuma chain encontrada',
   no_connected_dapps: 'Nenhum dApp conectado',
   no_connected_dapps_desc:
     'Os dApps aparecerão aqui sempre que você interagir com eles.',
@@ -636,7 +633,7 @@ export const pt = {
   total_bonded: 'Total vinculado {{ticker}}',
   active_nodes: 'Nós Ativos',
   vulti_node: 'VultiNode',
-  available_nodes: 'Available Nodes',
+  available_nodes: 'Nós disponíveis',
   request_to_bond: 'Solicitar vínculo',
   wait_until_node_churned: 'Aguarde até o nó ser rotacionado',
   unstake_available_on: 'Desbloqueio disponível em {{date}}',
@@ -668,14 +665,14 @@ export const pt = {
   onboarding_description_3:
     '{{productName}} é um aplicativo nativamente para múltiplos dispositivos. Requer pelo menos dois dispositivos para criar um cofre seguro: um dispositivo iniciador e um dispositivo de emparelhamento.',
   onboarding_description_4:
-    '{{productName}} é uma carteira sem frases-semente. Em vez disso, utiliza compartilhamentos de cofre fáceis de gerenciar. Cada dispositivo possui seu próprio compartilhamento de cofre exclusivo, que requer um backup separado.',
+    '{{productName}} é uma carteira sem frases-semente. Em vez disso, usa partes do cofre fáceis de gerenciar. Cada dispositivo tem sua própria parte do cofre, que precisa de um backup separado.',
   operator_fee: 'Taxa de Operador',
   basis_points: 'Pontos base',
   optionalDevice: 'Dispositivo opcional',
   other: 'Outro',
   overview: 'Visão geral',
-  part: 'papel',
-  passcodes_do_not_match: 'As senhas não coincidem.',
+  part: 'parte',
+  passcodes_do_not_match: 'Os códigos de acesso não coincidem.',
   password: 'Senha',
   password_do_not_match: 'As senhas não coincidem.',
   password_pattern_error:
@@ -686,7 +683,7 @@ export const pt = {
   pending: 'Pendente',
   percentage: 'Percentagem',
   percentage_limit: 'A porcentagem deve ser de 0 a 100.',
-  percentage_to_unstake: 'Percentagem para Desinvestir',
+  percentage_to_unstake: 'Porcentagem para retirar do stake',
   pick_referral_code: 'Escolha o código de indicação',
   platinum: 'Platina',
   plugin_info: 'Informações do aplicativo',
@@ -706,7 +703,7 @@ export const pt = {
   prioritize_vultisig: 'Priorize {{productName}}',
   priority: 'Prioridade',
   priority_fee: 'Taxa prioritária',
-  privacy_policy: 'política de Privacidade',
+  privacy_policy: 'Política de privacidade',
   processing_transaction: 'Processando transação...',
   processing_url: 'Processando URL...',
   provide_camera_permission:
@@ -721,7 +718,7 @@ export const pt = {
   qbtc_claim_failed_to_load: 'Falha ao carregar UTXOs elegíveis para resgate.',
   qbtc_claim_proving: 'Gerando provas…',
   qbtc_claim_proving_hint: 'Isso pode levar vários minutos.',
-  qbtc_claim_broadcasting: 'Broadcasting da reivindicação…',
+  qbtc_claim_broadcasting: 'Transmitindo a coleta…',
   qbtc_claim_success_title: 'Reivindicação bem-sucedida',
   qbtc_claim_utxos_claimed: 'UTXOs reivindicados',
   qbtc_claim_utxos_skipped: 'UTXOs ignorados',
@@ -741,15 +738,15 @@ export const pt = {
   referral_costs: 'Custos',
   referral_expiration_maximum: 'Máximo de 1000 anos',
   referral_expiration_minimum: 'Mínimo de 1 ano',
-  referral_extension_fee: 'Taxa de extensão de encaminhamento',
+  referral_extension_fee: 'Taxa de renovação da indicação',
   referral_fee_amount_minimum: 'Mínimo de {{amount}} RUNE',
   referral_landing_title:
     'Convide amigos. <g> Ganhe recompensas. </g> Economize em taxas.',
-  referral_program: 'Programa de Encaminhamento',
+  referral_program: 'Programa de indicação',
   referral_reg_fee: 'Taxa de inscrição',
   referral_status: 'Status',
   manage_referral_title: 'Indicações {{productName}}',
-  referrals_default_title: 'Encaminhamento',
+  referrals_default_title: 'Indicação',
   referrals_summary: {
     item_1: {
       description:
@@ -780,7 +777,7 @@ export const pt = {
   required_node_address: 'É necessário o endereço do nó.',
   resend_notification: 'Reenviar notificação',
   resend_notification_in: 'Reenviar notificação em {{time}}',
-  reshare: 'Compartilhar',
+  reshare: 'Recompartilhar',
   reshare_vault_description: 'Recompartilhe o cofre com um novo comitê.',
   reshare_your_vault: 'Compartilhe novamente seu cofre',
   resource: 'Recurso',
@@ -792,7 +789,7 @@ export const pt = {
   risky_transaction_detected: 'Transação de risco {{riskLevel}} detectada',
   risky_tx_warning:
     'Esta transação envolve um endereço malicioso. Interagir com ele pode comprometer seus ativos. Prossiga somente se tiver certeza.',
-  same_vault_share: 'Compartilhamento do mesmo cofre',
+  same_vault_share: 'Mesma parte do cofre',
   save: 'Salvar',
   save_10_percent_on_swaps: 'Economize <blue>10%</blue> em trocas agora',
   save_changes: 'Salvar alterações',
@@ -814,7 +811,7 @@ export const pt = {
   scan_with_device_index: 'Digitalize com o dispositivo {{index}}',
   scan_with_device_name: 'Digitalize com {{name}}',
   scanning: 'digitalizando...',
-  scanning_for_chains: 'Procurando correntes...',
+  scanning_for_chains: 'Procurando chains...',
   scanning_for_chains_subtitle:
     'Estamos verificando quais blockchains possuem endereços ativos para sua frase mnemônica. <highlight>Este processo pode levar até 2 minutos.</highlight>',
   search: 'Procurar',
@@ -846,20 +843,20 @@ export const pt = {
   security: 'Segurança',
   select: 'Selecione',
   select_asset: 'Selecione o ativo',
-  select_backup_file: 'Importe sua partilha do cofre',
-  select_vault_backup_share: 'Selecione a opção de compartilhamento do cofre',
+  select_backup_file: 'Importe a parte do seu cofre',
+  select_vault_backup_share: 'Selecione a parte do cofre',
   select_vault_backup_share_description:
-    'Este backup contém várias pastas compartilhadas do cofre. Selecione a pasta compartilhada para este dispositivo.',
+    'Este backup contém várias partes do cofre. Escolha a parte deste dispositivo.',
   unsupported_vault_backup_file:
     'Este arquivo não parece ser um backup do {{productName}} Vault. Selecione um arquivo `.vult` ou `.vult.zip` exportado do aplicativo {{productName}}.',
-  select_chain: 'Selecione a corrente',
-  select_chains: 'Selecione',
-  select_chains_manually: 'Selecione as correntes manualmente',
+  select_chain: 'Selecione a chain',
+  select_chains: 'Selecione as chains',
+  select_chains_manually: 'Selecione as chains manualmente',
   select_positions: 'Selecionar posições',
   select_positions_description:
     'Ative pelo menos uma posição para ver saldos e gerenciar posições.',
   compounded_token: 'Composto {{ticker}}',
-  select_destination_chain: 'Selecione a cadeia de destinos',
+  select_destination_chain: 'Selecione a chain de destino',
   select_n_devices_one: 'Selecione {{count}} dispositivo',
   select_n_devices_other: 'Selecione {{count}} dispositivos',
   select_pool: 'Selecione o pool',
@@ -871,28 +868,27 @@ export const pt = {
   send: 'Enviar',
   sends: 'Envia',
   send_amount_exceeds_balance: 'O valor excede o saldo.',
-  send_invalid_receiver_address: 'Insira um endereço de destinatário válido.',
-  send_overview: 'Enviar visão geral',
+  send_invalid_receiver_address: 'Endereço incorreto para a chain selecionada',
+  send_overview: 'Resumo do envio',
   send_receiver_address_same_as_sender:
     'O endereço do destinatário não pode ser o mesmo que o endereço do remetente.',
   send_receiver_dangerous_address:
-    'Este endereço não pode receber fundos. É um {{reason}}.',
+    'Este endereço não pode receber fundos. Motivo: {{reason}}.',
   send_terms_0: 'Estou enviando para o endereço correto.',
   send_terms_1: 'O valor está correto.',
   send_to: 'Enviar para',
   sent: 'Enviado',
   server_backup: 'Backup do servidor',
-  server_backup_description:
-    'Solicite novamente o compartilhamento do cofre do servidor.',
+  server_backup_description: 'Solicite novamente a parte do cofre do servidor.',
   session_init_failed: 'Falha ao inicializar a sessão',
   set_expiration: 'Data de expiração (em anos)',
-  set_passcode: 'Definir senha',
+  set_passcode: 'Definir código de acesso',
   settings: 'Configurações',
   share: 'Compartilhar',
   share_app: 'Compartilhe o aplicativo',
   share_description:
     'Compartilhe seu código de indicação exclusivo para convidar amigos. Eles ganham um desconto e, quanto mais negociarem, mais você ganha — diretamente na sua carteira.',
-  shares: 'Ações',
+  shares: 'Partes',
   show_balance: 'Mostrar saldo',
   show_total_balance: 'Mostrar saldo total',
   sign: 'Assinar',
@@ -906,7 +902,7 @@ export const pt = {
   sign_message: 'Assinar mensagem',
   sign_transaction: 'Assinar transação',
   signature: 'Assinatura',
-  signature_successful: 'Assinatura de sucesso',
+  signature_successful: 'Assinatura concluída',
   signed_signature: 'Assinatura assinada',
   signing_address: 'Endereço de assinatura',
   signing_error: 'Erro ao assinar. Tente novamente.',
@@ -918,7 +914,7 @@ export const pt = {
   site: 'Site',
   site_has_risk: 'Site malicioso detectado por <provider> </provider>',
   skip: 'Pular',
-  slippage: 'Deslizamento',
+  slippage: 'Slippage',
   something_went_wrong: 'Algo deu errado',
   somethings_wrong: 'Algo está errado',
   soon: 'Breve',
@@ -935,15 +931,15 @@ export const pt = {
   spender: 'Gastador',
   operator: 'Operador',
   contract: 'Contrato',
-  start_reshare: 'Começar a compartilhar',
+  start_reshare: 'Iniciar recompartilhamento',
   status: 'Status',
-  support: 'Apoiar',
+  support: 'Suporte',
   swap: 'Trocar',
   swaps: 'Trocas',
   swap_discount: 'Desconto de troca',
   swap_fee: 'Taxa de troca',
   swap_overview: 'Visão geral da troca',
-  swap_same_asset: 'Não é possível trocar entre ativos do mesmo tipo.',
+  swap_same_asset: 'Não é possível trocar um ativo por ele mesmo',
   swap_terms: {
     input: 'O valor da troca está correto.',
     output: 'Concordo com o valor mínimo que receberei.',
@@ -965,7 +961,7 @@ export const pt = {
     'O código de referência deve ter um alias de cadeia THOR.',
   tns_not_found: 'Código de indicação não encontrado',
   to: 'Para',
-  to_min_payout: 'pagamento mín.',
+  to_min_payout: 'recebimento mín.',
   today: 'Hoje',
   token_not_found_description:
     'Possíveis motivos: contrato incorreto, blockchain não suportada ou token removido dos registros.',
@@ -976,7 +972,7 @@ export const pt = {
   transaction_details: 'Detalhes da transação',
   transaction_has_risk:
     'Transação de risco {{riskLevel}} detectada por <provider></provider>',
-  transaction_failed: 'Transação<error> fracassado</error>',
+  transaction_failed: 'Transação <error>falhou</error>',
   transaction_pending: 'Transação pendente...',
   transaction_successful: 'Transação <g> bem-sucedida </g>',
   raw_transaction_data: 'Dados brutos de transação',
@@ -992,7 +988,7 @@ export const pt = {
   tron_freeze_button: 'Freeze',
   tron_freeze_title: 'TRON Freeze',
   tron_frozen_label: 'Frozen',
-  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_pending_withdrawals: 'Saques pendentes',
   tron_ready_to_claim: 'Pronto para reivindicar',
   withdraw_expire_unfreeze: 'Reivindicar',
   tron_unfreeze_button: 'Unfreeze',
@@ -1010,17 +1006,17 @@ export const pt = {
   type_here: 'Digite aqui',
   unbond: 'Desvincular',
   unbond_with_lp: 'Desvincular Maya',
-  ultimate: 'Final',
-  unlock_discount_tier: 'Desbloquear <b> {{tier}} </b> Nível',
+  ultimate: 'Supremo',
+  unlock_discount_tier: 'Desbloquear nível <b>{{tier}}</b>',
   unlock_discount_tier_description:
     'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
   unlock_discount_tier_description_ultimate:
-    'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa Vultisig</b> em todas as trocas.',
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa do Vultisig</b> em todos os swaps.',
   unlock_tier: 'Desbloquear nível',
   unfreeze: 'Unfreeze',
   unknown: 'Desconhecido',
   unlimited: 'Ilimitado',
-  unstake: 'Desvincule',
+  unstake: 'Retirar do stake',
   unstake_share_token_label: 'Unstake {{ticker}}',
   upgrade: 'Atualizar',
   upgrade_all_devices:
@@ -1028,7 +1024,7 @@ export const pt = {
   upgrade_now: 'Atualize agora',
   upgrade_now_prompt: 'Atualize seu cofre agora',
   upgrade_shares_info:
-    '<b>Você criará novos backups do Vault Share</b> e os armazenará como fazia antes.',
+    '<b>Você criará novos backups das partes do cofre</b>; guarde-os como antes.',
   upgrade_success: 'Vault atualizado <b>com sucesso</b>',
   upgrade_vault: 'Melhore seu cofre',
   upgrade_vault_description:
@@ -1046,7 +1042,7 @@ export const pt = {
   value: 'Valor',
   vault: 'Cofre',
   vaultCheckUpdatePage: {
-    applicationUpToDate: 'A inscrição está atualizada.',
+    applicationUpToDate: 'O aplicativo está atualizado.',
     downloadButton: 'Atualize agora',
     errorFetchingLatestVersion:
       'Erro ao obter a versão mais recente: {{error}}',
@@ -1059,14 +1055,14 @@ export const pt = {
   vault_cannot_be_opened:
     'O vault "{{name}}" não pode ser aberto neste dispositivo',
   vault_cannot_be_opened_backup_description:
-    'A sua cópia de segurança .vult é o caminho de volta. Importe-a e este vault volta a funcionar.',
+    'Seu backup .vult é o caminho de volta. Importe-o e este cofre volta a funcionar.',
   vault_cannot_be_opened_description:
-    'Os seus key shares estão encriptados e a chave que os desbloqueia não veio com este restauro. Nada neste dispositivo os consegue ler, por isso não pode assinar com este vault.',
-  vault_cannot_be_opened_no_backup: 'Não tenho cópia de segurança',
+    'As partes deste cofre estão criptografadas, e a chave que as desbloqueia não veio nesta restauração. Nada neste dispositivo consegue lê-las, então ele não pode assinar com este cofre.',
+  vault_cannot_be_opened_no_backup: 'Não tenho backup',
   vault_cannot_be_opened_no_backup_description:
-    'Sem uma cópia .vult, os key shares deste dispositivo já não podem ser desencriptados — essa parte não é recuperável. O vault em si ainda pode ser: se os seus outros dispositivos guardarem os próprios shares e continuarem a atingir o limiar de assinatura, ele continua a funcionar sem este dispositivo.',
+    'Sem um backup .vult, as partes do cofre deste dispositivo não podem mais ser desbloqueadas; isso não é recuperável. O cofre em si ainda pode ser: se seus outros dispositivos têm as próprias partes e ainda atingem o limite de assinatura, ele continua funcionando sem este.',
   vault_backup_page_password_info:
-    'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
+    'Nunca armazene partes do cofre de dispositivos diferentes no mesmo local.',
   vault_backup_page_password_protection:
     'Proteção opcional por senha do seu cofre',
   vault_backup_page_submit_loading_button_text: 'Salvando...',
@@ -1085,7 +1081,7 @@ export const pt = {
   vault_delete_page_term_3:
     'Eu fiz um backup do cofre para restaurar mais tarde.',
   vault_delete_page_vault_part: 'Parte do cofre',
-  vault_details_description: 'Veja o nome, a peça e o tipo do cofre.',
+  vault_details_description: 'Veja o nome, a parte e o tipo do cofre.',
   vault_details_edit_vault_description: 'Edite o nome do seu cofre',
   vault_details_page_signer_word: 'Signatário',
   vault_details_page_vault_ECDSA: 'ECDSA',
@@ -1103,7 +1099,7 @@ export const pt = {
     'O nome do cofre deve ter menos de 50 caracteres.',
   vault_name_required: 'O nome do cofre é obrigatório.',
   vault_notifications: 'Notificações do Vault',
-  vault_part: 'Compartilhamento do cofre',
+  vault_part: 'Parte do cofre',
   vault_password: 'Senha do cofre',
   vault_ready_description:
     'Está tudo pronto! Você mantém o controle de todas as transações.',
@@ -1114,7 +1110,7 @@ export const pt = {
   vault_server_share_bad_request:
     'Algo deu errado. Por favor, verifique sua senha novamente e tente outra vez.',
   vault_server_share_too_many_requests:
-    'Você solicitou o compartilhamento de backup com muita frequência em um curto período. Aguarde antes de tentar novamente.',
+    'Você solicitou sua parte de backup muitas vezes em pouco tempo. Aguarde antes de tentar novamente.',
   vault_settings: 'Configurações do cofre',
   vault_settings_address_book_address_min_length_error:
     'O endereço deve ter pelo menos 1 caractere.',
@@ -1136,7 +1132,7 @@ export const pt = {
   verify_password: 'Verificar senha',
   verify_password_for: 'Confirme sua senha para:',
   verify_password_periodic_message_description:
-    'Periodicamente, solicitaremos que você verifique sua senha de login rápido para que você sempre se lembre dela.',
+    'Pedimos a verificação periodicamente para que você não esqueça sua senha.',
   version: 'Versão',
   via: 'via',
   view_on_explorer: 'Visualizar no Explorador',
@@ -1160,10 +1156,10 @@ export const pt = {
   pool: 'Pool',
   paired_address: 'Endereço emparelhado',
   yesterday: 'Ontem',
-  you_are_bonding: 'Você está bondando',
+  you_are_bonding: 'Você está vinculando',
   you_are_unbonding: 'Você está desfazendo bond',
   you_are_sending: 'Você está enviando',
-  you_are_staking: 'Você está stakando',
+  you_are_staking: 'Você está fazendo stake',
   you_are_unstaking: 'Você está desfazendo stake',
   you_are_minting: 'Você está cunhando',
   you_are_redeeming: 'Você está resgatando',
@@ -1178,7 +1174,7 @@ export const pt = {
   vaultSetupOverview: {
     title: 'Configuração do seu cofre',
     fast: {
-      badgeTitle: 'Cofre Rápido',
+      badgeTitle: 'Fast Vault',
       badgeSubtitle: 'Configuração de 2 dispositivos',
       feature1Title: 'Assinatura de 1 dispositivo',
       feature1Description:
@@ -1191,7 +1187,7 @@ export const pt = {
         'Um co-signatário nunca pode iniciar transações; apenas auxilia na assinatura delas.',
     },
     secure2: {
-      badgeTitle: 'Cofre seguro',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'cofre para 2 dispositivos',
       feature1Title: 'Assinatura em 2 dispositivos',
       feature1Description:
@@ -1199,13 +1195,12 @@ export const pt = {
       feature2Title: 'Nenhum ponto único de falha',
       feature2Description:
         'Um único dispositivo não consegue movimentar fundos. Se um dispositivo for perdido ou exposto, ele não poderá aprovar transações sozinho.',
-      feature3Title:
-        'Ideal para armazenamento simples em câmaras frigoríficas.',
+      feature3Title: 'Ideal para armazenamento a frio simples',
       feature3Description:
         'Configuração ideal para usuários com apenas 2 dispositivos.',
     },
     secure3: {
-      badgeTitle: 'Cofre seguro',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'cofre para 3 dispositivos',
       feature1Title: 'Assinatura em 2 dispositivos',
       feature1Description:
@@ -1213,12 +1208,12 @@ export const pt = {
       feature2Title: 'Nenhum ponto único de falha',
       feature2Description:
         'Um único dispositivo não consegue movimentar fundos. Se um dispositivo for perdido ou exposto, ele não poderá aprovar transações sozinho.',
-      feature3Title: 'Ideal para armazenamento refrigerado',
+      feature3Title: 'Ideal para armazenamento a frio',
       feature3Description:
         'Equilíbrio perfeito para a maioria dos usuários. 2 assinaturas e 1 dispositivo de backup. Armazene seus ativos sem estresse.',
     },
     secure4: {
-      badgeTitle: 'Cofre seguro',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'cofre para 4 ou mais dispositivos',
       feature1Title: 'Assinatura em 3 ou mais dispositivos',
       feature1Description:
@@ -1261,8 +1256,7 @@ export const pt = {
   password_required_for_operation:
     'Por favor, insira sua senha para {{operation}}.',
   confirm_action: 'Confirmar ação',
-  confirm_action_description:
-    'Por favor, confirme que deseja realizar {{action}}.',
+  confirm_action_description: 'Confirme que deseja {{action}}.',
   agent_chat_render_error: 'Ocorreu um erro ao renderizar o chat.',
   agent_operation_sign_in: 'entrar',
   agent_session_expired:
@@ -1285,7 +1279,7 @@ export const pt = {
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Visualizar',
   agent_analyzing: 'Analisando...',
-  agent_analyzed_for: 'Analisado para {{duration}}s',
+  agent_analyzed_for: 'Analisado em {{duration}}s',
   agent_analyzed: 'Analisado',
   welcome_to_vulti_agent: 'Bem-vindo à Vulti Agent',
   agent_welcome_description:
@@ -1315,7 +1309,7 @@ export const pt = {
   active_delegations: 'Delegações Ativas',
   total_staked: 'Total em staking {{ticker}}',
   staked_label: 'Em staking: {{amount}} {{ticker}}',
-  unbonding_lock_label: '{{days}} trava de desvinculação de dia',
+  unbonding_lock_label: 'Bloqueio de desvinculação de {{days}} dias',
   unbonding_unlocks_at: 'Desbloqueia {{date}}',
   validator_status_active: 'Ativo',
   validator_status_churned_out: 'Rotacionado',
@@ -1340,7 +1334,7 @@ export const pt = {
   qbtc_claim_banner_cta: 'Reivindique agora',
   qbtc_claim_section_cta: 'Reivindique QBTC',
   qbtc_claim_card_title: 'QBTC reivindicável',
-  qbtc_claim_tab: 'Alegar',
+  qbtc_claim_tab: 'Coletar',
   qbtc_onboarding_title: 'Nova segurança quântica',
   qbtc_onboarding_subtitle:
     'As chaves clássicas podem ser quebradas por computadores quânticos. Habilitar QBTC requer a geração de um novo par de chaves.',
@@ -1349,15 +1343,15 @@ export const pt = {
     '{{productName}} executa uma cerimônia MPC local em seus dispositivos de cofre para gerar um novo par de chaves.',
   qbtc_onboarding_feature_link_title: 'Conecte-o ao seu cofre existente.',
   qbtc_onboarding_feature_link_description:
-    'A chave quântica está vinculada à sua estrutura de compartilhamento de cofre atual. Não é necessário compartilhar novamente.',
+    'A chave quântica fica vinculada à estrutura atual de partes do seu cofre. Não é preciso recompartilhar.',
   qbtc_onboarding_feature_claim_title:
     'Reivindique e realize transações em QBTC',
   qbtc_onboarding_feature_claim_description:
-    'Uma vez gerados, seus tokens elegíveis BTC e UTXOs aparecerão como tokens resgatáveis ​​QBTC em uma proporção de 1:1.',
+    'Depois de gerada a chave, seus UTXOs de BTC elegíveis aparecem como QBTC disponível para coleta na proporção de 1:1.',
   qbtc_onboarding_get_started: 'Comece agora',
   qbtc_claim_description:
-    'QBTC é uma versão resistente a ataques quânticos de BTC. Seus BTC e UTXOs existentes podem ser reivindicados como QBTC na proporção de 1:1. Selecione qual UTXOs você deseja reivindicar abaixo.',
-  qbtc_claim_eligible_utxos: 'Token UTXOs elegível',
+    'QBTC é uma versão de BTC resistente a ataques quânticos. Seus UTXOs de BTC existentes podem ser coletados como QBTC na proporção de 1:1. Selecione abaixo quais UTXOs coletar.',
+  qbtc_claim_eligible_utxos: 'UTXOs elegíveis',
   qbtc_claim_confirmed_blocks_ago: 'Confirmado · {{count}} blocos atrás',
   qbtc_claim_pending_confirmation: 'Confirmação pendente',
   qbtc_claim_all: 'Reivindicar tudo',
@@ -1365,7 +1359,7 @@ export const pt = {
   raw_message: 'Mensagem bruta',
   token: 'Token',
   token_approval: 'Aprovação de token',
-  skip_for_now: 'Por enquanto, pule esta etapa.',
+  skip_for_now: 'Pular por enquanto',
   station_migration_title: 'Migrar carteiras Station',
   station_migration_review_title: 'Analisar carteiras antigas Station',
   station_migration_review_description:
@@ -1376,9 +1370,9 @@ export const pt = {
   station_migration_set_up_without_migrating: 'Configurar sem migrar',
   station_migration_no_wallets_found:
     'Nenhuma carteira Station legada foi encontrada neste armazenamento de extensão.',
-  station_migration_summary_total_one: 'Carteira {{count}}',
-  station_migration_summary_total_other: 'Carteiras {{count}}',
-  station_migration_status_supported: 'Apoiado',
+  station_migration_summary_total_one: '{{count}} carteira',
+  station_migration_summary_total_other: '{{count}} carteiras',
+  station_migration_status_supported: 'Compatível',
   station_migration_status_unsupported: 'Sem suporte',
   station_migration_status_corrupt: 'Inválido',
   station_migration_status_needs_review: 'Precisa de revisão',
@@ -1444,7 +1438,7 @@ export const pt = {
   station_migration_failure_missing_encrypted_value:
     'Esta carteira não possui o material de chave criptografada necessário para a migração.',
   station_migration_failure_invalid_seed:
-    'Os dados iniciais descriptografados não são válidos.',
+    'Os dados da semente descriptografados não são válidos.',
   station_migration_failure_invalid_legacy_wallet:
     'Os dados da carteira legada descriptografados não são válidos.',
   station_migration_failure_metadata_mismatch:
@@ -1470,7 +1464,7 @@ export const pt = {
     'Station armazena apenas metadados públicos do Ledger. Não armazena chaves privadas que possam ser convertidas em um cofre {{productName}}.',
   paired: 'Emparelhado',
   plugin_marketplace_signin_description:
-    'Inicie sessão com o seu cofre {{productName}} para aceder a aplicações que automatizam os seus ativos digitais.',
+    'Entre com seu cofre {{productName}} para acessar apps que automatizam seus ativos digitais.',
   plugin_marketplace_welcome:
     'Bem-vindo ao Marketplace de Plugins {{productName}}',
   plugin_permissions_brand_safety_notice:
@@ -1499,19 +1493,19 @@ export const pt = {
   sui_dependencies: 'Dependências',
   sui_elements: 'Elementos',
   sui_gas_budget: 'orçamento de gás',
-  sui_gas_price: 'Preço da gasolina',
+  sui_gas_price: 'Preço do gás',
   sui_input_pure: 'Puro',
   sui_inputs: 'Entradas ({{count}})',
   sui_make_move_vec: 'Vetor de movimento',
   sui_merge_coins: 'Combine moedas',
-  sui_merge_into: 'Mesclar a(s) fonte(s) {{count}} em {{destination}}',
+  sui_merge_into: 'Mesclar {{count}} fonte(s) em {{destination}}',
   sui_modules: 'Módulos',
   sui_move_call: 'Mover chamada',
   sui_object_clock: 'Relógio',
   sui_object_deny_list: 'Lista de Negação',
   sui_object_random: 'Aleatório',
   sui_object_sui_system_state: 'Estado do sistema Sui',
-  sui_objects_to: 'Enviar objeto(s) {{count}} para {{address}}',
+  sui_objects_to: 'Enviar {{count}} objeto(s) para {{address}}',
   sui_param_amount: 'quantia',
   sui_param_balance: 'saldo',
   sui_param_coin: 'moeda',
@@ -1541,20 +1535,20 @@ export const pt = {
   custom_rpc_reachable_unverified:
     'Acessível · {{ms}} ms — identidade de rede não verificada',
   custom_rpc_reset_button: 'Restaurar para as configurações padrão',
-  custom_rpc_default_endpoint: 'PONTO DE ENDEREÇO ​​PADRÃO',
+  custom_rpc_default_endpoint: 'ENDPOINT PADRÃO',
   custom_rpc_editor_hint:
     'Toque para editar. Compatível apenas com endpoints HTTPS.',
   custom_rpc_save_button: 'Salvar RPC',
   custom_rpc_saved: 'Configurações RPC salvas',
   custom_rpc_testing: 'Testando…',
-  custom_rpc_unreachable: 'Ponto final inacessível',
+  custom_rpc_unreachable: 'Endpoint inacessível',
   custom_rpc_url_hint: 'https://seu-nó.exemplo',
-  custom_rpc_wrong_chain: 'Este ponto final serve uma cadeia diferente',
+  custom_rpc_wrong_chain: 'Este endpoint pertence a outra chain',
   send_to_different_address: 'Enviar para um endereço diferente',
   slippage_custom: 'Personalizado',
   slippage_helper:
     'Limita a variação máxima de preço antes que a execução seja cancelada.',
-  slippage_tolerance: 'Tolerância de deslizamento',
+  slippage_tolerance: 'Tolerância de slippage',
   swap_mode_limit: 'Limite',
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Usar destinatário externo',
@@ -1564,7 +1558,7 @@ export const pt = {
   custom_rpc_gate_description:
     'Aponte {{productName}} para seus próprios nós. Consultas mais rápidas, limites de taxa mais altos e privacidade total por cadeia.',
   feature_gate_requires: 'Requer',
-  feature_gate_requires_tier: '$VULT {{tier}} Nível ou superior',
+  feature_gate_requires_tier: 'Nível {{tier}} de $VULT ou superior',
   feature_gate_hold_at_least: 'Guarde pelo menos {{amount}} em seu cofre.',
   feature_gate_your_balance: 'Seu saldo',
   get_vult: 'Obtenha $VULT',
@@ -1635,7 +1629,7 @@ export const pt = {
     ends_in_hours_minutes: 'Termina em {{hours}} h {{minutes}} m',
     ends_in_minutes: 'Termina em {{minutes}} m',
   },
-  camera_permission_required: 'Permissão para filmagem não concedida.',
+  camera_permission_required: 'Permissão da câmera não concedida',
   camera_permission_required_description:
     'É necessário conceder permissão à câmera para prosseguir. Por favor, habilite-a nas Configurações.',
   swap_insufficient_funds:
@@ -1643,21 +1637,20 @@ export const pt = {
   keygen_failed_description:
     'A criação do cofre foi lenta devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
   same_vault_share_description:
-    'Por favor, altere o compartilhamento para assinatura. Dois dispositivos não podem usar o mesmo compartilhamento do cofre para co-assinatura.',
+    'Troque a parte usada para assinar. Dois dispositivos não podem usar a mesma parte do cofre para coassinar.',
   vault_is_not_loaded: 'O cofre não está carregado.',
-  vault_is_not_loaded_description:
-    'Por favor, importe o compartilhamento correto.',
-  ton_nominator_pool: 'Nominador Pool',
+  vault_is_not_loaded_description: 'Importe a parte correta.',
+  ton_nominator_pool: 'Pool de nominadores',
   ton_stake_title: 'Stake {{ticker}}',
   ton_stake_cta: 'Stake {{ticker}}',
   ton_stake_select_pool: 'Selecione um Pool',
   ton_stake_min: 'Mínimo {{amount}}',
   ton_stake_below_minimum: 'O valor deve ser pelo menos {{amount}} {{ticker}}',
-  ton_stake_insufficient_balance: 'Saldo insuficiente para esta aposta',
+  ton_stake_insufficient_balance: 'Saldo insuficiente para este stake',
   ton_stake_no_pools: 'Não há pools de staking disponíveis.',
   ton_stake_empty_title: 'Ganhe recompensas com seu {{ticker}}',
   ton_stake_empty_description:
-    'Faça staking {{ticker}} em um nominador pool para ganhar recompensas de staking.',
+    'Faça stake de {{ticker}} em um pool de nominadores para ganhar recompensas de staking.',
   ton_stake_chain_not_enabled: 'Habilite o TON para staking.',
   ton_stake_unsupported_pool:
     'Esta implementação pool não é suportada para staking.',
@@ -1668,13 +1661,14 @@ export const pt = {
   broadcast_error: 'A rede rejeitou esta transação.',
   broadcast_error_description:
     'Seus dispositivos assinaram a transação, mas a rede a rejeitou. Confira o motivo na blockchain abaixo e tente novamente.',
-  solana_unstake: 'Desvincule',
+  solana_unstake: 'Retirar do stake',
   solana_withdraw: 'Retirar',
-  solana_staking_stake_account: 'Conta de participação',
+  solana_staking_stake_account: 'Conta de stake',
   solana_staking_unstake_notice:
     'A desativação inicia um período de espera — seu token permanece bloqueado por aproximadamente {{days}} dias antes que você possa sacar.',
-  solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
-  solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
+  solana_staking_withdrawable_amount: 'Valor disponível para saque',
+  solana_staking_withdraw_ready_notice:
+    'Período de espera concluído. Pronto para sacar.',
   solana_move_stake: 'Mover',
   solana_finish_move: 'Finalizar movimentação',
   solana_staking_move_notice:
@@ -1684,41 +1678,40 @@ export const pt = {
   external_recipient_tooltip_content:
     'Envie os fundos trocados para um endereço de carteira diferente do seu.',
   blockaid_simulation_pending: 'Simulação de transação…',
-  malicious_dapp_detected: 'Token malicioso dApp detectado',
+  malicious_dapp_detected: 'dApp malicioso detectado',
   malicious_dapp_detected_description:
     '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
   before_you_reshare: 'Antes de compartilhar novamente',
   before_you_reshare_subtitle:
-    'Ao compartilhar novamente, suas ações no cofre são regeneradas. Há algumas coisas que você precisa saber primeiro.',
+    'Recompartilhar gera novamente as partes do seu cofre. Antes, há algumas coisas que você precisa saber.',
   i_understand: 'Eu entendo',
   join_reshare_description:
-    'Você recebeu uma solicitação de compartilhamento de outro dispositivo.',
+    'Você recebeu uma solicitação de recompartilhamento de outro dispositivo.',
   reshare_vault_subtitle:
-    'Atualize a configuração do seu cofre. Adicione ou remova dispositivos ou atualize os compartilhamentos.',
-  reshare_warning_cosigners_title: 'Todos os fiadores devem estar online.',
+    'Atualize a configuração do seu cofre. Adicione ou remova dispositivos, ou renove as partes.',
+  reshare_warning_cosigners_title: 'Todos os coassinantes devem estar online',
   reshare_warning_cosigners_description:
     'Todos os dispositivos atuais em seu cofre precisam participar da sessão de compartilhamento.',
-  reshare_warning_old_backups_title:
-    'Os backups antigos deixarão de funcionar.',
+  reshare_warning_old_backups_title: 'Faça novos backups',
   reshare_warning_old_backups_description:
-    'Todos os arquivos .vult existentes serão invalidados. Você precisará criar novos backups após o compartilhamento.',
+    'Os backups anteriores a este recompartilhamento não podem ser combinados com os novos. Os backups antigos continuam funcionando entre si, então guarde-os em segurança ou exclua-os. Se um dispositivo foi perdido ou comprometido, transfira seus fundos para um novo cofre.',
   start_reshare_description:
     'Você está alterando a configuração do dispositivo deste cofre.',
   reshare_success_title: 'Cofre compartilhado novamente',
   reshare_success_title_highlight: 'com sucesso',
-  reshare_backup_old_backups_wont_work: 'Os backups antigos não funcionarão.',
+  reshare_backup_old_backups_wont_work: 'Faça novos backups',
   reshare_backup_old_backups_wont_work_description:
-    'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
+    'Os backups anteriores a este recompartilhamento não podem ser combinados com os novos. Os backups antigos continuam funcionando entre si, então guarde-os em segurança ou exclua-os. Se um dispositivo foi perdido ou comprometido, transfira seus fundos para um novo cofre.',
   reshare_min_devices_required:
     'São necessários pelo menos {{count}} dispositivos.',
   reshare_more_devices_required: 'São necessários mais dispositivos.',
   reshare_threshold_not_met: 'Limiar não atingido',
   reshare_threshold_not_met_description:
-    'Você está tentando reduzir o número de dispositivos de<w> {{from}} para {{to}}</w> mas este cofre<w> requer signatários ativos {{count}}</w> Para se manter seguro.',
-  solana_delegate: 'Estaca',
+    'Você está tentando reduzir o número de dispositivos de <w>{{from}} para {{to}}</w>, mas este cofre <w>exige {{count}} signatários ativos</w> para continuar seguro.',
+  solana_delegate: 'Fazer stake',
   solana_staking_total_staked: 'Total em staking {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar ao novo validador',
-  solana_staking_stake_accounts: 'Contas de participação',
+  solana_staking_stake_accounts: 'Contas de stake',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Reserva de aluguel',
   solana_staking_min_delegation: 'A delegação mínima é {{amount}} {{ticker}}',
@@ -1727,17 +1720,17 @@ export const pt = {
   solana_staking_state_deactivating: 'Desativando',
   solana_staking_state_inactive: 'Inativo',
   solana_staking_activating_notice:
-    'Ativar — garante recompensas a partir da próxima época.',
+    'Ativando: rende recompensas a partir da próxima época.',
   solana_staking_deactivating_notice:
-    'Desativação — resfriamento antes de poder ser retirado.',
+    'Desativando: em período de espera antes de poder ser sacado.',
   solana_staking_inactive_notice:
-    'Inativo — resfriado e pronto para ser retirado.',
-  validator_commission_short: '{{value}} % taxa',
+    'Inativo: período de espera concluído e pronto para saque.',
+  validator_commission_short: 'Taxa de {{value}}%',
   reshare_failed: 'Erro ao compartilhar novamente. Tente outra vez.',
   reshare_failed_description:
     'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
   plugin_store_compatible: 'Compatível com a Loja de Plugins',
-  open_trust_line: 'Linha de Confiança Aberta',
+  open_trust_line: 'Abrir linha de confiança',
   trust_line: 'Linha de Confiança',
   trust_line_limit: 'Limite de confiança',
   trust_line_issuer: 'Emissor',
@@ -1775,7 +1768,7 @@ export const pt = {
   ripple_field_issuer: 'Emissor',
   ripple_undecoded_notice:
     'Esta transação não pôde ser decodificada. Revise os detalhes brutos abaixo antes de aprovar.',
-  swap_expected_payout: 'pagamento esperado',
+  swap_expected_payout: 'recebimento estimado',
   send_receiver_format_hint_cardano:
     'Insira um endereço Cardano que comece com addr1.',
   send_receiver_format_hint_cosmos:
@@ -1801,7 +1794,7 @@ export const pt = {
   swap_limit_unavailable:
     'As ordens limitadas estão temporariamente indisponíveis em THORChain',
   active_vaults: 'Cofres ativos',
-  edit_folder: 'Pasta de edição',
+  edit_folder: 'Editar pasta',
   nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
   no_results_found: 'Nenhum resultado encontrado',
   folder_active_vault: '“{{name}}” Ativo',
@@ -1827,10 +1820,9 @@ export const pt = {
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
   swap_limit_confirm: 'Os detalhes do pedido estão corretos.',
-  swap_limit_expiry_label: 'Termo',
+  swap_limit_expiry_label: 'Validade',
   swap_limit_place_order: 'Fazer pedido',
-  swap_limit_review_heading:
-    'Você está fazendo um pedido com limite de compra.',
+  swap_limit_review_heading: 'Você está criando uma ordem limite',
   swap_limit_review_target_price: 'Preço alvo',
   swap_limit_price_market: 'Mercado',
   swap_limit_warning_at_or_below_market:
@@ -1842,7 +1834,7 @@ export const pt = {
   activate: 'Ativar',
   trust_line_insufficient_xrp:
     'Não há {{ticker}} suficientes. Para abrir esta linha de confiança, são necessários {{amount}} {{ticker}} para a reserva e taxa da conta.',
-  swap_limit_payout_to: 'Pagamento para',
+  swap_limit_payout_to: 'Receber em',
   tron_freeze_verify_title: 'Congelar TRON',
   tron_unfreeze_verify_title: 'Descongelar TRON',
   swap_limit_expiry_days: '{{days}}d',
@@ -1853,31 +1845,31 @@ export const pt = {
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'A transação foi transmitida à rede.',
   swap_limit_cancel_title: 'Cancelar ordem',
-  swap_limit_cancel_verify_title: 'Estás a cancelar uma ordem limite',
+  swap_limit_cancel_verify_title: 'Você está cancelando uma ordem limite',
   swap_limit_cancel_order_label: 'Ordem',
   swap_limit_cancel_explanation:
     'Cancelar encerra esta ordem e reembolsa a parte que ainda não foi executada. O que já foi executado permanece executado e não é devolvido. Isto custa uma taxa de rede da THORChain.',
   swap_limit_cancel_donated_dust_row: 'Retido pela THORChain',
   swap_limit_cancel_duplicate_warning:
-    'Tem outra ordem ativa com o mesmo par e preço. A THORChain cancela primeiro a correspondência mais antiga, pelo que isto pode encerrar essa ordem em vez desta.',
+    'Você tem outra ordem aberta com o mesmo par e preço. A THORChain cancela primeiro a correspondência mais antiga, então isso pode encerrar aquela ordem em vez desta.',
   swap_limit_cancel_order_changed:
-    'Esta ordem mudou enquanto a analisava. Feche este ecrã e verifique o estado atual.',
+    'Esta ordem mudou enquanto você a revisava. Volte e verifique o status atual.',
   swap_limit_cancel_already_requested:
     'Já foi enviado um cancelamento para esta ordem e aguarda confirmação.',
   swap_limit_cancel_unavailable_legacy_order:
-    'Esta ordem foi criada antes de o cancelamento na aplicação estar disponível, pelo que os seus detalhes não podem ser verificados.',
+    'Esta ordem foi criada antes de o cancelamento no app existir, então os detalhes dela não podem ser verificados.',
   swap_limit_cancel_unavailable_mismatch:
-    'Os detalhes desta ordem não correspondem ao que a THORChain reporta, pelo que não pode ser cancelada com segurança.',
+    'Os detalhes desta ordem não correspondem ao que a THORChain informa, então ela não pode ser cancelada com segurança.',
   swap_limit_cancel_unavailable_memo_too_long:
-    'Esta ordem não pode ser cancelada a partir da sua cadeia de origem — a mensagem de cancelamento é demasiado longa para essa rede. Será reembolsada automaticamente ao expirar.',
+    'Esta ordem não pode ser cancelada pela chain de origem: a mensagem de cancelamento é longa demais para essa rede. Ela será reembolsada automaticamente ao expirar.',
   swap_limit_cancel_unavailable_chain:
-    'O cancelamento a partir da cadeia com que esta ordem foi financiada não é suportado. Será reembolsada automaticamente ao expirar.',
+    'Não é possível cancelar pela chain em que esta ordem foi financiada. Ela será reembolsada automaticamente ao expirar.',
   swap_limit_cancel_unavailable_no_signing_asset:
     'Adicione {{ticker}} a este cofre para cancelar esta ordem — o cancelamento é enviado a partir de {{chain}}.',
   swap_limit_cancel_view_transaction: 'Ver transação de cancelamento',
   swap_limit_cancel_sent: 'Cancelamento enviado',
   swap_limit_cancel_sent_detail:
-    'A tua ordem permanece aberta até a THORChain confirmar o fecho.',
+    'Sua ordem continua aberta até a THORChain confirmar o encerramento.',
   all_time_high: 'Máxima histórica',
   all_time_low: 'Mínima histórica',
   chart_range_all: 'TODOS',
@@ -1885,7 +1877,7 @@ export const pt = {
   chart_range_month: '1M',
   chart_range_week: '1W',
   chart_range_year: '1Y',
-  circulating_supply: 'Suprimento circulante',
+  circulating_supply: 'Oferta circulante',
   contract_address_copied: 'Endereço do contrato copiado',
   decimals: 'Decimais',
   fully_diluted_valuation: 'Avaliação totalmente diluída',
@@ -1894,7 +1886,7 @@ export const pt = {
   market_cap: 'Capitalização de mercado',
   market_cap_rank: 'Classificação',
   market_stats: 'Estatísticas de mercado',
-  max_supply: 'Suprimento máximo',
+  max_supply: 'Oferta máxima',
   price_range: 'Faixa de preço',
   token_info: 'Informações do token',
   volume_24h: 'Volume 24h',
@@ -1939,20 +1931,20 @@ export const pt = {
     'Este valor não pode ser convertido neste momento. Tente novamente em instantes.',
   kamino_earn_available_to_withdraw: 'Disponível para retirada',
   kamino_earn_delayed_liquidity:
-    'Essa quantidade de líquido é maior do que a capacidade atual do cofre, portanto, pode levar mais tempo para que a água seque.',
+    'Isso é mais do que o cofre tem de liquidez agora, então pode levar mais tempo para ser liquidado.',
   kamino_earn_receive_estimate:
     'O valor final é definido quando o saque é liquidado e pode variar ligeiramente.',
   kamino_earn_releases_from_farm:
     'Parte dessa posição está em staking, portanto, o saque a libera primeiro.',
-  kamino_earn_shares_burned: 'Ações queimadas',
+  kamino_earn_shares_burned: 'Cotas queimadas',
   kamino_earn_withdraw: 'Retirar do cofre',
-  kamino_earn_withdraw_from: 'Retirar-se de',
+  kamino_earn_withdraw_from: 'Sacar de',
   kamino_earn_you_receive: 'Você recebe',
   kamino_earn_no_solana_address:
     'Este cofre não possui endereço Solana, portanto o Kamino Earn está indisponível.',
   kamino_earn_entire_position: 'Tudo neste cofre',
   kamino_earn_strands_wrapped_sol_rent:
-    'Este depósito abre uma conta SOL vinculada, que retém uma pequena quantia de SOL até que você faça um saque.',
+    'Este depósito abre uma conta de wrapped SOL, que retém uma pequena quantia de SOL até você sacar.',
   kamino_earn_unreadable_description:
     'O pacote chega a um cofre de Kamino, mas este aplicativo não consegue ler o que ele faz, então não o assinará.',
   kamino_earn_unreadable_title: 'Esta transação não pode ser verificada.',
@@ -1979,7 +1971,7 @@ export const pt = {
     'Não houve negociações aqui neste período — a máxima foi {{price}}',
   swap_quote_expired:
     'Esta cotação expirou. Atualize a página para ver o preço atual.',
-  swap_failed_slippage: 'O preço ultrapassou a tolerância de derrapagem.',
+  swap_failed_slippage: 'O preço ultrapassou a tolerância de slippage.',
   swap_failed_slippage_description:
     'O preço se alterou antes da conclusão desta operação de troca, portanto, o pagamento teria sido inferior à sua tolerância de slippage permitida, e a rede reverteu a transação. Aumente sua tolerância de slippage ou tente novamente.',
   swap_applied_discounts: 'Descontos aplicados:',

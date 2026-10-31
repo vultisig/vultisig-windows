@@ -11,19 +11,19 @@ export const nl = {
   add_friends_referral: 'Een doorverwijzing van een vriend toevoegen',
   add_memo: 'MEMO toevoegen',
   add_new_vault: 'Nieuwe kluis toevoegen',
-  add_referral: 'Voeg een verwijzing toe',
+  add_referral: 'Referral toevoegen',
   add_referral_code: 'Referralcode opslaan',
   add_to_address_book: 'Toevoegen aan adresboek',
   add_suggested_token: 'Voorgestelde token toevoegen',
   bech32_prefix: 'Adresvoorvoegsel',
-  chain_id: 'Ketting-ID',
+  chain_id: 'Chain-ID',
   fee_currency: 'Kostenvaluta',
   rest_endpoint: 'REST-eindpunt',
   rpc_endpoint: 'RPC-eindpunt',
   site_wants_to_add_token: '{{site}} wil deze token aan je wallet toevoegen',
   suggest_chain_subtitle:
     '{{site}} wil deze blockchain aan je portemonnee toevoegen.',
-  suggest_chain_title: 'Voeg de voorgestelde ketting toe',
+  suggest_chain_title: 'Voorgestelde chain toevoegen',
   add_token: '{{ticker}}-token toevoegen',
   add_vaults_to_folder: 'Kluis(sen) selecteren',
   adding_token: 'Token toevoegen...',
@@ -37,7 +37,7 @@ export const nl = {
   address_book_vault: 'Mijn kluizen',
   adjust_search_query: 'Probeer je zoekcriteria aan te passen',
   advanced: 'Geavanceerd',
-  advanced_gas_fee: 'Geavanceerde gas fee',
+  advanced_gas_fee: 'Geavanceerde gaskosten',
   all_vaults: 'Alle kluizen',
   amount: 'Bedrag',
   amount_must_be_non_negative: 'Bedrag mag niet negatief zijn',
@@ -53,7 +53,7 @@ export const nl = {
   approval_tx: 'Goedkeurings-tx',
   approve: 'Goedkeuren',
   reject: 'Weigeren',
-  asset: 'Asset',
+  asset: 'Munt',
   assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
   at_least_one_device_subtitle:
@@ -65,19 +65,19 @@ export const nl = {
   backupsTitle: '<highlight>Back-ups,</highlight> jouw nieuwe herstelmethode',
   backupsDescription:
     'Back-ups ondersteunen je kluis. Elk apparaat heeft zijn <w>eigen</w> back-up. Een back-up alleen kan geen geld verplaatsen, die is alleen voor herstel. Importeer en herstel elk verloren apparaat.',
-  backupEachDevice: 'Maak een back-up van elk apparaat.',
+  backupEachDevice: 'Je apparaat heeft de regie',
   backupEachDeviceDescription:
     'De apparaatback-up <w>en</w> het wachtwoord zijn de sleutels. De server ondertekent alleen mee en er kan een back-up worden aangevraagd.',
   storeBackupsSeparately: 'Bewaar back-ups apart.',
   storeBackupsSeparatelyDescription:
-    'Bewaar elke back-up op een andere locatie. Mocht er één back-up verloren gaan, dan blijven uw gegevens veilig.',
+    'Bewaar elke back-up op een andere plek. Als er één in verkeerde handen valt, blijft je geld veilig.',
   backup_description:
-    'Maak een back-up van je kluis-share op een gewenste locatie',
+    'Maak een back-up van je kluisdeel op een plek naar keuze',
   backup_email_description:
-    'Voer het e-mailadres in om de link naar de kluis te ontvangen.',
+    'Voer het e-mailadres in waarop je het kluisdeel wilt ontvangen.',
   backup_password: 'Back-upwachtwoord',
   backup_password_description:
-    'Voer het wachtwoord in dat u hebt ingesteld bij het aanmaken van deze kluis.',
+    'Voer het wachtwoord in dat je hebt ingesteld bij het aanmaken van deze kluis.',
   backup_password_confirmation_title:
     'Wil je je back-up versleutelen met een wachtwoord?',
   backup_password_info_cannot_be_reset:
@@ -85,26 +85,26 @@ export const nl = {
   backup_password_info_encrypt_with_password:
     'Als je ervoor kiest een wachtwoord toe te voegen, wordt dit gebruikt om het back-upbestand te <b>versleutelen</b>.',
   backup_password_info_secure_without_password:
-    'Standaard is je back-up <b>veilig zonder</b> extra wachtwoord, omdat je kluis-shares op verschillende locaties opslaat.',
-  backup_share_sent: 'Back-up share verzonden!',
+    'Standaard is je back-up <b>veilig zonder</b> extra wachtwoord, omdat je kluisdelen op verschillende plekken bewaart.',
+  backup_share_sent: 'Back-up verzonden!',
   backup_share_sent_description:
-    'We hebben zojuist je back-up share naar je e-mail gestuurd. Zie je hem niet, controleer dan je spamfolder.',
+    'We hebben je back-up zojuist naar je e-mail gestuurd. Zie je hem niet? Kijk dan in je spammap.',
   backup_with_password: 'Back-up met wachtwoord',
   backup_without_password: 'Back-up zonder wachtwoord',
   balance: 'Saldo',
   balance_available: 'Beschikbaar saldo',
   balance_changes: 'Balanswijzigingen',
-  base_fee: 'Basisfee',
+  base_fee: 'Basiskosten',
   blockaid_security_scan: 'Blockaid-beveiligingsscan',
   blockaid_simulation_failed: 'Transactiesimulatie mislukt',
   blockaid_simulation_failed_description:
     'Kan deze transactie niet simuleren. Je kunt toch doorgaan, maar we raden aan de transactiedetails zorgvuldig te controleren.',
   swap_limit_done_hint:
-    'U kunt ze volgen in de transactiegeschiedenis onder het tabblad Limietorders.',
+    'Je kunt ze volgen in de transactiegeschiedenis, op het tabblad Limietorders.',
   swap_limit_filled_so_far: 'Tot nu toe uitgevoerd',
   swap_limit_minimum_received: 'Minimaal ontvangen',
   swap_limit_no_orders: 'Nog geen limietorders',
-  swap_limit_order_status: 'Bestelstatus',
+  swap_limit_order_status: 'Orderstatus',
   swap_limit_orders_title: 'Limietorders',
   swap_limit_progress_filled: '{{percent}}% uitgevoerd',
   swap_limit_status_cancelled: 'Geannuleerd',
@@ -116,7 +116,7 @@ export const nl = {
   swap_limit_status_rejected: 'Afgewezen',
   swap_limit_status_resting: 'Open',
   transaction_scanned_by: 'Transactie gescand door {{provider}}',
-  broadcasted: 'Uitgezonden',
+  broadcasted: 'Verzonden',
   bond: 'Bonden',
   bond_with_lp: 'Bond Maya',
   bronze: 'Brons',
@@ -165,10 +165,10 @@ export const nl = {
   check_for_update: 'Controleren op updates',
   choose_a_password: 'Kies een wachtwoord',
   choose_a_password_description:
-    'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b> <info />',
+    'Wil je extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b> <info />',
   choose_backup_method: 'Back-upmethode kiezen',
   choose_payout_asset: 'Uitbetalingsasset kiezen',
-  choose_chains: 'Kies kettingen',
+  choose_chains: 'Chains kiezen',
   choose_tokens: 'Tokens kiezen',
   choose_vaults: 'Kies kluizen',
   deposited: 'Gestort',
@@ -180,7 +180,7 @@ export const nl = {
     withdraw_header: 'Opnemen van Circle',
     verify_withdraw: 'Opname verifiëren',
     apy_approx: 'APY (ongeveer)',
-    apy_tooltip: 'De beloningen worden automatisch aan uw saldo toegevoegd.',
+    apy_tooltip: 'Beloningen worden automatisch bij je saldo opgeteld.',
   },
   clear: 'Wissen',
   close: 'Sluiten',
@@ -198,7 +198,7 @@ export const nl = {
   defi_lp_position_form_title:
     '{{action, select, add {Liquiditeit toevoegen} remove {Liquiditeit verwijderen} other {Liquiditeit beheren}}}',
   manage_tokens: 'Tokens beheren',
-  collected_rewards: 'Verzamelde rewards',
+  collected_rewards: 'Verzamelde beloningen',
   complete: 'Voltooien',
   congrats: 'Gefeliciteerd!',
   confirm: 'Bevestigen',
@@ -223,10 +223,10 @@ export const nl = {
   create_referral_title: 'Referral aanmaken',
   create_referral: 'Referral aanmaken',
   create_referral_desc:
-    'Maak je eigen code aan en verdien geld.<c> 20%</c> bij doorverwezen swaps',
+    'Maak je eigen code aan en verdien <c>20%</c> op swaps van mensen die je doorverwijst',
   save_referral: 'Verwijzing opslaan',
   save_referral_desc:
-    'Bewaar de verwijzingscode van een vriend en bespaar geld.<c> 10%</c> bij ruiltransacties.',
+    'Sla de referralcode van een vriend op en bespaar <c>10%</c> op swaps.',
   creating_vault: 'Kluis aanmaken',
   currency: 'Valuta',
   current_expiry: 'Huidige vervaldatum',
@@ -260,19 +260,17 @@ export const nl = {
   details: 'Details',
   developer_options: 'Ontwikkelaarsopties',
   device_backup: 'Apparaatback-up',
-  device_backup_description: 'Bewaar de kluis-share van dit apparaat.',
+  device_backup_description: 'Bewaar het kluisdeel van dit apparaat.',
   device_n_label: 'Apparaat {{number}} - {{hash}}',
   devices: 'Apparaten',
-  digit_input_error_validation:
-    'Fout bij het verifiëren van de code, probeer opnieuw',
+  digit_input_error_validation: 'Onjuiste code. Probeer het opnieuw.',
   digit_input_loading_validation: 'Code verifiëren, even geduld',
   digit_input_success_validation: 'Verificatie geslaagd',
   disconnect_all: 'Alles verbreken',
   discord: 'Discord',
   complete_fee_waive: 'Geen kosten',
   discount_tiers: 'Kortingsniveaus',
-  discount_tiers_description:
-    'Houd $VULT aan om lagere trading fees te ontgrendelen.',
+  discount_tiers_description: 'Houd $VULT aan voor lagere handelskosten.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
   earn: 'Verdienen',
@@ -282,7 +280,7 @@ export const nl = {
   remove_friends_referral: 'Verwijder verwijzing',
   edit_vaults: 'Kluizen bewerken',
   email: 'E-mail',
-  email_placeholder: 'Voer uw e-mailadres in',
+  email_placeholder: 'Voer je e-mailadres in',
   email_required: 'E-mail is verplicht',
   evm_chains: 'EVM-chains',
   enable: 'Inschakelen',
@@ -306,21 +304,21 @@ export const nl = {
   enter_number_placeholder: 'Voer een getal in',
   enter_percentage: 'Percentage invoeren',
   enter_referral_code_placeholder: 'Referralcode invoeren',
-  enter_up_to_4_characters_placeholder: 'Voer maximaal 4 tekens in',
-  enter_vault_name: 'Kluissnaam invoeren',
-  enter_your_email: 'Voer uw e-mailadres in',
+  enter_up_to_4_characters_placeholder: 'Voer de 4-cijferige code in',
+  enter_vault_name: 'Kluisnaam invoeren',
+  enter_your_email: 'Voer je e-mailadres in',
   enter_your_email_description:
-    'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
+    'Wordt eenmalig gebruikt om de back-up van je kluis te versturen. We slaan het niet op.',
   enter_your_password: 'Voer je wachtwoord in',
   entity_not_scanned: '{{entity}} niet gescand door <provider></provider>',
   entity_scanned: '{{entity}} gescand door <provider></provider>',
-  est_network_fee: 'Geschatte netwerkfee',
+  est_network_fee: 'Geschatte netwerkkosten',
   expand_view: 'Weergave uitvouwen',
   open_as_side_panel: 'Openen als zijpaneel',
   opened_in_new_tab: 'Geopend in een nieuw tabblad',
   push_notifications: 'Pushmeldingen',
   push_notifications_description:
-    'Ontvang een melding wanneer uw handtekening vereist is of wanneer een apparaat toegang aanvraagt.',
+    'Ontvang een melding wanneer je handtekening nodig is of een apparaat toegang vraagt.',
   push_notification_server_url: 'URL van de pushnotificatieserver',
   push_notification_server_placeholder:
     'Laat dit veld leeg voor de standaardinstelling in productie.',
@@ -372,8 +370,8 @@ export const nl = {
   faq_need_to_register_title:
     'Welke cryptocurrencies worden door {{productName}} ondersteund?',
   faq_recover_assets_content:
-    '{{productName}} is gratis te gebruiken. Alleen standaard netwerkfees gelden voor verzenden. En voor swaps en bridges is er een fee van 0,5% (50 bps).',
-  faq_recover_assets_title: 'Wat zijn de fees en kosten?',
+    '{{productName}} is gratis. Bij verzenden betaal je alleen de standaard netwerkkosten. Voor swaps en bridges geldt 0,5% (50 bps) kosten.',
+  faq_recover_assets_title: 'Wat zijn de kosten?',
   faq_secure_crypto_vault_content:
     'Ja, zolang je je back-ups hebt opgeslagen en toegang hebt tot de back-ups bij het aanmaken van de kluis. Je kunt deze back-ups op een nieuw apparaat importeren om weer toegang tot je assets te krijgen.',
   faq_secure_crypto_vault_title:
@@ -386,36 +384,34 @@ export const nl = {
   faq_supported_cryptocurrencies_title:
     'Wat zijn de voordelen van {{productName}}?',
   faq_vultisig_make_money_content:
-    '{{productName}} bewaart en beheert digitale assets veilig. Alle acties, zoals verzenden of swappen, vereisen dat de drempel van apparaten transacties ondertekent.',
+    '{{productName}} bewaart en beheert digitale assets veilig. Voor elke actie, zoals verzenden of swappen, moet het vereiste aantal apparaten de transactie ondertekenen.',
   faq_vultisig_make_money_title: 'Hoe wordt {{productName}} gebruikt?',
   fast: 'Snel',
-  fast_vault_session_conflict: 'Kluis-aandeel komt niet overeen',
+  fast_vault_session_conflict: 'Kluisdeel komt niet overeen',
   fast_vault_session_conflict_description:
-    'Uw lokale kluis-aandeel komt niet overeen met het aandeel op Vultiserver. Dit kan gebeuren als dezelfde seed phrase op een ander apparaat is geïmporteerd.',
+    'Je lokale kluisdeel komt niet overeen met het kluisdeel op Vultiserver. Dit kan gebeuren als dezelfde seedphrase op een ander apparaat is geïmporteerd.',
   fast_vault_password_start_keysign_description:
-    'Bevestig de transactie door het wachtwoord van je server-share in te voeren.',
+    'Bevestig de transactie met het wachtwoord van je serverdeel.',
   fastVaultSetup: {
     backup: {
-      codeInfo:
-        'Deze code bevestigt dat je kluis-share 1 via e-mail hebt ontvangen',
+      codeInfo: 'Hiermee activeer je de medeondertekenaar',
       enterCode: 'Voer de 4-cijferige code in die we je mailden',
       sentTo: 'Verzonden naar {{email}}.',
-      setNewStandard:
-        'Je bent klaar om een ​​nieuwe portemonneestandaard te gebruiken.',
+      setNewStandard: 'Je bent klaar voor een nieuwe walletstandaard.',
       changeEmailAndRestartKeygen: 'E-mail wijzigen en keygen herstarten',
       wellDone: 'Goed gedaan',
     },
     connectingWithServer: 'Verbinden met server...',
     emailSetupTitle:
-      'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
+      'Wordt eenmalig gebruikt om de back-up van je kluis te versturen. We slaan het niet op.',
     enterEmail: 'Voer je e-mail in',
     passwordCannotBeRecovered: 'Wachtwoord kan niet worden gereset of hersteld',
     passwordTooltip:
-      'Dit gebeurt omdat het wachtwoord wordt gebruikt om het back-upbestand lokaal te versleutelen, net zoals een harde schijf wordt versleuteld. In de volgende stap kunt u een hint toevoegen.',
+      'Het wachtwoord wordt gebruikt om het back-upbestand lokaal te versleutelen, zoals bij een versleutelde harde schijf. In de volgende stap kun je een hint toevoegen.',
     referralModalTitle: 'Verwijzingscode',
     referralModalSubtitle:
-      'Voer hier uw verwijzingscode in. <b>Profiteer van 10% korting op elke transactie.</b>',
-    applyReferral: 'Verwijzing aanvragen',
+      'Voer hier je referralcode in. <b>Krijg 10% korting op elke transactie.</b>',
+    applyReferral: 'Referral toepassen',
     referralAdded: 'Verwijzing toegevoegd',
     takeMinute: 'Dit duurt maar een moment',
   },
@@ -428,14 +424,14 @@ export const nl = {
   folder_at_least_one_vault_required: 'Minimaal één kluis is vereist',
   folders: 'Mappen',
   banner_carousel_go_to_banner: 'Ga naar banner {{number}}',
-  buy_vult_banner_title: 'En bespaar op wisselkosten.',
+  buy_vult_banner_title: 'En bespaar op swapkosten',
   buy_vult_banner_caption: 'Koop $VULT',
   follow_banner_caption: 'Vultisig bouwt samen met jou',
   follow_banner_title: 'Volg ons op X',
   rujira_banner_caption: 'Inzetten en verdienen',
-  rujira_banner_title: 'Rujira staking live nu',
-  vault_backup_banner_caption: 'Maak een back-up van uw kluis.',
-  vault_backup_banner_title: 'Verzoek om volledige bewaring van de kluis',
+  rujira_banner_title: 'Rujira-staking nu live',
+  vault_backup_banner_caption: 'Maak een back-up van je kluis',
+  vault_backup_banner_title: 'Vraag volledige controle over je kluis aan',
   referral_banner_caption: 'Mis deze beloningen niet!',
   referral_banner_title: 'Voeg je verwijzingscode toe',
   kamino_banner_caption: 'Nieuw op Solana',
@@ -467,7 +463,7 @@ export const nl = {
   grant_camera_permission: 'Cameratoestemming geven',
   gwei: 'GWEI',
   header_tooltip_content:
-    'Het referralprogramma wordt toegepast op THORChain-swaps en gebeurt op best-effort basis. Je moet een THORName registreren om de {{productName}}-referral te gebruiken. De registratiefee is 10 RUNE en 1 RUNE per jaar, betaald aan het THORChain-netwerk.',
+    'Het referralprogramma geldt voor THORChain-swaps en werkt op basis van best effort. Je moet een THORName registreren om de {{productName}}-referral te gebruiken. De registratie kost 10 RUNE plus 1 RUNE per jaar, te betalen aan het THORChain-netwerk.',
   header_tooltip_title: 'Referralprogramma',
   having_trouble_scanning_help: 'Hulp bij QR-scannen',
   having_trouble_scanning: 'Problemen met scannen?',
@@ -481,7 +477,7 @@ export const nl = {
   hide_total_balance: 'Totaal saldo verbergen',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
-    'Deze IBC-transactie bevat een memo, maar {{productName}} ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
+    "Deze IBC-transactie bevat een memo, maar {{productName}} ondersteunt momenteel geen memo's in IBC-transferberichten.<br> Als je doorgaat met deze transactie, kan dit leiden tot <b>onomkeerbaar verlies van tegoeden</b>.",
   ibc_transaction_not_supporting_memo_title:
     'IBC-transactiememo niet ondersteund',
   ibc_transfer: 'IBC-transfer',
@@ -495,31 +491,31 @@ export const nl = {
   enter_seedphrase_subtitle:
     'Laat een spatie tussen elk woord. Ondersteunde lengtes:<h> 12, 15, 18, 21 of 24 woorden</h>',
   mnemonic_placeholder:
-    'Voer de 12, 15, 18, 21 of 24 woorden van uw seedphrase in.',
+    'Voer de 12, 15, 18, 21 of 24 woorden van je seedphrase in',
   seedphrase_word_count_error:
-    'U hebt {{count}} woorden ingevoerd. De seed phrase moet 12, 15, 18, 21 of 24 woorden lang zijn.',
+    'Je hebt {{count}} woorden ingevoerd. De seedphrase moet 12, 15, 18, 21 of 24 woorden lang zijn.',
   seedphrase_invalid_error:
     'Seed phrase is niet correct, controleer alle woorden.',
   seedphrase_duplicate_vault_error:
-    'Deze seed phrase is al geïmporteerd als vault &quot;{{vaultName}}&quot;. Importeer een andere seed phrase.',
+    'Deze seedphrase is al geïmporteerd als kluis "{{vaultName}}". Importeer een andere seedphrase.',
   fast_vault_exists_warning_title: 'Kluis bestaat al',
   fast_vault_exists_warning_description:
-    'Deze seed phrase is al geïmporteerd als snelle kluis op een ander apparaat. Als u doorgaat, wordt het serveraandeel vervangen en werkt het andere apparaat niet meer.',
+    'Deze seedphrase is al als Fast Vault geïmporteerd op een ander apparaat. Als je doorgaat, wordt het serverdeel vervangen en werkt het andere apparaat niet meer.',
   fast_vault_exists_warning_hint:
-    'Als u wilt dat beide apparaten blijven werken, gebruik dan een beveiligde kluis.',
+    'Wil je dat beide apparaten blijven werken? Gebruik dan een Secure Vault.',
   import_seedphrase_description:
     'Voer het in, maak een kluis, kijk nooit meer terug.',
   import_seedphrase_onboarding_title:
     'Je betreedt een nieuw tijdperk, <g>en laat oude seed phrases achter.</g> Je hebt nodig:',
   import_vault: 'Kluis importeren',
   import_vult_backup: '.vult-back-up importeren',
-  import_vault_share: 'Kluis-share importeren',
+  import_vault_share: 'Kluisdeel importeren',
   import_vault_share_description:
-    'Gebruik een kluis-share om je kluis te herstellen.',
+    'Gebruik een kluisdeel om je kluis te herstellen.',
   import_vault_share_supported_files:
     'Ondersteunde bestandstypes: .bak & .vult',
   importing_vault: 'Kluis importeren...',
-  incorrect_email: 'Het e-mailadres is onjuist, controleer dit alstublieft.',
+  incorrect_email: 'Onjuist e-mailadres, controleer het',
   incorrect_password: 'Onjuist wachtwoord',
   vault_import_failed: 'Kon kluis niet importeren: {{message}}',
   incorrect_url: 'Onjuiste URL',
@@ -544,10 +540,9 @@ export const nl = {
   join_keygen: 'Deelnemen aan Keygen',
   join_keysign: 'Deelnemen aan Keysign',
   join_transaction: 'Deelnemen aan transactie',
-  foreground_notification_generic:
-    'Transactie onder voorbehoud van goedkeuring',
+  foreground_notification_generic: 'Transactie wacht op goedkeuring',
   foreground_notification_send: 'Verzend {{amount}}',
-  foreground_notification_swap: 'Wissel {{from}} → {{to}}',
+  foreground_notification_swap: 'Swap {{from}} → {{to}}',
   join_reshare: 'Deelnemen aan Reshare',
   join_session: 'Deelnemen aan sessie',
   joining_keygen: 'Deelnemen aan Keygen',
@@ -555,8 +550,8 @@ export const nl = {
   joining_session: 'Deelnemen aan sessie...',
   keygen: 'Keygen',
   keygen_devices_requirements_info:
-    'Scan QR met een ander apparaat. {{recommended}}-apparaten setup aanbevolen, {{min}} is voldoende.',
-  keygen_failed: 'Key generation-fout. Probeer opnieuw.',
+    'Scan de QR-code met een ander apparaat. Een opstelling met {{recommended}} apparaten wordt aanbevolen, {{min}} is voldoende.',
+  keygen_failed: 'Fout bij sleutelgeneratie. Probeer het opnieuw.',
   keys: 'Sleutels',
   keysign: 'Keysign',
   label: 'Label',
@@ -600,7 +595,7 @@ export const nl = {
   name: 'Naam',
   name_your_vault: 'Geef je kluis een naam',
   network: 'Netwerk',
-  network_fee: 'Netwerkfee',
+  network_fee: 'Netwerkkosten',
   network_rate: 'Netwerkrate',
   network_rate_required: 'Netwerkrate is verplicht',
   notification_sent_successfully: 'De melding is succesvol verzonden!',
@@ -641,7 +636,7 @@ export const nl = {
   apy: 'APY',
   bonded: 'Gebond',
   next_payout: 'Volgende uitbetaling',
-  estimated_reward: 'Geschatte reward',
+  estimated_reward: 'Geschatte beloning',
   next_churn: 'Volgende churn',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
@@ -650,9 +645,9 @@ export const nl = {
     'Je kluizen verschijnen hier. Begin met het aanmaken van een kluis of importeer een bestaande',
   node_address: 'Node-adres',
   normal: 'Normaal',
-  not_enough_funds: 'Onvoldoende funds',
+  not_enough_funds: 'Onvoldoende tegoed',
   nothing_to_add: 'Niets toe te voegen',
-  nothing_to_add_hint: 'Al uw kluizen zijn al gesorteerd.',
+  nothing_to_add_hint: 'Al je kluizen zijn al ingedeeld.',
   of: 'van',
   off: 'Uit',
   on: 'Aan',
@@ -663,8 +658,8 @@ export const nl = {
   onboarding_description_3:
     '{{productName}} is van nature een multi-device applicatie. Er zijn minimaal twee apparaten nodig om een veilige kluis aan te maken: één initiërend en één koppelapparaat.',
   onboarding_description_4:
-    '{{productName}} is een wallet zonder seed phrases. In plaats daarvan gebruikt het makkelijk te beheren kluis-shares. Elk apparaat heeft een unieke kluis-share die apart geback-upt moet worden.',
-  operator_fee: 'Operatorfee',
+    '{{productName}} is een wallet zonder seedphrases. In plaats daarvan gebruikt het eenvoudig te beheren kluisdelen. Elk apparaat heeft een eigen kluisdeel waarvan je apart een back-up moet maken.',
+  operator_fee: 'Operatorkosten',
   basis_points: 'Basispunten',
   optionalDevice: 'Optioneel apparaat',
   other: 'Overig',
@@ -700,7 +695,7 @@ export const nl = {
   price_impact_high: 'Hoge impact',
   prioritize_vultisig: '{{productName}} prioriteren',
   priority: 'Prioriteit',
-  priority_fee: 'Prioriteitsfee',
+  priority_fee: 'Prioriteitskosten',
   privacy_policy: 'Privacybeleid',
   processing_transaction: 'Transactie verwerken...',
   processing_url: 'URL verwerken...',
@@ -709,41 +704,40 @@ export const nl = {
   route: 'Route',
   qbtc_claim_title: 'QBTC-claim',
   qbtc_claim_no_claimable_utxos:
-    'Er zijn geen claimbare UTXO&#39;s gevonden voor dit adres.',
+    "Geen claimbare UTXO's gevonden voor dit adres.",
   qbtc_claim_disabled_notice:
-    'Het claimen van bitcoins is momenteel uitgeschakeld op de QBTC-blockchain.',
-  qbtc_claim_failed_to_load:
-    'Het laden van de claimbare UTXO&#39;s is mislukt.',
+    'Claimen is momenteel uitgeschakeld op de QBTC-chain.',
+  qbtc_claim_failed_to_load: "Claimbare UTXO's laden mislukt.",
   qbtc_claim_proving: 'Bewijs genereren…',
   qbtc_claim_proving_hint: 'Dit kan enkele minuten duren.',
-  qbtc_claim_broadcasting: 'Broadcasting claim…',
+  qbtc_claim_broadcasting: 'Claim verzenden…',
   qbtc_claim_success_title: 'Claim succesvol',
   qbtc_claim_utxos_claimed: 'UTXOs geclaimd',
-  qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
+  qbtc_claim_utxos_skipped: "UTXO's overgeslagen",
   qbtc_claim_done: 'Klaar',
   qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
   qbtc_claim_password_description:
-    'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
+    'Voer je Fast Vault-wachtwoord in om de claimtransactie mee te ondertekenen.',
   receive: 'Ontvangen',
   redeem: 'Inwisselen',
   reenter_password: 'Wachtwoord opnieuw invoeren',
   recover_vault_or_convert_seedphrase:
     'Herstel je kluis of zet je seed phrase om naar een kluis',
-  referral_annual_fee: 'Jaarlijkse referralfee',
+  referral_annual_fee: 'Jaarlijkse referralkosten',
   referral_code: 'Referralcode',
   referral_code_no_whitespace: 'Spaties niet toegestaan',
   referral_code_required: 'Gevalideerde referralcode is verplicht',
   referral_costs: 'Kosten',
   referral_expiration_maximum: 'Maximaal 1000 jaar',
   referral_expiration_minimum: 'Minimaal 1 jaar',
-  referral_extension_fee: 'Referral-verlengingsfee',
+  referral_extension_fee: 'Verlengingskosten referral',
   referral_fee_amount_minimum: 'Minimaal {{amount}} RUNE',
   referral_landing_title:
     'Nodig vrienden uit. <g> Verdien beloningen. </g> Bespaar op kosten.',
   referral_program: 'Referralprogramma',
-  referral_reg_fee: 'Registratiefee',
+  referral_reg_fee: 'Registratiekosten',
   referral_status: 'Status',
-  manage_referral_title: 'Verwijzingen naar {{productName}}',
+  manage_referral_title: '{{productName}}-referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -758,10 +752,10 @@ export const nl = {
     item_3: {
       description:
         'Word uitbetaald in je voorkeursasset telkens wanneer zij traden.',
-      title: 'Verdien automatisch rewards',
+      title: 'Verdien automatisch beloningen',
     },
     item_4: {
-      description: 'Gebruik een code van je vriend en bespaar op swap fees.',
+      description: 'Gebruik de code van een vriend en bespaar op swapkosten.',
       title: 'Referralcode gebruiken',
     },
   },
@@ -775,26 +769,28 @@ export const nl = {
   resend_notification: 'Melding opnieuw verzenden',
   resend_notification_in: 'Melding opnieuw verzenden over {{time}}',
   reshare: 'Reshare',
-  reshare_vault_description: 'Reshare kluis met een nieuw comité',
-  reshare_your_vault: 'Reshare je kluis',
+  reshare_vault_description:
+    'Deel de kluis opnieuw met een nieuwe groep apparaten',
+  reshare_your_vault: 'Deel je kluis opnieuw',
   resource: 'Resource',
   retry: 'Opnieuw proberen',
   review_vault_devices_subtitle:
-    'Controleer of dit de juiste apparaten zijn die u hebt toegevoegd:',
-  review_your_vault_devices: 'Controleer uw kluisapparaten.',
+    'Controleer of dit de juiste apparaten zijn die je hebt toegevoegd:',
+  review_your_vault_devices: 'Controleer je kluisapparaten',
   risky_site_detected: 'Kwaadaardige site gedetecteerd',
-  risky_transaction_detected: '{{riskLevel}}-risico transactie gedetecteerd',
+  risky_transaction_detected:
+    'Transactie met risiconiveau {{riskLevel}} gedetecteerd',
   risky_tx_warning:
     'Deze transactie betreft een kwaadaardig adres. Interactie kan je assets compromitteren. Ga alleen door als je zeker bent.',
-  same_vault_share: 'Dezelfde kluis-share',
+  same_vault_share: 'Hetzelfde kluisdeel',
   save: 'Opslaan',
   save_10_percent_on_swaps: 'Bespaar <blue>10%</blue> op swaps',
   save_changes: 'Wijzigingen opslaan',
   save_backup: 'Back-up opslaan',
   save_backup_description:
-    'Exporteer dit back-upbestand en sla het vervolgens op in de cloud. Het is <b>versleuteld</b> met het wachtwoord dat u eerder hebt ingesteld om uw kluis te ontgrendelen.',
+    'Exporteer dit back-upbestand en sla het daarna op in de cloud. Het is <b>versleuteld</b> met het wachtwoord dat je eerder hebt ingesteld om je kluis te ontgrendelen.',
   save_backup_description_2:
-    'Gebruik voor elke back-up een andere cloudservice of een ander account. Verwijder het bestand van dit apparaat zodra u klaar bent.',
+    'Gebruik voor elke back-up een andere cloudservice of een ander account. Verwijder het bestand van dit apparaat zodra je klaar bent.',
   save_backup_description_secure:
     'Exporteer dit back-upbestand en sla het vervolgens op in de cloud.',
   save_backup_n_of_n_to_cloud:
@@ -832,17 +828,17 @@ export const nl = {
   secure_backup_each_device_description:
     'Je maakt in totaal {{count}} back-ups. Je doet dit op elk apparaat.',
   secure_store_backups_separately_description:
-    'Bewaar elke back-up in een andere cloudservice of met een ander wachtwoord. Mocht er één back-up openbaar worden gemaakt, dan blijven uw gegevens veilig.',
+    'Bewaar elke back-up in een andere cloudservice of met een ander wachtwoord. Als er één uitlekt, blijft je geld veilig.',
   secure_notifications_are_here: 'Beveiligde meldingen zijn hier beschikbaar.',
   secure_notifications_description:
-    'Ontvang meldingen wanneer een ander apparaat toegang tot uw kluis aanvraagt ​​of wanneer uw handtekening vereist is.',
+    'Ontvang meldingen wanneer een ander apparaat wil deelnemen aan je kluis of wanneer je handtekening nodig is.',
   security: 'Beveiliging',
   select: 'Selecteren',
   select_asset: 'Asset selecteren',
-  select_backup_file: 'Importeer je kluis-share',
-  select_vault_backup_share: 'Selecteer kluis delen',
+  select_backup_file: 'Importeer je kluisdeel',
+  select_vault_backup_share: 'Kluisdeel selecteren',
   select_vault_backup_share_description:
-    'Deze back-up bevat meerdere gedeelde mappen in de kluis. Kies de map voor dit apparaat.',
+    'Deze back-up bevat meerdere kluisdelen. Kies het kluisdeel voor dit apparaat.',
   unsupported_vault_backup_file:
     'Dit bestand lijkt geen back-up van een {{productName}}-kluis te zijn. Kies een `.vult`- of `.vult.zip`-bestand dat is geëxporteerd vanuit de {{productName}}-app.',
   select_chain: 'Chain selecteren',
@@ -862,20 +858,20 @@ export const nl = {
   select_vaults_to_backup_description:
     'Kies of je alleen deze kluis back-upt of alle kluizen in je app.',
   send: 'Verzenden',
-  sends: 'Verzendt',
+  sends: 'Verzendingen',
   send_amount_exceeds_balance: 'Bedrag overschrijdt saldo',
   send_invalid_receiver_address: 'Verkeerd adres voor de geselecteerde chain',
   send_overview: 'Verzendoverzicht',
   send_receiver_address_same_as_sender:
     'Ontvangeradres kan niet hetzelfde zijn als afzenderadres',
   send_receiver_dangerous_address:
-    'Dit adres kan geen geld ontvangen. Het is een {{reason}}.',
+    'Dit adres kan geen geld ontvangen. Reden: {{reason}}.',
   send_terms_0: 'Ik verstuur naar het juiste adres',
   send_terms_1: 'Het bedrag klopt',
   send_to: 'Verzenden naar',
   sent: 'Verzonden',
   server_backup: 'Serverback-up',
-  server_backup_description: 'Vraag server kluis-share opnieuw aan.',
+  server_backup_description: 'Vraag het kluisdeel van de server opnieuw aan.',
   session_init_failed: 'Sessie initialiseren mislukt',
   set_expiration: 'Vervaldatum instellen (in jaren)',
   set_passcode: 'Pincode instellen',
@@ -884,7 +880,7 @@ export const nl = {
   share_app: 'De app delen',
   share_description:
     'Deel je unieke referralcode om vrienden uit te nodigen. Zij krijgen korting en hoe meer zij traden, hoe meer jij verdient — direct naar je wallet.',
-  shares: 'Shares',
+  shares: 'Kluisdelen',
   show_balance: 'Saldo tonen',
   show_total_balance: 'Totaal saldo tonen',
   sign: 'Ondertekenen',
@@ -921,22 +917,21 @@ export const nl = {
   nft_transfer: 'NFT-overdracht',
   excess_gas_refund: 'Terugbetaling van overtollig gas',
   forward_ton_amount: 'Doorgestuurd GRAM-bedrag',
-  raw_payload: 'Ruwe lading',
-  transferred: 'Overgeplaatst',
+  raw_payload: 'Onbewerkte payload',
+  transferred: 'Overgedragen',
   staked_amount: 'Gestaked bedrag',
-  spender: 'Uitgever',
+  spender: 'Spender',
   operator: 'Operator',
   contract: 'Contract',
   start_reshare: 'Reshare starten',
   status: 'Status',
   support: 'Support',
   swap: 'Swappen',
-  swaps: 'Ruilen',
+  swaps: 'Swaps',
   swap_discount: 'Swapkorting',
-  swap_fee: 'Swap fee',
+  swap_fee: 'Swapkosten',
   swap_overview: 'Swap-overzicht',
-  swap_same_asset:
-    'Het is niet mogelijk om tussen dezelfde activa te wisselen.',
+  swap_same_asset: 'Je kunt niet tussen dezelfde asset swappen.',
   swap_terms: {
     input: 'Het swap-bedrag klopt',
     output: 'Ik ga akkoord met het min. bedrag dat ik ontvang',
@@ -961,12 +956,12 @@ export const nl = {
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
   token_not_found_invalid: 'Ongeldig contractadres',
-  total_fee: 'Totale fees',
+  total_fee: 'Totale kosten',
   track: 'Volgen',
   transaction: 'Transactie',
   transaction_details: 'Transactiedetails',
   transaction_has_risk:
-    '{{riskLevel}}-risico transactie gedetecteerd door <provider></provider>',
+    'Transactie met risiconiveau {{riskLevel}} gedetecteerd door <provider></provider>',
   transaction_failed: 'Transactie<error> mislukt</error>',
   transaction_pending: 'Transactie in behandeling...',
   transaction_successful: 'Transactie <g> succesvol </g>',
@@ -983,7 +978,7 @@ export const nl = {
   tron_freeze_button: 'Freeze',
   tron_freeze_title: 'TRON Freeze',
   tron_frozen_label: 'Frozen',
-  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_pending_withdrawals: 'Openstaande opnames',
   tron_ready_to_claim: 'Klaar om te claimen',
   withdraw_expire_unfreeze: 'Claimen',
   tron_unfreeze_button: 'Unfreeze',
@@ -1004,9 +999,9 @@ export const nl = {
   ultimate: 'Ultimate',
   unlock_discount_tier: '<b>{{tier}}</b>-niveau ontgrendelen',
   unlock_discount_tier_description:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en ontvang je <b>{{bps}} bps korting op trading fees</b> voor alle swaps.',
+    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>{{bps}} bps korting op handelskosten</b> bij alle swaps.',
   unlock_discount_tier_description_ultimate:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>volledige kwijtschelding van Vultisig-fee</b> op alle swaps.',
+    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en betaal je <b>geen Vultisig-kosten</b> op alle swaps.',
   unlock_tier: 'Niveau ontgrendelen',
   unfreeze: 'Unfreeze',
   unknown: 'Onbekend',
@@ -1019,7 +1014,7 @@ export const nl = {
   upgrade_now: 'Nu upgraden',
   upgrade_now_prompt: 'Upgrade je kluis nu',
   upgrade_shares_info:
-    '<b>Je maakt nieuwe kluis-share back-ups</b>, en bewaart ze zoals je eerder deed',
+    '<b>Je maakt nieuwe back-ups van je kluisdelen</b> en bewaart ze zoals je eerder deed',
   upgrade_success: 'Kluis <b>succesvol</b> geüpgraded',
   upgrade_vault: 'Kluis upgraden',
   upgrade_vault_description:
@@ -1045,17 +1040,16 @@ export const nl = {
     version: 'Versie {{latestVersion}}',
   },
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
-  vault_cannot_be_opened:
-    'De vault "{{name}}" kan niet op dit apparaat worden geopend',
+  vault_cannot_be_opened: '"{{name}}" kan niet op dit apparaat worden geopend',
   vault_cannot_be_opened_backup_description:
-    'Je .vult-back-up is de weg terug. Importeer hem en deze vault werkt weer.',
+    'Je .vult-back-up is de weg terug. Importeer hem en deze kluis werkt weer.',
   vault_cannot_be_opened_description:
-    'De key shares zijn versleuteld en de sleutel waarmee ze worden ontgrendeld, is niet meegekomen met dit herstel. Niets op dit apparaat kan ze lezen, waardoor het niet met deze vault kan ondertekenen.',
+    'De sleuteldelen zijn versleuteld en de sleutel om ze te ontgrendelen is bij dit herstel niet meegekomen. Niets op dit apparaat kan ze lezen, dus dit apparaat kan niet met deze kluis ondertekenen.',
   vault_cannot_be_opened_no_backup: 'Ik heb geen back-up',
   vault_cannot_be_opened_no_backup_description:
-    'Zonder een .vult-back-up kunnen de key shares op dit apparaat niet opnieuw worden ontgrendeld — dat deel kan niet worden hersteld. De vault zelf mogelijk nog wel: als je andere apparaten hun eigen shares hebben en samen nog steeds de ondertekeningsdrempel bereiken, blijft hij zonder dit apparaat werken.',
+    'Zonder .vult-back-up kunnen de sleuteldelen op dit apparaat niet meer worden ontgrendeld — dat deel is niet te herstellen. De kluis zelf misschien nog wel: als je andere apparaten hun eigen sleuteldelen hebben en samen nog de ondertekeningsdrempel halen, blijft de kluis zonder dit apparaat werken.',
   vault_backup_page_password_info:
-    'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
+    'Bewaar kluisdelen van verschillende apparaten nooit op dezelfde plek',
   vault_backup_page_password_protection:
     'Optionele wachtwoordbeveiliging van je kluis',
   vault_backup_page_submit_loading_button_text: 'Opslaan...',
@@ -1070,7 +1064,7 @@ export const nl = {
   vault_delete_page_header_title: 'Kluis verwijderen',
   vault_delete_page_term_1:
     'Ik ben me ervan bewust dat de kluis permanent wordt verwijderd',
-  vault_delete_page_term_2: 'Ik ben me ervan bewust dat ik funds kan verliezen',
+  vault_delete_page_term_2: 'Ik ben me ervan bewust dat ik geld kan verliezen',
   vault_delete_page_term_3:
     'Ik heb een kluisback-up gemaakt om later te kunnen herstellen',
   vault_delete_page_vault_part: 'Kluisdeel',
@@ -1090,17 +1084,17 @@ export const nl = {
   vault_name_max_length_error: 'Kluisnaam moet korter zijn dan 50 tekens',
   vault_name_required: 'Kluisnaam is verplicht',
   vault_notifications: 'Kluismeldingen',
-  vault_part: 'Kluis-share',
+  vault_part: 'Kluisdeel',
   vault_password: 'Kluiswachtwoord',
   vault_ready_description:
     'Je bent helemaal klaar! Je behoudt de controle over elke transactie.',
-  vault_ready_to_use: 'Uw kluis is klaar voor gebruik.',
+  vault_ready_to_use: 'Je kluis is klaar voor gebruik',
   vault_rename_page_name_error: 'Kluisnaam moet tussen 1 en 50 tekens zijn',
   vault_selected: 'Kluis geselecteerd',
   vault_server_share_bad_request:
     'Er is iets misgegaan. Controleer je wachtwoord en probeer opnieuw.',
   vault_server_share_too_many_requests:
-    'Je hebt je back-up share te vaak aangevraagd in korte tijd. Wacht even en probeer opnieuw.',
+    'Je hebt je back-up in korte tijd te vaak aangevraagd. Wacht even en probeer het opnieuw.',
   vault_settings: 'Kluisinstellingen',
   vault_settings_address_book_address_min_length_error:
     'Adres moet minstens 1 teken lang zijn.',
@@ -1119,12 +1113,12 @@ export const nl = {
   vaults: 'Kluizen',
   verify: 'Verifiëren',
   verify_password: 'Wachtwoord verifiëren',
-  verify_password_for: 'Bevestig uw wachtwoord voor:',
+  verify_password_for: 'Bevestig je wachtwoord voor:',
   verify_password_periodic_message_description:
     'We vragen je periodiek om je fast sign-wachtwoord te verifiëren zodat je het altijd blijft onthouden',
   version: 'Versie',
   via: 'via',
-  view_on_explorer: 'Bekijken in Verkenner',
+  view_on_explorer: 'Bekijken in blockexplorer',
   vote: 'Stemmen',
   vultisig_community: '{{productName}}-community',
   vultisig_education: '{{productName}} Onderwijs',
@@ -1133,11 +1127,11 @@ export const nl = {
   waiting_for_devices_to_join: 'Wachten tot andere apparaten deelnemen',
   waiting_for_devices_to_join_description:
     'Je kluis begint te genereren zodra je de setup op je hoofdapparaat afrondt',
-  waiting_for_keygen_start: 'Wachten tot key generation start...',
+  waiting_for_keygen_start: 'Wachten tot de sleutelgeneratie start…',
   waiting_for_keysign_start: 'Wachten tot het ondertekenen begint...',
   wallet: 'Wallet',
   withdraw: 'Opnemen',
-  withdraw_ruji_rewards: 'RUJI-rewards opnemen',
+  withdraw_ruji_rewards: 'RUJI-beloningen opnemen',
   add_cacao_pool: 'Toevoegen aan CACAO-pool',
   remove_cacao_pool: 'Verwijderen uit CACAO-pool',
   add_thor_lp: 'Voeg THORChain LP toe',
@@ -1161,9 +1155,9 @@ export const nl = {
   signed_tx_unmerged: 'Gesplitst',
   signed_tx_switched: 'Van chain gewisseld',
   vaultSetupOverview: {
-    title: 'Uw kluisinstellingen',
+    title: 'Je kluisconfiguratie',
     fast: {
-      badgeTitle: 'Snelle kluis',
+      badgeTitle: 'Fast Vault',
       badgeSubtitle: 'configuratie met 2 apparaten',
       feature1Title: '1-Apparaatondertekening',
       feature1Description:
@@ -1176,41 +1170,41 @@ export const nl = {
         'Een medeondertekenaar kan nooit transacties initiëren; hij of zij assisteert alleen bij het ondertekenen ervan.',
     },
     secure2: {
-      badgeTitle: 'Beveiligde kluis',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'kluis voor 2 apparaten',
       feature1Title: '2-apparaatondertekening',
       feature1Description:
         'Elke transactie vereist goedkeuring van beide apparaten.',
-      feature2Title: 'Geen enkel zwak punt',
+      feature2Title: 'Geen single point of failure',
       feature2Description:
         'Eén apparaat alleen kan geen geld overmaken. Als een apparaat verloren raakt of in gevaar komt, kan het de transactie niet zelfstandig goedkeuren.',
-      feature3Title: 'Ideaal voor eenvoudige koelopslag.',
+      feature3Title: 'Ideaal voor eenvoudige cold storage',
       feature3Description:
         'De ideale configuratie voor gebruikers met slechts twee apparaten.',
     },
     secure3: {
-      badgeTitle: 'Beveiligde kluis',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'kluis voor 3 apparaten',
       feature1Title: '2-apparaatondertekening',
       feature1Description:
-        'Elke transactie vereist goedkeuring van 2 van uw 3 apparaten.',
-      feature2Title: 'Geen enkel zwak punt',
+        'Elke transactie heeft goedkeuring nodig van 2 van je 3 apparaten.',
+      feature2Title: 'Geen single point of failure',
       feature2Description:
         'Eén apparaat alleen kan geen geld overmaken. Als een apparaat verloren raakt of in gevaar komt, kan het de transactie niet zelfstandig goedkeuren.',
-      feature3Title: 'Ideaal voor koelopslag',
+      feature3Title: 'Ideaal voor cold storage',
       feature3Description:
-        'De perfecte balans voor de meeste gebruikers. 2 ondertekenaars en 1 back-upapparaat. Bewaar uw gegevens zonder stress.',
+        'De perfecte balans voor de meeste gebruikers. 2 ondertekenaars en 1 back-upapparaat. Bewaar je assets zonder stress.',
     },
     secure4: {
-      badgeTitle: 'Beveiligde kluis',
+      badgeTitle: 'Secure Vault',
       badgeSubtitle: 'Kluis voor 4 of meer apparaten',
       feature1Title: 'Ondertekening door 3 of meer apparaten',
       feature1Description:
-        'Voor kluizen is 67% van de apparaten nodig om een ​​transactie te ondertekenen. U kunt zoveel ondertekenaars instellen als u wilt.',
+        'Een kluis heeft 67% van de apparaten nodig om een transactie te ondertekenen. Voeg zoveel ondertekenaars toe als je wilt.',
       feature2Title: 'Dynamisch apparaatbeheer',
       feature2Description:
-        'Voeg zoveel apparaten toe als u wilt en profiteer van beveiliging op institutioneel niveau.',
-      feature3Title: 'Ontworpen voor teams en budgetten.',
+        'Voeg zoveel apparaten toe als je wilt en krijg beveiliging op institutioneel niveau.',
+      feature3Title: "Gemaakt voor teams en treasury's",
       feature3Description:
         'Ideaal voor teams die gezamenlijke fondsen en kluizen met een hogere waarde beheren, waarvoor meer tekenbevoegden nodig zijn.',
     },
@@ -1230,7 +1224,7 @@ export const nl = {
   failed_to_load_session_history:
     'Het laden van de sessiegeschiedenis is mislukt.',
   agent_history_load_error_description:
-    'Probeer het alstublieft opnieuw. Als het probleem aanhoudt, heropen dan de chat van zojuist of start een nieuwe.',
+    'Probeer het opnieuw. Blijft het probleem bestaan? Open dan de chat van zojuist opnieuw of start een nieuwe.',
   agent_history_empty_title: 'Nog geen chats',
   agent_history_empty_description:
     'Start een nieuwe chat en je recente gesprekken verschijnen hier.',
@@ -1244,10 +1238,9 @@ export const nl = {
   ask_about_plugins_policies: 'Vraag naar plugins en beleid...',
   approve_transaction: 'Transactie goedkeuren',
   enter_vault_password: 'Voer het kluiswachtwoord in',
-  password_required_for_operation: 'Voer uw wachtwoord in voor {{operation}}.',
+  password_required_for_operation: 'Voer je wachtwoord in voor {{operation}}.',
   confirm_action: 'Bevestig actie',
-  confirm_action_description:
-    'Bevestig alstublieft dat u {{action}} wilt uitvoeren.',
+  confirm_action_description: 'Bevestig dat je {{action}} wilt.',
   agent_chat_render_error:
     'Er is iets misgegaan bij het weergeven van de chat.',
   agent_operation_sign_in: 'inloggen',
@@ -1258,28 +1251,28 @@ export const nl = {
   agent_give_feedback: 'Geef feedback',
   agent_delete_chat_session: 'Chatsessie verwijderen',
   agent_signing_in: 'Aanmelden...',
-  agent_tool_label: 'Gereedschap: {{tool}}',
+  agent_tool_label: 'Tool: {{tool}}',
   agent_tx_confirmed: 'Bevestigd',
   agent_tx_failed: 'Mislukt',
   agent_tx_pending: 'In behandeling',
   agent_tx_type_approval: 'Goedkeuring',
   agent_tx_type_contract_call: 'Contractaanroep',
   agent_tx_type_contract_execute: 'Contract uitvoeren',
-  agent_tx_type_deposit: 'Borg',
+  agent_tx_type_deposit: 'Storting',
   agent_tx_type_send: 'Versturen',
-  agent_tx_type_swap: 'Ruil',
+  agent_tx_type_swap: 'Swap',
   agent_tx_type_transfer: 'Overdracht',
-  agent_tx_view: 'Weergave',
+  agent_tx_view: 'Bekijken',
   agent_analyzing: 'Analyseren...',
   agent_analyzed_for: 'Geanalyseerd voor {{duration}}s',
   agent_analyzed: 'Geanalyseerd',
   welcome_to_vulti_agent: 'Welkom bij Vulti Agent',
   agent_welcome_description:
-    'Uw kluis kan nu verzoeken begrijpen, acties automatiseren en u helpen bij het beheren van uw cryptovaluta.',
+    'Je kluis kan nu verzoeken begrijpen, acties automatiseren en je helpen je crypto te beheren.',
   authorize_agent: 'Agent autoriseren',
   reauthorize_vulti_agent: 'Vulti Agent opnieuw autoriseren',
   agent_reauth_description:
-    'Om veiligheidsredenen verloopt de autorisatie periodiek. Bevestig alstublieft dat u Vulti Agent wilt blijven gebruiken.',
+    'Om veiligheidsredenen verloopt de autorisatie regelmatig.\\nBevestig dat je Vulti Agent wilt blijven gebruiken.',
   authorize: 'Autoriseren',
   invalid_validator_address: 'Ongeldig validatoradres',
   unnamed_validator: 'Naamloos',
@@ -1293,7 +1286,7 @@ export const nl = {
   redelegate_same_validator:
     'De bestemmingsvalidator moet verschillen van de bronvalidator.',
   delegate: 'Delegeren',
-  undelegate: 'Delegeer ongedaan maken',
+  undelegate: 'Delegatie opheffen',
   redelegate: 'Herdelegeren',
   claim_rewards: 'Claim beloningen',
   select_validator: 'Selecteer Validator',
@@ -1301,7 +1294,7 @@ export const nl = {
   active_delegations: 'Actieve delegaties',
   total_staked: 'Totaal ingezette {{ticker}}',
   staked_label: 'Ingezette: {{amount}} {{ticker}}',
-  unbonding_lock_label: '{{days}}-day ontkoppelingsvergrendeling',
+  unbonding_lock_label: 'Unbonding-vergrendeling van {{days}} dagen',
   unbonding_unlocks_at: 'Ontgrendelt {{date}}',
   validator_status_active: 'Actief',
   validator_status_churned_out: 'Uitgestoten',
@@ -1314,15 +1307,15 @@ export const nl = {
   you_are_moving: 'Je bent aan het verplaatsen',
   you_are_claiming: 'Je bent aan het claimen',
   commission: 'commissie',
-  claim_n_validators: 'Claim van {{count}}-validators',
+  claim_n_validators: 'Claimen bij {{count}} validators',
   approval_amount: 'Goedkeuringsbedrag',
   approval_expires: 'Goedkeuring verloopt',
   deadline: 'Termijn',
   domain: 'Domein',
   no_expiry: 'Geen vervaldatum',
   primary_type: 'Primair type',
-  qbtc_claim_banner_title: 'Hetzelfde als Bitcoin. Kwantumveilig.',
-  qbtc_claim_banner_subtitle: 'Claim uw QBTC',
+  qbtc_claim_banner_title: 'Dezelfde bitcoin. Kwantumveilig.',
+  qbtc_claim_banner_subtitle: 'Claim je QBTC',
   qbtc_claim_banner_cta: 'Claim nu',
   qbtc_claim_section_cta: 'Claim QBTC',
   qbtc_claim_card_title: 'Claimbare QBTC',
@@ -1330,18 +1323,18 @@ export const nl = {
   qbtc_onboarding_title: 'Nieuwe kwantumbeveiliging',
   qbtc_onboarding_subtitle:
     'Klassieke sleutels kunnen door kwantumcomputers worden gekraakt. Om QBTC te activeren, moet een nieuw sleutelpaar worden gegenereerd.',
-  qbtc_onboarding_feature_generate_title: 'Genereer uw kwantum-sleutelpaar',
+  qbtc_onboarding_feature_generate_title: 'Genereer je kwantumsleutelpaar',
   qbtc_onboarding_feature_generate_description:
-    '{{productName}} voert een lokale MPC-ceremonie uit op al uw kluisapparaten om een ​​nieuw sleutelpaar te genereren.',
-  qbtc_onboarding_feature_link_title: 'Koppel het aan uw bestaande kluis.',
+    '{{productName}} voert een lokale MPC-ceremonie uit op je kluisapparaten om een nieuw sleutelpaar te maken.',
+  qbtc_onboarding_feature_link_title: 'Koppel het aan je bestaande kluis',
   qbtc_onboarding_feature_link_description:
-    'De kwantumsleutel is gekoppeld aan uw huidige kluisdelingsstructuur. Opnieuw delen is niet nodig.',
+    'De kwantumsleutel is gekoppeld aan de huidige structuur van je kluisdelen. Opnieuw delen is niet nodig.',
   qbtc_onboarding_feature_claim_title: 'Claim en verhandel in QBTC',
   qbtc_onboarding_feature_claim_description:
-    'Zodra ze gegenereerd zijn, verschijnen uw in aanmerking komende BTC UTXOs als claimbare QBTC in een verhouding van 1:1.',
+    "Na het genereren verschijnen je in aanmerking komende BTC-UTXO's als claimbare QBTC in een verhouding van 1:1.",
   qbtc_onboarding_get_started: 'Aan de slag',
   qbtc_claim_description:
-    'QBTC is een kwantumresistente versie van BTC. Uw bestaande BTC en UTXOs komen in aanmerking om te worden geclaimd als QBTC in een verhouding van 1:1. Selecteer hieronder welke UTXOs u wilt claimen.',
+    "QBTC is een kwantumbestendige versie van BTC. Je bestaande BTC-UTXO's kunnen als QBTC worden geclaimd in een verhouding van 1:1. Selecteer hieronder welke UTXO's je wilt claimen.",
   qbtc_claim_eligible_utxos: 'Geschikte UTXOs',
   qbtc_claim_confirmed_blocks_ago: 'Bevestigd · {{count}} blokken geleden',
   qbtc_claim_pending_confirmation: 'Bevestiging in afwachting',
@@ -1354,7 +1347,7 @@ export const nl = {
   station_migration_title: 'Migreer Station wallets',
   station_migration_review_title: 'Bekijk oude Station wallets',
   station_migration_review_description:
-    'Voer uw Station-wachtwoord in om ondersteunde wallets lokaal te decoderen. De oude Station-opslag blijft intact.',
+    'Voer je Station-wachtwoord in om ondersteunde wallets lokaal te ontsleutelen. De oude Station-opslag blijft intact.',
   station_migration_settings_title: 'Migreer Station wallets',
   station_migration_settings_description:
     'Controleer de oude Station wallets die op dit apparaat zijn gedetecteerd.',
@@ -1413,7 +1406,7 @@ export const nl = {
   station_migration_status_failed: 'Mislukt',
   station_migration_password_title: 'Ondersteunde wallets ontgrendelen',
   station_migration_password_description:
-    'Uw Station-wachtwoord blijft op dit apparaat staan ​​en wordt alleen gebruikt om oude Station-walletgegevens te decoderen.',
+    'Je Station-wachtwoord blijft op dit apparaat en wordt alleen gebruikt om oude Station-walletgegevens te ontsleutelen.',
   station_migration_password_label: 'Station wachtwoord',
   station_migration_password_invalid:
     'Dat wachtwoord ontgrendelde geen enkele ondersteunde Station-wallet.',
@@ -1428,11 +1421,11 @@ export const nl = {
   station_migration_failure_missing_encrypted_value:
     'Deze portemonnee mist het versleutelde sleutelmateriaal dat nodig is voor de migratie.',
   station_migration_failure_invalid_seed:
-    'De onversleutelde seed-gegevens zijn ongeldig.',
+    'De ontsleutelde seedgegevens zijn ongeldig.',
   station_migration_failure_invalid_legacy_wallet:
-    'De onversleutelde gegevens van de oude wallet zijn ongeldig.',
+    'De ontsleutelde gegevens van de oude wallet zijn ongeldig.',
   station_migration_failure_metadata_mismatch:
-    'De onversleutelde sleutel komt niet overeen met het oude Station-adres of de openbare sleutel.',
+    'De ontsleutelde sleutel komt niet overeen met het oude Station-adres of de publieke sleutel.',
   station_migration_failure_unsupported:
     'Dit type portemonnee kan niet met een wachtwoord worden gemigreerd.',
   station_migration_failure_split_interchain_private_keys:
@@ -1454,17 +1447,17 @@ export const nl = {
     'Station slaat alleen openbare Ledger-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een {{productName}}-kluis.',
   paired: 'Gekoppeld',
   plugin_marketplace_signin_description:
-    'Meld u aan met uw {{productName}} Vault om toegang te krijgen tot apps waarmee u uw digitale activa kunt automatiseren.',
+    'Meld je aan met je {{productName}}-kluis voor toegang tot apps die je digitale assets automatiseren.',
   plugin_marketplace_welcome:
     'Welkom bij de {{productName}} Plugin Marketplace.',
   plugin_permissions_brand_safety_notice:
-    '{{productName}} Apps kunnen nooit transacties ondertekenen die u niet eerst goedkeurt.',
+    '{{productName}}-apps kunnen nooit transacties ondertekenen die je niet eerst zelf goedkeurt.',
   extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'De handel in dit actief is tijdelijk stopgezet. Probeer het later opnieuw.',
   sui_arguments: 'Argumenten',
   sui_call_balance_destroy_zero: 'Vernietig lege balans',
-  sui_call_balance_join: 'Saldo&#39;s samenvoegen',
+  sui_call_balance_join: 'Saldi samenvoegen',
   sui_call_balance_split: 'Splitsing van de balans',
   sui_call_balance_value: 'Lees de saldowaarde',
   sui_call_balance_zero: 'Maak een lege balans aan',
@@ -1478,8 +1471,8 @@ export const nl = {
   sui_call_coin_zero: 'Maak een lege munt aan',
   sui_call_transfer_freeze_object: 'Object bevriezen',
   sui_call_transfer_share_object: 'Deel object',
-  sui_call_transfer_transfer: 'Overdrachtsobject',
-  sui_commands: 'Commando&#39;s ({{count}})',
+  sui_call_transfer_transfer: 'Object overdragen',
+  sui_commands: "Commando's ({{count}})",
   sui_dependencies: 'Afhankelijkheden',
   sui_elements: 'Elementen',
   sui_gas_budget: 'Gasbudget',
@@ -1488,35 +1481,35 @@ export const nl = {
   sui_inputs: 'Invoer ({{count}})',
   sui_make_move_vec: 'Maak Move-vector',
   sui_merge_coins: 'Munten samenvoegen',
-  sui_merge_into: 'Voeg de bron(nen) {{count}} samen met {{destination}}',
+  sui_merge_into: '{{count}} bron(nen) samenvoegen in {{destination}}',
   sui_modules: 'Modules',
   sui_move_call: 'Move call',
   sui_object_clock: 'Klok',
   sui_object_deny_list: 'DenyLijst',
   sui_object_random: 'Willekeurig',
   sui_object_sui_system_state: 'SuiSystemState',
-  sui_objects_to: 'Verzend object(en) {{count}} naar {{address}}',
+  sui_objects_to: '{{count}} object(en) verzenden naar {{address}}',
   sui_param_amount: 'hoeveelheid',
   sui_param_balance: 'saldo',
   sui_param_coin: 'munt',
   sui_param_destination: 'bestemming',
-  sui_param_object: 'voorwerp',
+  sui_param_object: 'object',
   sui_param_recipient: 'ontvanger',
   sui_param_source: 'bron',
-  sui_publish: 'Publicatiepakket',
+  sui_publish: 'Pakket publiceren',
   sui_split_amounts: 'Bedragen ({{count}})',
   sui_split_coins: 'Splits munten',
   sui_split_from: 'Van {{coin}}',
   sui_transaction_summary: 'Transactieoverzicht',
   sui_transfer_objects: 'Objecten overdragen',
   sui_type_arguments: 'Typeargumenten',
-  sui_upgrade: 'Upgrade-pakket',
+  sui_upgrade: 'Pakket upgraden',
   advanced_description:
-    'Berichten opnieuw delen, de beveiliging beheren of ondertekenen.',
+    'Opnieuw delen, beveiliging beheren of berichten ondertekenen.',
   advanced_settings: 'Geavanceerde instellingen',
-  advanced_swap: 'Geavanceerde omruiling',
+  advanced_swap: 'Geavanceerde swap',
   auto: 'Auto',
-  custom_rpc: 'Aangepaste RPC&#39;s',
+  custom_rpc: "Aangepaste RPC's",
   custom_rpc_chip_custom: 'Aangepast',
   custom_rpc_description: 'Gebruik je eigen knooppunten per keten.',
   custom_rpc_invalid_response: 'Onverwachte reactie van dit eindpunt',
@@ -1546,11 +1539,11 @@ export const nl = {
   swap_deposit_address: 'Stortingsadres',
   swap_deposit_address_unverifiable: 'Kan niet worden geverifieerd',
   custom_rpc_gate_description:
-    'Koppel {{productName}} aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
+    "Koppel {{productName}} aan je eigen nodes. Snellere query's, hogere rate limits en volledige privacy per chain.",
   feature_gate_requires: 'Vereist',
   feature_gate_requires_tier: '$VULT {{tier}} Niveau of hoger',
   feature_gate_hold_at_least: 'Bewaar ten minste {{amount}} in je kluis.',
-  feature_gate_your_balance: 'Uw saldo',
+  feature_gate_your_balance: 'Je saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
   copied: 'Gekopieerd',
@@ -1561,9 +1554,9 @@ export const nl = {
   swap_invalid_external_recipient:
     'Het ontvangersadres is niet geldig voor {{chain}}',
   advanced_swap_settings_gate_description:
-    'Optimaliseer uw swaps met aangepaste slippage, gaslimiet en een extern ontvangeradres.',
+    'Optimaliseer je swaps met aangepaste slippage, gaslimiet en een extern ontvangstadres.',
   signing_error_description:
-    'Een van uw apparaten reageerde niet op tijd. Controleer uw verbinding en probeer het opnieuw.',
+    'Een van je apparaten reageerde niet op tijd. Controleer je verbinding en probeer het opnieuw.',
   qbtc_claim_cosign_title: 'Medeonderteken de QBTC-claim',
   qbtc_claim_cosign_description:
     'Bekijk het onderstaande claimverzoek en keur vervolgens de medeondertekening ervan goed met de Bitcoin-sleutel van deze kluis.',
@@ -1573,7 +1566,7 @@ export const nl = {
   qbtc_claim_cosign_success:
     'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
   qbtc_onboarding_key_warning:
-    'Door QBTC in te schakelen, wordt een nieuwe kwantumsleutel en een nieuw QBTC-adres aangemaakt. Als deze kluis al een kwantumsleutel op een ander apparaat of via een import had, zijn de eerder aangemaakte QBTC-tegoeden mogelijk niet toegankelijk vanaf het nieuwe adres. Maak na het aanmaken van deze kluis een back-up.',
+    'Door QBTC in te schakelen worden een nieuwe kwantumsleutel en een nieuw QBTC-adres aangemaakt. Als deze kluis al een kwantumsleutel had op een ander apparaat of via een import, zijn eerdere QBTC-tegoeden mogelijk niet toegankelijk vanaf het nieuwe adres. Maak na het genereren een back-up van deze kluis.',
   qbtc_gov: {
     status: {
       passed: 'Geslaagd',
@@ -1592,7 +1585,7 @@ export const nl = {
     proposal_number: 'Voorstel # {{id}}',
     untitled_proposal: 'Voorstel zonder titel',
     active_section: 'Actief',
-    past_section: 'Verleden',
+    past_section: 'Afgelopen',
     no_proposals: 'Nog geen voorstellen',
     proposal_not_found: 'Voorstel niet gevonden',
     voting_ended: 'De stemming is afgelopen.',
@@ -1605,7 +1598,7 @@ export const nl = {
     voting_start: 'Begint',
     voting_end: 'Einde',
     messages: 'Berichten',
-    cast_vote: 'Breng uw stem uit',
+    cast_vote: 'Breng je stem uit',
     change_vote: 'Wijzig je stem',
     weighted_vote_cta: 'Gewogen stem',
     weighted_vote_title: 'Gewogen stem',
@@ -1624,11 +1617,11 @@ export const nl = {
   swap_insufficient_funds:
     'Onvoldoende saldo om de transactie uit te voeren. Stort geld op de wallet.',
   keygen_failed_description:
-    'Het aanmaken van de kluis is vertraagd vanwege een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+    'Het aanmaken van de kluis is vertraagd door een slechte verbinding. Je kunt het opnieuw proberen of wachten tot de verbinding hersteld is.',
   same_vault_share_description:
-    'Wijzig de gedeelde map naar &#39;ondertekenen&#39;. Twee apparaten kunnen niet dezelfde gedeelde map gebruiken voor gezamenlijke ondertekening.',
-  vault_is_not_loaded: 'Vault is niet geladen',
-  vault_is_not_loaded_description: 'Importeer het juiste aandeel.',
+    'Kies een ander kluisdeel om te ondertekenen. Twee apparaten kunnen niet hetzelfde kluisdeel gebruiken om mee te ondertekenen.',
+  vault_is_not_loaded: 'Kluis is niet geladen',
+  vault_is_not_loaded_description: 'Importeer het juiste kluisdeel.',
   ton_nominator_pool: 'Nominator Pool',
   ton_stake_title: 'Stake {{ticker}}',
   ton_stake_cta: 'Stake {{ticker}}',
@@ -1645,64 +1638,63 @@ export const nl = {
   ton_stake_unsupported_pool:
     'Deze pool implementatie wordt niet ondersteund voor staking.',
   ton_unstake_unsupported_pool:
-    'Deze pool implementatie wordt niet ondersteund voor het ontstaken van de token.',
+    'Deze implementatie van de pool wordt niet ondersteund voor unstaken.',
   ton_withdrawal_pending: 'Opname in behandeling — ontgrendelt {{date}}',
   ton_stake_pool_picker_header: 'Pool',
   broadcast_error: 'Het netwerk heeft deze transactie geweigerd.',
   broadcast_error_description:
-    'Uw apparaten hebben de transactie ondertekend, maar het netwerk heeft deze afgewezen. Bekijk de on-chain reden hieronder en onderteken de transactie opnieuw om het nogmaals te proberen.',
-  solana_unstake: 'Ontkoppelen',
-  solana_withdraw: 'Terugtrekken',
+    'Je apparaten hebben de transactie ondertekend, maar het netwerk heeft deze geweigerd. Bekijk hieronder de on-chain reden en onderteken opnieuw om het nog eens te proberen.',
+  solana_unstake: 'Unstaken',
+  solana_withdraw: 'Opnemen',
   solana_staking_stake_account: 'Inzetaccount',
   solana_staking_unstake_notice:
-    'Na deactivering treedt een afkoelperiode in werking — uw inzet blijft ongeveer {{days}} dagen geblokkeerd voordat u deze kunt opnemen.',
+    'Deactiveren start een afkoelperiode — je stake blijft ongeveer {{days}} dagen vastgezet voordat je kunt opnemen.',
   solana_staking_withdrawable_amount: 'Opneembaar bedrag',
   solana_staking_withdraw_ready_notice:
     'Afgekoeld en klaar om te worden opgenomen.',
   solana_move_stake: 'Verplaatsen',
   solana_finish_move: 'Verplaatsing voltooien',
   solana_staking_move_notice:
-    'Het overzetten van de stake vereist meerdere stappen en strekt zich uit over verschillende periodes: hiermee wordt het account nu gedeactiveerd en begint een afkoelperiode van ongeveer {{days}} dagen. Zodra die periode voorbij is, kunt u de stake overzetten naar de validator die u hebt gekozen.',
+    'Een stake verplaatsen gaat in meerdere stappen en duurt meerdere epochs: het account wordt nu gedeactiveerd en er begint een afkoelperiode van ongeveer {{days}} dagen. Daarna kun je de verplaatsing naar de gekozen validator afronden.',
   solana_staking_finish_move_notice:
     'Hiermee wordt het afgekoelde stake-account opnieuw gedelegeerd aan de nieuwe validator en wordt de verplaatsing voltooid.',
   external_recipient_tooltip_content:
-    'Stuur het omgewisselde geld naar een ander walletadres in plaats van naar je eigen adres.',
+    'Stuur de geswapte tegoeden naar een ander walletadres in plaats van naar je eigen adres.',
   blockaid_simulation_pending: 'Transactie simuleren…',
   malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
   malicious_dapp_detected_description:
-    '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
+    '{{dapp}} is door Blockaid als schadelijk gemarkeerd. Doe altijd eerst je eigen onderzoek voordat je verdergaat.',
   before_you_reshare: 'Voordat je het opnieuw deelt',
   before_you_reshare_subtitle:
-    'Door opnieuw te delen worden uw gedeelde mappen in de kluis opnieuw gegenereerd. Er zijn een paar dingen die u eerst moet weten.',
-  i_understand: 'Ik begrijp',
+    'Bij opnieuw delen worden je kluisdelen opnieuw gegenereerd. Er zijn eerst een paar dingen die je moet weten.',
+  i_understand: 'Ik begrijp het',
   join_reshare_description:
     'Je hebt een verzoek tot opnieuw delen ontvangen vanaf een ander apparaat.',
   reshare_vault_subtitle:
-    'Werk uw kluisinstellingen bij. Voeg apparaten toe of verwijder ze, of vernieuw gedeelde mappen.',
+    'Werk je kluisinstellingen bij. Voeg apparaten toe of verwijder ze, of vernieuw de kluisdelen.',
   reshare_warning_cosigners_title:
     'Alle medeondertekenaars moeten online zijn.',
   reshare_warning_cosigners_description:
-    'Alle apparaten die zich momenteel in uw kluis bevinden, moeten deelnemen aan de sessie voor het opnieuw delen.',
-  reshare_warning_old_backups_title: 'Oude back-ups werken niet meer.',
+    'Elk apparaat dat nu in je kluis zit, moet deelnemen aan de sessie voor opnieuw delen.',
+  reshare_warning_old_backups_title: 'Maak nieuwe back-ups',
   reshare_warning_old_backups_description:
-    'Alle bestaande .vult-bestanden worden ongeldig. U moet na het opnieuw delen nieuwe back-ups maken.',
+    'Back-ups van vóór deze Reshare kun je niet combineren met de nieuwe. Oude back-ups werken onderling nog wel, dus bewaar ze veilig of verwijder ze. Is een apparaat kwijt of gecompromitteerd? Zet je tegoed dan over naar een nieuwe kluis.',
   start_reshare_description:
-    'U wijzigt de apparaatinstellingen van deze kluis.',
-  reshare_success_title: 'Vault opnieuw gedeeld',
+    'Je wijzigt de apparaatinstellingen van deze kluis.',
+  reshare_success_title: 'Kluis opnieuw gedeeld',
   reshare_success_title_highlight: 'succesvol',
-  reshare_backup_old_backups_wont_work: 'Oude back-ups werken niet.',
+  reshare_backup_old_backups_wont_work: 'Maak nieuwe back-ups',
   reshare_backup_old_backups_wont_work_description:
-    'Back-ups van eerdere kluisconfiguraties kunnen niet worden gebruikt. Alleen back-ups die tijdens deze configuratie zijn gemaakt, zijn geldig.',
-  reshare_min_devices_required:
-    'Er zijn minimaal {{count}} -apparaten vereist.',
+    'Back-ups van vóór deze Reshare kun je niet combineren met de nieuwe. Oude back-ups werken onderling nog wel, dus bewaar ze veilig of verwijder ze. Is een apparaat kwijt of gecompromitteerd? Zet je tegoed dan over naar een nieuwe kluis.',
+  reshare_min_devices_required: 'Minstens {{count}} apparaten vereist',
   reshare_more_devices_required: 'Meer apparaten nodig',
   reshare_threshold_not_met: 'Drempelwaarde niet bereikt',
   reshare_threshold_not_met_description:
     'Je probeert het aantal apparaten te verminderen van<w> {{from}} naar {{to}}</w> maar deze kluis<w> vereist {{count}} actieve ondertekenaars</w> om veilig te blijven.',
-  solana_delegate: 'Inzet',
+  solana_delegate: 'Staken',
   solana_staking_total_staked: 'Totaal ingezette {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegeer aan nieuwe validator',
-  solana_staking_stake_accounts: 'Inzetrekeningen',
+  solana_staking_stake_accounts: 'Stake-accounts',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Huurreserve',
   solana_staking_min_delegation: 'Minimale delegatie is {{amount}} {{ticker}}',
@@ -1715,11 +1707,11 @@ export const nl = {
   solana_staking_deactivating_notice:
     'Deactiveren — afkoelen voordat het kan worden teruggetrokken.',
   solana_staking_inactive_notice:
-    'Inactief — afgekoeld en klaar om te worden verwijderd.',
+    'Inactief — afgekoeld en klaar om op te nemen.',
   validator_commission_short: '{{value}} % fee',
   reshare_failed: 'Fout bij het opnieuw delen. Probeer het opnieuw.',
   reshare_failed_description:
-    'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+    'Opnieuw delen is vertraagd door een slechte verbinding. Je kunt het opnieuw proberen of wachten tot de verbinding hersteld is.',
   plugin_store_compatible: 'Compatibel met de Plugin Store',
   open_trust_line: 'Open vertrouwenslijn',
   trust_line: 'Vertrouwenslijn',
@@ -1737,7 +1729,7 @@ export const nl = {
   solana_staking_current_validator: 'Huidige validator',
   solana_staking_new_validator: 'Nieuwe validator',
   solana_staking_pending_move_notice:
-    'Verplaatsen naar {{validator}} — u kunt de verplaatsing voltooien zodra de afkoelperiode voorbij is.',
+    'Verplaatsen naar {{validator}} — je kunt de verplaatsing afronden zodra de afkoelperiode voorbij is.',
   ripple_transaction_summary: 'Transactieoverzicht',
   ripple_field_type: 'Type',
   ripple_field_destination: 'Bestemming',
@@ -1755,10 +1747,10 @@ export const nl = {
   ripple_field_taker_gets: 'Verkopen',
   ripple_field_taker_pays: 'Kopen',
   ripple_field_trust_limit: 'Vertrouwenslimiet',
-  ripple_field_offer_sequence: 'Aanbiedingsvolgorde',
+  ripple_field_offer_sequence: 'Volgnummer aanbod',
   ripple_field_issuer: 'Uitgever',
   ripple_undecoded_notice:
-    'Deze transactie kon niet worden gedecodeerd. Controleer de onderstaande gegevens voordat u goedkeurt.',
+    'Deze transactie kon niet worden gedecodeerd. Controleer de ruwe gegevens hieronder voordat je goedkeurt.',
   swap_expected_payout: 'verwachte uitbetaling',
   send_receiver_format_hint_cardano:
     'Voer een Cardano-adres in dat begint met addr1.',
@@ -1789,18 +1781,18 @@ export const nl = {
     'Maak een nieuwe kluis aan om deze hier toe te voegen.',
   no_results_found: 'Geen resultaten gevonden',
   folder_active_vault: '‘{{name}}’ Actief',
-  swap_limit_asset: 'Bezit',
+  swap_limit_asset: 'Asset',
   swap_limit_buy: 'Kopen',
   swap_limit_execute_when: 'Uitvoeren wanneer',
   swap_limit_sell: 'Verkopen',
   swap_limit_blocker_chain_unavailable:
     'Deze keten is tijdelijk gestopt op THORChain',
-  swap_limit_blocker_insufficient_balance: 'Het bedrag overschrijdt uw saldo.',
+  swap_limit_blocker_insufficient_balance: 'Het bedrag is hoger dan je saldo',
   swap_limit_blocker_memo_invalid:
-    'Deze bestelling kan niet worden geplaatst zoals ingevoerd.',
+    'Deze order kan niet worden geplaatst zoals ingevoerd',
   swap_limit_blocker_no_amount: 'Voer een verkoopbedrag in',
   swap_limit_blocker_no_market_price:
-    'Dit valutapaar kan momenteel niet worden verhandeld op THORChain. Kies een ander actief.',
+    'Dit paar kan momenteel niet worden verhandeld op THORChain. Kies een andere asset.',
   swap_limit_blocker_no_price: 'Voer een streefprijs in',
   swap_limit_blocker_pair_not_routable:
     'THORChain kan geen limietorder tussen deze activa routeren.',
@@ -1810,16 +1802,16 @@ export const nl = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
-  swap_limit_confirm: 'De bestelgegevens zijn correct.',
+  swap_limit_confirm: 'De ordergegevens kloppen',
   swap_limit_expiry_label: 'Vervaldatum',
-  swap_limit_place_order: 'Bestelling plaatsen',
-  swap_limit_review_heading: 'U plaatst een limietorder.',
+  swap_limit_place_order: 'Order plaatsen',
+  swap_limit_review_heading: 'Je plaatst een limietorder',
   swap_limit_review_target_price: 'Doelprijs',
   swap_limit_price_market: 'Markt',
   swap_limit_warning_at_or_below_market:
-    'Deze prijs ligt op of onder de marktprijs, waardoor de bestelling mogelijk direct wordt uitgevoerd.',
+    'Deze prijs ligt op of onder de marktprijs, dus de order kan direct worden uitgevoerd.',
   swap_limit_warning_far_above_market:
-    'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
+    'Deze prijs ligt ver boven de marktprijs. De order kan verlopen zonder te worden uitgevoerd.',
   chain_address_copied: '{{chain}} adres gekopieerd',
   native: 'Native',
   activate: 'Activeren',
@@ -1839,7 +1831,7 @@ export const nl = {
   swap_limit_cancel_verify_title: 'Je annuleert een limietorder',
   swap_limit_cancel_order_label: 'Order',
   swap_limit_cancel_explanation:
-    'Annuleren sluit deze order en betaalt het deel terug dat nog niet is uitgevoerd. Wat al is uitgevoerd blijft uitgevoerd en wordt niet teruggegeven. Dit kost één THORChain-netwerkvergoeding.',
+    'Annuleren sluit deze order en betaalt het deel terug dat nog niet is uitgevoerd. Wat al is uitgevoerd, blijft uitgevoerd en wordt niet teruggegeven. Dit kost één keer THORChain-netwerkkosten.',
   swap_limit_cancel_donated_dust_row: 'Ingehouden door THORChain',
   swap_limit_cancel_duplicate_warning:
     'Je hebt nog een openstaande order met hetzelfde paar en dezelfde prijs. THORChain annuleert eerst de oudste overeenkomst, dus mogelijk wordt die order gesloten in plaats van deze.',
@@ -1884,7 +1876,7 @@ export const nl = {
   send_amount_adjusted_for_fee:
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
   swap_limit_cancel_records_unavailable:
-    'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
+    'Je transactiegeschiedenis kon niet worden geladen. Probeer het zo meteen opnieuw — je order blijft ongewijzigd.',
   swap_all_providers_failed:
     'Swapaanbieders zijn tijdelijk niet beschikbaar. Probeer het zo opnieuw.',
   swap_amount_below_minimum:
@@ -1892,10 +1884,10 @@ export const nl = {
   swap_amount_too_small:
     'Voer een hoger bedrag in om een swapofferte te krijgen.',
   swap_invalid_config:
-    'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
+    'Controleer de swapgegevens, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
   swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
   ripple_warning_partial_payment:
-    'Deze transactie betreft een gedeeltelijke betaling: het weergegeven bedrag is het maximale bedrag dat kan worden verzonden, geen gegarandeerd bedrag. De ontvanger kan minder ontvangen. Het bedrag dat u kunt uitgeven, is beperkt door het maximale verzendbedrag, en daar bovenop komen de netwerkkosten.',
+    'Deze transactie is een gedeeltelijke betaling: het getoonde bedrag is het maximum dat kan worden afgeleverd, geen gegarandeerd bedrag. De ontvanger kan minder ontvangen. Wat je uitgeeft, wordt apart begrensd door het maximale verzendbedrag, en daar komen de netwerkkosten nog bovenop.',
   ripple_warning_custom_paths:
     'De website leverde kandidaatroutes aan voor deze betaling. Het netwerk beslist welke route wordt gebruikt en kan ook de directe route kiezen.',
   price_impact: 'Prijsimpact',
@@ -1921,20 +1913,20 @@ export const nl = {
     'Dit bedrag kan momenteel niet worden omgerekend. Probeer het over een moment opnieuw.',
   kamino_earn_available_to_withdraw: 'Beschikbaar om op te nemen',
   kamino_earn_delayed_liquidity:
-    'Dit is meer dan de kluis momenteel aan vloeistof kan bevatten, dus het kan langer duren voordat het bezinkt.',
+    'Dit is meer dan de kluis momenteel aan liquide middelen heeft, dus de afhandeling kan langer duren.',
   kamino_earn_receive_estimate:
     'Het definitieve bedrag wordt vastgesteld wanneer de opname is verwerkt en kan enigszins afwijken.',
   kamino_earn_releases_from_farm:
     'Een deel van deze positie is gestaked, dus bij een opname wordt dat deel eerst vrijgegeven.',
   kamino_earn_shares_burned: 'Aandelen verbrand',
   kamino_earn_withdraw: 'Opname uit de kluis',
-  kamino_earn_withdraw_from: 'Terugtrekken uit',
-  kamino_earn_you_receive: 'U ontvangt',
+  kamino_earn_withdraw_from: 'Opnemen uit',
+  kamino_earn_you_receive: 'Je ontvangt',
   kamino_earn_no_solana_address:
     'Deze kluis heeft geen adres in Solana, dus Kamino Earn is niet beschikbaar.',
   kamino_earn_entire_position: 'Alles in deze kluis',
   kamino_earn_strands_wrapped_sol_rent:
-    "Met deze storting wordt een 'wrapped SOL'-rekening geopend, waarop een klein bedrag aan SOL wordt vastgehouden totdat u het opneemt.",
+    'Deze storting opent een wrapped-SOL-account, waarop een klein bedrag SOL vastzit tot je opneemt.',
   kamino_earn_unreadable_description:
     'Het bereikt een Kamino-kluis, maar deze app kan niet lezen wat het doet, dus zal het niet ondertekenen.',
   kamino_earn_unreadable_title: 'Deze transactie kan niet worden geverifieerd.',
@@ -1946,9 +1938,9 @@ export const nl = {
   kamino_earn_protocol: 'Kamino',
   on_chain: 'op {{chain}}',
   max_total_fee: 'Maximale totale kosten',
-  broadcast_refused: 'Uitzending nog niet bevestigd',
+  broadcast_refused: 'Verzending niet bevestigd',
   broadcast_refused_description:
-    'Uw apparaten hebben deze transactie ondertekend, maar dit apparaat heeft na een laatste veiligheidscontrole geweigerd deze te verzenden. Een ander apparaat dat de transactie heeft ondertekend, heeft deze mogelijk wel verzonden. Bekijk de status hieronder en bevestig het resultaat voordat u opnieuw ondertekent.',
+    'Je apparaten hebben deze transactie ondertekend, maar dit apparaat heeft na een laatste veiligheidscontrole geweigerd deze te verzenden. Een ander ondertekenend apparaat kan hem toch hebben verzonden. Bekijk hieronder de status en controleer de uitkomst voordat je opnieuw ondertekent.',
   not_seen_onchain: 'Nog niet op de blockchain gezien',
   some_balances_failed_to_load: 'Sommige saldi konden niet worden geladen.',
   swap_limit_chart_title: 'Prijsgrafiek',
@@ -1964,14 +1956,14 @@ export const nl = {
     'Deze prijsopgave is verlopen. Vernieuw de pagina voor de actuele prijs.',
   swap_failed_slippage: 'De prijs is buiten de sliptolerantie getreden.',
   swap_failed_slippage_description:
-    'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
+    'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan je slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog je slippagetolerantie of probeer het opnieuw.',
   swap_applied_discounts: 'Toegepaste kortingen:',
   swap_add_custom_token: '+ Voeg een aangepast token toe',
   swap_no_token_found: 'Geen token gevonden',
   ton_tx_failure_seqno_mismatch:
-    'Een andere transactie vanuit deze portemonnee werd eerst verwerkt, waardoor het netwerk deze als niet in de juiste volgorde heeft afgewezen. Controleer uw transactiegeschiedenis: als deze overschrijving daar niet tussen staat, verstuur hem dan opnieuw.',
+    'Een andere transactie vanuit deze wallet werd eerst verwerkt, dus het netwerk heeft deze afgewezen als niet op volgorde. Controleer je geschiedenis: staat deze overdracht er niet bij, verstuur hem dan opnieuw.',
   ton_tx_failure_expired:
-    'Het tijdsvenster voor de transactie was verlopen voordat het netwerk deze kon verwerken. Zorg ervoor dat de datum en tijd op uw apparaat automatisch zijn ingesteld en verstuur de transactie vervolgens opnieuw.',
+    'Het tijdvenster van de transactie was verstreken voordat het netwerk haar verwerkte. Zorg dat de datum en tijd op je apparaat automatisch worden ingesteld en verstuur de transactie opnieuw.',
   ton_tx_failure_invalid_signature:
     'Het walletcontract heeft de handtekening afgewezen. Onderteken de transactie opnieuw; als dit blijft mislukken, komt het walletcontract op dit adres niet overeen met deze kluis.',
   ton_tx_failure_wallet_id_mismatch:
@@ -1993,25 +1985,25 @@ export const nl = {
   ton_tx_failure_action_failed:
     'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn echter wel in rekening gebracht. Controleer de transactie en probeer het opnieuw.',
   ton_tx_failure_action_partially_failed:
-    'De wallet kon in deze transactie ten minste één overboeking niet uitvoeren, terwijl andere overboekingen mogelijk wel zijn gelukt. De netwerkkosten zijn desondanks in rekening gebracht. Controleer uw transactiegeschiedenis voordat u opnieuw een overboeking doet.',
+    'De wallet kon ten minste één overdracht in deze transactie niet uitvoeren; andere zijn mogelijk wel gelukt. De netwerkkosten zijn wel in rekening gebracht. Controleer je transactiegeschiedenis voordat je opnieuw verstuurt.',
   ton_simulation_will_fail:
-    'De transactiepreview verwacht dat deze transactie zal mislukken. Als u de transactie toch ondertekent, kost dit waarschijnlijk netwerkkosten zonder dat de transactie wordt voltooid.',
+    'Volgens de transactievoorbeeldweergave gaat deze transactie mislukken. Onderteken je toch, dan kost dat waarschijnlijk netwerkkosten zonder dat de transactie wordt voltooid.',
   token_verification_unverified: 'Niet geverifieerd',
   token_verification_unverified_hint:
-    'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat u het vertrouwt.',
+    'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat je het vertrouwt.',
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
   solana_blockhash_expired:
     'De transactie is verlopen voordat deze bevestigd kon worden.',
   solana_blockhash_expired_description:
-    'Uw apparaten hebben de transactie ondertekend, maar het Solana-netwerk heeft deze niet bevestigd voordat de blockhash verliep, waardoor de transactie nooit is voltooid. Onderteken de transactie opnieuw om deze met een nieuwe blockhash te verzenden.',
+    'Je apparaten hebben de transactie ondertekend, maar het Solana-netwerk heeft deze niet bevestigd voordat de blockhash verliep, dus is de transactie nooit doorgegaan. Onderteken opnieuw om hem met een nieuwe blockhash te versturen.',
   no_tokens_selected: 'Geen tokens geselecteerd',
   no_tokens_selected_description:
     'Je hebt alle tokens uitgeschakeld. Zorg ervoor dat het token dat je zoekt is ingeschakeld.',
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
-    'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
+    'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de wallet gebruikt. Elk contract is een apart adres met een eigen saldo — er wordt geen geld verplaatst, dus alles op het andere adres blijft daar staan tot je het verstuurt.',
   ton_gasless_pay_fee_in_token: 'Betaal netwerkkosten in {{ticker}}',
   ton_gasless_description:
     'Geen GRAM nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
@@ -2019,18 +2011,18 @@ export const nl = {
   max_network_fee: 'Maximale netwerkkosten',
   swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
   swap_failed_refunded_description:
-    'De swap kon niet worden voltooid, daarom heeft de aanbieder uw geld teruggestuurd naar uw wallet in plaats van de door u aangevraagde activa. Er is geen swap voltooid. Probeer het opnieuw om een nieuwe offerte te ontvangen.',
+    'De swap kon niet worden voltooid, dus de aanbieder heeft je tegoeden teruggestuurd naar je wallet in plaats van de asset die je wilde. Er is geen swap uitgevoerd. Probeer het opnieuw voor een nieuwe prijsopgave.',
   substrate_account_may_be_reaped:
     'De afzender heeft deze overschrijving toegestaan om de rekening leeg te halen: als het resterende saldo lager is dan het minimumsaldo, wordt het resterende bedrag vernietigd en de rekening gedeactiveerd.',
   review_not_enough_funds:
-    'Het lijkt erop dat uw kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
+    'Het lijkt erop dat je kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
   risk_level: {
     medium: 'Medium',
     high: 'Hoog',
   },
   tx_failed_expired: 'Verlopen voordat het bevestigd was',
   tx_failed_expired_description:
-    'Het netwerk heeft deze transactie niet bevestigd voordat de deadline verstreek, waardoor deze nooit is voltooid en er niets van uw portemonnee is afgeschreven. Probeer de transactie opnieuw te ondertekenen en te verzenden met een nieuwe deadline.',
+    'Het netwerk heeft deze transactie niet bevestigd voordat ze verliep, dus ze is nooit doorgegaan en er heeft niets je wallet verlaten. Probeer opnieuw te ondertekenen en te versturen met een nieuwe deadline.',
   signed_awaiting_broadcast:
     'Ondertekend, maar nog niet naar het netwerk verzonden.',
   signed_awaiting_broadcast_description:
@@ -2038,12 +2030,12 @@ export const nl = {
   no_active_chains_found_partial_description:
     'We hebben geen activa aangetroffen op de blockchains die we konden controleren.',
   unscanned_chains_warning:
-    'We konden de saldi op deze blockchains niet controleren. Als u er tegoeden op heeft staan, selecteer ze dan handmatig:',
+    'We konden de saldi op deze chains niet controleren. Heb je daar tegoeden staan? Selecteer ze dan handmatig:',
   substrate_allow_death_toggle: 'Maak het account leeg',
   substrate_allow_death_description:
-    'Het volledige saldo, minus de netwerkkosten, wordt overgemaakt en de rekening wordt gesloten. Alles wat onder het minimale stortingsbedrag overblijft, wordt vernietigd.',
+    'Verstuurt het volledige saldo min de netwerkkosten en sluit het account. Wat onder het minimumsaldo (existential deposit) overblijft, wordt vernietigd.',
   substrate_allow_death_review_warning:
-    'Deze overschrijving maakt uw rekening leeg. De rekening wordt gedeactiveerd en elk resterend saldo onder het minimale stortingsbedrag wordt vernietigd.',
+    'Deze overdracht maakt je account leeg. Het account wordt gedeactiveerd en elk resterend saldo onder het minimumsaldo (existential deposit) wordt vernietigd.',
   next_reward: 'Volgende beloning',
   last_reward: 'Laatste beloning',
   total_rewards_earned: 'Totaal verdiende beloningen',
@@ -2052,9 +2044,9 @@ export const nl = {
   bond_reward_history_error:
     'De beloningsgeschiedenis kon niet worden geladen.',
   send_amount_reduced_at_review:
-    'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}}.',
+    'De netwerkkosten of je saldo zijn gewijzigd nadat je het bedrag had ingesteld. Daarom is het bedrag verlaagd van {{requestedAmount}} naar {{amount}}.',
   send_enter_address_first_for_percentage:
-    'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
+    'Voer eerst het adres van de ontvanger in om de percentageknoppen te gebruiken.',
   send_insufficient_balance_for_fee:
     'Onvoldoende saldo om de netwerkkosten te betalen.',
   failed_to_copy_tx_hash: 'Het kopiëren van de transactiehash is mislukt.',
@@ -2065,16 +2057,16 @@ export const nl = {
   failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
   add_maya_lp: 'Voeg MayaChain LP toe',
   maya_lp_checking_position:
-    'Uw MayaChain positie in deze pool wordt gecontroleerd...',
+    'Je MayaChain-positie in deze pool wordt gecontroleerd…',
   maya_lp_position_unavailable:
-    'Uw MayaChain positie in deze pool kon niet worden gelezen, waardoor deze storting niet kan worden gecontroleerd. Probeer het later opnieuw.',
+    'Je MayaChain-positie in deze pool kon niet worden gelezen, dus deze storting kan niet worden gecontroleerd. Probeer het later opnieuw.',
   maya_lp_paired_with_other_address:
-    'Uw {{pool}} positie is gekoppeld aan een ander adres. MayaChain zou deze storting terugbetalen.',
+    'Je {{pool}}-positie is gekoppeld aan een ander adres. MayaChain zou deze storting terugstorten.',
   maya_lp_pending_address_mismatch:
-    'Een lopende storting op {{pool}} maakt gebruik van een CACAO of activa-adres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugbetalen.',
+    'Een lopende storting op {{pool}} gebruikt een CACAO- of assetadres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugstorten.',
   maya_lp_cacao_alone: 'Dit voegt alleen CACAO toe, zonder gekoppelde activa.',
   maya_lp_cacao_only_position:
-    'Uw {{pool}} positie bevat alleen CACAO. MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',
+    'Je {{pool}}-positie bevat alleen CACAO. MayaChain stort een gekoppelde storting op deze positie terug, dus voeg alleen CACAO toe.',
   custom_message_unsupported_format:
     'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
   custom_message_unsupported_method:
@@ -2082,11 +2074,11 @@ export const nl = {
   revoke: 'Toegang intrekken',
   token_approvals: 'Tokengoedkeuringen',
   token_approvals_description:
-    'Controleer en trek contracten in die uw tokens kunnen uitgeven.',
+    'Bekijk en trek contracten in die je tokens kunnen uitgeven.',
   token_approvals_disconnect_note:
     'Het verbreken van de verbinding met een dApp heft deze goedkeuringen niet op. Elke intrekking is een afzonderlijke on-chain transactie met netwerkkosten.',
   token_approvals_empty_description:
-    'Contracten die u toestaat uw tokens op dit netwerk uit te geven, worden hier weergegeven.',
+    'Contracten die je toestaat je tokens op dit netwerk uit te geven, verschijnen hier.',
   token_approvals_empty_title: 'Geen actieve goedkeuringen voor {{chain}}',
   token_approvals_not_supported: 'Niet ondersteund',
   token_approvals_switch_network: 'Kies een ander netwerk',
@@ -2096,7 +2088,7 @@ export const nl = {
   token_approvals_unsupported_title: 'Niet beschikbaar op {{chain}}',
   revoke_approval: 'Toegang intrekken',
   revoke_approval_explanation:
-    'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het token niet langer vanuit uw kluis kan worden verplaatst. U betaalt netwerkkosten.',
+    'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het dit token niet meer uit je kluis kan verplaatsen. Je betaalt netwerkkosten.',
   revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
   token_approvals_count: 'Goedkeuringen: {{count}}',
 }

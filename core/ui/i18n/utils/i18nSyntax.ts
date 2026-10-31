@@ -286,8 +286,23 @@ export const findTranslationIntegrityIssues = ({
     )
   })
 
+  const pluralCategories = new Intl.PluralRules(locale).resolvedOptions()
+    .pluralCategories
+
+  // Locales with richer plural rules (ru, hr) add _few/_many beside the source's _one/_other.
+  const isLocalePluralForm = (key: string) => {
+    const separator = key.lastIndexOf('_')
+    const category = key.slice(separator + 1) as Intl.LDMLPluralRule
+
+    return (
+      separator > 0 &&
+      pluralCategories.includes(category) &&
+      sourceEntries.values.has(`${key.slice(0, separator)}_other`)
+    )
+  }
+
   targetEntries.values.forEach((_, key) => {
-    if (!sourceEntries.values.has(key)) {
+    if (!sourceEntries.values.has(key) && !isLocalePluralForm(key)) {
       issues.push({ key, locale, kind: 'extra-key' })
     }
   })
