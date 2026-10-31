@@ -1,6 +1,8 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
+import { chainActionsRecord } from '@core/ui/vault/deposit/ChainAction'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import {
   tssMessageSchema,
   TssType,
@@ -12,32 +14,16 @@ import {
   KeysignMessage,
   KeysignMessageSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { getRawQueryParams } from '@vultisig/lib-utils/query/getRawQueryParams'
+import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
-type DeeplinkType = 'NewVault' | 'SignTransaction' | 'send'
-
-type DeeplinkSharedData = {
-  jsonData: string
-  vault: string
-}
-
-type DeeplinkParams = DeeplinkSharedData & {
-  type: DeeplinkType
-} & {
-  tssType: TssType
-} & {
-  vault: string
-}
-
-type SendDeeplinkParams = {
-  assetChain: string
-  assetTicker: string
-  toAddress: string
-  amount?: string
-  memo?: string
-}
+import { deeplinkRoutePattern } from './deeplinkRoutePattern'
+import {
+  DeeplinkQueryParams,
+  getDeeplinkQueryParams,
+} from './getDeeplinkQueryParams'
 
 export type NewVaultData = {
   keygenMsg: KeygenMessage | ReshareMessage | SingleKeygenMessage
@@ -57,19 +43,74 @@ export type SendDeeplinkData = {
   memo?: string
 }
 
+/** A deposit (MsgDeposit) the link asks to prefill on the Custom action. */
+export type DepositDeeplinkData = {
+  chain: Chain
+  ticker: string
+  amount?: string
+  memo: string
+}
+
 export type ParsedDeeplink =
   | { newVault: NewVaultData }
   | { signTransaction: SignTransactionData }
   | { send: SendDeeplinkData }
+  | { deposit: DepositDeeplinkData }
+
+const customDepositChains = Object.entries(chainActionsRecord)
+  .filter(([, actions]) => actions.includes('custom'))
+  .map(([chain]) => chain)
+
+const decimalAmountPattern = /^\d+(\.\d+)?$/
+
+const tickerPattern = /^[A-Za-z0-9.-]{1,15}$/
+
+const tssTypes = getRecordKeys(tssMessageSchema)
+
+const parseDepositDeeplink = ({
+  assetChain,
+  assetTicker,
+  amount,
+  memo,
+}: DeeplinkQueryParams): DepositDeeplinkData => {
+  const chainName = shouldBePresent(assetChain, 'assetChain')
+  const chain = shouldBePresent(
+    Object.values(Chain).find(
+      chain =>
+        areLowerCaseEqual(chain, chainName) &&
+        customDepositChains.includes(chain)
+    ),
+    'chain'
+  )
+
+  if (amount !== undefined && !decimalAmountPattern.test(amount)) {
+    throw new Error(`Invalid deeplink amount: ${amount}`)
+  }
+
+  if (assetTicker !== undefined && !tickerPattern.test(assetTicker)) {
+    throw new Error('Invalid deeplink ticker')
+  }
+
+  const decodedMemo = memo ? decodeURIComponent(memo) : ''
+  if (!decodedMemo.trim()) {
+    throw new Error('Missing deeplink memo')
+  }
+
+  return {
+    chain,
+    ticker: assetTicker ?? chainFeeCoin[chain].ticker,
+    amount,
+    memo: decodedMemo,
+  }
+}
 
 export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
-  if (/:\/\/send\?/.test(url)) {
-    const queryParams = getRawQueryParams<SendDeeplinkParams>(url)
+  const queryParams = getDeeplinkQueryParams(url)
 
+  if (deeplinkRoutePattern('send').test(url)) {
+    const assetChain = shouldBePresent(queryParams.assetChain, 'assetChain')
     const chain = shouldBePresent(
-      Object.values(Chain).find(chain =>
-        areLowerCaseEqual(chain, queryParams.assetChain)
-      ),
+      Object.values(Chain).find(chain => areLowerCaseEqual(chain, assetChain)),
       'chain'
     )
 
@@ -86,18 +127,27 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
     }
   }
 
-  const queryParams = getRawQueryParams<DeeplinkParams>(url)
+  const { type } = queryParams
 
-  const { type, jsonData } = queryParams
-  const payload = await decompressQrPayload(jsonData)
+  if (type === 'Deposit') {
+    return { deposit: parseDepositDeeplink(queryParams) }
+  }
+  const payload = await decompressQrPayload(
+    shouldBePresent(queryParams.jsonData, 'jsonData')
+  )
 
   if (type === 'NewVault') {
-    const keygenMsg = fromBinary(tssMessageSchema[queryParams.tssType], payload)
+    const { tssType } = queryParams
+    if (!isOneOf(tssType, tssTypes)) {
+      throw new Error(`Invalid deeplink tssType: ${tssType}`)
+    }
+
+    const keygenMsg = fromBinary(tssMessageSchema[tssType], payload)
 
     return {
       newVault: {
         keygenMsg,
-        tssType: queryParams.tssType,
+        tssType,
       },
     }
   }
@@ -108,7 +158,7 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
     return {
       signTransaction: {
         keysignMsg,
-        vaultId: queryParams.vault,
+        vaultId: shouldBePresent(queryParams.vault, 'vault'),
       },
     }
   }

@@ -1068,7 +1068,7 @@ export const de = {
   },
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
   vault_cannot_be_opened:
-    'Dieser Vault lässt sich auf diesem Gerät nicht öffnen',
+    'Der Vault „{{name}}“ lässt sich auf diesem Gerät nicht öffnen',
   vault_cannot_be_opened_backup_description:
     'Ihr .vult-Backup ist der Weg zurück. Importieren Sie es, und dieser Vault funktioniert wieder.',
   vault_cannot_be_opened_description:
@@ -2093,8 +2093,42 @@ export const de = {
   share_qr_code: 'QR-Code teilen',
   share_qr_image: 'QR-Bild teilen',
   failed_to_save_image: 'Bild konnte nicht gespeichert werden',
+  add_maya_lp: 'Füge MayaChain LP hinzu',
+  maya_lp_checking_position:
+    'Ihre MayaChain-Position in diesem Pool wird überprüft …',
+  maya_lp_position_unavailable:
+    'Ihre MayaChain-Position in diesem Pool konnte nicht gelesen werden, daher kann diese Einzahlung nicht überprüft werden. Bitte versuchen Sie es später erneut.',
+  maya_lp_paired_with_other_address:
+    'Ihre Position {{pool}} ist mit einer anderen Adresse verknüpft. MayaChain würde diese Einzahlung zurückerstatten.',
+  maya_lp_pending_address_mismatch:
+    'Eine ausstehende Einzahlung an {{pool}} verwendet eine CACAO oder Asset-Adresse, die nicht mit diesem Tresor übereinstimmt. MayaChain würde diese Einzahlung erstatten.',
+  maya_lp_cacao_alone:
+    'Dadurch wird nur CACAO hinzugefügt, ohne zugehöriges Asset.',
+  maya_lp_cacao_only_position:
+    'Ihre {{pool}}-Position enthält nur CACAO. MayaChain erstattet eine gepaarte Einzahlung darauf zurück, fügen Sie daher stattdessen nur CACAO hinzu.',
   custom_message_unsupported_format:
     'Diese Nachricht liegt nicht in einem anerkannten Signaturformat vor und kann daher nicht signiert werden.',
   custom_message_unsupported_method:
     'Nicht unterstützte Signaturmethode. Verwenden Sie personal_sign oder eth_signTypedData_v4.',
+  revoke: 'Zugriff entziehen',
+  token_approvals: 'Token-Genehmigungen',
+  token_approvals_description:
+    'Verträge prüfen und widerrufen, die Ihre Token ausgeben können.',
+  token_approvals_disconnect_note:
+    'Das Trennen eines dApp entfernt diese Genehmigungen nicht. Jeder Widerruf ist eine separate On-Chain-Transaktion mit einer Netzwerkgebühr.',
+  token_approvals_empty_description:
+    'Verträge, denen Sie die Verwendung Ihrer Token in diesem Netzwerk gestatten, werden hier angezeigt.',
+  token_approvals_empty_title:
+    'Für {{chain}} liegen keine aktiven Genehmigungen vor.',
+  token_approvals_not_supported: 'Nicht unterstützt',
+  token_approvals_switch_network: 'Wählen Sie ein anderes Netzwerk',
+  token_approvals_unlimited_count: 'Unbegrenzt: {{count}}',
+  token_approvals_unsupported_description:
+    'Token-Genehmigungen in diesem Netzwerk können noch nicht angezeigt werden. Wählen Sie ein anderes Netzwerk, um sie einzusehen.',
+  token_approvals_unsupported_title: 'Nicht verfügbar auf {{chain}}',
+  revoke_approval: 'Zugriff widerrufen',
+  revoke_approval_explanation:
+    'Setzt das Kontingent dieses Vertrags auf 0, sodass dieser Token nicht mehr aus Ihrem Tresor transferiert werden kann. Es fällt eine Netzwerkgebühr an.',
+  revoke_approval_new_allowance: 'Neue Ausgabenobergrenze',
+  token_approvals_count: 'Genehmigungen: {{count}}',
 }

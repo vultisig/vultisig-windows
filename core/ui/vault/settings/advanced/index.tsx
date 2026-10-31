@@ -20,6 +20,7 @@ import {
   ListItemIconWrapper,
 } from '../vaultSettingsListStyles'
 import { CustomRpcSettingsRow } from './CustomRpcSettingsRow'
+import { TokenApprovalsSettingsRow } from './tokenApprovals/TokenApprovalsSettingsRow'
 
 export const VaultSettingsAdvancedPage: FC = () => {
   const { t } = useTranslation()
@@ -96,6 +97,7 @@ export const VaultSettingsAdvancedPage: FC = () => {
             showArrow={canSignCustomMessage}
           />
           <CustomRpcSettingsRow />
+          <TokenApprovalsSettingsRow />
         </SettingsSection>
       </PageContent>
     </VStack>

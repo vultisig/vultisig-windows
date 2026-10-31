@@ -1045,7 +1045,8 @@ export const nl = {
     version: 'Versie {{latestVersion}}',
   },
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
-  vault_cannot_be_opened: 'Deze vault kan niet op dit apparaat worden geopend',
+  vault_cannot_be_opened:
+    'De vault "{{name}}" kan niet op dit apparaat worden geopend',
   vault_cannot_be_opened_backup_description:
     'Je .vult-back-up is de weg terug. Importeer hem en deze vault werkt weer.',
   vault_cannot_be_opened_description:
@@ -2062,8 +2063,40 @@ export const nl = {
   share_qr_code: 'Deel de QR-code',
   share_qr_image: 'Deel de QR-afbeelding',
   failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
+  add_maya_lp: 'Voeg MayaChain LP toe',
+  maya_lp_checking_position:
+    'Uw MayaChain positie in deze pool wordt gecontroleerd...',
+  maya_lp_position_unavailable:
+    'Uw MayaChain positie in deze pool kon niet worden gelezen, waardoor deze storting niet kan worden gecontroleerd. Probeer het later opnieuw.',
+  maya_lp_paired_with_other_address:
+    'Uw {{pool}} positie is gekoppeld aan een ander adres. MayaChain zou deze storting terugbetalen.',
+  maya_lp_pending_address_mismatch:
+    'Een lopende storting op {{pool}} maakt gebruik van een CACAO of activa-adres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugbetalen.',
+  maya_lp_cacao_alone: 'Dit voegt alleen CACAO toe, zonder gekoppelde activa.',
+  maya_lp_cacao_only_position:
+    'Uw {{pool}} positie bevat alleen CACAO. MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',
   custom_message_unsupported_format:
     'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
   custom_message_unsupported_method:
     'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
+  revoke: 'Toegang intrekken',
+  token_approvals: 'Tokengoedkeuringen',
+  token_approvals_description:
+    'Controleer en trek contracten in die uw tokens kunnen uitgeven.',
+  token_approvals_disconnect_note:
+    'Het verbreken van de verbinding met een dApp heft deze goedkeuringen niet op. Elke intrekking is een afzonderlijke on-chain transactie met netwerkkosten.',
+  token_approvals_empty_description:
+    'Contracten die u toestaat uw tokens op dit netwerk uit te geven, worden hier weergegeven.',
+  token_approvals_empty_title: 'Geen actieve goedkeuringen voor {{chain}}',
+  token_approvals_not_supported: 'Niet ondersteund',
+  token_approvals_switch_network: 'Kies een ander netwerk',
+  token_approvals_unlimited_count: 'Onbeperkt: {{count}}',
+  token_approvals_unsupported_description:
+    'De goedgekeurde tokens op dit netwerk kunnen nog niet worden weergegeven. Kies een ander netwerk om ze te bekijken.',
+  token_approvals_unsupported_title: 'Niet beschikbaar op {{chain}}',
+  revoke_approval: 'Toegang intrekken',
+  revoke_approval_explanation:
+    'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het token niet langer vanuit uw kluis kan worden verplaatst. U betaalt netwerkkosten.',
+  revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
+  token_approvals_count: 'Goedkeuringen: {{count}}',
 }

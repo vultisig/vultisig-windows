@@ -1058,7 +1058,8 @@ export const es = {
     version: 'Versión {{latestVersion}}',
   },
   vault_already_exists: 'La bóveda "{{name}}" ya existe',
-  vault_cannot_be_opened: 'Este vault no se puede abrir en este dispositivo',
+  vault_cannot_be_opened:
+    'El vault "{{name}}" no se puede abrir en este dispositivo',
   vault_cannot_be_opened_backup_description:
     'Tu copia de seguridad .vult es el camino de vuelta. Impórtala y este vault volverá a funcionar.',
   vault_cannot_be_opened_description:
@@ -2076,8 +2077,39 @@ export const es = {
   share_qr_code: 'Compartir código QR',
   share_qr_image: 'Compartir imagen QR',
   failed_to_save_image: 'No se pudo guardar la imagen.',
+  add_maya_lp: 'Agregar MayaChain LP',
+  maya_lp_checking_position: 'Comprobando su posición MayaChain en este pool …',
+  maya_lp_position_unavailable:
+    'No se pudo leer su posición MayaChain en este pool , por lo que no se puede verificar este depósito. Inténtelo de nuevo más tarde.',
+  maya_lp_paired_with_other_address:
+    'Su posición {{pool}} está asociada a una dirección diferente. MayaChain le reembolsará este depósito.',
+  maya_lp_pending_address_mismatch:
+    'Un depósito pendiente en {{pool}} utiliza una dirección CACAO o una dirección de activo que no coincide con esta bóveda. MayaChain reembolsaría este depósito.',
+  maya_lp_cacao_alone: 'Esto agrega CACAO solo, sin ningún activo asociado.',
+  maya_lp_cacao_only_position:
+    'Su posición {{pool}} contiene únicamente CACAO. MayaChain reembolsa un depósito asociado, por lo que debe agregar solo CACAO.',
   custom_message_unsupported_format:
     'Este mensaje no está en un formato de firma reconocido, por lo que no se puede firmar.',
   custom_message_unsupported_method:
     'Método de firma no compatible. Utilice personal_sign o eth_signTypedData_v4.',
+  revoke: 'Revocar el acceso',
+  token_approvals: 'Aprobaciones de tokens',
+  token_approvals_description:
+    'Revisa y revoca los contratos que pueden gastar tus tokens.',
+  token_approvals_disconnect_note:
+    'Desconectar un dApp no elimina estas aprobaciones. Cada revocación es una transacción independiente en la cadena de bloques con una comisión de red.',
+  token_approvals_empty_description:
+    'Los contratos a los que autorices a gastar tus tokens en esta red aparecerán aquí.',
+  token_approvals_empty_title: 'No hay aprobaciones activas en {{chain}}',
+  token_approvals_not_supported: 'No compatible',
+  token_approvals_switch_network: 'Elige otra red',
+  token_approvals_unlimited_count: 'Ilimitado: {{count}}',
+  token_approvals_unsupported_description:
+    'Aún no se pueden mostrar las aprobaciones de tokens en esta red. Elija otra red para revisarlas.',
+  token_approvals_unsupported_title: 'No disponible en {{chain}}',
+  revoke_approval: 'Revocar el acceso',
+  revoke_approval_explanation:
+    'Establece el límite de este contrato en 0, por lo que ya no podrá mover este token de tu bóveda. Se aplica una tarifa de red.',
+  revoke_approval_new_allowance: 'Nuevo límite de gasto',
+  token_approvals_count: 'Aprobaciones: {{count}}',
 }

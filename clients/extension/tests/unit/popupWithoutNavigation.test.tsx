@@ -22,7 +22,10 @@ import { useContext } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({
+    t: (key: string, options?: { name?: string }) =>
+      options?.name ? `${key}:${options.name}` : key,
+  }),
 }))
 
 // The splash reaches the Lottie player, which needs a real canvas.
@@ -36,14 +39,17 @@ vi.mock('@core/ui/chain/providers/WalletCoreProvider', () => ({
 }))
 
 const goBack = vi.hoisted(() => vi.fn())
+const setCurrentVaultId = vi.hoisted(() => vi.fn(async () => {}))
+const goHome = vi.hoisted(() => vi.fn())
 
 vi.mock('@core/ui/state/core', () => ({
   useCore: () => ({
     goBack,
+    goHome,
     openUrl: () => {},
     version: 'test',
     getPasscodeEncryption: async () => null,
-    setCurrentVaultId: async () => {},
+    setCurrentVaultId,
   }),
 }))
 
@@ -95,16 +101,26 @@ const Probe = () => {
   return <span>no-vault</span>
 }
 
-const renderProvider = (history?: View[]) => {
+const otherVault: Vault = {
+  ...vault,
+  name: 'Other vault',
+  publicKeys: { ecdsa: 'other-ecdsa-public-key', eddsa: 'other-eddsa' },
+  order: 1,
+}
+
+const renderProvider = (history?: View[], extraVaults: Vault[] = []) => {
   const queryClient = new QueryClient()
   // StorageDependant settles storage before mounting the provider, and the
   // passcode hook asserts its query has data.
   queryClient.setQueryData([StorageKey.passcodeEncryption], null)
+  queryClient.setQueryData([StorageKey.fiatCurrency], 'usd')
 
   const shell = (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={darkTheme}>
-        <VaultsProvider value={[{ ...vault, coins: [] }]}>
+        <VaultsProvider
+          value={[vault, ...extraVaults].map(v => ({ ...v, coins: [] }))}
+        >
           <CurrentVaultIdProvider value={getVaultId(vault)}>
             <PasscodeProvider initialValue={null}>
               <RootCurrentVaultProvider>
@@ -131,6 +147,8 @@ const renderProvider = (history?: View[]) => {
 beforeEach(() => {
   readVaultAllKeyShares.mockReset()
   goBack.mockReset()
+  setCurrentVaultId.mockClear()
+  goHome.mockReset()
 })
 
 describe('RootCurrentVaultProvider without a NavigationProvider', () => {
@@ -147,12 +165,70 @@ describe('RootCurrentVaultProvider without a NavigationProvider', () => {
 
     renderProvider()
 
-    expect(await screen.findByText('vault_cannot_be_opened')).toBeTruthy()
+    expect(
+      await screen.findByText('vault_cannot_be_opened:Popup vault')
+    ).toBeTruthy()
     expect(screen.queryByText('import_vult_backup')).toBeNull()
 
     fireEvent.click(screen.getByText('close'))
 
     expect(goBack).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('UnreadableVaultRecovery', () => {
+  it.each([
+    ['without a NavigationProvider', undefined],
+    ['with a NavigationProvider', [{ id: 'vault' }]],
+  ])('names the vault and shows the cause %s', async (_host, history) => {
+    readVaultAllKeyShares.mockRejectedValue(
+      new UnreadableVaultKeySharesError(new Error('Invalid MPC keyshare'))
+    )
+
+    renderProvider(history)
+
+    expect(
+      await screen.findByText('vault_cannot_be_opened:Popup vault')
+    ).toBeTruthy()
+
+    fireEvent.click(screen.getByText('show_exact_error'))
+
+    expect(await screen.findByText('Invalid MPC keyshare')).toBeTruthy()
+  })
+})
+
+describe('switching away from an unreadable vault', () => {
+  it('opens another vault from the recovery page', async () => {
+    readVaultAllKeyShares.mockRejectedValue(new UnreadableVaultKeySharesError())
+
+    renderProvider([{ id: 'vault' }], [otherVault])
+
+    fireEvent.click(await screen.findByText('select_vault'))
+    expect(screen.queryAllByText('Popup vault')).toHaveLength(0)
+    fireEvent.click(await screen.findByText('Other vault'))
+
+    await vi.waitFor(() =>
+      expect(setCurrentVaultId).toHaveBeenCalledWith(getVaultId(otherVault))
+    )
+    await vi.waitFor(() => expect(goHome).toHaveBeenCalledTimes(1))
+  })
+
+  it('offers no switch when this is the only vault', async () => {
+    readVaultAllKeyShares.mockRejectedValue(new UnreadableVaultKeySharesError())
+
+    renderProvider([{ id: 'vault' }])
+
+    expect(await screen.findByText('import_vult_backup')).toBeTruthy()
+    expect(screen.queryByText('select_vault')).toBeNull()
+  })
+
+  it('offers no switch in the dApp popup', async () => {
+    readVaultAllKeyShares.mockRejectedValue(new UnreadableVaultKeySharesError())
+
+    renderProvider(undefined, [otherVault])
+
+    expect(await screen.findByText('close')).toBeTruthy()
+    expect(screen.queryByText('select_vault')).toBeNull()
   })
 })
 

@@ -979,7 +979,7 @@ export const zh = {
     version: '版本 {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" 已存在',
-  vault_cannot_be_opened: '本设备无法打开此 vault',
+  vault_cannot_be_opened: '本设备无法打开 vault “{{name}}”',
   vault_cannot_be_opened_backup_description:
     '您的 .vult 备份就是找回的途径。导入备份后，此 vault 即可恢复使用。',
   vault_cannot_be_opened_description:
@@ -1908,8 +1908,38 @@ export const zh = {
   share_qr_code: '分享二维码',
   share_qr_image: '分享二维码图片',
   failed_to_save_image: '图像保存失败',
+  add_maya_lp: '添加 MayaChain LP',
+  maya_lp_checking_position: '正在检查您在此 pool 中的 MayaChain 仓位……',
+  maya_lp_position_unavailable:
+    '无法读取您在此 pool 中的 MayaChain 仓位，因此无法核验此笔存款。请稍后再试。',
+  maya_lp_cacao_only_position:
+    '您的 {{pool}} 仓位仅持有 CACAO。MayaChain 会退还向该仓位进行的配对存款，因此请改为仅添加 CACAO。',
+  maya_lp_paired_with_other_address:
+    '您的 {{pool}} 仓位已与另一个地址配对。MayaChain 将退还此笔存款。',
+  maya_lp_pending_address_mismatch:
+    '一笔存入 {{pool}} 的待处理存款所使用的 CACAO 或资产地址与此保险库不匹配。MayaChain 将退还此笔存款。',
+  maya_lp_cacao_alone: '这将仅添加 CACAO，不含配对资产。',
   custom_message_unsupported_format:
     '此消息格式不符合认可的签名格式，因此无法签名。',
   custom_message_unsupported_method:
     '不支持的签名方法。请使用personal_sign或eth_signTypedData_v4。',
+  revoke: '撤销访问权限',
+  token_approvals: '代币审批',
+  token_approvals_description: '审核并撤销可以花费您代币的合约',
+  token_approvals_disconnect_note:
+    '断开dApp连接并不会移除这些批准。每次撤销都是一笔单独的链上交易，并会产生网络费用。',
+  token_approvals_empty_description:
+    '您允许在此网络上使用您的代币的合约将显示在此处。',
+  token_approvals_empty_title: '{{chain}}没有有效的审批。',
+  token_approvals_not_supported: '不支持',
+  token_approvals_switch_network: '选择其他网络',
+  token_approvals_unlimited_count: '无限： {{count}}',
+  token_approvals_unsupported_description:
+    '此网络上的代币审批信息暂无法显示。请选择其他网络查看。',
+  token_approvals_unsupported_title: '{{chain}}不可用',
+  revoke_approval: '撤销访问权限',
+  revoke_approval_explanation:
+    '将此合约的授权额度设置为 0，使其无法再从您的金库中转移此代币。您需要支付网络费用。',
+  revoke_approval_new_allowance: '新的消费限额',
+  token_approvals_count: '批准： {{count}}',
 }
