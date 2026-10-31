@@ -1282,7 +1282,7 @@ export const es = {
   authorize_agent: 'Autorizar agente',
   reauthorize_vulti_agent: 'Reautorizar Vulti Agent',
   agent_reauth_description:
-    'Por motivos de seguridad, la autorización caduca periódicamente.\\nConfirma para seguir usando Vulti Agent.',
+    'Por motivos de seguridad, la autorización caduca periódicamente.\nConfirma para seguir usando Vulti Agent.',
   authorize: 'Autorizar',
   invalid_validator_address: 'Dirección de validador no válida',
   unnamed_validator: 'Sin nombre',

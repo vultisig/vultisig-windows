@@ -2,7 +2,7 @@ export const hr = {
   accept_continue: 'Prihvati i nastavi',
   action: 'Radnja',
   active: 'Aktivan',
-  active_chains_found_one: 'Pronašli smo {{count}} aktivni lanac',
+  active_chains_found_one: 'Pronašli smo {{count}} aktivan lanac',
   active_chains_found_few: 'Pronašli smo {{count}} aktivna lanca',
   active_chains_found_other: 'Pronašli smo {{count}} aktivnih lanaca',
   active_chains_warning:

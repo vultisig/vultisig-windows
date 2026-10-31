@@ -580,7 +580,7 @@ export const it = {
   looks_good: 'Sembra tutto ok',
   low: 'Basso',
   lp_units: 'Unità LP',
-  m_of_n_vault: 'Vault {{m}} di {{n}}',
+  m_of_n_vault: 'Vault {{m}}-su-{{n}}',
   make_sure_chains: 'Assicurati che la chain che cerchi sia abilitata.',
   manage_chains: 'Gestisci le chain',
   manage_notifications_in_settings:

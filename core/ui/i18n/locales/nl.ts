@@ -1272,7 +1272,7 @@ export const nl = {
   authorize_agent: 'Agent autoriseren',
   reauthorize_vulti_agent: 'Vulti Agent opnieuw autoriseren',
   agent_reauth_description:
-    'Om veiligheidsredenen verloopt de autorisatie regelmatig.\\nBevestig dat je Vulti Agent wilt blijven gebruiken.',
+    'Om veiligheidsredenen verloopt de autorisatie regelmatig.\nBevestig dat je Vulti Agent wilt blijven gebruiken.',
   authorize: 'Autoriseren',
   invalid_validator_address: 'Ongeldig validatoradres',
   unnamed_validator: 'Naamloos',
