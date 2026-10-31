@@ -5,7 +5,7 @@ import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useFormState, useWatch } from 'react-hook-form'
@@ -23,7 +23,16 @@ import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 
-export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
+type CreateReferralFormProps = OnFinishProp & OnBackProp
+
+/**
+ * Form for registering the vault's own THORName referral code. Header back
+ * hands control to `onBack` so the parent referral view can close this screen.
+ */
+export const CreateReferralForm = ({
+  onFinish,
+  onBack,
+}: CreateReferralFormProps) => {
   const { t } = useTranslation()
 
   const { control } = useCreateReferralForm()
@@ -36,7 +45,7 @@ export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
   return (
     <VStack flexGrow gap={40}>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={
           <Tooltip
             renderOpener={({ ref }) => (

@@ -3,14 +3,13 @@ import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { useEffect, useMemo, useRef } from 'react'
 import { useFormState, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreNavigate } from '../../../../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
 import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
@@ -28,11 +27,15 @@ import { ReferralCodeField } from './Fields/ReferralCodeField'
 
 type Props = {
   nameDetails: ValidThorchainNameDetails
-} & OnFinishProp
+} & OnFinishProp &
+  OnBackProp
 
-export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
+/**
+ * Form for editing the vault's own THORName referral. Header back hands
+ * control to `onBack` so the parent referral view can return to Your Referrals.
+ */
+export const EditReferralForm = ({ onFinish, onBack, nameDetails }: Props) => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
   const { control, setValue } = useEditReferralFormData()
   const { isValid, isSubmitting } = useFormState({ control })
 
@@ -99,11 +102,7 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   return (
     <VStack flexGrow gap={40}>
       <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() => navigate({ id: 'referral' }, { replace: true })}
-          />
-        }
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={t('referrals_default_title')}
       />
       <ReferralPageWrapper

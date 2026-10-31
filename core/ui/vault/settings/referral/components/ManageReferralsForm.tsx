@@ -18,22 +18,30 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
 import { FormFieldErrorText } from './Referrals.styled'
 
-export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
+type ManageReferralsFormProps = OnFinishProp & OnBackProp
+
+/**
+ * Form for saving or replacing the friend referral code applied to swaps.
+ * Header back hands control to `onBack` so the parent referral view can close
+ * this screen; `onFinish` opens the edit-friend-referral screen.
+ */
+export const ManageReferralsForm = ({
+  onFinish,
+  onBack,
+}: ManageReferralsFormProps) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const vaultId = useAssertCurrentVaultId()
-  const navigate = useCoreNavigate()
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
     useFriendReferralQuery(vaultId)
   const { mutateAsync: setFriendReferral, isPending: isRemoving } =
@@ -77,11 +85,7 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
   return (
     <>
       <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() => navigate({ id: 'referral' }, { replace: true })}
-          />
-        }
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={t('manage_referral_title')}
       />
       <PageContent alignItems="center">
