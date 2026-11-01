@@ -54,6 +54,7 @@ import {
   getCowSwapKeysignData,
   signCowSwapOrder,
 } from '../../cowswap/cowSwapKeysign'
+import { encodeBitcoinMessageSignature } from '../../customMessage/bitcoin'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 import { getCosmosKeplrBridgeTxHash } from '../../tx/getCosmosKeplrBridgeTxHash'
 
@@ -382,17 +383,30 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               chain,
             })
 
-            // A standalone XRPL signature (GemWallet `signMessage`) is
-            // DER-encoded, unlike the raw r+s+recoveryId form WalletCore
-            // consumes when compiling a Ripple transaction.
-            const signatureFormat =
-              chainKind === 'ripple' ? 'der' : signatureFormats[chainKind]
+            const getSignatureBytes = () => {
+              // A Bitcoin signed message gets a BIP-137 compact signature for
+              // the vault's native SegWit (BIP-84) account.
+              if (chainKind === 'utxo') {
+                return encodeBitcoinMessageSignature({
+                  signature,
+                  addressType: 'p2wpkh',
+                })
+              }
 
-            const result = generateSignature({
-              walletCore,
-              signature,
-              signatureFormat,
-            })
+              // A standalone XRPL signature (GemWallet `signMessage`) is
+              // DER-encoded, unlike the raw r+s+recoveryId form WalletCore
+              // consumes when compiling a Ripple transaction.
+              const signatureFormat =
+                chainKind === 'ripple' ? 'der' : signatureFormats[chainKind]
+
+              return generateSignature({
+                walletCore,
+                signature,
+                signatureFormat,
+              })
+            }
+
+            const result = getSignatureBytes()
 
             return {
               signature: Buffer.from(result).toString('hex'),

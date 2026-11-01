@@ -5,6 +5,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 
 import { isAdr36SignBytes } from './adr36'
+import { unwrapBitcoinSignedMessage } from './bitcoin'
 import {
   customMessageDefaultChain,
   customMessageSupportedChains,
@@ -61,6 +62,7 @@ export const isSignableCustomMessage = ({
     evm: () =>
       method === 'personal_sign' &&
       unwrapPersonalSignMessage(message) !== undefined,
+    utxo: () => unwrapBitcoinSignedMessage(bytes) !== undefined,
     tron: () => hasTronMessageHeader(bytes),
     cosmos: () => isAdr36SignBytes(bytes),
     solana: () => true,
