@@ -49,7 +49,7 @@ export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
           <StyledText>{t('fast')}</StyledText>
         </>
       ) : (
-        <StyledText>{`${t('part')} ${least}-${t('of')}-${total}`}</StyledText>
+        <StyledText>{t('m_of_n', { m: least, n: total })}</StyledText>
       )}
     </StyledVaultSigners>
   )

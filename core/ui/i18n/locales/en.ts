@@ -357,7 +357,7 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   complete_fee_waive: 'No Fee',
-  discount_tiers: 'Discount Tiers',
+  discount_tiers: '{{ticker}} Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
@@ -669,6 +669,7 @@ export const en = {
   low_24h: '24h Low',
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
+  m_of_n: '{{m}}-of-{{n}}',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
   malicious_dapp_detected: 'Malicious dApp detected',
   malicious_dapp_detected_description:
@@ -778,7 +779,6 @@ export const en = {
   nothing_to_add: 'Nothing to add',
   nothing_to_add_hint: 'All your vaults are already sorted.',
   nothing_to_add_hint_secondary: 'Create a new vault to add it here.',
-  of: 'of',
   off: 'Off',
   on: 'On',
   onboarding_description_1:
@@ -794,7 +794,6 @@ export const en = {
   optionalDevice: 'Optional Device',
   other: 'Other',
   overview: 'Overview',
-  part: 'part',
   passcodes_do_not_match: 'Passcodes do not match.',
   password: 'Password',
   password_do_not_match: 'Passwords do not match',
@@ -1641,7 +1640,7 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
-  vault_cannot_be_opened: `"{{name}}" can't be opened on this device`,
+  vault_cannot_be_opened: '"{{name}}" can\'t be opened on this device',
   vault_cannot_be_opened_backup_description:
     'Your .vult backup is the way back. Import it and this vault works again.',
   vault_cannot_be_opened_description:
@@ -1685,6 +1684,7 @@ export const en = {
   vault_name_required: 'Vault name is required',
   vault_notifications: 'Vault Notifications',
   vault_part: 'Vault Share',
+  vault_share_position: 'Share {{index}} of {{total}}',
   vault_password: 'Vault Password',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",

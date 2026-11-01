@@ -271,7 +271,7 @@ export const pt = {
   disconnect_all: 'Desconectar tudo',
   discord: 'Discord',
   complete_fee_waive: 'Sem Taxa',
-  discount_tiers: 'Níveis de desconto',
+  discount_tiers: 'Níveis de desconto {{ticker}}',
   discount_tiers_description:
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
   discovering_mediator: 'Descobrindo o serviço de mediação, aguarde...',
@@ -580,6 +580,7 @@ export const pt = {
   low: 'Baixo',
   lp_units: 'Unidades LP',
   m_of_n_vault: 'Cofre {{m}}-de-{{n}}',
+  m_of_n: '{{m}}-de-{{n}}',
   make_sure_chains:
     'Certifique-se de que a cadeia que você está procurando esteja habilitada.',
   manage_chains: 'Gerenciar cadeias',
@@ -658,7 +659,6 @@ export const pt = {
   not_enough_funds: 'Fundos insuficientes',
   nothing_to_add: 'Nada a acrescentar',
   nothing_to_add_hint: 'Todos os seus cofres já estão organizados.',
-  of: 'de',
   off: 'Desligado',
   on: 'Ligado',
   onboarding_description_1:
@@ -674,7 +674,6 @@ export const pt = {
   optionalDevice: 'Dispositivo opcional',
   other: 'Outro',
   overview: 'Visão geral',
-  part: 'papel',
   passcodes_do_not_match: 'As senhas não coincidem.',
   password: 'Senha',
   password_do_not_match: 'As senhas não coincidem.',
@@ -1104,6 +1103,7 @@ export const pt = {
   vault_name_required: 'O nome do cofre é obrigatório.',
   vault_notifications: 'Notificações do Vault',
   vault_part: 'Compartilhamento do cofre',
+  vault_share_position: 'Parte {{index}} de {{total}}',
   vault_password: 'Senha do cofre',
   vault_ready_description:
     'Está tudo pronto! Você mantém o controle de todas as transações.',

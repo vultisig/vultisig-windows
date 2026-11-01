@@ -274,7 +274,7 @@ export const it = {
   disconnect_all: 'Disconnetti tutto',
   discord: 'Discord',
   complete_fee_waive: 'Nessuna commissione',
-  discount_tiers: 'Livelli di sconto',
+  discount_tiers: 'Livelli di sconto {{ticker}}',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
   discovering_mediator: 'Servizio di mediazione in corso, attendere prego...',
@@ -584,6 +584,7 @@ export const it = {
   low: 'Basso',
   lp_units: 'Unità LP',
   m_of_n_vault: '{{m}}-di-{{n}} Caveau',
+  m_of_n: '{{m}}-di-{{n}}',
   make_sure_chains: 'Assicurati che la catena che stai cercando sia abilitata.',
   manage_chains: 'Gestire le catene',
   manage_notifications_in_settings:
@@ -661,7 +662,6 @@ export const it = {
   not_enough_funds: 'Fondi insufficienti',
   nothing_to_add: 'Niente da aggiungere',
   nothing_to_add_hint: 'Tutti i tuoi caveau sono già stati sistemati.',
-  of: 'Di',
   off: 'Spento',
   on: 'Acceso',
   onboarding_description_1:
@@ -677,7 +677,6 @@ export const it = {
   optionalDevice: 'Dispositivo opzionale',
   other: 'Altro',
   overview: 'Panoramica',
-  part: 'parte',
   passcodes_do_not_match: 'I codici di accesso non corrispondono',
   password: 'Password',
   password_do_not_match: 'Le password non corrispondono',
@@ -1106,6 +1105,7 @@ export const it = {
   vault_name_required: 'Il nome del vault è obbligatorio',
   vault_notifications: 'Notifiche del Vault',
   vault_part: 'Condivisione Vault',
+  vault_share_position: 'Parte {{index}} di {{total}}',
   vault_password: 'Password del caveau',
   vault_ready_description:
     'È tutto pronto! Avrai sempre il controllo di ogni transazione.',

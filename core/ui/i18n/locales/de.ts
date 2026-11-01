@@ -273,7 +273,7 @@ export const de = {
   disconnect_all: 'Alle Verbindungen trennen',
   discord: 'Discord',
   complete_fee_waive: 'Keine Gebühr',
-  discount_tiers: 'Rabattstufen',
+  discount_tiers: '{{ticker}}-Rabattstufen',
   discount_tiers_description:
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
   discovering_mediator: 'Mediatordienst wird ermittelt, bitte warten...',
@@ -586,6 +586,7 @@ export const de = {
   low: 'Niedrig',
   lp_units: 'LP-Einheiten',
   m_of_n_vault: '{{m}}-of-{{n}} Tresor',
+  m_of_n: '{{m}}-aus-{{n}}',
   make_sure_chains:
     'Stellen Sie sicher, dass die gesuchte Kette aktiviert ist.',
   manage_chains: 'Kettenmanagement',
@@ -665,7 +666,6 @@ export const de = {
   not_enough_funds: 'Nicht genügend Mittel',
   nothing_to_add: 'Nichts hinzuzufügen',
   nothing_to_add_hint: 'Alle Ihre Tresore sind bereits sortiert.',
-  of: 'von',
   off: 'Aus',
   on: 'An',
   onboarding_description_1:
@@ -681,7 +681,6 @@ export const de = {
   optionalDevice: 'Optionales Gerät',
   other: 'Andere',
   overview: 'Überblick',
-  part: 'Teil',
   passcodes_do_not_match: 'Die Passwörter stimmen nicht überein',
   password: 'Passwort',
   password_do_not_match: 'Die Passwörter stimmen nicht überein.',
@@ -1114,6 +1113,7 @@ export const de = {
   vault_name_required: 'Der Tresorname ist erforderlich.',
   vault_notifications: 'Tresorbenachrichtigungen',
   vault_part: 'Vault Share',
+  vault_share_position: 'Anteil {{index}} von {{total}}',
   vault_password: 'Tresorpasswort',
   vault_ready_description:
     'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',

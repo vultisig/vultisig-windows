@@ -268,7 +268,7 @@ export const ko = {
   disconnect_all: '모든 연결을 끊으세요',
   discord: 'Discord',
   complete_fee_waive: '수수료 없음',
-  discount_tiers: '할인 등급',
+  discount_tiers: '{{ticker}} 할인 등급',
   discount_tiers_description:
     '$VULT를 보유하면 거래 수수료를 낮출 수 있습니다.',
   discovering_mediator: '중재자 서비스를 찾는 중입니다. 잠시 기다려 주세요...',
@@ -571,6 +571,7 @@ export const ko = {
   low: '낮은',
   lp_units: 'LP 단위',
   m_of_n_vault: '{{m}}-of-{{n}} 볼트',
+  m_of_n: '{{n}}개 중 {{m}}개',
   make_sure_chains: '찾고자 하는 체인이 활성화되어 있는지 확인하세요.',
   manage_chains: '체인 관리',
   manage_notifications_in_settings:
@@ -648,7 +649,6 @@ export const ko = {
   not_enough_funds: '자금이 부족합니다',
   nothing_to_add: '더 이상 추가할 내용이 없습니다.',
   nothing_to_add_hint: '모든 금고가 이미 정리되었습니다.',
-  of: '~의',
   off: '끄다',
   on: '~에',
   onboarding_description_1:
@@ -664,7 +664,6 @@ export const ko = {
   optionalDevice: '선택 사양 장치',
   other: '다른',
   overview: '개요',
-  part: '부분',
   passcodes_do_not_match: '비밀번호가 일치하지 않습니다.',
   password: '비밀번호',
   password_do_not_match: '비밀번호가 일치하지 않습니다',
@@ -1111,6 +1110,7 @@ export const ko = {
   vault_name_required: '금고 이름은 필수 입력 사항입니다.',
   vault_notifications: '금고 알림',
   vault_part: '금고 공유',
+  vault_share_position: '{{total}}개 중 {{index}}번째 조각',
   vault_password: '금고 비밀번호',
   vault_ready_description:
     '모든 준비가 완료되었습니다! 모든 거래는 고객님께서 직접 관리하실 수 있습니다.',

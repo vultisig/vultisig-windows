@@ -12,6 +12,10 @@ import styled, { css } from 'styled-components'
  */
 const accentAlpha = 0.69
 
+const bannerHorizontalPadding = 16
+const extensionCloseButtonInset = 10
+const closeButtonSize = 40
+
 /**
  * The banner surface: a single row, tappable in full. The campaign accent
  * fades in from the right over the flat base, matching the two-layer gradient
@@ -29,7 +33,7 @@ export const HomePromoBannerRoot = styled.div<{
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 20px 16px;
+  padding: 20px ${bannerHorizontalPadding}px;
   ${borderRadius.xl};
   border: 1px solid ${getColor('foregroundExtra')};
   overflow: hidden;
@@ -43,7 +47,12 @@ export const HomePromoBannerRoot = styled.div<{
       .toCssValue()} 50%, ${accent} 100%), ${base}`
   }};
 
-  ${({ $isExtension }) => $isExtension && `height: 81px;`}
+  ${({ $isExtension }) =>
+    $isExtension &&
+    css`
+      height: 100%;
+      min-height: 81px;
+    `}
 `
 
 export const HomePromoBannerContent = styled.div`
@@ -72,12 +81,9 @@ export const HomePromoBannerTextStack = styled.div<{ $isExtension: boolean }>`
   ${({ $isExtension }) =>
     $isExtension &&
     css`
-      > * {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+      padding-right: ${extensionCloseButtonInset +
+      closeButtonSize -
+      bannerHorizontalPadding}px;
     `}
 `
 
@@ -87,12 +93,14 @@ export const HomePromoBannerCloseButton = styled(IconButton)<{
 }>`
   position: absolute;
   z-index: 3;
-  top: ${({ $isExtension }) => ($isExtension ? 10 : 0)}px;
-  right: ${({ $isExtension }) => ($isExtension ? 10 : 0)}px;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
+  top: ${({ $isExtension }) =>
+    $isExtension ? extensionCloseButtonInset : 0}px;
+  right: ${({ $isExtension }) =>
+    $isExtension ? extensionCloseButtonInset : 0}px;
+  width: ${closeButtonSize}px;
+  height: ${closeButtonSize}px;
+  min-width: ${closeButtonSize}px;
+  min-height: ${closeButtonSize}px;
   border-radius: 77px;
   border: none;
   background: ${({ $isExtension, theme }) =>
