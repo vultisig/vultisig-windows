@@ -71,11 +71,12 @@ describe('getTypedDataHex', () => {
     )
   })
 
-  it('refuses a self-referencing __proto__ type with a descriptive error', () => {
+  it('refuses a self-referencing __proto__ type without overflowing the stack', () => {
     const message = JSON.stringify(mail).replace(
       '"Mail":[',
       '"__proto__":[{"name":"next","type":"__proto__"}],"Mail":[{"name":"link","type":"__proto__"},'
     )
+    expect(() => getTypedDataHex(message)).toThrow()
     expect(() => getTypedDataHex(message)).not.toThrow(RangeError)
   })
 
