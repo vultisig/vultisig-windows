@@ -303,7 +303,7 @@ export const ko = {
   enter_vault_name: '볼트 이름을 입력하세요',
   enter_your_email: '이메일 주소를 입력하세요',
   enter_your_email_description:
-    '볼트 백업을 보낼 때 한 번만 사용하며, 저장하지 않습니다.',
+    '볼트 백업을 보낼 때 한 번만 사용하며, {{productName}}은(는) 저장하지 않습니다.',
   enter_your_password: '비밀번호를 입력하세요',
   entity_not_scanned:
     '<provider></provider>에서 {{entity}}을(를) 스캔하지 않았습니다',
@@ -397,7 +397,8 @@ export const ko = {
       wellDone: '잘하셨습니다',
     },
     connectingWithServer: '서버에 연결 중...',
-    emailSetupTitle: '볼트 백업을 보낼 때 한 번만 사용하며, 저장하지 않습니다.',
+    emailSetupTitle:
+      '볼트 백업을 보낼 때 한 번만 사용하며, {{productName}}은(는) 저장하지 않습니다.',
     enterEmail: '이메일을 입력하세요',
     passwordCannotBeRecovered: '비밀번호는 재설정하거나 복구할 수 없습니다',
     passwordTooltip:

@@ -309,7 +309,7 @@ export const ru = {
   enter_vault_name: 'Введите имя хранилища',
   enter_your_email: 'Введите свой адрес электронной почты',
   enter_your_email_description:
-    'Используется один раз, чтобы отправить резервную копию хранилища. Мы его не храним.',
+    'Используется один раз, чтобы отправить резервную копию хранилища. {{productName}} его не хранит.',
   enter_your_password: 'Введите ваш пароль',
   entity_not_scanned: '{{entity}} не просканировано <provider></provider>',
   entity_scanned: '{{entity}} просканировано <provider></provider>',
@@ -404,7 +404,7 @@ export const ru = {
     },
     connectingWithServer: 'Подключение к серверу...',
     emailSetupTitle:
-      'Используется один раз, чтобы отправить резервную копию хранилища. Мы его не храним.',
+      'Используется один раз, чтобы отправить резервную копию хранилища. {{productName}} его не хранит.',
     enterEmail: 'Введите email',
     passwordCannotBeRecovered: 'Пароль нельзя сбросить или восстановить',
     passwordTooltip:

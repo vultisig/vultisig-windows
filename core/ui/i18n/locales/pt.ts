@@ -310,7 +310,7 @@ export const pt = {
   enter_vault_name: 'Digite o nome do cofre',
   enter_your_email: 'Insira seu e-mail',
   enter_your_email_description:
-    'Usado uma única vez para enviar o backup do seu cofre. Não o armazenamos.',
+    'Usado uma única vez para enviar o backup do seu cofre. O {{productName}} não o armazena.',
   enter_your_password: 'Digite sua senha',
   entity_not_scanned: '{{entity}} não foi escaneado por <provider></provider>',
   entity_scanned: '{{entity}} escaneado por <provider></provider>',
@@ -408,7 +408,7 @@ export const pt = {
     },
     connectingWithServer: 'Conectando com o servidor...',
     emailSetupTitle:
-      'Usado uma única vez para enviar o backup do seu cofre. Não o armazenamos.',
+      'Usado uma única vez para enviar o backup do seu cofre. O {{productName}} não o armazena.',
     enterEmail: 'Insira seu email',
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada.',
     passwordTooltip:

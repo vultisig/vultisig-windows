@@ -312,7 +312,7 @@ export const de = {
   enter_vault_name: 'Tresornamen eingeben',
   enter_your_email: 'Geben Sie Ihre E-Mail-Adresse ein',
   enter_your_email_description:
-    'Wird nur einmal verwendet, um das Tresor-Backup zu senden. Wir speichern sie nicht.',
+    'Wird nur einmal verwendet, um das Tresor-Backup zu senden. {{productName}} speichert sie nicht.',
   enter_your_password: 'Geben Sie Ihr Passwort ein',
   entity_not_scanned:
     '{{entity}} wurde von <provider></provider> nicht gescannt.',
@@ -413,7 +413,7 @@ export const de = {
     },
     connectingWithServer: 'Verbindung zum Server wird hergestellt...',
     emailSetupTitle:
-      'Wird nur einmal verwendet, um das Tresor-Backup zu senden. Wir speichern sie nicht.',
+      'Wird nur einmal verwendet, um das Tresor-Backup zu senden. {{productName}} speichert sie nicht.',
     enterEmail: 'Geben Sie Ihre E-Mail ein',
     passwordCannotBeRecovered:
       'Das Passwort kann nicht zurückgesetzt oder wiederhergestellt werden.',

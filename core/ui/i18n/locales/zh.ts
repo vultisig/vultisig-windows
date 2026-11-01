@@ -292,7 +292,7 @@ export const zh = {
   enter_vault_name: '输入保险库名称',
   enter_your_email: '请输入您的电子邮件地址',
   enter_your_email_description:
-    '仅用于发送一次您的保险库备份。我们不会存储该地址。',
+    '仅用于发送一次您的保险库备份。{{productName}} 不会存储该地址。',
   enter_your_password: '请输入您的密码',
   entity_not_scanned: '{{entity}}未经 <provider></provider> 扫描',
   entity_scanned: '{{entity}}已经 <provider></provider> 扫描',
@@ -376,7 +376,8 @@ export const zh = {
       wellDone: '做得好',
     },
     connectingWithServer: '正在连接服务器…',
-    emailSetupTitle: '仅用于发送一次您的保险库备份。我们不会存储该地址。',
+    emailSetupTitle:
+      '仅用于发送一次您的保险库备份。{{productName}} 不会存储该地址。',
     enterEmail: '请输入您的邮箱',
     passwordCannotBeRecovered: '密码无法重置或找回',
     passwordTooltip:

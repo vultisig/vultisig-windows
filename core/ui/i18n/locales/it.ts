@@ -312,7 +312,7 @@ export const it = {
   enter_vault_name: 'Inserisci il nome del vault',
   enter_your_email: 'Inserisci la tua email',
   enter_your_email_description:
-    'Usata una sola volta per inviare il backup del vault. Non la conserviamo.',
+    'Usata una sola volta per inviare il backup del vault. {{productName}} non la conserva.',
   enter_your_password: 'Inserisci la tua password',
   entity_not_scanned: '{{entity}} non scansionato da <provider></provider>',
   entity_scanned: '{{entity}} scansionata da <provider></provider>',
@@ -411,7 +411,7 @@ export const it = {
     },
     connectingWithServer: 'Connessione con il server...',
     emailSetupTitle:
-      'Usata una sola volta per inviare il backup del vault. Non la conserviamo.',
+      'Usata una sola volta per inviare il backup del vault. {{productName}} non la conserva.',
     enterEmail: 'Inserisci la tua email',
     passwordCannotBeRecovered:
       'La password non può essere reimpostata o recuperata',

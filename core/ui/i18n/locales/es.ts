@@ -311,7 +311,7 @@ export const es = {
   enter_vault_name: 'Ingresa el nombre de la bóveda',
   enter_your_email: 'Ingresa tu correo electrónico',
   enter_your_email_description:
-    'Solo se usa una vez para enviar la copia de seguridad de tu bóveda. No lo guardamos.',
+    'Solo se usa una vez para enviar la copia de seguridad de tu bóveda. {{productName}} no lo guarda.',
   enter_your_password: 'Ingresa tu contraseña',
   entity_not_scanned: '{{entity}} no escaneado por <provider></provider>',
   entity_scanned: '{{entity}} escaneada por <provider></provider>',
@@ -406,7 +406,7 @@ export const es = {
     },
     connectingWithServer: 'Conectando con el servidor...',
     emailSetupTitle:
-      'Solo se usa una vez para enviar la copia de seguridad de tu bóveda. No lo guardamos.',
+      'Solo se usa una vez para enviar la copia de seguridad de tu bóveda. {{productName}} no lo guarda.',
     enterEmail: 'Ingresa tu correo electrónico',
     passwordCannotBeRecovered:
       'La contraseña no se puede restablecer ni recuperar',

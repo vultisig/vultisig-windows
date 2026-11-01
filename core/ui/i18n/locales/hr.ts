@@ -311,7 +311,7 @@ export const hr = {
   enter_vault_name: 'Unesite naziv trezora',
   enter_your_email: 'Unesite svoju e-poštu',
   enter_your_email_description:
-    'Koristi se samo jednom za slanje sigurnosne kopije trezora. Ne pohranjujemo je.',
+    'Koristi se samo jednom za slanje sigurnosne kopije trezora. {{productName}} je ne pohranjuje.',
   enter_your_password: 'Unesite svoju lozinku',
   entity_not_scanned:
     '{{entity}} nije skeniran od strane <provider></provider>',
@@ -407,7 +407,7 @@ export const hr = {
     },
     connectingWithServer: 'Povezivanje sa serverom...',
     emailSetupTitle:
-      'Koristi se samo jednom za slanje sigurnosne kopije trezora. Ne pohranjujemo je.',
+      'Koristi se samo jednom za slanje sigurnosne kopije trezora. {{productName}} je ne pohranjuje.',
     enterEmail: 'Unesite svoju e-poštu',
     passwordCannotBeRecovered: 'Lozinku nije moguće resetirati ili oporaviti',
     passwordTooltip:

@@ -308,7 +308,7 @@ export const nl = {
   enter_vault_name: 'Kluisnaam invoeren',
   enter_your_email: 'Voer je e-mailadres in',
   enter_your_email_description:
-    'Wordt eenmalig gebruikt om de back-up van je kluis te versturen. We slaan het niet op.',
+    'Wordt eenmalig gebruikt om de back-up van je kluis te versturen. {{productName}} slaat het niet op.',
   enter_your_password: 'Voer je wachtwoord in',
   entity_not_scanned: '{{entity}} niet gescand door <provider></provider>',
   entity_scanned: '{{entity}} gescand door <provider></provider>',
@@ -403,7 +403,7 @@ export const nl = {
     },
     connectingWithServer: 'Verbinden met server...',
     emailSetupTitle:
-      'Wordt eenmalig gebruikt om de back-up van je kluis te versturen. We slaan het niet op.',
+      'Wordt eenmalig gebruikt om de back-up van je kluis te versturen. {{productName}} slaat het niet op.',
     enterEmail: 'Voer je e-mail in',
     passwordCannotBeRecovered: 'Wachtwoord kan niet worden gereset of hersteld',
     passwordTooltip:

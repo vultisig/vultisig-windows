@@ -399,7 +399,7 @@ export const en = {
   enter_vault_name: 'Enter Vault Name',
   enter_your_email: 'Enter your email',
   enter_your_email_description:
-    "Used once to send your vault backup. We don't store it.",
+    "Used once to send your vault backup. {{productName}} doesn't store it.",
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
@@ -496,7 +496,8 @@ export const en = {
       wellDone: 'Well done',
     },
     connectingWithServer: 'Connecting with server...',
-    emailSetupTitle: "Used once to send your vault backup. We don't store it.",
+    emailSetupTitle:
+      "Used once to send your vault backup. {{productName}} doesn't store it.",
     enterEmail: 'Enter your email',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
     passwordTooltip:
