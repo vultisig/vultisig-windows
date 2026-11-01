@@ -59,7 +59,9 @@ export const getFiatCurrencyAffixes = (
     affix.map(({ value }) => value).join('')
   const affixes = {
     prefix: join(parts.slice(0, parts.findIndex(isNumberPart))),
-    suffix: join(parts.slice(parts.findLastIndex(isNumberPart) + 1)),
+    suffix: join(
+      parts.slice(parts.length - [...parts].reverse().findIndex(isNumberPart))
+    ),
   }
   fiatCurrencyAffixes.set(currency, affixes)
 
