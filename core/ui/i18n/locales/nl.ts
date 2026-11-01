@@ -1678,14 +1678,14 @@ export const nl = {
     'Elk apparaat dat nu in je kluis zit, moet deelnemen aan de sessie voor opnieuw delen.',
   reshare_warning_old_backups_title: 'Maak nieuwe back-ups',
   reshare_warning_old_backups_description:
-    'Back-ups van vóór deze Reshare kun je niet combineren met de nieuwe. Oude back-ups werken onderling nog wel, dus bewaar ze veilig of verwijder ze. Is een apparaat kwijt of gecompromitteerd? Zet je tegoed dan over naar een nieuwe kluis.',
+    'Back-ups van vóór deze Reshare kun je niet combineren met de nieuwe. Sla eerst vanaf elk apparaat een nieuwe back-up op. Daarna werken oude back-ups onderling nog wel, dus bewaar ze veilig of verwijder ze. Is een apparaat kwijt of gecompromitteerd? Zet je tegoed dan over naar een nieuwe kluis.',
   start_reshare_description:
     'Je wijzigt de apparaatinstellingen van deze kluis.',
   reshare_success_title: 'Kluis opnieuw gedeeld',
   reshare_success_title_highlight: 'succesvol',
   reshare_backup_old_backups_wont_work: 'Maak nieuwe back-ups',
   reshare_backup_old_backups_wont_work_description:
-    'Back-ups van vóór deze Reshare kun je niet combineren met de nieuwe. Oude back-ups werken onderling nog wel, dus bewaar ze veilig of verwijder ze. Is een apparaat kwijt of gecompromitteerd? Zet je tegoed dan over naar een nieuwe kluis.',
+    'Back-ups van vóór deze Reshare kun je niet combineren met de nieuwe. Sla eerst vanaf elk apparaat een nieuwe back-up op. Daarna werken oude back-ups onderling nog wel, dus bewaar ze veilig of verwijder ze. Is een apparaat kwijt of gecompromitteerd? Zet je tegoed dan over naar een nieuwe kluis.',
   reshare_min_devices_required: 'Minstens {{count}} apparaten vereist',
   reshare_more_devices_required: 'Meer apparaten nodig',
   reshare_threshold_not_met: 'Drempelwaarde niet bereikt',

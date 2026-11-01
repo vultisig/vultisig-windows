@@ -1710,14 +1710,14 @@ export const de = {
     'Alle aktuellen Geräte Ihres Tresors müssen an der Reshare-Sitzung teilnehmen.',
   reshare_warning_old_backups_title: 'Neue Backups erstellen',
   reshare_warning_old_backups_description:
-    'Backups von vor diesem Reshare lassen sich nicht mit den neuen kombinieren. Alte Backups funktionieren untereinander weiterhin. Bewahren Sie sie also sicher auf oder löschen Sie sie. Wenn ein Gerät verloren gegangen ist oder kompromittiert wurde, verschieben Sie Ihr Guthaben in einen neuen Tresor.',
+    'Backups von vor diesem Reshare lassen sich nicht mit den neuen kombinieren. Speichern Sie zuerst von jedem Gerät ein neues Backup. Danach funktionieren alte Backups untereinander weiterhin. Bewahren Sie sie also sicher auf oder löschen Sie sie. Wenn ein Gerät verloren gegangen ist oder kompromittiert wurde, verschieben Sie Ihr Guthaben in einen neuen Tresor.',
   start_reshare_description:
     'Sie ändern die Gerätekonfiguration dieses Tresors.',
   reshare_success_title: 'Tresor-Reshare',
   reshare_success_title_highlight: 'erfolgreich',
   reshare_backup_old_backups_wont_work: 'Neue Backups erstellen',
   reshare_backup_old_backups_wont_work_description:
-    'Backups von vor diesem Reshare lassen sich nicht mit den neuen kombinieren. Alte Backups funktionieren untereinander weiterhin. Bewahren Sie sie also sicher auf oder löschen Sie sie. Wenn ein Gerät verloren gegangen ist oder kompromittiert wurde, verschieben Sie Ihr Guthaben in einen neuen Tresor.',
+    'Backups von vor diesem Reshare lassen sich nicht mit den neuen kombinieren. Speichern Sie zuerst von jedem Gerät ein neues Backup. Danach funktionieren alte Backups untereinander weiterhin. Bewahren Sie sie also sicher auf oder löschen Sie sie. Wenn ein Gerät verloren gegangen ist oder kompromittiert wurde, verschieben Sie Ihr Guthaben in einen neuen Tresor.',
   reshare_min_devices_required: 'Mindestens {{count}} Geräte erforderlich',
   reshare_more_devices_required: 'Weitere Geräte erforderlich',
   reshare_threshold_not_met: 'Schwellenwert nicht erreicht',

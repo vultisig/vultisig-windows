@@ -1564,13 +1564,13 @@ export const zh = {
     '您保险库中的所有现有设备都需要参与重新共享会话。',
   reshare_warning_old_backups_title: '创建新备份',
   reshare_warning_old_backups_description:
-    '本次重新共享之前的备份无法与新备份组合使用。旧备份之间仍可配合使用，因此请妥善保管或将其删除。如果有设备丢失或遭到入侵，请将您的资金转移到新的保险库。',
+    '本次重新共享之前的备份无法与新备份组合使用。请先在每台设备上保存新备份。之后，旧备份之间仍可配合使用，因此请妥善保管或将其删除。如果有设备丢失或遭到入侵，请将您的资金转移到新的保险库。',
   start_reshare_description: '您正在更改此保险库的设备设置。',
   reshare_success_title: '保险库已重新共享',
   reshare_success_title_highlight: '成功',
   reshare_backup_old_backups_wont_work: '创建新备份',
   reshare_backup_old_backups_wont_work_description:
-    '本次重新共享之前的备份无法与新备份组合使用。旧备份之间仍可配合使用，因此请妥善保管或将其删除。如果有设备丢失或遭到入侵，请将您的资金转移到新的保险库。',
+    '本次重新共享之前的备份无法与新备份组合使用。请先在每台设备上保存新备份。之后，旧备份之间仍可配合使用，因此请妥善保管或将其删除。如果有设备丢失或遭到入侵，请将您的资金转移到新的保险库。',
   reshare_min_devices_required: '至少需要{{count}}台设备',
   reshare_more_devices_required: '需要更多设备',
   reshare_threshold_not_met: '未达到阈值',

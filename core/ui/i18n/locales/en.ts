@@ -952,7 +952,7 @@ export const en = {
   plugin_store_compatible: 'Plugin Store compatible',
   reshare_backup_old_backups_wont_work: 'Make fresh backups',
   reshare_backup_old_backups_wont_work_description:
-    "Backups from before this reshare can't be combined with the new ones. Old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
+    "Backups from before this reshare can't be combined with the new ones. Save a new backup from every device first. After that, old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
   reshare_min_devices_required: 'At least {{count}} devices required',
   reshare_vault_description: 'Reshare vault with a new committee',
   reshare_vault_subtitle:
@@ -962,7 +962,7 @@ export const en = {
     'Every current device in your vault needs to participate in the reshare session.',
   reshare_warning_old_backups_title: 'Make fresh backups',
   reshare_warning_old_backups_description:
-    "Backups from before this reshare can't be combined with the new ones. Old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
+    "Backups from before this reshare can't be combined with the new ones. Save a new backup from every device first. After that, old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
   reshare_success_title: 'Vault reshared',
   reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',

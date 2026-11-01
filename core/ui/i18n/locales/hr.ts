@@ -1682,13 +1682,13 @@ export const hr = {
     'Svaki trenutni uređaj u vašem trezoru mora sudjelovati u sesiji ponovnog dijeljenja.',
   reshare_warning_old_backups_title: 'Napravite nove sigurnosne kopije',
   reshare_warning_old_backups_description:
-    'Sigurnosne kopije od prije ovog ponovnog dijeljenja ne mogu se kombinirati s novima. Stare sigurnosne kopije i dalje rade međusobno, zato ih čuvajte na sigurnom ili ih izbrišite. Ako je uređaj izgubljen ili kompromitiran, premjestite sredstva u novi trezor.',
+    'Sigurnosne kopije od prije ovog ponovnog dijeljenja ne mogu se kombinirati s novima. Najprije spremite novu sigurnosnu kopiju sa svakog uređaja. Nakon toga stare sigurnosne kopije i dalje rade međusobno, zato ih čuvajte na sigurnom ili ih izbrišite. Ako je uređaj izgubljen ili kompromitiran, premjestite sredstva u novi trezor.',
   start_reshare_description: 'Mijenjate postavke uređaja ovog trezora.',
   reshare_success_title: 'Trezor je ponovno podijeljen',
   reshare_success_title_highlight: 'uspješno',
   reshare_backup_old_backups_wont_work: 'Napravite nove sigurnosne kopije',
   reshare_backup_old_backups_wont_work_description:
-    'Sigurnosne kopije od prije ovog ponovnog dijeljenja ne mogu se kombinirati s novima. Stare sigurnosne kopije i dalje rade međusobno, zato ih čuvajte na sigurnom ili ih izbrišite. Ako je uređaj izgubljen ili kompromitiran, premjestite sredstva u novi trezor.',
+    'Sigurnosne kopije od prije ovog ponovnog dijeljenja ne mogu se kombinirati s novima. Najprije spremite novu sigurnosnu kopiju sa svakog uređaja. Nakon toga stare sigurnosne kopije i dalje rade međusobno, zato ih čuvajte na sigurnom ili ih izbrišite. Ako je uređaj izgubljen ili kompromitiran, premjestite sredstva u novi trezor.',
   reshare_min_devices_required: 'Potrebno je najmanje {{count}} uređaja',
   reshare_more_devices_required: 'Potrebno je više uređaja',
   reshare_threshold_not_met: 'Prag nije dosegnut',

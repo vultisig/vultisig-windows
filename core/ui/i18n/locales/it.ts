@@ -1696,14 +1696,14 @@ export const it = {
     'Ogni dispositivo attuale del tuo vault deve partecipare alla sessione di reshare.',
   reshare_warning_old_backups_title: 'Crea nuovi backup',
   reshare_warning_old_backups_description:
-    'I backup precedenti a questo reshare non possono essere combinati con quelli nuovi. I vecchi backup continuano a funzionare tra loro, quindi conservali al sicuro o eliminali. Se un dispositivo è stato perso o compromesso, sposta i tuoi fondi in un nuovo vault.',
+    'I backup precedenti a questo reshare non possono essere combinati con quelli nuovi. Prima salva un nuovo backup da ogni dispositivo. Dopodiché, i vecchi backup continuano a funzionare tra loro, quindi conservali al sicuro o eliminali. Se un dispositivo è stato perso o compromesso, sposta i tuoi fondi in un nuovo vault.',
   start_reshare_description:
     'Stai modificando la configurazione del dispositivo di questo vault.',
   reshare_success_title: 'Reshare del vault',
   reshare_success_title_highlight: 'con successo',
   reshare_backup_old_backups_wont_work: 'Crea nuovi backup',
   reshare_backup_old_backups_wont_work_description:
-    'I backup precedenti a questo reshare non possono essere combinati con quelli nuovi. I vecchi backup continuano a funzionare tra loro, quindi conservali al sicuro o eliminali. Se un dispositivo è stato perso o compromesso, sposta i tuoi fondi in un nuovo vault.',
+    'I backup precedenti a questo reshare non possono essere combinati con quelli nuovi. Prima salva un nuovo backup da ogni dispositivo. Dopodiché, i vecchi backup continuano a funzionare tra loro, quindi conservali al sicuro o eliminali. Se un dispositivo è stato perso o compromesso, sposta i tuoi fondi in un nuovo vault.',
   reshare_min_devices_required: 'Servono almeno {{count}} dispositivi',
   reshare_more_devices_required: 'Sono necessari più dispositivi',
   reshare_threshold_not_met: 'Soglia non raggiunta',

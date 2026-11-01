@@ -1643,13 +1643,13 @@ export const ko = {
     '볼트의 현재 기기가 모두 재공유 세션에 참여해야 합니다.',
   reshare_warning_old_backups_title: '새 백업 만들기',
   reshare_warning_old_backups_description:
-    '이번 재공유 이전의 백업은 새 백업과 함께 사용할 수 없습니다. 이전 백업끼리는 계속 함께 작동하므로 안전하게 보관하거나 삭제하세요. 기기를 분실했거나 보안이 침해된 경우 자금을 새 볼트로 옮기세요.',
+    '이번 재공유 이전의 백업은 새 백업과 함께 사용할 수 없습니다. 먼저 모든 기기에서 새 백업을 저장하세요. 그 후에도 이전 백업끼리는 계속 함께 작동하므로 안전하게 보관하거나 삭제하세요. 기기를 분실했거나 보안이 침해된 경우 자금을 새 볼트로 옮기세요.',
   start_reshare_description: '이 볼트의 기기 구성을 변경하고 있습니다.',
   reshare_success_title: '볼트 재공유',
   reshare_success_title_highlight: '성공',
   reshare_backup_old_backups_wont_work: '새 백업 만들기',
   reshare_backup_old_backups_wont_work_description:
-    '이번 재공유 이전의 백업은 새 백업과 함께 사용할 수 없습니다. 이전 백업끼리는 계속 함께 작동하므로 안전하게 보관하거나 삭제하세요. 기기를 분실했거나 보안이 침해된 경우 자금을 새 볼트로 옮기세요.',
+    '이번 재공유 이전의 백업은 새 백업과 함께 사용할 수 없습니다. 먼저 모든 기기에서 새 백업을 저장하세요. 그 후에도 이전 백업끼리는 계속 함께 작동하므로 안전하게 보관하거나 삭제하세요. 기기를 분실했거나 보안이 침해된 경우 자금을 새 볼트로 옮기세요.',
   reshare_min_devices_required: '최소 {{count}}대의 기기가 필요합니다.',
   reshare_more_devices_required: '추가 기기가 필요합니다',
   reshare_threshold_not_met: '임계값 미달',

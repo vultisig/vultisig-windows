@@ -1694,14 +1694,14 @@ export const pt = {
     'Todos os dispositivos atuais em seu cofre precisam participar da sessão de compartilhamento.',
   reshare_warning_old_backups_title: 'Faça novos backups',
   reshare_warning_old_backups_description:
-    'Os backups anteriores a este recompartilhamento não podem ser combinados com os novos. Os backups antigos continuam funcionando entre si, então guarde-os em segurança ou exclua-os. Se um dispositivo foi perdido ou comprometido, transfira seus fundos para um novo cofre.',
+    'Os backups anteriores a este recompartilhamento não podem ser combinados com os novos. Primeiro, salve um novo backup de cada dispositivo. Depois disso, os backups antigos continuam funcionando entre si, então guarde-os em segurança ou exclua-os. Se um dispositivo foi perdido ou comprometido, transfira seus fundos para um novo cofre.',
   start_reshare_description:
     'Você está alterando a configuração do dispositivo deste cofre.',
   reshare_success_title: 'Cofre compartilhado novamente',
   reshare_success_title_highlight: 'com sucesso',
   reshare_backup_old_backups_wont_work: 'Faça novos backups',
   reshare_backup_old_backups_wont_work_description:
-    'Os backups anteriores a este recompartilhamento não podem ser combinados com os novos. Os backups antigos continuam funcionando entre si, então guarde-os em segurança ou exclua-os. Se um dispositivo foi perdido ou comprometido, transfira seus fundos para um novo cofre.',
+    'Os backups anteriores a este recompartilhamento não podem ser combinados com os novos. Primeiro, salve um novo backup de cada dispositivo. Depois disso, os backups antigos continuam funcionando entre si, então guarde-os em segurança ou exclua-os. Se um dispositivo foi perdido ou comprometido, transfira seus fundos para um novo cofre.',
   reshare_min_devices_required:
     'São necessários pelo menos {{count}} dispositivos.',
   reshare_more_devices_required: 'São necessários mais dispositivos.',

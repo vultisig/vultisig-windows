@@ -1691,14 +1691,14 @@ export const es = {
     'Todos los dispositivos actuales de tu bóveda deben participar en la sesión de recompartición.',
   reshare_warning_old_backups_title: 'Crea copias de seguridad nuevas',
   reshare_warning_old_backups_description:
-    'Las copias de seguridad anteriores a esta recompartición no se pueden combinar con las nuevas. Las copias antiguas siguen funcionando entre sí, así que guárdalas en un lugar seguro o elimínalas. Si perdiste un dispositivo o se vio comprometido, mueve tus fondos a una bóveda nueva.',
+    'Las copias de seguridad anteriores a esta recompartición no se pueden combinar con las nuevas. Primero guarda una copia de seguridad nueva de cada dispositivo. Después, las copias antiguas siguen funcionando entre sí, así que guárdalas en un lugar seguro o elimínalas. Si perdiste un dispositivo o se vio comprometido, mueve tus fondos a una bóveda nueva.',
   start_reshare_description:
     'Estás cambiando la configuración del dispositivo de esta bóveda.',
   reshare_success_title: 'Bóveda recompartida',
   reshare_success_title_highlight: 'exitosamente',
   reshare_backup_old_backups_wont_work: 'Crea copias de seguridad nuevas',
   reshare_backup_old_backups_wont_work_description:
-    'Las copias de seguridad anteriores a esta recompartición no se pueden combinar con las nuevas. Las copias antiguas siguen funcionando entre sí, así que guárdalas en un lugar seguro o elimínalas. Si perdiste un dispositivo o se vio comprometido, mueve tus fondos a una bóveda nueva.',
+    'Las copias de seguridad anteriores a esta recompartición no se pueden combinar con las nuevas. Primero guarda una copia de seguridad nueva de cada dispositivo. Después, las copias antiguas siguen funcionando entre sí, así que guárdalas en un lugar seguro o elimínalas. Si perdiste un dispositivo o se vio comprometido, mueve tus fondos a una bóveda nueva.',
   reshare_min_devices_required: 'Se requieren al menos {{count}} dispositivos',
   reshare_more_devices_required: 'Se necesitan más dispositivos',
   reshare_threshold_not_met: 'Umbral no alcanzado',
