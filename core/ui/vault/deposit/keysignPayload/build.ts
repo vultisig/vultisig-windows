@@ -602,7 +602,7 @@ const cosmosStakingChains: readonly IbcEnabledCosmosChain[] = [
 const isCosmosStakingChain = (chain: Chain): chain is IbcEnabledCosmosChain =>
   (cosmosStakingChains as readonly Chain[]).includes(chain)
 
-// QBTC signs Cosmos staking txs with ML-DSA (~2.4 KB signature) rather than
+// QBTC signs Cosmos staking txs with ML-DSA (~3.3 KB signature) rather than
 // secp256k1. `MsgBeginRedelegate` — the heaviest single-msg staking path —
 // out-of-gasses against the Terra-family floor, so QBTC requests 800k. The fee
 // is unchanged: qbtc-testnet has no minimum gas price and enforces a flat

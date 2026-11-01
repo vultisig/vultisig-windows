@@ -387,7 +387,7 @@ const getAccounts = async (chainId: string): Promise<AccountData[]> => {
 
     return [
       {
-        // QBTC signs with MLDSA-44; Keplr's `Algo` union predates
+        // QBTC signs with MLDSA-65; Keplr's `Algo` union predates
         // post-quantum signing and only allows secp256k1/ed25519/sr25519.
         // We declare secp256k1 so the cast typechecks, but the bytes in
         // `pubkey` are the raw MLDSA hex from the vault. dApps that only
