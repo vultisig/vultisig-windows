@@ -4,6 +4,7 @@ import {
   findEmptyEip712BytesFields,
   getEip712PayloadIssue,
   getEip712SignedPrimaryType,
+  pruneEip712PayloadTypes,
 } from './eip712'
 import { Eip712V4Payload } from './interface'
 
@@ -35,6 +36,15 @@ const makePayload = (
   ...overrides,
 })
 
+const withUnusedTypes = () =>
+  makePayload({
+    types: {
+      ...makePayload().types,
+      Group: [{ name: 'members', type: 'Item[]' }],
+      Wrapper: [{ name: 'order', type: 'Order' }],
+    },
+  })
+
 const withMessage = (message: Record<string, unknown>) =>
   makePayload({ message: { ...makePayload().message, ...message } })
 
@@ -43,14 +53,32 @@ describe('getEip712PayloadIssue', () => {
     expect(getEip712PayloadIssue(makePayload())).toBeUndefined()
   })
 
-  it.each(['Item', 'Permit'])(
-    'refuses a %s primaryType that is not the struct the hash signs',
+  it.each(['Permit', 'EIP712Domain'])(
+    'refuses a %s primaryType that is not a struct the types define',
     primaryType => {
       expect(getEip712PayloadIssue(makePayload({ primaryType }))).toContain(
         'primaryType'
       )
     }
   )
+
+  it('refuses a nested-struct primaryType the message does not match', () => {
+    expect(
+      getEip712PayloadIssue(makePayload({ primaryType: 'Item' }))
+    ).toBeDefined()
+  })
+
+  it('accepts a nested-struct primaryType whose message matches it', () => {
+    const payload = makePayload({
+      primaryType: 'Item',
+      message: { id: `0x${'01'.repeat(32)}` },
+    })
+    expect(getEip712PayloadIssue(payload)).toBeUndefined()
+  })
+
+  it('accepts a payload declaring types the primary type never uses', () => {
+    expect(getEip712PayloadIssue(withUnusedTypes())).toBeUndefined()
+  })
 
   it('names a fixed-width bytes field holding an empty string', () => {
     const issue = getEip712PayloadIssue(withMessage({ salt: '' }))
@@ -141,7 +169,11 @@ describe('getEip712SignedPrimaryType', () => {
     expect(getEip712SignedPrimaryType(payload)).toBe('Order')
   })
 
-  it('follows the struct the hash signs when the declared type differs', () => {
+  it('ignores types the primary type never uses', () => {
+    expect(getEip712SignedPrimaryType(withUnusedTypes())).toBe('Order')
+  })
+
+  it('follows the struct the types root at when they do not define the declared type', () => {
     const payload = makePayload({ primaryType: 'Permit' })
     expect(getEip712SignedPrimaryType(payload)).toBe('Order')
   })
@@ -155,5 +187,21 @@ describe('getEip712SignedPrimaryType', () => {
       },
     })
     expect(getEip712SignedPrimaryType(payload)).toBe('A')
+  })
+})
+
+describe('pruneEip712PayloadTypes', () => {
+  it('drops the types the primary type never uses', () => {
+    expect(pruneEip712PayloadTypes(withUnusedTypes())).toEqual(makePayload())
+  })
+
+  it('keeps a declared EIP712Domain', () => {
+    const EIP712Domain = [{ name: 'name', type: 'string' }]
+    const payload = withUnusedTypes()
+    const pruned = pruneEip712PayloadTypes({
+      ...payload,
+      types: { ...payload.types, EIP712Domain },
+    })
+    expect(pruned.types).toEqual({ EIP712Domain, ...makePayload().types })
   })
 })
