@@ -80,6 +80,17 @@ describe('getEip712PayloadIssue', () => {
     expect(getEip712PayloadIssue(withUnusedTypes())).toBeUndefined()
   })
 
+  it('refuses a payload with two root types when primaryType names neither', () => {
+    const payload = makePayload({
+      primaryType: 'Permit',
+      types: {
+        ...makePayload().types,
+        Group: [{ name: 'members', type: 'Item[]' }],
+      },
+    })
+    expect(getEip712PayloadIssue(payload)).toContain('primaryType')
+  })
+
   it('names a fixed-width bytes field holding an empty string', () => {
     const issue = getEip712PayloadIssue(withMessage({ salt: '' }))
     expect(issue).toContain('message.salt')
