@@ -1,4 +1,5 @@
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { getNumberFormat } from './getNumberFormat'
 
@@ -32,8 +33,9 @@ const disambiguatedFiatCurrencySymbol: Partial<Record<FiatCurrency, string>> = {
 
 /** Amounts from this value up are shown in compact notation (1.2M). */
 const compactNotationThreshold = 1_000_000
-// Below this an amount would round to zero at two decimals.
-const smallestStandardAmount = 0.005
+// Below this an amount would round to zero at the currency's own decimals.
+const getSmallestStandardAmount = (fractionDigits: number) =>
+  0.5 * 10 ** -fractionDigits
 const tinyAmountSignificantDigits = 4
 // Leading zeros from which they collapse into a subscript count (0.0₇3).
 const subscriptNotationThreshold = 4
@@ -135,7 +137,12 @@ export const formatFiatAmount = ({
     })
   }
 
-  if (value > 0 && value < smallestStandardAmount) {
+  const maximumFractionDigits = shouldBePresent(
+    getNumberFormat(currencyOptions).resolvedOptions().maximumFractionDigits,
+    'currency fraction digits'
+  )
+
+  if (value > 0 && value < getSmallestStandardAmount(maximumFractionDigits)) {
     return formatFiatParts({
       numberFormat: getNumberFormat({
         ...currencyOptions,
@@ -147,9 +154,6 @@ export const formatFiatAmount = ({
       fraction: getTinyAmountDecimals(value),
     })
   }
-
-  const { maximumFractionDigits } =
-    getNumberFormat(currencyOptions).resolvedOptions()
 
   return formatFiatParts({
     numberFormat: getNumberFormat({
