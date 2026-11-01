@@ -10,6 +10,7 @@ import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useState } from 'react'
 
+import { getClaimAddresses } from '../utils/getClaimAddresses'
 import { getClaimMessageHashHex } from '../utils/getClaimMessageHashHex'
 import {
   ClaimBroadcastingPhase,
@@ -80,8 +81,9 @@ export const ClaimRunner = ({
     // Same derivation a secure-vault co-signer uses, so both sign an identical
     // round-1 hash.
     const messageHashHex = getClaimMessageHashHex({ vault, walletCore })
+    const { bitcoinAddress } = getClaimAddresses({ vault, walletCore })
 
-    return { compressedPubkeyHex, messageHashHex }
+    return { compressedPubkeyHex, messageHashHex, bitcoinAddress }
   })
 
   const [phase, setPhase] = useState<ClaimRunnerPhase>({ btcSign: null })
@@ -115,6 +117,7 @@ export const ClaimRunner = ({
             utxos={utxos}
             btcSig={btcSig}
             compressedPubkeyHex={compressedPubkeyHex}
+            bitcoinAddress={claimInputs.bitcoinAddress}
             qbtcAddress={qbtcAddress}
             mldsaPublicKeyHex={shouldBePresent(
               vault.publicKeyMldsa,
