@@ -1,3 +1,4 @@
+import { useThorchainSecuredAssetsQuery } from '@core/ui/chain/coin/queries/useThorchainSecuredAssetsQuery'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
@@ -26,6 +27,7 @@ import {
 import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@vultisig/core-chain/coin/utils/sortCoinsAlphabetically'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -75,6 +77,7 @@ export const ManageVaultChainCoinsPage = () => {
   const currentchain = useCurrentVaultChain()
   const currentCoins = useCurrentVaultChainCoins(currentchain)
   const whitelistedQuery = useWhitelistedCoinsQuery(currentchain)
+  const securedAssetsQuery = useThorchainSecuredAssetsQuery(currentchain)
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
   const addToCoinFinderIgnore = useAddToCoinFinderIgnoreMutation()
@@ -89,11 +92,16 @@ export const ManageVaultChainCoinsPage = () => {
   const allCoins = useMemo(
     () =>
       getManageableCoins({
-        known: sortCoinsAlphabetically(knownTokens[currentchain]),
+        known: sortCoinsAlphabetically(
+          withoutDuplicates(
+            [...knownTokens[currentchain], ...(securedAssetsQuery.data ?? [])],
+            areEqualCoins
+          )
+        ),
         whitelisted: whitelistedQuery.data || [],
         current: currentCoins,
       }),
-    [currentchain, whitelistedQuery.data, currentCoins]
+    [currentchain, securedAssetsQuery.data, whitelistedQuery.data, currentCoins]
   )
 
   const maxInitialTokens = 200
