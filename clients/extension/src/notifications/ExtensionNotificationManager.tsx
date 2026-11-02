@@ -1,4 +1,4 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
+import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { handleKeysignWsNotification } from '@core/ui/notifications/handleKeysignWsNotification'
 import {
   buildKeysignNotificationWebSocketUrl,
@@ -145,16 +145,15 @@ export const ExtensionNotificationManager = () => {
     }
 
     const meta = (async () => {
-      const { computeNotificationVaultId } = await loadMpcEngine()
       const next = new Map<string, { isFastVault: boolean }>()
       for (const vault of currentVaults) {
         if (!vault.hexChainCode) {
           continue
         }
-        const vaultId = await computeNotificationVaultId(
-          vault.publicKeys.ecdsa,
-          vault.hexChainCode
-        )
+        const vaultId = computeNotificationVaultId({
+          ecdsaPublicKey: vault.publicKeys.ecdsa,
+          hexChainCode: vault.hexChainCode,
+        })
         next.set(vaultId, { isFastVault: hasServer(vault.signers) })
       }
       return next

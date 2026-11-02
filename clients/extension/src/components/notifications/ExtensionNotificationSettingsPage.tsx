@@ -19,13 +19,14 @@ export const ExtensionNotificationSettingsPage = () => {
   const { t } = useTranslation()
   const storedVaults = useVaults()
   const vaultsWithChain = storedVaults.filter(v => v.hexChainCode)
-  const { data: enabledById = {} } = useExtensionAllVaultsNotificationStates()
+  const { data: enabledById = {}, isPending: isLoadingStates } =
+    useExtensionAllVaultsNotificationStates()
 
   const { mutate: toggleVault, isPending: isTogglingVault } =
     useExtensionToggleVaultNotificationMutation()
   const { mutate: toggleAll, isPending: isTogglingAll } =
     useExtensionToggleAllVaultsNotificationMutation()
-  const isPending = isTogglingVault || isTogglingAll
+  const isPending = isLoadingStates || isTogglingVault || isTogglingAll
 
   const vaults = toVaultNotificationItems(vaultsWithChain, enabledById)
   const anyEnabled = vaults.some(v => v.enabled)

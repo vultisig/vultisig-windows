@@ -1,4 +1,4 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
+import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -71,8 +71,10 @@ export const useExtensionToggleVaultNotificationMutation = () => {
       localPartyId,
       enabled,
     }: ToggleVaultNotificationInput) => {
-      const { computeNotificationVaultId } = await loadMpcEngine()
-      const vaultId = await computeNotificationVaultId(ecdsa, hexChainCode)
+      const vaultId = computeNotificationVaultId({
+        ecdsaPublicKey: ecdsa,
+        hexChainCode,
+      })
 
       if (enabled) {
         await subscribeToPush({ vaultId, partyName: localPartyId })
@@ -107,15 +109,14 @@ export const useExtensionToggleAllVaultsNotificationMutation = () => {
       vaults,
       enabled,
     }: ToggleAllVaultsNotificationInput) => {
-      const { computeNotificationVaultId } = await loadMpcEngine()
       let failedCount = 0
 
       for (const vault of vaults) {
         try {
-          const vaultId = await computeNotificationVaultId(
-            vault.ecdsa,
-            vault.hexChainCode
-          )
+          const vaultId = computeNotificationVaultId({
+            ecdsaPublicKey: vault.ecdsa,
+            hexChainCode: vault.hexChainCode,
+          })
 
           if (enabled) {
             await subscribeToPush({
