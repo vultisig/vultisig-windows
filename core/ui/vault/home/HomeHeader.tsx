@@ -2,6 +2,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getHeaderCollapseProgress } from '@core/ui/page/headerCollapse'
 import { useHomeDisplay } from '@core/ui/storage/homeDisplay'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useTransform } from 'framer-motion'
 import { ReactNode, Suspense } from 'react'
@@ -50,8 +51,17 @@ export const HomeHeader = ({ primaryControls }: HomeHeaderProps) => {
       }
       balance={
         <HomeBalanceQuery>
-          {({ data, error }) => {
-            if (data !== undefined) return formatFiatAmount(data)
+          {({ data, error, isUpdating }) => {
+            if (data !== undefined) {
+              return isUpdating ? (
+                <HStack as="span" gap={6} alignItems="center">
+                  {formatFiatAmount(data)}
+                  <Spinner size="0.8em" style={{ opacity: 0.5 }} />
+                </HStack>
+              ) : (
+                formatFiatAmount(data)
+              )
+            }
             if (error) return t('failed_to_load')
 
             return <Spinner size="0.9em" />
