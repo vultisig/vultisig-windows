@@ -1919,7 +1919,7 @@ export const zh = {
     '不支持的签名方法。请使用 personal_sign 或 eth_signTypedData_v4。',
   revoke: '撤销访问权限',
   token_approvals: '代币授权',
-  token_approvals_delegate: '委托人',
+  token_approvals_delegate: '被授权方',
   token_approvals_partial: '无法完整检查以下网络上的 Permit2 授权：{{chains}}',
   token_approvals_not_checked: '尚未检查：{{chains}}',
   granted_approvals: '已授予的授权',
@@ -1929,7 +1929,7 @@ export const zh = {
   revoke_approval_permit2_explanation:
     '将此合约的 Permit2 额度设为 0。您已签名但尚未被使用的许可仍可恢复该额度，因此如需彻底切断 Permit2，请同时撤销此代币对 Permit2 的授权。您需要支付网络费。',
   revoke_approval_spl_explanation:
-    '移除此代币账户的委托人，使其无法再从您的保险库中转移此代币。您需要支付网络费。',
+    '移除此代币账户的被授权方，使其无法再从您的保险库中转移此代币。您需要支付网络费。',
   revoke_approval_unreadable: '此交易与您选择的授权不匹配，因此无法签名。',
   token_approvals_empty_title: '没有有效授权',
   token_approvals_empty_description:

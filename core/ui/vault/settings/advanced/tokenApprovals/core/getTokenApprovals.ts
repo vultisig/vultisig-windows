@@ -1,6 +1,7 @@
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { groupItems } from '@vultisig/lib-utils/array/groupItems'
 import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { getAddress } from 'viem'
 
 import { ChainApprovals } from './ChainApprovals'
@@ -64,12 +65,14 @@ export const getTokenApprovals = async ({
 }: GetTokenApprovalsInput): Promise<ChainApprovals> => {
   const pairs = await getApprovedTokenSpenders({ chain, owner })
 
-  const [erc20, permit2] = await Promise.all([
+  const [erc20, permit2Read] = await Promise.all([
     getErc20Allowances({ chain, owner, pairs }),
     isPermit2Chain(chain)
-      ? getPermit2Allowances({ chain, owner, candidates: pairs })
-      : { allowances: [], isComplete: true },
+      ? attempt(() => getPermit2Allowances({ chain, owner, candidates: pairs }))
+      : { data: { allowances: [], isComplete: true } },
   ])
+  // A Permit2 outage marks the chain incomplete instead of hiding its ERC-20 rows.
+  const permit2 = permit2Read.data ?? { allowances: [], isComplete: false }
 
   const tokens = await getApprovalTokens({
     chain,

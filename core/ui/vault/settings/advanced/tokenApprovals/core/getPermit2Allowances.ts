@@ -79,10 +79,9 @@ export const getPermit2Allowances = async ({
   const client = getEvmClient(chain)
   const tokens = [...new Set(pairs.map(({ token }) => token))]
 
-  // allowFailure off: a failed read would otherwise look like no allowance and hide a live one.
+  // A failed read drops its pair and flags the result incomplete, never reads as no allowance.
   const [permit2Results, rootResults] = await Promise.all([
     client.multicall({
-      allowFailure: false,
       contracts: pairs.map(
         ({ token, spender }) =>
           ({
@@ -94,7 +93,6 @@ export const getPermit2Allowances = async ({
       ),
     }),
     client.multicall({
-      allowFailure: false,
       contracts: tokens.map(
         token =>
           ({
@@ -108,16 +106,24 @@ export const getPermit2Allowances = async ({
   ])
 
   const permit2Enabled = new Set(
-    tokens.filter((_, index) => rootResults[index] > 0n)
+    tokens.filter((_, index) => {
+      const root = rootResults[index]
+      return root.status === 'success' && root.result > 0n
+    })
   )
   const now = Math.floor(Date.now() / 1000)
 
   const allowances = pairs.flatMap((pair, index) => {
-    const [amount, expiration] = permit2Results[index]
+    const read = permit2Results[index]
+    if (read.status !== 'success') return []
+    const [amount, expiration] = read.result
     return amount > 0n && expiration >= now && permit2Enabled.has(pair.token)
       ? [{ ...pair, amount, expiration }]
       : []
   })
+  const hasFailedRead = [...permit2Results, ...rootResults].some(
+    ({ status }) => status !== 'success'
+  )
 
-  return { allowances, isComplete }
+  return { allowances, isComplete: isComplete && !hasFailedRead }
 }
