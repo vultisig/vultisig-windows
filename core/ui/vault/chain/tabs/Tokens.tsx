@@ -5,7 +5,7 @@ import { CoinDetailModal } from '@core/ui/vault/chain/coin/CoinDetailModal'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultChainCoinItem } from '@core/ui/vault/chain/VaultChainCoinItem'
-import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
+import { useProgressiveVaultChainCoinsQuery } from '@core/ui/vault/queries/useProgressiveVaultChainCoinsQuery'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -13,6 +13,7 @@ import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { parseRippleTokenId } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
@@ -40,7 +41,7 @@ const StyledPanel = styled(Panel)`
 
 export const Tokens = () => {
   const chain = useCurrentVaultChain()
-  const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
+  const vaultCoinsQuery = useProgressiveVaultChainCoinsQuery(chain)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const chainCoins = useCurrentVaultChainCoins(chain)
@@ -144,6 +145,16 @@ export const Tokens = () => {
           )
         }}
       />
+      {vaultCoinsQuery.data && vaultCoinsQuery.isUpdating ? (
+        <VStack fullWidth>
+          <Spinner />
+        </VStack>
+      ) : null}
+      {vaultCoinsQuery.isIncomplete ? (
+        <Text color="danger" size={12} centerHorizontally>
+          {t('some_balances_failed_to_load')}
+        </Text>
+      ) : null}
     </VStack>
   )
 }
