@@ -1,21 +1,35 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { getThorchainPools } from '@vultisig/core-chain/chains/cosmos/thor/lp/pools'
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { getThorchainSecuredAssetCatalog } from '@vultisig/core-chain/chains/cosmos/thor/securedAssets'
 import { KnownCoin } from '@vultisig/core-chain/coin/Coin'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { securedAssetDenomToPoolAsset } from '../price/thor/getThorchainSecuredAssetPrices'
 
-const fetchThorchainSecuredAssetCoins = async (): Promise<KnownCoin[]> => {
-  const [{ assets }, availablePools] = await Promise.all([
-    getThorchainSecuredAssetCatalog(),
-    getThorchainPools(),
-  ])
+type ThorchainPoolStatus = {
+  asset: string
+  status: string
+}
 
-  const availablePoolAssets = new Set(
-    availablePools.map(({ asset }) => asset.toUpperCase())
+const getAvailablePoolAssets = async (): Promise<Set<string>> => {
+  const pools = await queryUrl<ThorchainPoolStatus[]>(
+    `${cosmosRpcUrl.THORChain}/thorchain/pools`
   )
+
+  return new Set(
+    pools
+      .filter(({ status }) => status.toLowerCase() === 'available')
+      .map(({ asset }) => asset.toUpperCase())
+  )
+}
+
+const fetchThorchainSecuredAssetCoins = async (): Promise<KnownCoin[]> => {
+  const [{ assets }, availablePoolAssets] = await Promise.all([
+    getThorchainSecuredAssetCatalog(),
+    getAvailablePoolAssets(),
+  ])
 
   // Catalog entries carry live pool state; only the coin fields may reach storage.
   return assets
@@ -28,7 +42,7 @@ const fetchThorchainSecuredAssetCoins = async (): Promise<KnownCoin[]> => {
 /**
  * THORChain secured assets whose pool is Available, as plain coins: the live
  * `/thorchain/securedassets` catalog (static metadata when offline) filtered
- * by Midgard's Available pools. Errors when the pools can't be read, so an
+ * by THORNode's Available pools. Errors when the pools can't be read, so an
  * unfiltered list is never offered. Fetches only for THORChain.
  */
 export const useThorchainSecuredAssetsQuery = (
