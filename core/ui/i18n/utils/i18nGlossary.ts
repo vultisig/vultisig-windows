@@ -5,6 +5,53 @@ type I18nGlossaryEntry = {
   targetTerms?: string[]
 }
 
+// Native renderings chosen by the per-locale reviewer glossaries.
+const vaultShareTargetTerms = [
+  'Vault Share',
+  'Vault Shares',
+  'Tresoranteil',
+  'Tresoranteile',
+  'fragmento',
+  'fragmentos',
+  'Fragmento',
+  'quota',
+  'quote',
+  'Quota',
+  'udio',
+  'udjela',
+  'udjele',
+  'Udio',
+  'kluisdeel',
+  'kluisdelen',
+  'Kluisdeel',
+  'parte do cofre',
+  'parte do seu cofre',
+  'partes do cofre',
+  'Parte do cofre',
+  'part de coffre',
+  'Part de coffre',
+  'parts de coffre',
+  'Part du coffre',
+  'part serveur',
+  'Доля',
+  'доли',
+  'долю',
+  'долей',
+  '볼트 셰어',
+  '保险库份额',
+]
+
+const poolTargetTerms = [
+  'Pool',
+  'pool',
+  'poola',
+  'poolu',
+  'Пул',
+  'пул',
+  '풀',
+  '池',
+]
+
 export const i18nGlossary = [
   {
     term: '$VULT',
@@ -50,11 +97,13 @@ export const i18nGlossary = [
     term: 'Vault Share',
     preserve: true,
     note: 'Core Vultisig recovery concept; keep exactly as written.',
+    targetTerms: vaultShareTargetTerms,
   },
   {
     term: 'Vault Shares',
     preserve: true,
     note: 'Core Vultisig recovery concept; keep exactly as written.',
+    targetTerms: vaultShareTargetTerms,
   },
   {
     term: 'QBTC',
@@ -140,6 +189,14 @@ export const i18nGlossary = [
     term: 'Bandwidth Points',
     preserve: true,
     note: 'TRON resource name; keep exactly as written.',
+    targetTerms: [
+      'Bandwidth Points',
+      'Bandwidth',
+      'Bodovi propusnosti',
+      'points de bande passante',
+      '대역폭 포인트',
+      '带宽',
+    ],
   },
   {
     term: 'UTXOs',
@@ -186,6 +243,7 @@ export const i18nGlossary = [
     term: 'dApps',
     preserve: true,
     note: 'Web3 app term; keep capitalization exactly as written.',
+    targetTerms: ['dApps', 'dApp', 'dAppovi'],
   },
   {
     term: 'dApp',
@@ -201,18 +259,31 @@ export const i18nGlossary = [
     term: 'Broadcasting',
     preserve: true,
     note: 'Transaction status term; avoid TV/radio false friends.',
-    targetTerms: ['Broadcasting', '브로드캐스팅'],
+    targetTerms: [
+      'Broadcasting',
+      '브로드캐스팅',
+      '브로드캐스트',
+      'übertragen',
+      'Transmitiendo',
+      'Transmitindo',
+      'Slanje',
+      'Отправка',
+      'verzenden',
+      'Diffusion',
+      '广播',
+    ],
   },
   {
     term: 'Pool',
     preserve: true,
     note: 'DeFi pool term; avoid swimming-pool false friends.',
+    targetTerms: poolTargetTerms,
   },
   {
     term: 'pool',
     preserve: true,
     note: 'DeFi pool term; avoid swimming-pool false friends.',
-    targetTerms: ['Pool', 'pool'],
+    targetTerms: poolTargetTerms,
   },
   {
     term: 'contract',
