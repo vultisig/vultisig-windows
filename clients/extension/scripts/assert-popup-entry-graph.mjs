@@ -11,8 +11,7 @@ import { fileURLToPath } from 'node:url'
 // the SDK and the WalletCore glue moved behind loadMpcEngine / loadWalletCore
 // (the Vite build also rejects those two packages in the graph by module id);
 // raise the budget only for code that genuinely belongs on home. popup.html,
-// the dApp request window, measured 14.97 MB before its screens moved behind
-// dynamic imports and 6.56 MB after.
+// the dApp request window, shares the shell and so the budget.
 //
 // The Firefox build groups each package into one vendor chunk, which keeps
 // WalletCore on the static path through the core-mpc and core-chain chunks
@@ -69,7 +68,6 @@ const checkEntryGraph = async htmlFile => {
 }
 
 const failures = []
-// popup.html (the dApp request window) shares the shell, so it shares the budget.
 for (const htmlFile of ['index.html', 'popup.html']) {
   const failure = await checkEntryGraph(htmlFile)
   if (failure) failures.push(failure)
