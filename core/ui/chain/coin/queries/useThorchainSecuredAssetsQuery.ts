@@ -21,7 +21,7 @@ export const useThorchainSecuredAssetsQuery = (
   chain: Chain
 ): UseQueryResult<KnownCoin[]> =>
   useQuery({
-    queryKey: ['thorchainSecuredAssets', chain],
+    queryKey: ['thorchainSecuredAssets'],
     enabled: chain === Chain.THORChain,
     queryFn: fetchThorchainSecuredAssetCoins,
   })
