@@ -51,10 +51,13 @@ export const VaultFolderPage = () => {
   const folderTotal = useMemo(() => {
     if (!vaultTotals) return undefined
 
-    return vaults.reduce((sum, vault) => {
-      const value = vaultTotals[getVaultId(vault)] ?? 0
-      return sum + value
-    }, 0)
+    let total = 0
+    for (const vault of vaults) {
+      const value = vaultTotals[getVaultId(vault)]
+      if (value === undefined) return undefined
+      total += value
+    }
+    return total
   }, [vaultTotals, vaults])
 
   const summarySubtitle = useMemo(() => {

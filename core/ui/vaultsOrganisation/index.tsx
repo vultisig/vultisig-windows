@@ -120,7 +120,8 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
       totalVaultsCount > 1 &&
       !skipBalanceFetch &&
       !isTotalsPending &&
-      vaultTotals
+      vaultTotals &&
+      vaults.every(vault => vaultTotals[getVaultId(vault)] !== undefined)
     ) {
       const totalBalance = Object.values(vaultTotals).reduce(
         (sum, value) => sum + value,
@@ -138,6 +139,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
     t,
     totalVaultsCount,
     vaultCountLabel,
+    vaults,
     vaultTotals,
   ])
 

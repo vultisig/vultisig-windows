@@ -36,8 +36,9 @@ type UseVaultsTotalBalancesInput = {
 
 /**
  * Fiat total per vault. A vault appears in `totals` once every one of its
- * coins has a balance, so rows fill in one by one; `isPending` stays true until
- * all of them have, which is what totals spanning several vaults wait on.
+ * coins has a balance, so rows fill in one by one and a failed read leaves out
+ * only its own vault. Totals spanning several vaults must check that every
+ * vault they cover is present.
  */
 export const useVaultsTotalBalances = ({
   vaults: scopedVaults,
@@ -111,7 +112,7 @@ export const useVaultsTotalBalances = ({
     if (!enabled) return {}
 
     const prices = priceQuery.data
-    if (error || priceQuery.isPending || !prices) {
+    if (priceError || priceQuery.isPending || !prices) {
       return undefined
     }
 
@@ -141,7 +142,7 @@ export const useVaultsTotalBalances = ({
   }, [
     balanceQueries,
     enabled,
-    error,
+    priceError,
     priceQuery.data,
     priceQuery.isPending,
     vaultCoinEntries,

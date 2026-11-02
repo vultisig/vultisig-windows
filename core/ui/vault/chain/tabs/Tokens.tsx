@@ -16,7 +16,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { parseRippleTokenId } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
-import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { CoinKey, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@vultisig/core-chain/coin/utils/sortCoinsByBalance'
 import { splitBy } from '@vultisig/lib-utils/array/splitBy'
@@ -114,12 +114,12 @@ export const Tokens = () => {
 
           return (
             <List>
-              {orderedCoins.map((coin, idx) =>
+              {orderedCoins.map(coin =>
                 coin.id && tokensNeedingTrustLine.has(coin.id) ? (
                   // No trust line yet, so there is no balance to drill into —
                   // the row offers the activation instead of the coin detail.
                   <StyledPanel
-                    key={`${idx}-${coin.id}`}
+                    key={coinKeyToString(coin)}
                     onClick={() => activateTrustLine(coin)}
                   >
                     <VaultChainCoinItem
@@ -129,7 +129,7 @@ export const Tokens = () => {
                   </StyledPanel>
                 ) : (
                   <Opener
-                    key={`${idx}-${coin.id}`}
+                    key={coinKeyToString(coin)}
                     renderOpener={({ onOpen }) => (
                       <StyledPanel onClick={onOpen}>
                         <VaultChainCoinItem value={coin} />
