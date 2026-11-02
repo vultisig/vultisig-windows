@@ -1,17 +1,23 @@
 import { recordMap } from '@vultisig/lib-utils/record/recordMap'
-import { ComponentType, lazy, useSyncExternalStore } from 'react'
+import {
+  ComponentType,
+  lazy,
+  LazyExoticComponent,
+  useSyncExternalStore,
+} from 'react'
 
-import { ViewLoader, ViewLoaders } from './ViewLoaders'
+import { ViewLoaders } from './ViewLoaders'
 import { Views } from './Views'
 
-type LazyView = {
-  View: ComponentType
-  load: ViewLoader
+/** A component that loads its module on first render, and the loader that warms it ahead of time. */
+export type LazyComponent<P extends object> = {
+  Component: ComponentType<P>
+  load: () => Promise<ComponentType<P>>
 }
 
-type LazyViewState = {
-  loaded: ComponentType<any> | null
-  Lazy: ComponentType
+type LazyComponentState<P extends object> = {
+  loaded: ComponentType<P> | null
+  Lazy: LazyExoticComponent<ComponentType<P>>
 }
 
 // React schedules a retry render as soon as a load fails. Renewing the lazy
@@ -20,8 +26,18 @@ type LazyViewState = {
 // retrying in a loop, while a later navigation tries the load again.
 const failedLoadRetryDelayMs = 1000
 
-const createLazyView = (loader: ViewLoader): LazyView => {
-  let loading: Promise<ComponentType<any>> | null = null
+/**
+ * Turns a module loader into a component that suspends until the module has
+ * loaded and then renders it with the props it was given. `load` shares the
+ * component's cache, so a component loaded ahead of time renders without ever
+ * suspending. A load that fails surfaces in the nearest error boundary; a
+ * render that comes at least a second later tries the load again, and a
+ * successful call to `load` in the meantime lets it render right away.
+ */
+export const lazyComponent = <P extends object>(
+  loader: () => Promise<ComponentType<P>>
+): LazyComponent<P> => {
+  let loading: Promise<ComponentType<P>> | null = null
   let failedAt: number | null = null
   const listeners = new Set<() => void>()
 
@@ -47,7 +63,7 @@ const createLazyView = (loader: ViewLoader): LazyView => {
   const createLazy = () =>
     lazy(() => load().then(component => ({ default: component })))
 
-  let state: LazyViewState = { loaded: null, Lazy: createLazy() }
+  let state: LazyComponentState<P> = { loaded: null, Lazy: createLazy() }
 
   const subscribe = (listener: () => void) => {
     listeners.add(listener)
@@ -66,16 +82,16 @@ const createLazyView = (loader: ViewLoader): LazyView => {
     return state
   }
 
-  const View = () => {
+  const Component = (props: P) => {
     const { loaded: Loaded, Lazy } = useSyncExternalStore(
       subscribe,
       getSnapshot
     )
 
-    return Loaded ? <Loaded /> : <Lazy />
+    return Loaded ? <Loaded {...props} /> : <Lazy {...props} />
   }
 
-  return { View, load }
+  return { Component, load }
 }
 
 type LazyViews<T extends string> = {
@@ -84,21 +100,17 @@ type LazyViews<T extends string> = {
 }
 
 /**
- * Turns view loaders into components that suspend until their module has
- * loaded. The returned loaders share the cache the views read from, so a view
- * loaded ahead of time (see `PrefetchViews`) renders without ever suspending.
- * A load that fails surfaces in the nearest error boundary; a render that
- * comes at least a second later, such as the next navigation to the view,
- * tries the load again, and a successful call to that view's loader in the
- * meantime lets it render right away.
+ * Turns view loaders into views built with `lazyComponent`. The returned
+ * loaders share the cache the views read from, so a view loaded ahead of time
+ * (see `PrefetchViews`) renders without ever suspending.
  */
 export const lazyViews = <T extends string>(
   loaders: ViewLoaders<T>
 ): LazyViews<T> => {
-  const lazy = recordMap(loaders, createLazyView)
+  const lazy = recordMap(loaders, loader => lazyComponent(loader))
 
   return {
-    views: recordMap(lazy, ({ View }) => View),
+    views: recordMap(lazy, ({ Component }) => Component),
     loaders: recordMap(lazy, ({ load }) => load),
   }
 }

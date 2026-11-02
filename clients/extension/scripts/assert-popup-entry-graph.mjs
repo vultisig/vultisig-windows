@@ -10,7 +10,9 @@ import { fileURLToPath } from 'node:url'
 // 18.8 MB with every page in it, 14.1 MB after the view split, and 8.2 MB once
 // the SDK and the WalletCore glue moved behind loadMpcEngine / loadWalletCore
 // (the Vite build also rejects those two packages in the graph by module id);
-// raise the budget only for code that genuinely belongs on home.
+// raise the budget only for code that genuinely belongs on home. popup.html,
+// the dApp request window, measured 14.97 MB before its screens moved behind
+// dynamic imports and 6.56 MB after.
 //
 // The Firefox build groups each package into one vendor chunk, which keeps
 // WalletCore on the static path through the core-mpc and core-chain chunks
@@ -27,7 +29,7 @@ const distDir = path.resolve(currentDir, '..', artifactDirectory)
 const formatMb = bytes => `${(bytes / 1024 / 1024).toFixed(2)} MB`
 
 // popup.html (the dApp request window) shares the shell, so it shares the budget.
-const assertEntryGraph = async htmlFile => {
+const checkEntryGraph = async htmlFile => {
   const html = await readFile(path.resolve(distDir, htmlFile), 'utf8')
 
   const entryGraphFiles = [
@@ -60,14 +62,19 @@ const assertEntryGraph = async htmlFile => {
     `  ${formatMb(total).padStart(10)}  total (budget ${formatMb(maxEntryGraphBytes)})`
   )
 
-  if (total > maxEntryGraphBytes) {
-    throw new Error(
-      `The ${htmlFile} entry graph is ${formatMb(total)}, over the ${formatMb(
+  return total > maxEntryGraphBytes
+    ? `The ${htmlFile} entry graph is ${formatMb(total)}, over the ${formatMb(
         maxEntryGraphBytes
       )} budget. A page module is probably imported statically on the first-paint path; keep pages and popup screens behind the dynamic imports in their registries.`
-    )
-  }
+    : null
 }
 
-await assertEntryGraph('index.html')
-await assertEntryGraph('popup.html')
+const failures = []
+for (const htmlFile of ['index.html', 'popup.html']) {
+  const failure = await checkEntryGraph(htmlFile)
+  if (failure) failures.push(failure)
+}
+
+if (failures.length > 0) {
+  throw new Error(failures.join('\n'))
+}
