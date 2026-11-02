@@ -24,8 +24,8 @@ type HistoryEventsResponse = {
   items: HistoryEvent[]
 }
 
-// A token contract and a spender the owner approved it for, lowercased.
-type TokenSpender = {
+/** A token contract and a spender the owner approved it for, lowercased. */
+export type TokenSpender = {
   token: string
   spender: string
 }
@@ -43,7 +43,9 @@ const maxPages = 10
 /**
  * Collects every (token, spender) pair the owner ever approved on the
  * network, from 1inch's Approve and Revoke history. Whether an allowance is
- * still active is read separately; permit-based approvals are not indexed.
+ * still active is read separately. A Permit2 approve the owner sent shows up
+ * here with the Permit2 spender; a permit signature someone else submitted
+ * does not, nor does an EIP-2612 permit.
  */
 export const getApprovedTokenSpenders = async ({
   chain,
