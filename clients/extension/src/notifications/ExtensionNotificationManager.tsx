@@ -129,9 +129,7 @@ export const ExtensionNotificationManager = () => {
   const vaultsRef = useRef(vaults)
   vaultsRef.current = vaults
 
-  // Built the first time a notification needs it, and rebuilt when the vault
-  // list changes, so the SDK load it depends on is not started on mount ahead
-  // of the idle prefetch. A build that failed is dropped so the next one retries.
+  // Built the first time a notification needs it and rebuilt when the vault list changes.
   const vaultBannerMetaRef = useRef<{
     vaults: ReturnType<typeof useVaults>
     meta: Promise<Map<string, { isFastVault: boolean }>>
@@ -158,11 +156,6 @@ export const ExtensionNotificationManager = () => {
       }
       return next
     })()
-    meta.catch(() => {
-      if (vaultBannerMetaRef.current?.meta === meta) {
-        vaultBannerMetaRef.current = null
-      }
-    })
     vaultBannerMetaRef.current = { vaults: currentVaults, meta }
 
     return meta

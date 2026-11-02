@@ -39,6 +39,7 @@ const StyledPanel = styled(Panel)`
   }
 `
 
+/** A chain's token list; rows appear as balances load, marked while others are loading or have failed. */
 export const Tokens = () => {
   const chain = useCurrentVaultChain()
   const vaultCoinsQuery = useProgressiveVaultChainCoinsQuery(chain)

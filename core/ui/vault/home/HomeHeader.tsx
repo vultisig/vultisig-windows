@@ -19,6 +19,7 @@ type HomeHeaderProps = {
   primaryControls?: ReactNode
 }
 
+/** The home page's sticky header, with the vault's balance marked while it is still updating. */
 export const HomeHeader = ({ primaryControls }: HomeHeaderProps) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()

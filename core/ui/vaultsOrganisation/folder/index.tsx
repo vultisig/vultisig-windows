@@ -16,6 +16,7 @@ import {
 } from '@core/ui/vaultsOrganisation/components'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
+import { sumVaultTotals } from '@core/ui/vaultsOrganisation/utils/sumVaultTotals'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -48,17 +49,7 @@ export const VaultFolderPage = () => {
     useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
-  const folderTotal = useMemo(() => {
-    if (!vaultTotals) return undefined
-
-    let total = 0
-    for (const vault of vaults) {
-      const value = vaultTotals[getVaultId(vault)]
-      if (value === undefined) return undefined
-      total += value
-    }
-    return total
-  }, [vaultTotals, vaults])
+  const folderTotal = sumVaultTotals({ totals: vaultTotals, vaults })
 
   const summarySubtitle = useMemo(() => {
     const parts = [t('vault_count', { count: vaults.length })]

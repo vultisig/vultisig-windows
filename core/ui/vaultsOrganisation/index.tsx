@@ -16,6 +16,7 @@ import {
   VaultSearchField,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
+import { sumVaultTotals } from '@core/ui/vaultsOrganisation/utils/sumVaultTotals'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -99,11 +100,10 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   // sums the same set. Per-row rendering below only uses the folderless
   // subset, but the shared cache means folder vaults' balances are ready when
   // the user drills into a folder.
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances({
-      vaults,
-      enabled: !skipBalanceFetch,
-    })
+  const { totals: vaultTotals } = useVaultsTotalBalances({
+    vaults,
+    enabled: !skipBalanceFetch,
+  })
   const formatFiatAmount = useFormatFiatAmount()
 
   const totalVaultsCount = vaults.length
@@ -116,25 +116,18 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
     const parts = [vaultCountLabel]
 
+    const totalBalance = sumVaultTotals({ totals: vaultTotals, vaults })
     if (
       totalVaultsCount > 1 &&
       !skipBalanceFetch &&
-      !isTotalsPending &&
-      vaultTotals &&
-      vaults.every(vault => vaultTotals[getVaultId(vault)] !== undefined)
+      totalBalance !== undefined
     ) {
-      const totalBalance = Object.values(vaultTotals).reduce(
-        (sum, value) => sum + value,
-        0
-      )
-
       parts.push(formatFiatAmount(totalBalance))
     }
 
     return parts.join(' • ')
   }, [
     formatFiatAmount,
-    isTotalsPending,
     skipBalanceFetch,
     t,
     totalVaultsCount,

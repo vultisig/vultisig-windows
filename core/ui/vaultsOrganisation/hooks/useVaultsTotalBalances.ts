@@ -37,8 +37,7 @@ type UseVaultsTotalBalancesInput = {
 /**
  * Fiat total per vault. A vault appears in `totals` once every one of its
  * coins has a balance, so rows fill in one by one and a failed read leaves out
- * only its own vault. Totals spanning several vaults must check that every
- * vault they cover is present.
+ * only its own vault. Use `sumVaultTotals` for totals spanning several vaults.
  */
 export const useVaultsTotalBalances = ({
   vaults: scopedVaults,
