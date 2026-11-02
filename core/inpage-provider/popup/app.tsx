@@ -64,7 +64,7 @@ export const PopupApp = () => {
     mutationFn: () => takePopupCall(callId),
     // Fetch the method's screen while the shell boots from storage.
     onSuccess: ({ method }) => {
-      popupResolvers[method].load().catch(() => undefined)
+      void popupResolvers[method].load().catch(() => undefined)
     },
     onError: () => {
       resolvePopupCall({
