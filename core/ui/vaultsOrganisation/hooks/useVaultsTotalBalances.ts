@@ -98,14 +98,8 @@ export const useVaultsTotalBalances = ({
     })),
   })
 
-  const isBalancesPending = balanceQueries.some(query => query.isPending)
-  const balancesError = balanceQueries.find(query => query.error)?.error ?? null
-
   const priceError =
     'error' in priceQuery ? priceQuery.error : (priceQuery.errors[0] ?? null)
-
-  const isPending = enabled && (priceQuery.isPending || isBalancesPending)
-  const error = priceError ?? balancesError
 
   const totals = useMemo(() => {
     if (!enabled) return {}
@@ -147,9 +141,5 @@ export const useVaultsTotalBalances = ({
     vaultCoinEntries,
   ])
 
-  return {
-    totals,
-    isPending,
-    error,
-  }
+  return { totals }
 }

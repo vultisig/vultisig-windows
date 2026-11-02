@@ -16,7 +16,6 @@ import {
   VaultSearchField,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
-import { sumVaultTotals } from '@core/ui/vaultsOrganisation/utils/sumVaultTotals'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -38,6 +37,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../state/core'
+import { sumVaultTotals } from './utils/sumVaultTotals'
 
 type FolderEntry = {
   id: string
@@ -269,10 +269,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
             <VStack gap={12}>
               {displayedVaults.map(vault => {
                 const vaultId = getVaultId(vault)
-                const value =
-                  !skipBalanceFetch && vaultTotals?.[vaultId] !== undefined
-                    ? vaultTotals[vaultId]
-                    : undefined
+                const value = vaultTotals?.[vaultId]
 
                 return (
                   <VaultListItem

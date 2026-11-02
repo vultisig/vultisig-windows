@@ -16,7 +16,6 @@ import {
 } from '@core/ui/vaultsOrganisation/components'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
-import { sumVaultTotals } from '@core/ui/vaultsOrganisation/utils/sumVaultTotals'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -32,6 +31,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getVaultSecurityTone } from '../utils/getVaultSecurityTone'
+import { sumVaultTotals } from '../utils/sumVaultTotals'
 
 export const VaultFolderPage = () => {
   const { t } = useTranslation()
@@ -45,8 +45,7 @@ export const VaultFolderPage = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances({ vaults })
+  const { totals: vaultTotals } = useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
   const folderTotal = sumVaultTotals({ totals: vaultTotals, vaults })
@@ -54,12 +53,12 @@ export const VaultFolderPage = () => {
   const summarySubtitle = useMemo(() => {
     const parts = [t('vault_count', { count: vaults.length })]
 
-    if (!isTotalsPending && folderTotal !== undefined) {
+    if (folderTotal !== undefined) {
       parts.push(formatFiatAmount(folderTotal))
     }
 
     return parts.join(' • ')
-  }, [folderTotal, formatFiatAmount, isTotalsPending, t, vaults.length])
+  }, [folderTotal, formatFiatAmount, t, vaults.length])
 
   const handleSelectVault = (vaultId: string) =>
     mutate(vaultId, {

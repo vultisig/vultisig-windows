@@ -1,6 +1,3 @@
-import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
-import { usePortfolioVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
@@ -10,6 +7,9 @@ import {
 } from '@vultisig/core-chain/coin/AccountCoin'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 
+import { useCoinPricesQuery } from '../../chain/coin/price/queries/useCoinPricesQuery'
+import { useBalancesQuery } from '../../chain/coin/queries/useBalancesQuery'
+import { usePortfolioVaultChainCoins } from '../state/currentVaultCoins'
 import { VaultChainCoin } from './useVaultChainCoinsQuery'
 
 /** Chain coins that have loaded so far, flagged while others are still loading or have failed. */
@@ -18,28 +18,20 @@ type ProgressiveVaultChainCoinsQuery = Query<VaultChainCoin[]> & {
   isIncomplete: boolean
 }
 
-type ResolveProgressiveVaultChainCoinsInput = {
+type CollectLoadedCoinsInput = {
   coins: AccountCoin[]
   prices: Record<string, number>
   balances: Record<string, bigint> | undefined
   failedCoins: string[]
-  error: unknown
-  hasPriceError: boolean
 }
 
-/**
- * Lists each coin whose balance has loaded once prices have settled, since a
- * row without a price reads as zero. A missing balance is reported as loading
- * or failed, never as an amount; a failed price read marks the list incomplete.
- */
-const resolveProgressiveVaultChainCoins = ({
+/** Coins whose balance has loaded, with whether any are still loading or have failed. */
+const collectLoadedCoins = ({
   coins,
   prices,
   balances,
   failedCoins,
-  error,
-  hasPriceError,
-}: ResolveProgressiveVaultChainCoinsInput): ProgressiveVaultChainCoinsQuery => {
+}: CollectLoadedCoinsInput) => {
   const failedCoinKeys = new Set(failedCoins)
   const rows: VaultChainCoin[] = []
   let hasLoadingCoin = false
@@ -61,45 +53,38 @@ const resolveProgressiveVaultChainCoins = ({
     rows.push({ ...coin, amount, price: prices[coinKeyToString(coin)] })
   })
 
-  if (rows.length === 0 && hasLoadingCoin) {
-    return { ...pendingQuery, isUpdating: true, isIncomplete: false }
-  }
+  return { rows, hasLoadingCoin, hasFailedCoin }
+}
 
-  if (rows.length === 0 && hasFailedCoin) {
-    return {
-      data: undefined,
-      isPending: false,
-      error: error ?? new Error('Failed to load balances'),
-      isUpdating: false,
-      isIncomplete: false,
-    }
-  }
-
-  return {
-    ...getResolvedQuery(rows),
-    isUpdating: hasLoadingCoin,
-    isIncomplete: hasFailedCoin || hasPriceError,
-  }
+type ResolveProgressiveVaultChainCoinsInput = {
+  coins: AccountCoin[]
+  prices: Record<string, number> | undefined
+  isPricesPending: boolean
+  priceError: unknown
+  balances: Record<string, bigint> | undefined
+  failedCoins: string[]
+  balanceError: unknown
 }
 
 /**
- * A chain's coins for display, each listed once its balance has loaded, so a
- * slow or failed read holds back only its own row. Use `useVaultChainCoinsQuery`
- * where every balance must be present at once.
+ * Lists each coin whose balance has loaded once prices have settled, since a
+ * row without a price reads as zero. A missing balance is reported as loading
+ * or failed, never as an amount; a failed price read marks the list incomplete.
  */
-export const useProgressiveVaultChainCoinsQuery = (
-  chain: Chain
-): ProgressiveVaultChainCoinsQuery => {
-  const coins = usePortfolioVaultChainCoins(chain)
-  const pricesQuery = useCoinPricesQuery({ coins })
-  const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
-  const [priceError] = pricesQuery.errors
-
-  if (pricesQuery.isPending) {
+const resolveProgressiveVaultChainCoins = ({
+  coins,
+  prices,
+  isPricesPending,
+  priceError,
+  balances,
+  failedCoins,
+  balanceError,
+}: ResolveProgressiveVaultChainCoinsInput): ProgressiveVaultChainCoinsQuery => {
+  if (isPricesPending) {
     return { ...pendingQuery, isUpdating: true, isIncomplete: false }
   }
 
-  if (!pricesQuery.data) {
+  if (!prices) {
     return {
       data: undefined,
       isPending: false,
@@ -109,12 +94,51 @@ export const useProgressiveVaultChainCoinsQuery = (
     }
   }
 
+  const { rows, hasLoadingCoin, hasFailedCoin } = collectLoadedCoins({
+    coins,
+    prices,
+    balances,
+    failedCoins,
+  })
+
+  if (rows.length === 0 && hasLoadingCoin) {
+    return { ...pendingQuery, isUpdating: true, isIncomplete: false }
+  }
+
+  if (rows.length === 0 && hasFailedCoin) {
+    return {
+      data: undefined,
+      isPending: false,
+      error: balanceError ?? new Error('Failed to load balances'),
+      isUpdating: false,
+      isIncomplete: false,
+    }
+  }
+
+  return {
+    ...getResolvedQuery(rows),
+    isUpdating: hasLoadingCoin,
+    isIncomplete: hasFailedCoin || priceError !== undefined,
+  }
+}
+
+/**
+ * A chain's coins for display, each listed once its balance has loaded, so a
+ * slow or failed read holds back only its own row. Use `useVaultChainCoinsQuery`
+ * where every balance must be present at once.
+ */
+export const useProgressiveVaultChainCoinsQuery = (chain: Chain) => {
+  const coins = usePortfolioVaultChainCoins(chain)
+  const pricesQuery = useCoinPricesQuery({ coins })
+  const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
+
   return resolveProgressiveVaultChainCoins({
     coins,
     prices: pricesQuery.data,
+    isPricesPending: pricesQuery.isPending,
+    priceError: pricesQuery.errors[0],
     balances: balancesQuery.data,
     failedCoins: balancesQuery.failedCoins,
-    error: balancesQuery.errors[0] ?? null,
-    hasPriceError: priceError !== undefined,
+    balanceError: balancesQuery.errors[0],
   })
 }
