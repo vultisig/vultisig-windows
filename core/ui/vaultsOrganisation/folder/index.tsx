@@ -150,9 +150,7 @@ export const VaultFolderPage = () => {
                     }
                     title={vault.name}
                     subtitle={
-                      !isTotalsPending && value !== undefined
-                        ? formatFiatAmount(value)
-                        : undefined
+                      value !== undefined ? formatFiatAmount(value) : undefined
                     }
                     meta={<VaultSigners vault={vault} />}
                     trailing={

@@ -275,9 +275,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
               {displayedVaults.map(vault => {
                 const vaultId = getVaultId(vault)
                 const value =
-                  !skipBalanceFetch &&
-                  !isTotalsPending &&
-                  vaultTotals?.[vaultId] !== undefined
+                  !skipBalanceFetch && vaultTotals?.[vaultId] !== undefined
                     ? vaultTotals[vaultId]
                     : undefined
 
