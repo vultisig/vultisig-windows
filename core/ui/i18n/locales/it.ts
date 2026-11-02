@@ -272,7 +272,7 @@ export const it = {
   disconnect_all: 'Disconnetti tutto',
   discord: 'Discord',
   complete_fee_waive: 'Nessuna commissione',
-  discount_tiers: 'Livelli di sconto',
+  discount_tiers: 'Livelli di sconto {{ticker}}',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
   discovering_mediator: 'Ricerca del servizio di mediazione, attendi...',
@@ -583,6 +583,7 @@ export const it = {
   m_of_n_vault: 'Vault {{m}}-su-{{n}}',
   make_sure_chains: 'Assicurati che la chain che cerchi sia abilitata.',
   manage_chains: 'Gestisci le chain',
+  m_of_n: '{{m}}-di-{{n}}',
   manage_notifications_in_settings:
     'È possibile gestire le notifiche nelle impostazioni di sistema.',
   max: 'Massimo',
@@ -658,7 +659,6 @@ export const it = {
   not_enough_funds: 'Fondi insufficienti',
   nothing_to_add: 'Niente da aggiungere',
   nothing_to_add_hint: 'Tutti i tuoi vault sono già ordinati.',
-  of: 'Di',
   off: 'Spento',
   on: 'Acceso',
   onboarding_description_1:
@@ -674,7 +674,6 @@ export const it = {
   optionalDevice: 'Dispositivo opzionale',
   other: 'Altro',
   overview: 'Panoramica',
-  part: 'parte',
   passcodes_do_not_match: 'I codici di accesso non corrispondono',
   password: 'Password',
   password_do_not_match: 'Le password non corrispondono',
@@ -1100,6 +1099,7 @@ export const it = {
   vault_notifications: 'Notifiche del Vault',
   vault_part: 'Quota del vault',
   vault_password: 'Password del vault',
+  vault_share_position: 'Parte {{index}} di {{total}}',
   vault_ready_description:
     'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
   vault_ready_to_use: "Il tuo vault è pronto all'uso",

@@ -269,7 +269,7 @@ export const ru = {
   disconnect_all: 'Отключить всё',
   discord: 'Discord',
   complete_fee_waive: 'Без комиссии',
-  discount_tiers: 'Уровни скидок',
+  discount_tiers: 'Уровни скидок {{ticker}}',
   discount_tiers_description:
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',
   discovering_mediator: 'Поиск mediator-сервиса, пожалуйста подождите...',
@@ -572,6 +572,7 @@ export const ru = {
   low: 'Низкий',
   lp_units: 'LP-юниты',
   m_of_n_vault: 'Хранилище {{m}}-из-{{n}}',
+  m_of_n: '{{m}}-из-{{n}}',
   make_sure_chains: 'Убедитесь, что нужная сеть включена.',
   manage_chains: 'Управление сетями',
   manage_notifications_in_settings:
@@ -650,7 +651,6 @@ export const ru = {
   not_enough_funds: 'Недостаточно средств',
   nothing_to_add: 'Нечего добавлять',
   nothing_to_add_hint: 'Все ваши хранилища уже рассортированы.',
-  of: 'из',
   off: 'Выкл',
   on: 'Вкл',
   onboarding_description_1:
@@ -666,7 +666,6 @@ export const ru = {
   optionalDevice: 'Необязательное устройство',
   other: 'Другое',
   overview: 'Обзор',
-  part: 'часть',
   passcodes_do_not_match: 'Пин-коды не совпадают',
   password: 'Пароль',
   password_do_not_match: 'Пароли не совпадают',
@@ -1092,6 +1091,7 @@ export const ru = {
   vault_name_required: 'Имя хранилища обязательно',
   vault_notifications: 'Уведомления хранилища',
   vault_part: 'Доля хранилища',
+  vault_share_position: 'Доля {{index}} из {{total}}',
   vault_password: 'Пароль хранилища',
   vault_ready_description:
     'Всё готово! Вы сохраняете контроль над каждой транзакцией.',

@@ -269,7 +269,7 @@ export const nl = {
   disconnect_all: 'Alles verbreken',
   discord: 'Discord',
   complete_fee_waive: 'Geen kosten',
-  discount_tiers: 'Kortingsniveaus',
+  discount_tiers: '{{ticker}}-kortingsniveaus',
   discount_tiers_description: 'Houd $VULT aan voor lagere handelskosten.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
@@ -571,6 +571,7 @@ export const nl = {
   low: 'Laag',
   lp_units: 'LP-units',
   m_of_n_vault: '{{m}}-van-{{n}} kluis',
+  m_of_n: '{{m}}-van-{{n}}',
   make_sure_chains: 'Zorg dat de chain waar je naar zoekt is ingeschakeld.',
   manage_chains: 'Chains beheren',
   manage_notifications_in_settings:
@@ -648,7 +649,6 @@ export const nl = {
   not_enough_funds: 'Onvoldoende tegoed',
   nothing_to_add: 'Niets toe te voegen',
   nothing_to_add_hint: 'Al je kluizen zijn al ingedeeld.',
-  of: 'van',
   off: 'Uit',
   on: 'Aan',
   onboarding_description_1:
@@ -664,7 +664,6 @@ export const nl = {
   optionalDevice: 'Optioneel apparaat',
   other: 'Overig',
   overview: 'Overzicht',
-  part: 'deel',
   passcodes_do_not_match: 'Pincodes komen niet overeen',
   password: 'Wachtwoord',
   password_do_not_match: 'Wachtwoorden komen niet overeen',
@@ -1085,6 +1084,7 @@ export const nl = {
   vault_name_required: 'Kluisnaam is verplicht',
   vault_notifications: 'Kluismeldingen',
   vault_part: 'Kluisdeel',
+  vault_share_position: 'Deel {{index}} van {{total}}',
   vault_password: 'Kluiswachtwoord',
   vault_ready_description:
     'Je bent helemaal klaar! Je behoudt de controle over elke transactie.',

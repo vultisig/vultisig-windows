@@ -271,7 +271,7 @@ export const hr = {
   disconnect_all: 'Isključi sve',
   discord: 'Discord',
   complete_fee_waive: 'Bez naknade',
-  discount_tiers: 'Razine popusta',
+  discount_tiers: 'Razine popusta {{ticker}}',
   discount_tiers_description:
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
@@ -574,6 +574,7 @@ export const hr = {
   low: 'Nisko',
   lp_units: 'LP jedinice',
   m_of_n_vault: 'Trezor {{m}}-od-{{n}}',
+  m_of_n: '{{m}}-od-{{n}}',
   make_sure_chains: 'Provjerite je li lanac koji tražite omogućen.',
   manage_chains: 'Upravljanje lancima',
   manage_notifications_in_settings:
@@ -652,7 +653,6 @@ export const hr = {
   not_enough_funds: 'Nema dovoljno sredstava',
   nothing_to_add: 'Nema što dodati',
   nothing_to_add_hint: 'Svi vaši trezori su već sortirani.',
-  of: 'od',
   off: 'Isključeno',
   on: 'Uključeno',
   onboarding_description_1:
@@ -668,7 +668,6 @@ export const hr = {
   optionalDevice: 'Dodatni uređaj',
   other: 'Ostalo',
   overview: 'Pregled',
-  part: 'dio',
   passcodes_do_not_match: 'Pristupni kodovi se ne podudaraju.',
   password: 'Lozinka',
   password_do_not_match: 'Lozinke se ne podudaraju',
@@ -1101,6 +1100,7 @@ export const hr = {
   vault_name_required: 'Naziv trezora je obavezan',
   vault_notifications: 'Obavijesti o trezoru',
   vault_part: 'Udio trezora',
+  vault_share_position: 'Udio {{index}} od {{total}}',
   vault_password: 'Lozinka trezora',
   vault_ready_description:
     'Spremni ste! Vi imate kontrolu nad svakom transakcijom.',

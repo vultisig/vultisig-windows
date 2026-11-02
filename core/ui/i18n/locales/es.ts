@@ -271,7 +271,7 @@ export const es = {
   disconnect_all: 'Desconectar todo',
   discord: 'Discord',
   complete_fee_waive: 'Sin comisión',
-  discount_tiers: 'Niveles de descuento',
+  discount_tiers: 'Niveles de descuento {{ticker}}',
   discount_tiers_description:
     'Ten $VULT para desbloquear comisiones de trading más bajas.',
   discovering_mediator: 'Descubriendo el servicio de mediación, espera...',
@@ -575,6 +575,7 @@ export const es = {
   low: 'Bajo',
   lp_units: 'Unidades LP',
   m_of_n_vault: 'Bóveda {{m}}-de-{{n}}',
+  m_of_n: '{{m}}-de-{{n}}',
   make_sure_chains:
     'Asegúrate de que la cadena que estás buscando esté activada.',
   manage_chains: 'Administrar cadenas',
@@ -653,7 +654,6 @@ export const es = {
   not_enough_funds: 'No hay fondos suficientes',
   nothing_to_add: 'Nada que agregar',
   nothing_to_add_hint: 'Todas tus bóvedas ya están ordenadas.',
-  of: 'de',
   off: 'Apagado',
   on: 'Activado',
   onboarding_description_1:
@@ -669,7 +669,6 @@ export const es = {
   optionalDevice: 'Dispositivo opcional',
   other: 'Otro',
   overview: 'Descripción general',
-  part: 'fragmento',
   passcodes_do_not_match: 'Los códigos de acceso no coinciden',
   password: 'Contraseña',
   password_do_not_match: 'Las contraseñas no coinciden',
@@ -1095,6 +1094,7 @@ export const es = {
   vault_name_required: 'El nombre de la bóveda es obligatorio',
   vault_notifications: 'Notificaciones de la bóveda',
   vault_part: 'Fragmento de la bóveda',
+  vault_share_position: 'Parte {{index}} de {{total}}',
   vault_password: 'Contraseña de la bóveda',
   vault_ready_description:
     '¡Todo listo! Mantienes el control de cada transacción.',
