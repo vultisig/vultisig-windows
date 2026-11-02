@@ -1019,7 +1019,7 @@ export const de = {
   ultimate: 'Ultimativ',
   unlock_discount_tier: 'Stufe <b>{{tier}}</b> freischalten',
   unlock_discount_tier_description:
-    'Mit {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten <b>{{bps}} bps Rabatt auf die Handelsgebühr</b> bei allen Swaps.',
+    'Mit {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten <b>{{percent}} Rabatt auf die Handelsgebühr</b> bei allen Swaps.',
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   unlock_tier: 'Stufe freischalten',

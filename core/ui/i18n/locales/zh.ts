@@ -939,7 +939,7 @@ export const zh = {
   ultimate: '至尊',
   unlock_discount_tier: '解锁 <b>{{tier}}</b> 等级',
   unlock_discount_tier_description:
-    '持有{{minBalance}}，即可解锁{{tier}}等级，并在所有兑换中享受 <b>{{bps}} bps 手续费折扣</b>。',
+    '持有{{minBalance}}，即可解锁{{tier}}等级，并在所有兑换中享受 <b>{{percent}} 手续费折扣</b>。',
   unlock_discount_tier_description_ultimate:
     '持有{{minBalance}}，即可解锁{{tier}}等级，所有兑换<b>全免 Vultisig 手续费</b>。',
   unlock_tier: '解锁等级',

@@ -1005,7 +1005,7 @@ export const ru = {
   ultimate: 'Ultimate',
   unlock_discount_tier: 'Разблокировать уровень <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>скидку {{bps}} bps на торговые комиссии</b> для всех свопов.',
+    'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>скидку {{percent}} на торговые комиссии</b> для всех свопов.',
   unlock_discount_tier_description_ultimate:
     'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>полную отмену комиссии Vultisig</b> для всех свопов.',
   unlock_tier: 'Разблокировать уровень',

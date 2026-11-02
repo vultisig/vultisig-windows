@@ -1482,7 +1482,7 @@ export const en = {
   ultimate: 'Ultimate',
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
-    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.",
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{percent}} trading fee discount</b> on all swaps.",
   unlock_discount_tier_description_ultimate:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
