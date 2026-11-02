@@ -6,8 +6,6 @@ import { KnownCoin } from '@vultisig/core-chain/coin/Coin'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
-import { securedAssetDenomToPoolAsset } from '../price/thor/getThorchainSecuredAssetPrices'
-
 type ThorchainPoolStatus = {
   asset: string
   status: string
@@ -33,9 +31,7 @@ const fetchThorchainSecuredAssetCoins = async (): Promise<KnownCoin[]> => {
 
   // Catalog entries carry live pool state; only the coin fields may reach storage.
   return assets
-    .filter(({ id }) =>
-      availablePoolAssets.has(securedAssetDenomToPoolAsset(id))
-    )
+    .filter(({ l1Asset }) => availablePoolAssets.has(l1Asset))
     .map(asset => omit(asset, 'l1Asset', 'isSecured', 'supply', 'depth'))
 }
 
@@ -49,7 +45,7 @@ export const useThorchainSecuredAssetsQuery = (
   chain: Chain
 ): UseQueryResult<KnownCoin[]> =>
   useQuery({
-    queryKey: ['thorchainSecuredAssets'],
+    queryKey: ['thorchainSecuredAssets', chain],
     enabled: chain === Chain.THORChain,
     queryFn: fetchThorchainSecuredAssetCoins,
   })

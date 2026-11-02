@@ -27,7 +27,6 @@ import {
 import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@vultisig/core-chain/coin/utils/sortCoinsAlphabetically'
-import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -92,12 +91,10 @@ export const ManageVaultChainCoinsPage = () => {
   const allCoins = useMemo(
     () =>
       getManageableCoins({
-        known: sortCoinsAlphabetically(
-          withoutDuplicates(
-            [...knownTokens[currentchain], ...(securedAssetsQuery.data ?? [])],
-            areEqualCoins
-          )
-        ),
+        known: sortCoinsAlphabetically([
+          ...knownTokens[currentchain],
+          ...(securedAssetsQuery.data ?? []),
+        ]),
         whitelisted: whitelistedQuery.data || [],
         current: currentCoins,
       }),
