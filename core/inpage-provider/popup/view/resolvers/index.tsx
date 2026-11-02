@@ -1,23 +1,25 @@
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
-import { ExportVaults } from '@core/inpage-provider/popup/view/resolvers/exportVaults'
-import { GrantVaultAccess } from '@core/inpage-provider/popup/view/resolvers/grantVaultAccess'
-import { PluginReshare } from '@core/inpage-provider/popup/view/resolvers/pluginReshare'
-import { SendTx } from '@core/inpage-provider/popup/view/resolvers/sendTx'
-import { SignMessage } from '@core/inpage-provider/popup/view/resolvers/signMessage'
-import { SuggestKeplrChain } from '@core/inpage-provider/popup/view/resolvers/suggestKeplrChain'
-import { WatchAsset } from '@core/inpage-provider/popup/view/resolvers/watchAsset'
+import { lazy } from 'react'
+
+import { popupResolverLoaders } from './loaders'
 
 type PopupApiImplementation = {
   [K in PopupMethod]: PopupResolver<K>
 }
 
+const lazyResolver = <K extends PopupMethod>(method: K): PopupResolver<K> =>
+  lazy(() =>
+    popupResolverLoaders[method]().then(Resolver => ({ default: Resolver }))
+  )
+
+/** Each method's screen, suspending until its module has loaded. */
 export const PopupResolvers: PopupApiImplementation = {
-  grantVaultAccess: GrantVaultAccess,
-  exportVaults: ExportVaults,
-  pluginReshare: PluginReshare,
-  signMessage: SignMessage,
-  sendTx: SendTx,
-  watchAsset: WatchAsset,
-  suggestKeplrChain: SuggestKeplrChain,
+  grantVaultAccess: lazyResolver('grantVaultAccess'),
+  exportVaults: lazyResolver('exportVaults'),
+  pluginReshare: lazyResolver('pluginReshare'),
+  signMessage: lazyResolver('signMessage'),
+  sendTx: lazyResolver('sendTx'),
+  watchAsset: lazyResolver('watchAsset'),
+  suggestKeplrChain: lazyResolver('suggestKeplrChain'),
 }
