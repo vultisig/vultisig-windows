@@ -132,7 +132,7 @@
     "undici": "8.12.3",
     "vite": "7.3.7",
     "vitest": "4.1.10",
-    "follow-redirects": "1.16.1",
+    "follow-redirects": "1.16.2",
     "markdown-it": "14.3.3",
     "ws@8.17.1": "8.21.0",
     "ws@8.18.3": "8.21.0",
