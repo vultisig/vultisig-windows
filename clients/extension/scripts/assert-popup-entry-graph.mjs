@@ -24,46 +24,50 @@ const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const artifactDirectory = brand === 'station' ? 'dist-station' : 'dist'
 const distDir = path.resolve(currentDir, '..', artifactDirectory)
 
-const html = await readFile(path.resolve(distDir, 'index.html'), 'utf8')
-
-const entryGraphFiles = [
-  ...html.matchAll(
-    /<script[^>]*\ssrc="([^"]+)"|<link[^>]*rel="modulepreload"[^>]*\shref="([^"]+)"/g
-  ),
-].map(match => match[1] ?? match[2])
-
-if (entryGraphFiles.length === 0) {
-  throw new Error(
-    `No entry script found in ${path.join(distDir, 'index.html')}`
-  )
-}
-
 const formatMb = bytes => `${(bytes / 1024 / 1024).toFixed(2)} MB`
 
-const sizes = await Promise.all(
-  entryGraphFiles.map(async file => {
-    const { size } = await stat(path.resolve(distDir, file.replace(/^\//, '')))
+// popup.html (the dApp request window) shares the shell, so it shares the budget.
+const assertEntryGraph = async htmlFile => {
+  const html = await readFile(path.resolve(distDir, htmlFile), 'utf8')
 
-    return { file, size }
-  })
-)
+  const entryGraphFiles = [
+    ...html.matchAll(
+      /<script[^>]*\ssrc="([^"]+)"|<link[^>]*rel="modulepreload"[^>]*\shref="([^"]+)"/g
+    ),
+  ].map(match => match[1] ?? match[2])
 
-const total = sizes.reduce((sum, { size }) => sum + size, 0)
+  if (entryGraphFiles.length === 0) {
+    throw new Error(`No entry script found in ${path.join(distDir, htmlFile)}`)
+  }
 
-console.log(
-  `Popup entry graph (${artifactDirectory}/index.html${isFirefoxBuild ? ', firefox' : ''}):`
-)
-for (const { file, size } of sizes) {
-  console.log(`  ${formatMb(size).padStart(10)}  ${file}`)
-}
-console.log(
-  `  ${formatMb(total).padStart(10)}  total (budget ${formatMb(maxEntryGraphBytes)})`
-)
+  const sizes = await Promise.all(
+    entryGraphFiles.map(async file => {
+      const { size } = await stat(path.resolve(distDir, file.replace(/^\//, '')))
 
-if (total > maxEntryGraphBytes) {
-  throw new Error(
-    `The popup entry graph is ${formatMb(total)}, over the ${formatMb(
-      maxEntryGraphBytes
-    )} budget. A page module is probably imported statically somewhere on the home path; keep pages behind the dynamic imports in the view registries.`
+      return { file, size }
+    })
   )
+
+  const total = sizes.reduce((sum, { size }) => sum + size, 0)
+
+  console.log(
+    `Entry graph (${artifactDirectory}/${htmlFile}${isFirefoxBuild ? ', firefox' : ''}):`
+  )
+  for (const { file, size } of sizes) {
+    console.log(`  ${formatMb(size).padStart(10)}  ${file}`)
+  }
+  console.log(
+    `  ${formatMb(total).padStart(10)}  total (budget ${formatMb(maxEntryGraphBytes)})`
+  )
+
+  if (total > maxEntryGraphBytes) {
+    throw new Error(
+      `The ${htmlFile} entry graph is ${formatMb(total)}, over the ${formatMb(
+        maxEntryGraphBytes
+      )} budget. A page module is probably imported statically on the first-paint path; keep pages and popup screens behind the dynamic imports in their registries.`
+    )
+  }
 }
+
+await assertEntryGraph('index.html')
+await assertEntryGraph('popup.html')

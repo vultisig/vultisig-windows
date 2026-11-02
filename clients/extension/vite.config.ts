@@ -1,6 +1,6 @@
 import vultisigSdk from '@vultisig/sdk/vite'
 import path from 'path'
-import { defineConfig, loadEnv, PluginOption } from 'vite'
+import { defineConfig, loadEnv, PluginOption, Rollup } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import wasm from 'vite-plugin-wasm'
@@ -47,9 +47,9 @@ const preserveDefineDataProperty = (): PluginOption => ({
   },
 })
 
-// Modules that must not be evaluated before the popup's home paints. They are
-// loaded through `loadMpcEngine` and `loadWalletCore`; a static import anywhere
-// on the home path would put them back into a chunk that index.html
+// Modules that must not be evaluated before a page's first paint. They are
+// loaded through `loadMpcEngine` and `loadWalletCore`; a static import on the
+// first-paint path would put them back into a chunk that the page's HTML
 // modulepreloads, which the size budget alone cannot catch (#4937).
 // Matched on each package's own `dist/`: the SDK's Vite plugin resolves node
 // polyfill shims from the SDK's nested node_modules, and those are fine here.
@@ -58,57 +58,75 @@ const popupEntryGraphForbiddenModules = [
   '/node_modules/@trustwallet/wallet-core/dist/',
 ]
 
+// The toolbar popup (index.html) and the dApp request window (popup.html).
+const lazyLoadingEntries = ['index', 'popup']
+
+type GetEntryGraphOffendersInput = {
+  chunks: Rollup.OutputChunk[]
+  entry: Rollup.OutputChunk
+}
+
+/** Forbidden modules in an entry's static import graph, each with the chain of chunks that reaches it. */
+const getEntryGraphOffenders = ({
+  chunks,
+  entry,
+}: GetEntryGraphOffendersInput) => {
+  const importedBy = new Map<string, string | null>([[entry.fileName, null]])
+  const visit = (fileName: string) => {
+    chunks
+      .find(chunk => chunk.fileName === fileName)
+      ?.imports.forEach(imported => {
+        if (importedBy.has(imported)) return
+        importedBy.set(imported, fileName)
+        visit(imported)
+      })
+  }
+  visit(entry.fileName)
+  const chainTo = (fileName: string): string => {
+    const parent = importedBy.get(fileName)
+    return parent ? `${chainTo(parent)} -> ${fileName}` : fileName
+  }
+
+  return chunks
+    .filter(chunk => importedBy.has(chunk.fileName))
+    .flatMap(chunk =>
+      Object.keys(chunk.modules)
+        .filter(id =>
+          popupEntryGraphForbiddenModules.some(forbidden =>
+            id.replace(/\\/g, '/').includes(forbidden)
+          )
+        )
+        .map(
+          id =>
+            `${chainTo(chunk.fileName)}: ${id.replace(/^.*node_modules\//, '')}`
+        )
+    )
+}
+
 const assertPopupEntryGraphModules = (): PluginOption => ({
   name: 'vultisig:assert-popup-entry-graph-modules',
   generateBundle(_, bundle) {
     const chunks = Object.values(bundle).filter(
       output => output.type === 'chunk'
     )
-    const entry = chunks.find(chunk => chunk.isEntry && chunk.name === 'index')
-    if (!entry) {
-      this.error(
-        'The popup entry chunk "index" was not emitted; the entry-graph check cannot run. Keep the `index` input in rollupOptions or update this check.'
-      )
-    }
 
-    // Static import chain from the entry to each chunk, for the error message.
-    const importedBy = new Map<string, string | null>([[entry.fileName, null]])
-    const visit = (fileName: string) => {
-      chunks
-        .find(chunk => chunk.fileName === fileName)
-        ?.imports.forEach(imported => {
-          if (importedBy.has(imported)) return
-          importedBy.set(imported, fileName)
-          visit(imported)
-        })
-    }
-    visit(entry.fileName)
-    const staticGraph = new Set(importedBy.keys())
-    const chainTo = (fileName: string): string => {
-      const parent = importedBy.get(fileName)
-      return parent ? `${chainTo(parent)} -> ${fileName}` : fileName
-    }
-
-    const offenders = chunks
-      .filter(chunk => staticGraph.has(chunk.fileName))
-      .flatMap(chunk =>
-        Object.keys(chunk.modules)
-          .filter(id =>
-            popupEntryGraphForbiddenModules.some(forbidden =>
-              id.replace(/\\/g, '/').includes(forbidden)
-            )
-          )
-          .map(
-            id =>
-              `${chainTo(chunk.fileName)}: ${id.replace(/^.*node_modules\//, '')}`
-          )
+    lazyLoadingEntries.forEach(entryName => {
+      const entry = chunks.find(
+        chunk => chunk.isEntry && chunk.name === entryName
       )
+      if (!entry) {
+        this.error(
+          `The entry chunk "${entryName}" was not emitted; the entry-graph check cannot run. Keep the \`${entryName}\` input in rollupOptions or update this check.`
+        )
+      }
 
-    if (offenders.length > 0) {
-      this.error(
-        `The popup entry graph statically includes modules that must load after home paints (see loadMpcEngine / loadWalletCore):\n${offenders.slice(0, 10).join('\n')}${offenders.length > 10 ? `\n...and ${offenders.length - 10} more` : ''}`
-      )
-    }
+      const offenders = getEntryGraphOffenders({ chunks, entry })
+      if (offenders.length > 0) {
+        this.error(
+          `The ${entryName} entry graph statically includes modules that must load after first paint (see loadMpcEngine / loadWalletCore):\n${offenders.slice(0, 10).join('\n')}${offenders.length > 10 ? `\n...and ${offenders.length - 10} more` : ''}`
+        )
+      }
+    })
   },
 })
 
