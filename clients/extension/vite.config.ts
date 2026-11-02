@@ -53,13 +53,13 @@ const preserveDefineDataProperty = (): PluginOption => ({
 // modulepreloads, which the size budget alone cannot catch (#4937).
 // Matched on each package's own `dist/`: the SDK's Vite plugin resolves node
 // polyfill shims from the SDK's nested node_modules, and those are fine here.
-const popupEntryGraphForbiddenModules = [
+const firstPaintForbiddenModules = [
   '/node_modules/@vultisig/sdk/dist/',
   '/node_modules/@trustwallet/wallet-core/dist/',
 ]
 
 // The toolbar popup (index.html) and the dApp request window (popup.html).
-const lazyLoadingEntries = ['index', 'popup']
+const firstPaintEntries = ['index', 'popup']
 
 type GetEntryGraphOffendersInput = {
   chunks: Rollup.OutputChunk[]
@@ -92,7 +92,7 @@ const getEntryGraphOffenders = ({
     .flatMap(chunk =>
       Object.keys(chunk.modules)
         .filter(id =>
-          popupEntryGraphForbiddenModules.some(forbidden =>
+          firstPaintForbiddenModules.some(forbidden =>
             id.replace(/\\/g, '/').includes(forbidden)
           )
         )
@@ -103,14 +103,14 @@ const getEntryGraphOffenders = ({
     )
 }
 
-const assertPopupEntryGraphModules = (): PluginOption => ({
-  name: 'vultisig:assert-popup-entry-graph-modules',
+const assertFirstPaintEntryGraphs = (): PluginOption => ({
+  name: 'vultisig:assert-first-paint-entry-graphs',
   generateBundle(_, bundle) {
     const chunks = Object.values(bundle).filter(
       output => output.type === 'chunk'
     )
 
-    lazyLoadingEntries.forEach(entryName => {
+    firstPaintEntries.forEach(entryName => {
       const entry = chunks.find(
         chunk => chunk.isEntry && chunk.name === entryName
       )
@@ -322,7 +322,7 @@ export default defineConfig(async ({ mode }) => {
         // so the transaction builders in @vultisig/core-mpc and core-chain, which
         // only lazy pages use, sit next to the modules home needs and drag
         // WalletCore in statically. Only the Chromium build can hold this line.
-        ...(isFirefoxBuild ? [] : [assertPopupEntryGraphModules()]),
+        ...(isFirefoxBuild ? [] : [assertFirstPaintEntryGraphs()]),
       ],
       build: {
         // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's

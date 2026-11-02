@@ -1,6 +1,5 @@
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { callNotFoundPopupResult } from '@core/inpage-provider/popup/error'
-import { popupMethods } from '@core/inpage-provider/popup/interface'
 import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -12,6 +11,7 @@ import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUni
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { Suspense, useEffect } from 'react'
 
+import { popupMethods } from './interface'
 import { dismissSidePanelPopup, isPopupInSidePanel } from './sidePanel/dismiss'
 import { usePopupCallId, useResolvePopupCallMutation } from './view/core/call'
 import { VaultsOnly } from './view/flow/VaultsOnly'
@@ -42,9 +42,6 @@ const takePopupCall = async (callId: string) => {
     throw new Error(`Unknown popup method: ${method}`)
   }
 
-  // Fetch the method's screen while the shell boots from storage.
-  popupResolvers[method].load().catch(() => undefined)
-
   return { ...entry, method }
 }
 
@@ -65,6 +62,10 @@ export const PopupApp = () => {
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: () => takePopupCall(callId),
+    // Fetch the method's screen while the shell boots from storage.
+    onSuccess: ({ method }) => {
+      popupResolvers[method].load().catch(() => undefined)
+    },
     onError: () => {
       resolvePopupCall({
         result: callNotFoundPopupResult,

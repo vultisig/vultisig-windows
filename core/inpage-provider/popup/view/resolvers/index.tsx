@@ -1,4 +1,4 @@
-import { LazyComponent, lazyComponent } from '@lib/ui/navigation/lazyViews'
+import { LazyComponent, lazyComponent } from '@lib/ui/base/lazyComponent'
 
 import { PopupMethod } from '../../interface'
 import { PopupResolver } from '../resolver'

@@ -28,7 +28,6 @@ const distDir = path.resolve(currentDir, '..', artifactDirectory)
 
 const formatMb = bytes => `${(bytes / 1024 / 1024).toFixed(2)} MB`
 
-// popup.html (the dApp request window) shares the shell, so it shares the budget.
 const checkEntryGraph = async htmlFile => {
   const html = await readFile(path.resolve(distDir, htmlFile), 'utf8')
 
@@ -70,6 +69,7 @@ const checkEntryGraph = async htmlFile => {
 }
 
 const failures = []
+// popup.html (the dApp request window) shares the shell, so it shares the budget.
 for (const htmlFile of ['index.html', 'popup.html']) {
   const failure = await checkEntryGraph(htmlFile)
   if (failure) failures.push(failure)
