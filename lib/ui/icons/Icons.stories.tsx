@@ -15,11 +15,9 @@ import { BadgeCheckIcon } from './BadgeCheckIcon'
 import { BagClockIcon } from './BagClockIcon'
 import { BellIcon } from './BellIcon'
 import { BookIcon } from './BookIcon'
-import { BooksIcon } from './BooksIcon'
 import { BoxIcon } from './BoxIcon'
 import { BrokenChainLink3Icon } from './BrokenChainLink3Icon'
 import { BrowserExtensionIcon } from './BrowserExtensionIcon'
-import { BubbleQuestionIcon } from './BubbleQuestionIcon'
 import { CalendarBlankIcon } from './CalendarBlankIcon'
 import { CalendarClockIcon } from './CalendarClockIcon'
 import { CalendarIcon } from './CalendarIcon'
@@ -60,12 +58,10 @@ import { CubeWithCornersIcon } from './CubeWithCornersIcon'
 import { DAppsIcon } from './DAppsIcon'
 import { DeviceIcon } from './DeviceIcon'
 import { DevicesIcon } from './DevicesIcon'
-import { DiscordIcon } from './DiscordIcon'
 import { DollarIcon } from './DollarIcon'
 import { DownloadSeedphraseIcon } from './DownloadSeedphraseIcon'
 import { EmailIcon } from './EmailIcon'
 import { EmailNotificationIcon } from './EmailNotificationIcon'
-import { ExpandIcon } from './ExpandIcon'
 import { EyeClosedIcon } from './EyeClosedIcon'
 import { EyeIcon } from './EyeIcon'
 import { EyeOffIcon } from './EyeOffIcon'
@@ -82,7 +78,6 @@ import { FolderLockIcon } from './FolderLockIcon'
 import { FolderUploadIcon } from './FolderUploadIcon'
 import { FrameIcon } from './FrameIcon'
 import { FuelIcon } from './FuelIcon'
-import { GithubIcon } from './GithubIcon'
 import { GlobusIcon } from './GlobusIcon'
 import { GripVerticalIcon } from './GripVerticalIcon'
 import { GroupOneIcon } from './GroupOneIcon'
@@ -107,7 +102,6 @@ import { MenuIcon } from './MenuIcon'
 import { NavigationXIcon } from './NavigationXIcon'
 import { PadlockIcon } from './PadlockIcon'
 import { PageCheckIcon } from './PageCheckIcon'
-import { PanelRightIcon } from './PanelRightIcon'
 import { PasteIcon } from './PasteIcon'
 import { PencilIcon } from './PenciIcon'
 import { PercentIcon } from './PercentIcon'
@@ -157,7 +151,6 @@ import { TransactionApproveIcon } from './TransactionApproveIcon'
 import { TransactionReceiveIcon } from './TransactionReceiveIcon'
 import { TransactionSendIcon } from './TransactionSendIcon'
 import { TransactionSwapIcon } from './TransactionSwapIcon'
-import { TrashCanIcon } from './TrashCanIcon'
 import { TrashIcon } from './TrashIcon'
 import { TrashIcon2 } from './TrashIcon2'
 import { TriangleAlertIcon } from './TriangleAlertIcon'
@@ -193,11 +186,9 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   BagClockIcon,
   BellIcon,
   BookIcon,
-  BooksIcon,
   BoxIcon,
   BrokenChainLink3Icon,
   BrowserExtensionIcon,
-  BubbleQuestionIcon,
   CalendarBlankIcon,
   CalendarClockIcon,
   CalendarIcon,
@@ -237,12 +228,10 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   DAppsIcon,
   DeviceIcon,
   DevicesIcon,
-  DiscordIcon,
   DollarIcon,
   DownloadSeedphraseIcon,
   EmailIcon,
   EmailNotificationIcon,
-  ExpandIcon,
   EyeClosedIcon,
   EyeIcon,
   EyeOffIcon,
@@ -259,7 +248,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   FolderUploadIcon,
   FrameIcon,
   FuelIcon,
-  GithubIcon,
   GlobusIcon,
   GripVerticalIcon,
   GroupOneIcon,
@@ -285,7 +273,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   NavigationXIcon,
   PadlockIcon,
   PageCheckIcon,
-  PanelRightIcon,
   PasteIcon,
   PencilIcon,
   PercentIcon,
@@ -320,7 +307,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   TransactionReceiveIcon,
   TransactionSendIcon,
   TransactionSwapIcon,
-  TrashCanIcon,
   TrashIcon,
   TrashIcon2,
   TriangleAlertIcon,

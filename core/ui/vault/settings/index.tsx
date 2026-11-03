@@ -34,7 +34,10 @@ export const VaultSettingsPage = () => {
 
   const areReferralsEnabled = Boolean(addresses[Chain.THORChain])
   // Only desktop registers a migrate page; the extension's view is empty.
-  const canMigrate = client === 'desktop' && vault.libType !== 'DKLS'
+  const canMigrate =
+    client === 'desktop' &&
+    vault.libType !== 'DKLS' &&
+    vault.libType !== 'KeyImport'
 
   return (
     <VStack fullHeight>

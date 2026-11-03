@@ -114,6 +114,10 @@ const Row = styled(ListItem)`
   min-height: 0;
   padding: 16px 12px;
 
+  > :first-child {
+    min-width: 0;
+  }
+
   > :nth-child(2) {
     flex-shrink: 0;
   }

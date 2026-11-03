@@ -1159,7 +1159,7 @@ export const hr = {
   waiting_for_keygen_start: 'Čekanje početka generiranja ključa...',
   waiting_for_keysign_start: 'Čeka se početak procesa potpisivanja...',
   wallet: 'Novčanik',
-  website: 'Web stranica',
+  website: 'Web',
   withdraw: 'Povući',
   withdraw_ruji_rewards: 'Isplata RUJI nagrada',
   add_cacao_pool: 'Dodaj u CACAO pool',

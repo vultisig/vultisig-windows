@@ -41,7 +41,7 @@ const Container = styled(UnstyledButton)`
   height: ${tileHeight}px;
   justify-content: center;
   min-width: 0;
-  padding: 12px;
+  padding: 12px 4px;
   transition: background-color 0.2s;
 
   &:hover {
