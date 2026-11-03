@@ -303,10 +303,10 @@ const stationNetworkChangeEvent = 'station_network_change'
  *   payload is assembled into a protobuf `TxRaw` with
  *   `SIGN_MODE_LEGACY_AMINO_JSON` (see {@link stationTxAssembly}) and
  *   broadcast by the background service worker, the same path as Keplr
- *   `sendTx`. Per-message-type
- *   encoding is delegated to cosmjs's `AminoTypes` and `Registry`, so any
- *   bank / staking / distribution / gov / ibc / wasm message and any
- *   number of messages per tx are supported with no per-type code here.
+ *   `sendTx`. Per-message-type encoding is delegated to cosmjs's
+ *   `AminoTypes` and `Registry`, so any bank / staking / distribution / gov /
+ *   ibc / wasm message and any number of messages per tx are supported with
+ *   no per-type code here.
  *
  * `switchNetwork` toggles between `mainnet` (Terra v2 + sister Cosmos chains)
  * and `classic` (Terra Classic) and emits `station_network_change` so dApps
