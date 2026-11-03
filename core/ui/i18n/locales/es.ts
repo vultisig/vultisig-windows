@@ -1007,7 +1007,7 @@ export const es = {
   ultimate: 'Supremo',
   unlock_discount_tier: 'Desbloquear nivel <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un <b>descuento de {{percent}} en la comisión de trading</b> en todos los swaps.',
+    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un <b>descuento de {{percent}} en la comisión de swap de Vultisig</b> en todos los swaps.',
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la comisión de Vultisig</b> en todos los swaps.',
   unlock_tier: 'Desbloquear nivel',

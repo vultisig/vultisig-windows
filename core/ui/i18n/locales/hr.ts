@@ -1011,7 +1011,7 @@ export const hr = {
   ultimate: 'Krajnji',
   unlock_discount_tier: 'Otključaj razinu <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{percent}} naknade za trgovanje</b> na sve swapove.',
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{percent}} na Vultisig naknadu za swap</b> na sve swapove.',
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   unlock_tier: 'Otključaj razinu',
