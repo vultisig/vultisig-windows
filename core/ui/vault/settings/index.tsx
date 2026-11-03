@@ -1,7 +1,7 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useIsPasscodeRequired } from '@core/ui/passcodeEncryption/state/useIsPasscodeRequired'
 import { SettingsItem } from '@core/ui/settings/SettingsItem'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -11,12 +11,11 @@ import { CloudArrowUpIcon } from '@lib/ui/icons/CloudArrowUpIcon'
 import { FileSearchIcon } from '@lib/ui/icons/FileSearchIcon'
 import { GridLayout7Icon } from '@lib/ui/icons/GridLayout7Icon'
 import { LockFilledIcon } from '@lib/ui/icons/LockFilledIcon'
-import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { PenWritingIcon } from '@lib/ui/icons/PenWritingIcon'
+import { ReferralMegaphoneIcon } from '@lib/ui/icons/ReferralMegaphoneIcon'
 import { ShieldOutlineIcon } from '@lib/ui/icons/ShieldOutlineIcon'
 import { TrashFilledIcon } from '@lib/ui/icons/TrashFilledIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
 
@@ -41,10 +40,7 @@ export const VaultSettingsPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('vault_settings')}
-      />
+      <SettingsPageHeader title={t('vault_settings')} />
       <VaultSettingsContent gap={14} flexGrow scrollable>
         <SettingsSection title={t('vault_management')}>
           <SettingsItem
@@ -67,7 +63,7 @@ export const VaultSettingsPage = () => {
           />
           {areReferralsEnabled && (
             <SettingsItem
-              icon={<MegaphoneIcon />}
+              icon={<ReferralMegaphoneIcon />}
               onClick={() => navigate({ id: 'referral' })}
               title={t('referral_code')}
             />

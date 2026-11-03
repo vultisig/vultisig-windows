@@ -9,7 +9,7 @@ import {
 } from '../../../storage/blockaid'
 
 /** Settings row toggling the Blockaid transaction scan. */
-export const ManageBlockaid = () => {
+export const ManageBlockaid = ({ iconWidth }: { iconWidth?: number }) => {
   const value = useIsBlockaidEnabled()
   const { mutate: setValue } = useSetIsBlockaidEnabledMutation()
   const { t } = useTranslation()
@@ -17,6 +17,7 @@ export const ManageBlockaid = () => {
   return (
     <SettingsItem
       icon={<ScanIcon />}
+      iconWidth={iconWidth}
       title={t('blockaid_security_scan')}
       description={t('blockaid_security_scan_description')}
       control={<Switch checked={value} onChange={setValue} size="large" />}

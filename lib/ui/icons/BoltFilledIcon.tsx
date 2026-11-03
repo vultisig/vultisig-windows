@@ -1,22 +1,24 @@
 import { SvgProps } from '@lib/ui/props'
 
-/** Lightning bolt, filled. */
+/** A filled lightning bolt, drawn 18 wide for Quick settings. */
 export const BoltFilledIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
+    width="0.9em"
     height="1em"
-    viewBox="0 0 20 20"
+    viewBox="0 0 18 20"
     fill="none"
     {...props}
   >
-    <path
-      d="M11.0007 2.99967L9.00065 8.99967H16.0007L9.00065 16.9997L11.0007 10.9997H4.00065L11.0007 2.99967Z"
-      fill="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      stroke="currentColor"
-    />
+    <g>
+      <path
+        d="M9.90059 2.99967L8.10059 8.99967H14.4006L8.10059 16.9997L9.90059 10.9997H3.60059L9.90059 2.99967Z"
+        fill="var(--icon-accent, currentColor)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+    </g>
   </svg>
 )

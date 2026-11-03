@@ -5,6 +5,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { UiProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useContext } from 'react'
 import styled from 'styled-components'
 
@@ -14,6 +15,8 @@ type SettingsItemTone = 'regular' | 'danger'
 
 // 2px at the 16px render size, on the icon's 24 viewBox.
 const largeChevronStrokeWidth = 3
+
+const defaultIconWidth = 20
 
 const chevronIcons = {
   small: <StationChevronRightSmallIcon />,
@@ -33,6 +36,7 @@ type SettingsItemProps = {
   onClick?: () => void
   tone?: SettingsItemTone
   chevron?: keyof typeof chevronIcons
+  iconWidth?: number
 } & UiProps
 
 /** One row of a settings card: icon, title, optional subtitle and a trailing value, control or chevron. */
@@ -46,6 +50,7 @@ export const SettingsItem = ({
   onClick,
   tone = 'regular',
   chevron = 'small',
+  iconWidth = defaultIconWidth,
   ...rest
 }: SettingsItemProps) => {
   const titleVariant = useContext(SettingsItemTitleVariantContext)
@@ -61,20 +66,24 @@ export const SettingsItem = ({
   return (
     <Row
       icon={
-        <IconWrapper size={20} color={isDanger ? 'danger' : 'textShyExtra'}>
+        <IconSlot
+          size={defaultIconWidth}
+          color={isDanger ? 'danger' : 'textShyExtra'}
+          $width={iconWidth}
+        >
           {icon}
-        </IconWrapper>
+        </IconSlot>
       }
       title={
         <HStack alignItems="center" gap={4}>
-          <Text
+          <BaselineText
             as="span"
             color={isDanger ? 'danger' : 'regular'}
             variant={titleVariant}
             cropped
           >
             {title}
-          </Text>
+          </BaselineText>
           {titleAccessory}
         </HStack>
       }
@@ -94,9 +103,9 @@ export const SettingsItem = ({
         (value || trailing) && (
           <HStack alignItems="center" gap={12}>
             {value && (
-              <Text as="span" color="regular" variant="subtitle" nowrap>
+              <BaselineText as="span" color="regular" variant="subtitle" nowrap>
                 {value}
-              </Text>
+              </BaselineText>
             )}
             {trailing}
           </HStack>
@@ -110,6 +119,7 @@ export const SettingsItem = ({
 }
 
 const Row = styled(ListItem)`
+  --icon-accent: ${getColor('text')};
   gap: 12px;
   min-height: 0;
   padding: 16px 12px;
@@ -125,4 +135,14 @@ const Row = styled(ListItem)`
 
 const Description = styled(Text)<{ $isDanger: boolean }>`
   opacity: ${({ $isDanger }) => ($isDanger ? 0.8 : 1)};
+`
+
+const IconSlot = styled(IconWrapper)<{ $width: number }>`
+  width: ${({ $width }) => $width}px;
+`
+
+// Browsers round Brockmann's ascent down, which draws 13px and 15px text 1px above Figma.
+const BaselineText = styled(Text)`
+  position: relative;
+  top: 1px;
 `

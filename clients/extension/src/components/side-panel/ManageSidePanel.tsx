@@ -2,6 +2,7 @@ import {
   useIsSidePanelEnabledQuery,
   useSetIsSidePanelEnabledMutation,
 } from '@clients/extension/src/storage/isSidePanelEnabled'
+import { quickSettingsIconWidth } from '@core/ui/settings/constants'
 import { SettingsItem } from '@core/ui/settings/SettingsItem'
 import { SidebarLeftIcon } from '@lib/ui/icons/SidebarLeftIcon'
 import { Switch } from '@lib/ui/inputs/switch'
@@ -62,6 +63,7 @@ export const ManageSidePanel = () => {
   return (
     <SettingsItem
       icon={<SidebarLeftIcon />}
+      iconWidth={quickSettingsIconWidth}
       control={<Switch checked={isSidePanelEnabled} size="large" />}
       onClick={handleToggle}
       title={t('open_as_side_panel')}

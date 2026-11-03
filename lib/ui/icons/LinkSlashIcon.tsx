@@ -10,33 +10,35 @@ export const LinkSlashIcon = (props: SvgProps) => (
     fill="none"
     {...props}
   >
-    <path
-      d="M9.9997 4.9997L9.0352 4.0352C7.6545 2.6545 5.4159 2.6545 4.0352 4.0352C2.6545 5.4159 2.6545 7.6545 4.0352 9.0352L4.9997 9.9997"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M10 15L10.9645 15.9645C12.3452 17.3452 14.5838 17.3452 15.9645 15.9645C17.3452 14.5838 17.3452 12.3452 15.9645 10.9645L15 10"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M9.99967 9.99967L7.99967 7.99967"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M2.99967 16.9997L16.9997 2.99967"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+    <g>
+      <path
+        d="M9.9997 4.9997L9.0352 4.0352C7.6545 2.6545 5.4159 2.6545 4.0352 4.0352C2.6545 5.4159 2.6545 7.6545 4.0352 9.0352L4.9997 9.9997"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="currentColor"
+      />
+      <path
+        d="M10 15L10.9645 15.9645C12.3452 17.3452 14.5838 17.3452 15.9645 15.9645C17.3452 14.5838 17.3452 12.3452 15.9645 10.9645L15 10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="currentColor"
+      />
+      <path
+        d="M9.99967 9.99967L7.99967 7.99967"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+      <path
+        d="M2.99967 16.9997L16.9997 2.99967"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+    </g>
   </svg>
 )

@@ -1,7 +1,7 @@
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsItem } from '@core/ui/settings/SettingsItem'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -10,7 +10,6 @@ import { FilePenIcon } from '@lib/ui/icons/FilePenIcon'
 import { PenWritingIcon } from '@lib/ui/icons/PenWritingIcon'
 import { ShareUpRight2Icon } from '@lib/ui/icons/ShareUpRight2Icon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { useTranslation } from 'react-i18next'
@@ -30,10 +29,7 @@ export const VaultSettingsAdvancedPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('advanced')}
-      />
+      <SettingsPageHeader title={t('advanced')} />
       <VaultSettingsContent flexGrow scrollable>
         <SettingsSection itemTitleVariant="subtitle">
           {!isFastVault && (

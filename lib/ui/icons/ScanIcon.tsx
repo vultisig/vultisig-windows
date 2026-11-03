@@ -1,49 +1,51 @@
 import { SvgProps } from '@lib/ui/props'
 
-/** Scanner frame corners crossed by a scan line. */
+/** Scan brackets with a center line, drawn 18 wide for Quick settings. */
 export const ScanIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
+    width="0.9em"
     height="1em"
-    viewBox="0 0 20 20"
+    viewBox="0 0 18 20"
     fill="none"
     {...props}
   >
-    <path
-      d="M16.9997 10H2.9997"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      stroke="currentColor"
-    />
-    <path
-      d="M12.9997 2.9997H13.9997C15.1042 2.9997 15.9997 3.8951 15.9997 4.9997V5.9997"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      stroke="currentColor"
-    />
-    <path
-      d="M4.0007 5.9997V4.9997C4.0007 3.8951 4.8961 2.9997 6.0007 2.9997H7.0007"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      stroke="currentColor"
-    />
-    <path
-      d="M12.9997 16.9998H13.9997C15.1042 16.9998 15.9997 16.1044 15.9997 14.9998V13.9998"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      stroke="currentColor"
-    />
-    <path
-      d="M4.0007 13.9998V14.9998C4.0007 16.1044 4.8961 16.9998 6.0007 16.9998H7.0007"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      stroke="currentColor"
-    />
+    <g>
+      <path
+        d="M15.2997 10H2.69971"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+      <path
+        d="M11.6997 2.99967H12.5997C13.5938 2.99967 14.3997 3.89507 14.3997 4.99967V5.99967"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+      <path
+        d="M3.60059 5.99967V4.99967C3.60059 3.89507 4.40645 2.99967 5.40059 2.99967H6.30059"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+      <path
+        d="M11.6997 16.9998H12.5997C13.5938 16.9998 14.3997 16.1044 14.3997 14.9998V13.9998"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+      <path
+        d="M3.60059 13.9998V14.9998C3.60059 16.1044 4.40645 16.9998 5.40059 16.9998H6.30059"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="var(--icon-accent, currentColor)"
+      />
+    </g>
   </svg>
 )

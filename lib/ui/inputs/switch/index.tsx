@@ -25,7 +25,7 @@ const getKnobTravel = (dimensions: SwitchDimensions) =>
   dimensions.width - getKnobSize(dimensions) - 2 * dimensions.inset
 
 // Figma neutrals/500, the large toggle's off track; no theme token carries it.
-const largeTrackOffColor = new HSLA(206, 15, 55)
+const largeTrackOffColor = new HSLA(205.5, 14.5, 55.5)
 
 const StyledLabel = styled.span`
   opacity: 1;

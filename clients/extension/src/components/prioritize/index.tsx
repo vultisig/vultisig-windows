@@ -2,6 +2,7 @@ import {
   useIsWalletPrioritizedQuery,
   useSetIsWalletPrioritizedMutation,
 } from '@core/extension/storage/isWalletPrioritized'
+import { quickSettingsIconWidth } from '@core/ui/settings/constants'
 import { SettingsItem } from '@core/ui/settings/SettingsItem'
 import { BoltFilledIcon } from '@lib/ui/icons/BoltFilledIcon'
 import { Switch } from '@lib/ui/inputs/switch'
@@ -15,6 +16,7 @@ export const Prioritize = () => {
   return (
     <SettingsItem
       icon={<BoltFilledIcon />}
+      iconWidth={quickSettingsIconWidth}
       control={<Switch checked={isPrioritized} size="large" />}
       onClick={() => setPrioritize(!isPrioritized)}
       title={t('prioritize_vultisig')}

@@ -1,5 +1,4 @@
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
@@ -21,7 +20,6 @@ import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,12 +28,14 @@ import styled from 'styled-components'
 import { currentProductBrand } from '../product/brand'
 import {
   currentProductEducationUrl,
+  quickSettingsIconWidth,
   shouldShowVultisigCommunity,
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
 } from './constants'
 import { SettingsCommunity } from './SettingsCommunity'
 import { SettingsItem } from './SettingsItem'
+import { SettingsPageHeader } from './SettingsPageHeader'
 import { ShareAppSettingsItem } from './ShareAppSettingsItem'
 
 type SettingsPageProps = {
@@ -67,27 +67,22 @@ export const SettingsPage = ({
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() => {
-              if (history.length > 1) {
-                goBack()
-              } else {
-                navigate({ id: 'vault' }, { replace: true })
-              }
-            }}
-          />
-        }
+      <SettingsPageHeader
+        onBack={() => {
+          if (history.length > 1) {
+            goBack()
+          } else {
+            navigate({ id: 'vault' }, { replace: true })
+          }
+        }}
         title={t('settings')}
-        hasBorder
       />
       <Content gap={13} flexGrow scrollable>
         <VStack gap={14}>
           {client === 'extension' && (
             <SettingsSection title={t('quick_settings')}>
               {prioritize}
-              <ManageBlockaid />
+              <ManageBlockaid iconWidth={quickSettingsIconWidth} />
               {sidePanel}
               {expandView}
             </SettingsSection>

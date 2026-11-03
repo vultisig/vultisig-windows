@@ -20,3 +20,4 @@ export const currentProductEducationUrl =
     : vultisigEducationUrl
 export const shouldShowVultisigCommunity = currentProductBrand === 'vultisig'
 export const extensionStoreReviewsUrl = `${extensionDownloadUrl}/reviews`
+export const quickSettingsIconWidth = 18
