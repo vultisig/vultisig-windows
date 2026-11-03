@@ -2029,6 +2029,7 @@ export const ko = {
     '다음에서 Permit2 승인을 모두 확인하지 못했습니다: {{chains}}',
   token_approvals_not_checked: '아직 확인하지 않음: {{chains}}',
   granted_approvals: '부여된 승인',
+  token_approvals_all_chains: '모든 체인',
   token_approvals_checking: '확인 중: {{chains}}',
   token_approvals_failed: '확인 실패: {{chains}}',
   token_approvals_via: '승인 경로',

@@ -3,6 +3,7 @@ import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { TokenApproval } from '@core/ui/vault/settings/advanced/tokenApprovals/core/TokenApproval'
+import { TokenApprovalsChain } from '@core/ui/vault/settings/advanced/tokenApprovals/core/tokenApprovalsChains'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { QbtcVoteSelection } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/proposal'
@@ -166,7 +167,7 @@ export type CoreView =
   | { id: 'vaultSettingsAdvanced' }
   | { id: 'customRpc' }
   | { id: 'customRpcDetail'; state: { chain: Chain } }
-  | { id: 'tokenApprovals' }
+  | { id: 'tokenApprovals'; state?: { chain: TokenApprovalsChain } }
   | { id: 'revokeTokenApproval'; state: { approval: TokenApproval } }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }

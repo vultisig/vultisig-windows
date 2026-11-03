@@ -2073,6 +2073,7 @@ export const hr = {
     'Permit2 odobrenja nisu u potpunosti provjerena na: {{chains}}',
   token_approvals_not_checked: 'Još nije provjereno: {{chains}}',
   granted_approvals: 'Dodijeljena odobrenja',
+  token_approvals_all_chains: 'Svi lanci',
   token_approvals_checking: 'Još se provjerava: {{chains}}',
   token_approvals_failed: 'Provjera nije uspjela: {{chains}}',
   token_approvals_via: 'Odobreno putem',
