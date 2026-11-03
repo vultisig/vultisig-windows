@@ -1,3 +1,4 @@
+import { HSLA } from '@lib/ui/colors/HSLA'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, isValidElement, KeyboardEvent, ReactNode } from 'react'
@@ -5,47 +6,87 @@ import styled, { css } from 'styled-components'
 
 import { borderRadius } from '../../css/borderRadius'
 
+type SwitchSize = 'medium' | 'large'
+
+type SwitchDimensions = {
+  width: number
+  height: number
+  inset: number
+}
+
+const switchDimensions: Record<SwitchSize, SwitchDimensions> = {
+  medium: { width: 40, height: 24, inset: 2 },
+  large: { width: 56, height: 30, inset: 3 },
+}
+
+const getKnobSize = ({ height, inset }: SwitchDimensions) => height - 2 * inset
+
+const getKnobTravel = (dimensions: SwitchDimensions) =>
+  dimensions.width - getKnobSize(dimensions) - 2 * dimensions.inset
+
+// Figma neutrals/500, the large toggle's off track; no theme token carries it.
+const largeTrackOffColor = new HSLA(206, 15, 55)
+
 const StyledLabel = styled.span`
   opacity: 1;
   transition: 0.2s;
 `
 
-const StyledSpinner = styled(Spinner)`
-  left: 2px;
-  top: 2px;
+const StyledSpinner = styled(Spinner)<{ $inset: number }>`
+  left: ${({ $inset }) => $inset}px;
+  top: ${({ $inset }) => $inset}px;
 `
 
-const StyledSlider = styled.span<{ checked?: boolean }>`
-  background-color: ${getColor('mistExtra')};
+const StyledSlider = styled.span<{ checked?: boolean; $size: SwitchSize }>`
   ${borderRadius.pill};
-  height: 24px;
   position: relative;
   transition: 0.2s;
-  width: 40px;
+
+  ${({ $size }) => {
+    const dimensions = switchDimensions[$size]
+    const knobSize = getKnobSize(dimensions)
+
+    return css`
+      height: ${dimensions.height}px;
+      width: ${dimensions.width}px;
+
+      &:before {
+        height: ${knobSize}px;
+        left: ${dimensions.inset}px;
+        top: ${dimensions.inset}px;
+        width: ${knobSize}px;
+      }
+    `
+  }}
+
+  background-color: ${({ $size }) =>
+    $size === 'large'
+      ? largeTrackOffColor.toCssValue()
+      : getColor('mistExtra')};
 
   &:before {
     background-color: ${getColor('white')};
     ${borderRadius.pill};
     content: '';
-    height: 20px;
-    left: 2px;
     position: absolute;
-    top: 2px;
     transition: all 0.2s;
-    width: 20px;
   }
 
-  ${({ checked }) => {
+  ${({ checked, $size }) => {
+    const travel = getKnobTravel(switchDimensions[$size])
+
     return checked
       ? css`
-          background-color: ${getColor('buttonPrimary')};
+          background-color: ${getColor(
+            $size === 'large' ? 'primaryAccentFour' : 'buttonPrimary'
+          )};
 
           ${StyledSpinner} {
-            transform: translateX(16px);
+            transform: translateX(${travel}px);
           }
 
           &:before {
-            transform: translateX(16px);
+            transform: translateX(${travel}px);
           }
         `
       : css``
@@ -103,6 +144,8 @@ type SwitchProps = {
   label?: ReactNode
   loading?: boolean
   onChange?: (value: boolean) => void
+  /** `large` is the 56x30 toggle of the settings rows. */
+  size?: SwitchSize
 }
 
 export const Switch: FC<SwitchProps> = ({
@@ -111,6 +154,7 @@ export const Switch: FC<SwitchProps> = ({
   label,
   loading = false,
   onChange,
+  size = 'medium',
 }) => {
   const handleClick = () => {
     if (onChange && !disabled && !loading) onChange(!checked)
@@ -140,8 +184,13 @@ export const Switch: FC<SwitchProps> = ({
         role="switch"
         tabIndex={0}
       >
-        <StyledSlider checked={checked}>
-          {loading && <StyledSpinner size={20} />}
+        <StyledSlider checked={checked} $size={size}>
+          {loading && (
+            <StyledSpinner
+              $inset={switchDimensions[size].inset}
+              size={getKnobSize(switchDimensions[size])}
+            />
+          )}
         </StyledSlider>
         {label ? (
           isValidElement(label) ? (
