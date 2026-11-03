@@ -17,6 +17,7 @@ import {
   TransactionRecordStatus,
   TrustLineTransactionRecord,
 } from '@core/ui/transaction-history/core'
+import { TransactionMemoText } from '@core/ui/transaction-history/detail/TransactionMemoText'
 import { getRecordTagType } from '@core/ui/transaction-history/recordTagType'
 import {
   FeeBearingRecord,
@@ -262,7 +263,7 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
         <NetworkFeeDetailRow record={record} />
         {data.memo && (
           <DetailRow label={t('memo')}>
-            <Text>{data.memo}</Text>
+            <TransactionMemoText value={data.memo} />
           </DetailRow>
         )}
       </SeparatedByLine>
@@ -548,9 +549,7 @@ const LimitSwapDetailPanel = ({
           <MiddleTruncate text={data.destinationAddress} width={200} />
         </DetailRow>
         <DetailRow label={t('memo')}>
-          <Text style={{ wordBreak: 'break-all', textAlign: 'right' }}>
-            {data.memo}
-          </Text>
+          <TransactionMemoText value={data.memo} />
         </DetailRow>
       </SeparatedByLine>
     </Panel>
