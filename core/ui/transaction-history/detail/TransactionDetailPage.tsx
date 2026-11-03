@@ -118,7 +118,7 @@ type DetailRowProps = {
 }
 
 const DetailRow = ({ label, children }: DetailRowProps) => (
-  <HStack alignItems="center" gap={4} justifyContent="space-between">
+  <HStack alignItems="center" gap={12} justifyContent="space-between">
     <Text color="shy" weight={500}>
       {label}
     </Text>
