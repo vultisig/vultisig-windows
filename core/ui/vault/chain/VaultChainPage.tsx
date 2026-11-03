@@ -1,4 +1,6 @@
+import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { QbtcClaimBanner } from '@core/ui/qbtc/claim/components/QbtcClaimBanner'
 import { QbtcClaimSection } from '@core/ui/qbtc/claim/components/QbtcClaimSection'
@@ -6,6 +8,7 @@ import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
+import { ClockRotateClockwiseIcon } from '@lib/ui/icons/ClockRotateClockwiseIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar, PageContent } from '@lib/ui/page/PageContent'
@@ -21,7 +24,12 @@ import { TronResourcesSection } from './tron/TronResourcesSection'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultChainOverview } from './VaultChainOverview'
 
+/**
+ * One chain of the current vault: its balance, tokens, and links to this
+ * chain's transaction history and its block explorer.
+ */
 export const VaultChainPage = () => {
+  const navigate = useCoreNavigate()
   const openExternalUrl = useOpenExternalUrl()
   const chain = useCurrentVaultChain()
   const address = useCurrentVaultAddress(chain)
@@ -45,6 +53,18 @@ export const VaultChainPage = () => {
           secondaryControls={
             <HStack gap={4} alignItems="center">
               <RefreshVaultChainBalance />
+              {featureFlags.transactionHistory && (
+                <IconButton
+                  onClick={() =>
+                    navigate({ id: 'transactionHistory', state: { chain } })
+                  }
+                  data-testid="chain-transaction-history-button"
+                >
+                  <IconWrapper size={24}>
+                    <ClockRotateClockwiseIcon />
+                  </IconWrapper>
+                </IconButton>
+              )}
               <IconButton onClick={() => openExternalUrl(blockExplorerUrl)}>
                 <IconWrapper size={24}>
                   <ArCubeIcon />
