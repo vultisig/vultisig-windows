@@ -152,7 +152,7 @@ test.describe('Chain transaction history', () => {
       const { page, vaultPage } = await openVault({ context, extensionId })
 
       await vaultPage.navigateToChain(chain)
-      await page.getByTestId('chain-transaction-history-button').click()
+      await page.getByRole('button', { name: 'Transaction History' }).click()
 
       if (swap + send === 0) {
         await expect(page.getByText('No transactions yet')).toBeVisible()

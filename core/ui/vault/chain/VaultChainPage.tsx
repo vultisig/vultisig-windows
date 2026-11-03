@@ -15,6 +15,7 @@ import { pageBottomInsetVar, PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCurrentVaultAddress } from '../state/currentVaultCoins'
@@ -29,6 +30,7 @@ import { VaultChainOverview } from './VaultChainOverview'
  * chain's transaction history and its block explorer.
  */
 export const VaultChainPage = () => {
+  const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const openExternalUrl = useOpenExternalUrl()
   const chain = useCurrentVaultChain()
@@ -58,6 +60,7 @@ export const VaultChainPage = () => {
                   onClick={() =>
                     navigate({ id: 'transactionHistory', state: { chain } })
                   }
+                  aria-label={t('transaction_history')}
                   data-testid="chain-transaction-history-button"
                 >
                   <IconWrapper size={24}>
