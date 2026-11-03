@@ -89,6 +89,7 @@ export const ru = {
   backup_share_sent: 'Резервная доля отправлена!',
   backup_share_sent_description:
     'Мы только что отправили вашу резервную долю на e-mail. Если не видите письмо, проверьте папку «Спам».',
+  backup_vault_share: 'Резервная копия доли хранилища',
   backup_with_password: 'Резервная копия с паролем',
   backup_without_password: 'Резервная копия без пароля',
   balance: 'Баланс',
@@ -96,6 +97,7 @@ export const ru = {
   balance_changes: 'Изменения баланса',
   base_fee: 'Базовая комиссия',
   blockaid_security_scan: 'Проверка безопасности Blockaid',
+  blockaid_security_scan_description: 'Проверять транзакции перед подписанием',
   blockaid_simulation_failed: 'Симуляция транзакции не удалась',
   blockaid_simulation_failed_description:
     'Не удалось симулировать транзакцию. Вы можете продолжить, но рекомендуем внимательно проверить детали транзакции.',
@@ -253,7 +255,7 @@ export const ru = {
   },
   delete: 'Удалить',
   delete_folder: 'Удалить папку',
-  delete_vault_description: 'Удалить хранилище навсегда',
+  delete_vault_description: 'Удалить долю хранилища навсегда',
   deposit: 'Функция',
   description: 'Описание',
   destination_address: 'Адрес получателя',
@@ -290,7 +292,7 @@ export const ru = {
   enable_tss_batching: 'Включить пакетную обработку TSS',
   post_quantum_keygen: 'Постквантовая генерация ключей',
   post_quantum_keygen_description:
-    'Сгенерируйте постквантовый (MLDSA) ключ для этого хранилища.',
+    'Сгенерируйте ключ MLDSA-44 для квантовой устойчивости',
   enable_token_instruction:
     'Включите минимум один токен, чтобы видеть балансы и управлять позициями.',
   enter: 'Войти',
@@ -316,6 +318,8 @@ export const ru = {
   est_network_fee: 'Оценка комиссии сети',
   expand_view: 'Развернуть',
   open_as_side_panel: 'Открыть в боковой панели',
+  open_as_side_panel_description:
+    'Держать {{productName}} открытым рядом с вкладками',
   opened_in_new_tab: 'Открыто в новой вкладке',
   push_notifications: 'Push-уведомления',
   push_notifications_description:
@@ -461,6 +465,7 @@ export const ru = {
   home_display_combined_description:
     'Обе вкладки показывают общий баланс кошелька и DeFi.',
   home_display_combined_title: 'Кошелёк + DeFi',
+  home_display_description: 'Изменить отображение баланса кошелька',
   gold: 'Золото',
   grant_camera_permission: 'Разрешить доступ к камере',
   gwei: 'GWEI',
@@ -566,6 +571,9 @@ export const ru = {
   loading: 'Загрузка...',
   localMode: 'Вы в локальном режиме',
   lock_time: 'Время блокировки',
+  lock_time_description:
+    'Задайте время до автоматической блокировки приложения',
+  lock_time_setting: 'Время блокировки',
   lock_vultisig_automatically_after: 'Автоблокировка {{productName}} через...',
   looking_for_server: 'Поиск FastVaultServer...',
   looks_good: 'Выглядит хорошо.',
@@ -585,6 +593,8 @@ export const ru = {
   message_to_sign: 'Сообщение для подписи',
   method: 'Метод',
   method_required: 'Метод подписи обязателен',
+  migrate: 'Миграция',
+  migrate_vault_description: 'Перенести хранилище GG20 на DKLS',
   mint: 'Mint',
   minute_one: '{{count}} минута',
   minute_few: '{{count}} минуты',
@@ -688,12 +698,15 @@ export const ru = {
   to_start_plugin_installation: 'Чтобы начать установку плагина',
   portfolio_balance: 'Баланс портфеля',
   positions: 'Позиции',
+  post_quantum_key: 'Постквантовый ключ',
   powered_by: 'Работает на <provider></provider>',
   price: 'Цена',
   price_impact_average: 'Среднее',
   price_impact_good: 'Хорошее',
   price_impact_high: 'Высокое влияние',
   prioritize_vultisig: 'Приоритизировать {{productName}}',
+  prioritize_vultisig_description:
+    'Показывать {{productName}} первым при обмене',
   priority: 'Приоритет',
   priority_fee: 'Приоритетная комиссия',
   privacy_policy: 'Политика конфиденциальности',
@@ -837,6 +850,7 @@ export const ru = {
   secure_notifications_description:
     'Получайте оповещения, когда другое устройство запрашивает подключение к вашему хранилищу или когда требуется ваша подпись.',
   security: 'Безопасность',
+  security_description: 'Управление пин-кодом',
   select: 'Выбрать',
   select_asset: 'Выбрать актив',
   select_backup_file: 'Импортировать долю хранилища',
@@ -996,7 +1010,7 @@ export const ru = {
   try_again: 'Попробовать снова',
   turn_your_vault_into_rewards_machine:
     'Превратите своё хранилище в машину наград. Создайте реферальный код и начните зарабатывать.',
-  twitter: 'Twitter',
+  twitter: 'X',
   tx_hash: 'Хэш транзакции',
   type: 'Тип',
   type_here: 'Введите здесь',
@@ -1082,7 +1096,7 @@ export const ru = {
   vault_details_page_vault_MLDSA: 'Ключ MLDSA',
   vault_details_page_vault_type: 'Тип хранилища',
   vault_info: 'Информация о хранилище',
-  vault_management: 'Хранилище',
+  vault_management: 'Управление хранилищем',
   vault_name: 'Имя хранилища',
   vault_name_already_exists: 'Пожалуйста, выберите другое имя хранилища.',
   vault_name_description:
@@ -1127,9 +1141,9 @@ export const ru = {
   via: 'с помощью',
   view_on_explorer: 'Просмотреть в обозревателе',
   vote: 'Голосовать',
+  vult_tier_badge: 'УРОВЕНЬ {{ticker}}',
   vultisig_community: 'Сообщество {{productName}}',
   vultisig_education: '{{productName}} Education',
-  vultisig_website: 'Сайт {{productName}}',
   waitingOnDevices: 'Ожидание устройств...',
   waiting_for_devices_to_join: 'Ожидание подключения других устройств',
   waiting_for_devices_to_join_description:
@@ -1137,6 +1151,7 @@ export const ru = {
   waiting_for_keygen_start: 'Ожидание начала генерации ключа...',
   waiting_for_keysign_start: 'Ожидание начала процесса подписи...',
   wallet: 'Кошелёк',
+  website: 'Сайт',
   withdraw: 'Вывести',
   withdraw_ruji_rewards: 'Вывести награды RUJI',
   add_cacao_pool: 'Добавить в пул CACAO',
@@ -1327,6 +1342,8 @@ export const ru = {
   qbtc_claim_card_title: 'QBTC можно получить',
   qbtc_claim_tab: 'Получить',
   qbtc_onboarding_title: 'Новая квантовая безопасность',
+  quick_settings: 'Быстрые настройки',
+  rate_app: 'Оценить приложение',
   qbtc_onboarding_subtitle:
     'Классические ключи могут быть взломаны квантовыми компьютерами. Для активации QBTC требуется сгенерировать новую пару ключей.',
   qbtc_onboarding_feature_generate_title:
@@ -1462,7 +1479,6 @@ export const ru = {
     'Добро пожаловать на торговую площадку плагинов {{productName}}.',
   plugin_permissions_brand_safety_notice:
     'Приложения {{productName}} никогда не смогут подписывать транзакции, которые вы предварительно не одобрите.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'Торги этим активом временно приостановлены. Пожалуйста, попробуйте позже.',
   sui_arguments: 'Аргументы',
@@ -2073,8 +2089,6 @@ export const ru = {
     'Неподдерживаемый метод подписи. Используйте personal_sign или eth_signTypedData_v4.',
   revoke: 'Отменить доступ',
   token_approvals: 'Подтверждение токенов',
-  token_approvals_description:
-    'Просматривайте и отзывайте контракты, позволяющие тратить ваши токены.',
   token_approvals_disconnect_note:
     'Отключение dApp не отменяет эти подтверждения. Каждое аннулирование представляет собой отдельную транзакцию в блокчейне с сетевой комиссией.',
   token_approvals_empty_description:
@@ -2090,5 +2104,6 @@ export const ru = {
   revoke_approval_explanation:
     'Устанавливает лимит этого контракта на 0, поэтому он больше не сможет перемещать этот токен из вашего хранилища. Вы платите комиссию сети.',
   revoke_approval_new_allowance: 'Новый лимит расходов',
+  revoke_approvals: 'Отозвать разрешения',
   token_approvals_count: 'Подтверждения: {{count}}',
 }

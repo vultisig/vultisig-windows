@@ -1,29 +1,27 @@
+import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsItem } from '@core/ui/settings/SettingsItem'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { AtomShieldIcon } from '@lib/ui/icons/AtomShieldIcon'
-import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
-import { Upload4Icon } from '@lib/ui/icons/Upload4Icon'
+import { FilePenIcon } from '@lib/ui/icons/FilePenIcon'
+import { PenWritingIcon } from '@lib/ui/icons/PenWritingIcon'
+import { ShareUpRight2Icon } from '@lib/ui/icons/ShareUpRight2Icon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { ListItem } from '@lib/ui/list/item'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
-import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  DescriptionText,
-  ListItemIconWrapper,
-} from '../vaultSettingsListStyles'
+import { VaultSettingsContent } from '../VaultSettingsContent'
 import { CustomRpcSettingsRow } from './CustomRpcSettingsRow'
-import { TokenApprovalsSettingsRow } from './tokenApprovals/TokenApprovalsSettingsRow'
 
-export const VaultSettingsAdvancedPage: FC = () => {
+/** Vault Settings > Advanced: reshare, post-quantum key, signing and node settings. */
+export const VaultSettingsAdvancedPage = () => {
   const { t } = useTranslation()
+  const { client } = useCore()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
   const isFastVault = hasServer(vault.signers)
@@ -36,70 +34,42 @@ export const VaultSettingsAdvancedPage: FC = () => {
         primaryControls={<PageHeaderBackButton />}
         title={t('advanced')}
       />
-      <PageContent gap={14} flexGrow scrollable>
-        <SettingsSection title={t('advanced')}>
+      <VaultSettingsContent flexGrow scrollable>
+        <SettingsSection itemTitleVariant="subtitle">
           {!isFastVault && (
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <Upload4Icon />
-                </ListItemIconWrapper>
-              }
-              description={
-                <DescriptionText>
-                  {t('reshare_vault_description')}
-                </DescriptionText>
-              }
+            <SettingsItem
+              description={t('reshare_vault_description')}
+              icon={<ShareUpRight2Icon />}
               onClick={() => navigate({ id: 'reshareVault' })}
               title={t('reshare')}
-              hoverable
-              showArrow
             />
           )}
           {!vault.publicKeyMldsa && (
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <AtomShieldIcon />
-                </ListItemIconWrapper>
-              }
-              description={
-                <DescriptionText>
-                  {t('post_quantum_keygen_description')}
-                </DescriptionText>
-              }
+            <SettingsItem
+              description={t('post_quantum_keygen_description')}
+              icon={<FilePenIcon />}
               onClick={() => navigate({ id: 'qbtcQuantumSecurityOnboarding' })}
-              title={t('post_quantum_keygen')}
-              hoverable
-              showArrow
+              title={t('post_quantum_key')}
             />
           )}
-          <ListItem
-            icon={
-              <ListItemIconWrapper>
-                <IconFileEdit />
-              </ListItemIconWrapper>
-            }
+          <SettingsItem
             description={
-              <DescriptionText>
-                {canSignCustomMessage
-                  ? t('sign_custom_message_description')
-                  : t('sign_custom_message_unavailable_imported_no_ethereum')}
-              </DescriptionText>
+              canSignCustomMessage
+                ? t('sign_custom_message_description')
+                : t('sign_custom_message_unavailable_imported_no_ethereum')
             }
+            icon={<PenWritingIcon />}
             onClick={
               canSignCustomMessage
                 ? () => navigate({ id: 'signCustomMessage' })
                 : undefined
             }
             title={t('sign')}
-            hoverable={canSignCustomMessage}
-            showArrow={canSignCustomMessage}
           />
+          {client === 'desktop' && <ManageBlockaid />}
           <CustomRpcSettingsRow />
-          <TokenApprovalsSettingsRow />
         </SettingsSection>
-      </PageContent>
+      </VaultSettingsContent>
     </VStack>
   )
 }

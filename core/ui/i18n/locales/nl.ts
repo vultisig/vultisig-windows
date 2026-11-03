@@ -89,6 +89,7 @@ export const nl = {
   backup_share_sent: 'Back-up verzonden!',
   backup_share_sent_description:
     'We hebben je back-up zojuist naar je e-mail gestuurd. Zie je hem niet? Kijk dan in je spammap.',
+  backup_vault_share: 'Back-up van kluisdeel',
   backup_with_password: 'Back-up met wachtwoord',
   backup_without_password: 'Back-up zonder wachtwoord',
   balance: 'Saldo',
@@ -96,6 +97,8 @@ export const nl = {
   balance_changes: 'Balanswijzigingen',
   base_fee: 'Basiskosten',
   blockaid_security_scan: 'Blockaid-beveiligingsscan',
+  blockaid_security_scan_description:
+    'Controleer transacties voordat je ondertekent',
   blockaid_simulation_failed: 'Transactiesimulatie mislukt',
   blockaid_simulation_failed_description:
     'Kan deze transactie niet simuleren. Je kunt toch doorgaan, maar we raden aan de transactiedetails zorgvuldig te controleren.',
@@ -253,7 +256,7 @@ export const nl = {
   },
   delete: 'Verwijderen',
   delete_folder: 'Map verwijderen',
-  delete_vault_description: 'Verwijder je kluis permanent',
+  delete_vault_description: 'Verwijder je kluisdeel permanent',
   deposit: 'Functie',
   description: 'Beschrijving',
   destination_address: 'Bestemmingsadres',
@@ -289,7 +292,7 @@ export const nl = {
   enable_tss_batching: 'TSS-batchverwerking inschakelen',
   post_quantum_keygen: 'Post-kwantum sleutelgeneratie',
   post_quantum_keygen_description:
-    'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
+    'Genereer een MLDSA-44-sleutel voor quantumbestendigheid',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
   enter: 'Binnenkomen',
@@ -315,6 +318,8 @@ export const nl = {
   est_network_fee: 'Geschatte netwerkkosten',
   expand_view: 'Weergave uitvouwen',
   open_as_side_panel: 'Openen als zijpaneel',
+  open_as_side_panel_description:
+    'Houd {{productName}} open naast je tabbladen',
   opened_in_new_tab: 'Geopend in een nieuw tabblad',
   push_notifications: 'Pushmeldingen',
   push_notifications_description:
@@ -459,6 +464,7 @@ export const nl = {
   home_display_combined_description:
     'Beide tabbladen tonen je gecombineerde wallet- en DeFi-saldo.',
   home_display_combined_title: 'Wallet + DeFi',
+  home_display_description: 'Weergave van het walletsaldo bewerken',
   gold: 'Goud',
   grant_camera_permission: 'Cameratoestemming geven',
   gwei: 'GWEI',
@@ -564,6 +570,9 @@ export const nl = {
   loading: 'Laden...',
   localMode: 'Je bent in lokale modus',
   lock_time: 'Vergrendeltijd',
+  lock_time_description:
+    'Stel in na hoeveel tijd de app automatisch vergrendelt',
+  lock_time_setting: 'Vergrendeltijd',
   lock_vultisig_automatically_after:
     '{{productName}} automatisch vergrendelen na...',
   looking_for_server: 'Zoeken naar FastVaultServer...',
@@ -584,6 +593,8 @@ export const nl = {
   message_to_sign: 'Te ondertekenen bericht',
   method: 'Methode',
   method_required: 'Ondertekenmethode is verplicht',
+  migrate: 'Migreren',
+  migrate_vault_description: 'GG20-kluis migreren naar DKLS',
   mint: 'Mint',
   minute_one: '{{count}} minuut',
   minute_other: '{{count}} minuten',
@@ -687,12 +698,15 @@ export const nl = {
   to_start_plugin_installation: 'Om de plugininstallatie te starten',
   portfolio_balance: 'Portfoliosaldo',
   positions: 'Posities',
+  post_quantum_key: 'Post-quantum sleutel',
   powered_by: 'Aangedreven door <provider></provider>',
   price: 'Prijs',
   price_impact_average: 'Gemiddeld',
   price_impact_good: 'Goed',
   price_impact_high: 'Hoge impact',
   prioritize_vultisig: '{{productName}} prioriteren',
+  prioritize_vultisig_description:
+    'Toon {{productName}} eerst wanneer je swapt',
   priority: 'Prioriteit',
   priority_fee: 'Prioriteitskosten',
   privacy_policy: 'Privacybeleid',
@@ -832,6 +846,7 @@ export const nl = {
   secure_notifications_description:
     'Ontvang meldingen wanneer een ander apparaat wil deelnemen aan je kluis of wanneer je handtekening nodig is.',
   security: 'Beveiliging',
+  security_description: 'Beheer je pincode',
   select: 'Selecteren',
   select_asset: 'Asset selecteren',
   select_backup_file: 'Importeer je kluisdeel',
@@ -989,7 +1004,7 @@ export const nl = {
   try_again: 'Opnieuw proberen',
   turn_your_vault_into_rewards_machine:
     'Maak van je kluis een rewards-machine. Maak nu je referral aan en begin te verdienen.',
-  twitter: 'Twitter',
+  twitter: 'X',
   tx_hash: 'Transactie-hash',
   type: 'Type',
   type_here: 'Typ hier',
@@ -1075,7 +1090,7 @@ export const nl = {
   vault_details_page_vault_MLDSA: 'MLDSA-sleutel',
   vault_details_page_vault_type: 'Kluistype',
   vault_info: 'Kluisinfo',
-  vault_management: 'Kluis',
+  vault_management: 'Kluisbeheer',
   vault_name: 'Kluisnaam',
   vault_name_already_exists: 'Kies een andere kluisnaam.',
   vault_name_description:
@@ -1120,9 +1135,9 @@ export const nl = {
   via: 'via',
   view_on_explorer: 'Bekijken in blockexplorer',
   vote: 'Stemmen',
+  vult_tier_badge: '{{ticker}}-NIVEAU',
   vultisig_community: '{{productName}}-community',
   vultisig_education: '{{productName}} Onderwijs',
-  vultisig_website: '{{productName}}-website',
   waitingOnDevices: 'Wachten op apparaten...',
   waiting_for_devices_to_join: 'Wachten tot andere apparaten deelnemen',
   waiting_for_devices_to_join_description:
@@ -1130,6 +1145,7 @@ export const nl = {
   waiting_for_keygen_start: 'Wachten tot de sleutelgeneratie start…',
   waiting_for_keysign_start: 'Wachten tot het ondertekenen begint...',
   wallet: 'Wallet',
+  website: 'Website',
   withdraw: 'Opnemen',
   withdraw_ruji_rewards: 'RUJI-beloningen opnemen',
   add_cacao_pool: 'Toevoegen aan CACAO-pool',
@@ -1321,6 +1337,8 @@ export const nl = {
   qbtc_claim_card_title: 'Claimbare QBTC',
   qbtc_claim_tab: 'Claim',
   qbtc_onboarding_title: 'Nieuwe kwantumbeveiliging',
+  quick_settings: 'Snelle instellingen',
+  rate_app: 'Beoordeel de app',
   qbtc_onboarding_subtitle:
     'Klassieke sleutels kunnen door kwantumcomputers worden gekraakt. Om QBTC te activeren, moet een nieuw sleutelpaar worden gegenereerd.',
   qbtc_onboarding_feature_generate_title: 'Genereer je kwantumsleutelpaar',
@@ -1452,7 +1470,6 @@ export const nl = {
     'Welkom bij de {{productName}} Plugin Marketplace.',
   plugin_permissions_brand_safety_notice:
     '{{productName}}-apps kunnen nooit transacties ondertekenen die je niet eerst zelf goedkeurt.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'De handel in dit actief is tijdelijk stopgezet. Probeer het later opnieuw.',
   sui_arguments: 'Argumenten',
@@ -2073,8 +2090,6 @@ export const nl = {
     'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
   revoke: 'Toegang intrekken',
   token_approvals: 'Tokengoedkeuringen',
-  token_approvals_description:
-    'Bekijk en trek contracten in die je tokens kunnen uitgeven.',
   token_approvals_disconnect_note:
     'Het verbreken van de verbinding met een dApp heft deze goedkeuringen niet op. Elke intrekking is een afzonderlijke on-chain transactie met netwerkkosten.',
   token_approvals_empty_description:
@@ -2090,5 +2105,6 @@ export const nl = {
   revoke_approval_explanation:
     'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het dit token niet meer uit je kluis kan verplaatsen. Je betaalt netwerkkosten.',
   revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
+  revoke_approvals: 'Goedkeuringen intrekken',
   token_approvals_count: 'Goedkeuringen: {{count}}',
 }

@@ -90,6 +90,7 @@ export const de = {
   backup_share_sent: 'Tresoranteil gesendet!',
   backup_share_sent_description:
     'Wir haben Ihren Tresoranteil soeben an Ihre E-Mail-Adresse gesendet. Falls Sie ihn nicht finden, prüfen Sie Ihren Spam-Ordner.',
+  backup_vault_share: 'Tresoranteil sichern',
   backup_with_password: 'Backup mit Passwort',
   backup_without_password: 'Backup ohne Passwort',
   balance: 'Guthaben',
@@ -97,6 +98,7 @@ export const de = {
   balance_changes: 'Guthabenänderungen',
   base_fee: 'Grundgebühr',
   blockaid_security_scan: 'Blockaid-Sicherheitsscan',
+  blockaid_security_scan_description: 'Transaktionen vor dem Signieren prüfen',
   blockaid_simulation_failed: 'Transaktionssimulation fehlgeschlagen',
   blockaid_simulation_failed_description:
     'Diese Transaktion konnte nicht simuliert werden. Sie können trotzdem fortfahren, wir empfehlen Ihnen jedoch, die Transaktionsdetails sorgfältig zu prüfen.',
@@ -256,7 +258,7 @@ export const de = {
   },
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
-  delete_vault_description: 'Löschen Sie Ihren Tresor endgültig.',
+  delete_vault_description: 'Löschen Sie Ihren Tresoranteil endgültig.',
   deposit: 'Funktion',
   description: 'Beschreibung',
   destination_address: 'Zieladresse',
@@ -293,7 +295,7 @@ export const de = {
   enable_tss_batching: 'TSS-Batching aktivieren',
   post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
   post_quantum_keygen_description:
-    'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
+    'MLDSA-44-Schlüssel für Quantenresistenz generieren',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
   enter: 'Eingeben',
@@ -320,6 +322,8 @@ export const de = {
   est_network_fee: 'Geschätzte Netzwerkgebühr',
   expand_view: 'Ansicht erweitern',
   open_as_side_panel: 'Als Seitenleiste öffnen',
+  open_as_side_panel_description:
+    '{{productName}} neben Ihren Tabs geöffnet lassen',
   opened_in_new_tab: 'In einem neuen Tab geöffnet',
   push_notifications: 'Push-Benachrichtigungen',
   push_notifications_description:
@@ -471,6 +475,7 @@ export const de = {
   home_display_combined_description:
     'Beide Tabs zeigen Ihr kombiniertes Wallet- und DeFi-Guthaben.',
   home_display_combined_title: 'Wallet + DeFi',
+  home_display_description: 'Anzeige des Wallet-Guthabens bearbeiten',
   gold: 'Gold',
   grant_camera_permission: 'Kameraerlaubnis erteilen',
   gwei: 'GWEI',
@@ -577,6 +582,9 @@ export const de = {
   loading: 'Laden...',
   localMode: 'Sie befinden sich im lokalen Modus',
   lock_time: 'Sperrzeit',
+  lock_time_description:
+    'Legen Sie fest, wann die App automatisch gesperrt wird',
+  lock_time_setting: 'Sperrzeit',
   lock_vultisig_automatically_after:
     '{{productName}} wird nach... automatisch gesperrt',
   looking_for_server: 'Suche nach FastVaultServer...',
@@ -598,6 +606,8 @@ export const de = {
   message_to_sign: 'Zu signierende Nachricht',
   method: 'Verfahren',
   method_required: 'Die Signaturmethode ist erforderlich.',
+  migrate: 'Migrieren',
+  migrate_vault_description: 'GG20-Tresor zu DKLS migrieren',
   mint: 'Mint',
   minute_one: '{{count}} Minute',
   minute_other: '{{count}} Minuten',
@@ -702,12 +712,15 @@ export const de = {
   to_start_plugin_installation: 'Um die App-Installation zu starten',
   portfolio_balance: 'Portfoliowert',
   positions: 'Positionen',
+  post_quantum_key: 'Post-Quantum-Schlüssel',
   powered_by: 'Bereitgestellt von <provider></provider>',
   price: 'Preis',
   price_impact_average: 'Durchschnitt',
   price_impact_good: 'Gut',
   price_impact_high: 'Hoher Preiseinfluss',
   prioritize_vultisig: '{{productName}} priorisieren',
+  prioritize_vultisig_description:
+    '{{productName}} beim Tauschen zuerst anzeigen',
   priority: 'Priorität',
   priority_fee: 'Prioritätsgebühr',
   privacy_policy: 'Datenschutzrichtlinie',
@@ -850,6 +863,7 @@ export const de = {
   secure_notifications_description:
     'Sie werden benachrichtigt, wenn ein anderes Gerät Ihrem Tresor beitreten möchte oder Ihre Signatur erforderlich ist.',
   security: 'Sicherheit',
+  security_description: 'Passcode verwalten',
   select: 'Wählen',
   select_asset: 'Asset auswählen',
   select_backup_file: 'Tresoranteil importieren',
@@ -1010,7 +1024,7 @@ export const de = {
   try_again: 'Versuchen Sie es erneut',
   turn_your_vault_into_rewards_machine:
     'Machen Sie Ihren Tresor zur Belohnungsmaschine. Erstellen Sie jetzt Ihren Empfehlungscode und verdienen Sie mit.',
-  twitter: 'Twitter',
+  twitter: 'X',
   tx_hash: 'Transaktions-Hash',
   type: 'Typ',
   type_here: 'Hier tippen',
@@ -1099,7 +1113,7 @@ export const de = {
   vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
   vault_details_page_vault_type: 'Tresortyp',
   vault_info: 'Tresorinformationen',
-  vault_management: 'Tresor',
+  vault_management: 'Tresorverwaltung',
   vault_name: 'Tresorname',
   vault_name_already_exists: 'Bitte wählen Sie einen anderen Tresornamen.',
   vault_name_description:
@@ -1147,9 +1161,9 @@ export const de = {
   via: 'über',
   view_on_explorer: 'Im Explorer anzeigen',
   vote: 'Abstimmung',
+  vult_tier_badge: '{{ticker}}-STUFE',
   vultisig_community: '{{productName}}-Community',
   vultisig_education: '{{productName}} Education',
-  vultisig_website: '{{productName}}-Website',
   waitingOnDevices: 'Warten auf Geräte...',
   waiting_for_devices_to_join: 'Warten auf den Beitritt weiterer Geräte',
   waiting_for_devices_to_join_description:
@@ -1157,6 +1171,7 @@ export const de = {
   waiting_for_keygen_start: 'Warten auf den Start der Schlüsselgenerierung...',
   waiting_for_keysign_start: 'Warten auf den Start des Signiervorgangs …',
   wallet: 'Wallet',
+  website: 'Website',
   withdraw: 'Auszahlen',
   withdraw_ruji_rewards: 'RUJI-Belohnungen auszahlen',
   add_cacao_pool: 'Zum CACAO-Pool hinzufügen',
@@ -1347,6 +1362,8 @@ export const de = {
   qbtc_claim_card_title: 'Claimbare QBTC',
   qbtc_claim_tab: 'Beanspruchen',
   qbtc_onboarding_title: 'Neue Quantensicherheit',
+  quick_settings: 'Schnelleinstellungen',
+  rate_app: 'App bewerten',
   qbtc_onboarding_subtitle:
     'Klassische Schlüssel können von Quantencomputern geknackt werden. Die Aktivierung von QBTC erfordert die Generierung eines neuen Schlüsselpaares.',
   qbtc_onboarding_feature_generate_title:
@@ -1482,7 +1499,6 @@ export const de = {
     'Willkommen im {{productName}} Plugin Marketplace',
   plugin_permissions_brand_safety_notice:
     '{{productName}} Apps können niemals Transaktionen signieren, die Sie nicht vorher genehmigen.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'Der Handel mit diesem Asset ist vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.',
   sui_arguments: 'Argumente',
@@ -2106,8 +2122,6 @@ export const de = {
     'Nicht unterstützte Signaturmethode. Verwenden Sie personal_sign oder eth_signTypedData_v4.',
   revoke: 'Zugriff entziehen',
   token_approvals: 'Token-Genehmigungen',
-  token_approvals_description:
-    'Verträge prüfen und widerrufen, die Ihre Token ausgeben können.',
   token_approvals_disconnect_note:
     'Das Trennen eines dApp entfernt diese Genehmigungen nicht. Jeder Widerruf ist eine separate On-Chain-Transaktion mit einer Netzwerkgebühr.',
   token_approvals_empty_description:
@@ -2124,5 +2138,6 @@ export const de = {
   revoke_approval_explanation:
     'Setzt das Kontingent dieses Vertrags auf 0, sodass dieser Token nicht mehr aus Ihrem Tresor transferiert werden kann. Es fällt eine Netzwerkgebühr an.',
   revoke_approval_new_allowance: 'Neue Ausgabenobergrenze',
+  revoke_approvals: 'Genehmigungen widerrufen',
   token_approvals_count: 'Genehmigungen: {{count}}',
 }
