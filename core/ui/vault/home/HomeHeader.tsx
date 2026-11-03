@@ -69,7 +69,13 @@ export const HomeHeader = ({ primaryControls }: HomeHeaderProps) => {
                     <Tooltip
                       content={t('some_balances_failed_to_load')}
                       renderOpener={props => (
-                        <IconWrapper {...props} color="danger" size={14}>
+                        <IconWrapper
+                          {...props}
+                          color="danger"
+                          size={14}
+                          tabIndex={0}
+                          aria-label={t('some_balances_failed_to_load')}
+                        >
                           <CircleAlertIcon />
                         </IconWrapper>
                       )}
