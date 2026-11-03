@@ -1,10 +1,14 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { formatDateShort } from '@core/ui/defi/shared/formatters'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
+import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
@@ -13,6 +17,7 @@ import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Panel } from '@lib/ui/panel/Panel'
+import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
@@ -60,11 +65,88 @@ const Divider = styled.div`
   background: ${getColor('foregroundSuper')};
 `
 
+const EstimatedRewardButton = styled(UnstyledButton)`
+  flex: 1;
+  min-width: 0;
+  text-align: start;
+`
+
+const Chevron = styled(ChevronRightIcon)`
+  flex-shrink: 0;
+  font-size: 16px;
+  color: ${getColor('text')};
+`
+
 const ActionsRow = styled(HStack)`
   width: 100%;
   gap: 12px;
   flex-wrap: wrap;
 `
+
+type EstimatedRewardStatProps = Pick<
+  Props,
+  'isSkeleton' | 'estimatedReward' | 'renderRewardHistory'
+> & {
+  ticker: string
+}
+
+const EstimatedRewardStat = ({
+  isSkeleton,
+  estimatedReward,
+  ticker,
+  renderRewardHistory,
+}: EstimatedRewardStatProps) => {
+  const { t } = useTranslation()
+
+  const label = (
+    <StatLabel>
+      <TrophyIcon />
+      <Text size={14} color="shy">
+        {t('estimated_reward')}
+      </Text>
+    </StatLabel>
+  )
+
+  const value = (
+    <StatValue color="shyExtra">
+      {isSkeleton ? (
+        <Skeleton width="90px" height="16px" />
+      ) : estimatedReward !== undefined ? (
+        <BalanceVisibilityAware>
+          {formatAmount(estimatedReward, { ticker })}
+        </BalanceVisibilityAware>
+      ) : (
+        '—'
+      )}
+    </StatValue>
+  )
+
+  if (!renderRewardHistory) {
+    return (
+      <VStack flexGrow gap={8}>
+        {label}
+        {value}
+      </VStack>
+    )
+  }
+
+  return (
+    <Opener
+      renderOpener={({ onOpen }) => (
+        <EstimatedRewardButton onClick={onOpen}>
+          <VStack gap={8}>
+            {label}
+            <HStack alignItems="center" gap={4}>
+              {value}
+              <Chevron strokeWidth={3} />
+            </HStack>
+          </VStack>
+        </EstimatedRewardButton>
+      )}
+      renderContent={renderRewardHistory}
+    />
+  )
+}
 
 type Props = {
   coin: Coin
@@ -97,6 +179,8 @@ type Props = {
   transferCoin?: Coin
   /** Base-unit balance of {@link Props.transferCoin}, once resolved. */
   transferAmount?: bigint
+  /** When set, Estimated Reward opens this position's reward history. */
+  renderRewardHistory?: (props: OnCloseProp) => ReactNode
 }
 
 export const StakeCard = ({
@@ -125,6 +209,7 @@ export const StakeCard = ({
   onTransfer,
   transferCoin,
   transferAmount,
+  renderRewardHistory,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
@@ -250,25 +335,12 @@ export const StakeCard = ({
                     )}
                   </StatValue>
                 </VStack>
-                <VStack flexGrow gap={8}>
-                  <StatLabel>
-                    <TrophyIcon />
-                    <Text size={14} color="shy">
-                      {t('estimated_reward')}
-                    </Text>
-                  </StatLabel>
-                  <StatValue color="shyExtra">
-                    {isSkeleton ? (
-                      <Skeleton width="90px" height="16px" />
-                    ) : estimatedReward !== undefined ? (
-                      formatAmount(estimatedReward, {
-                        ticker: rewardTicker ?? coin.ticker,
-                      })
-                    ) : (
-                      '—'
-                    )}
-                  </StatValue>
-                </VStack>
+                <EstimatedRewardStat
+                  isSkeleton={isSkeleton}
+                  estimatedReward={estimatedReward}
+                  ticker={rewardTicker ?? coin.ticker}
+                  renderRewardHistory={renderRewardHistory}
+                />
               </HStack>
             </VStack>
           </>

@@ -6,6 +6,7 @@ import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { OnCloseProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
@@ -13,6 +14,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StakeCard } from '../components/stake/StakeCard'
+import { TcyRewardHistorySheet } from '../components/stake/TcyRewardHistorySheet'
 import { TransferableStakeCard } from '../components/stake/TransferableStakeCard'
 import type { StakeUiTranslationKey } from '../config/stakeUiResolver'
 import {
@@ -313,17 +315,20 @@ const ThorchainStakedPositions = () => {
           })
         }
 
+        const title = resolveStakeTitle({
+          position,
+          coin: token,
+          translate,
+        })
+        const { estimatedReward } = position
+
         const cardProps = {
           coin: token,
-          title: resolveStakeTitle({
-            position,
-            coin: token,
-            translate,
-          }),
+          title,
           amount: position.amount,
           fiat: position.fiatValue,
           apr: position.apr,
-          estimatedReward: position.estimatedReward,
+          estimatedReward,
           rewards: position.rewards,
           rewardTicker: position.rewardTicker,
           nextPayout: position.nextPayout,
@@ -342,6 +347,16 @@ const ThorchainStakedPositions = () => {
               ? () => handleNavigate('withdraw_ruji_rewards')
               : undefined,
           infoUrl: position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined,
+          renderRewardHistory:
+            position.id === 'thor-stake-tcy'
+              ? ({ onClose }: OnCloseProp) => (
+                  <TcyRewardHistorySheet
+                    title={title}
+                    estimatedReward={estimatedReward}
+                    onClose={onClose}
+                  />
+                )
+              : undefined,
         }
 
         // The transferable variant reads the receipt token's own balance, so
