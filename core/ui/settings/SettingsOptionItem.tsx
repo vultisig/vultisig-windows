@@ -6,6 +6,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../product/brand'
 import { SettingsBaselineText } from './SettingsBaselineText'
 
 // Figma Backgrounds/surface-1-2; no theme token carries it.
@@ -57,7 +58,7 @@ export const SettingsOptionItem = ({
 const Row = styled(ListItem)<{ $isSelected: boolean }>`
   --icon-accent: ${getColor('text')};
   background-color: ${({ $isSelected, theme }) =>
-    $isSelected
+    $isSelected && currentProductBrand === 'vultisig'
       ? selectedFill.toCssValue()
       : theme.colors.foreground.toCssValue()};
   gap: 12px;
