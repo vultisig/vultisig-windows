@@ -4,7 +4,7 @@ import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { useTranslation } from 'react-i18next'
 
-import { formatAffiliateBpsPercent } from '../../affiliate/affiliateBps'
+import { formatDiscountPercentOfBaseFee } from '../../affiliate/affiliateBps'
 import { DiscountLabel } from './DiscountLabel'
 import { SwapDiscountAmount } from './SwapDiscountAmount'
 import { SwapFeeRowRenderer } from './swapFeeRow'
@@ -19,10 +19,8 @@ type VultDiscountRowProps = {
 }
 
 /**
- * Reports a VULT tier as the share of the swap it waives, in the same unit the
- * fee row above states its list rate, and as the money that share takes off
- * that row. Expressing it as a portion of the fee instead reads as a fee of its
- * own when the base is nowhere on screen.
+ * Reports a VULT tier as the share of the base swap fee it waives, and as the
+ * money that share takes off the fee row above.
  */
 export const VultDiscountRow = ({
   renderRow,
@@ -38,7 +36,7 @@ export const VultDiscountRow = ({
       {renderRow({
         label: (
           <DiscountLabel icon={<Icon />}>
-            {`${vult.ticker} ${t(tier)}: ${formatAffiliateBpsPercent(bps)}`}
+            {`${vult.ticker} ${t(tier)}: ${formatDiscountPercentOfBaseFee(bps)}`}
           </DiscountLabel>
         ),
         value: <SwapDiscountAmount value={fee} />,

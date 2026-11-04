@@ -982,7 +982,7 @@ export const ko = {
   ultimate: '얼티밋',
   unlock_discount_tier: '<b>{{tier}}</b> 티어 잠금 해제',
   unlock_discount_tier_description:
-    '{{minBalance}}을(를) 보유하면 {{tier}} 티어가 잠금 해제되어 모든 스왑에서 <b>{{bps}}bps 거래 수수료 할인</b>을 받습니다.',
+    '{{minBalance}}을(를) 보유하면 {{tier}} 티어가 잠금 해제되어 모든 스왑에서 <b>{{percent}} Vultisig 스왑 수수료 할인</b>을 받습니다.',
   unlock_discount_tier_description_ultimate:
     '{{minBalance}}을(를) 보유하면 {{tier}} 티어가 잠금 해제되어 모든 스왑에서 <b>Vultisig 수수료가 전액 면제</b>됩니다.',
   unlock_tier: '티어 잠금 해제',
