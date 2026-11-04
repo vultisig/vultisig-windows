@@ -32,7 +32,7 @@ export const VaultSignersPill: FC<VaultSignersPillProps> = ({
   const least = getKeygenThreshold(total)
   const fast = hasServer(vault.signers) && !isServer(vault.localPartyId)
 
-  const text = fast ? t('fast') : `${least}-${t('of')}-${total}`
+  const text = fast ? t('fast') : t('m_of_n', { m: least, n: total })
 
   return (
     <PillContainer {...rest}>

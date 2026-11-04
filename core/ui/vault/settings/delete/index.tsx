@@ -1,6 +1,6 @@
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useDeleteVaultMutation, useVaults } from '@core/ui/storage/vaults'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -15,7 +15,6 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { fiatCurrencySymbolRecord } from '@vultisig/core-config/FiatCurrency'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +31,7 @@ export const DeleteVaultPage = () => {
   const [termsAccepted, setTermsAccepted] = useState(terms.map(() => false))
   const { data: vaultBalance } = useVaultTotalBalanceQuery()
   const navigate = useCoreNavigate()
-  const currency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
   const vault = useCurrentVault()
   const vaults = useVaults()
   const isLastVault = vaults.length <= 1
@@ -93,7 +92,7 @@ export const DeleteVaultPage = () => {
               {t('vault_value')}:
             </Text>
             <Text size={14} weight={500}>
-              {`${vaultBalance} ${fiatCurrencySymbolRecord[currency]}`}
+              {vaultBalance !== undefined && formatFiatAmount(vaultBalance)}
             </Text>
           </Item>
 
@@ -103,7 +102,10 @@ export const DeleteVaultPage = () => {
                 {t('vault_delete_page_vault_part')}:
               </Text>
               <Text size={14} weight={500}>
-                {`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1}-${t('of')}-${vault.signers.length}`}
+                {t('vault_share_position', {
+                  index: vault.signers.indexOf(vault.localPartyId) + 1,
+                  total: vault.signers.length,
+                })}
               </Text>
             </VItem>
             <VItem>
