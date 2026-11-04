@@ -578,7 +578,7 @@ export const pt = {
   lock_time: 'Horário de bloqueio',
   lock_time_description:
     'Defina o tempo até o aplicativo bloquear automaticamente',
-  lock_time_setting: 'Horário de bloqueio',
+  lock_time_setting: 'Tempo de bloqueio',
   lock_vultisig_automatically_after:
     'Bloquear {{productName}} automaticamente após...',
   looking_for_server: 'Procurando por FastVaultServer...',
