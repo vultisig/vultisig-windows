@@ -747,12 +747,6 @@
       "source": "ios"
     },
     {
-      "desktop": "MobileSignalIcon",
-      "v3": "mobile-signal",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
       "desktop": "AtomShieldIcon",
       "v3": "atom-shield",
       "status": "migrated",

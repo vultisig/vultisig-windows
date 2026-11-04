@@ -16,6 +16,7 @@ const ScreenshotWrapper = styled.div`
   padding: 24px;
 `
 
+/** Shows the current vault's details and saves them as an image. */
 export const VaultDetailsPage = () => {
   const { t } = useTranslation()
   const { name } = useCurrentVault()

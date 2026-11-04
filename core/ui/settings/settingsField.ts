@@ -30,6 +30,11 @@ export const settingsOutlinedTextInput = css`
   line-height: 20px;
   padding: 15px;
 
+  &:focus,
+  &:active {
+    border-color: ${getColor('primaryAccentFour')};
+  }
+
   &::placeholder {
     color: ${getColor('textShy')};
     font-size: 14px;

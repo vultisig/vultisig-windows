@@ -1,3 +1,4 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { settingsReadOnlySurface } from '@core/ui/settings/settingsField'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
@@ -5,7 +6,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 type CustomMessageVerifyContentProps = {
   method: string
@@ -19,6 +20,7 @@ const settingsLabelProps = { variant: 'caption' } as const
 const defaultValueProps = { size: 14, weight: 500 } as const
 const settingsValueProps = { variant: 'stationBodyS' } as const
 
+/** The signing method and message a user reviews before signing a custom message. */
 export const CustomMessageVerifyContent = ({
   method,
   message,
@@ -34,6 +36,7 @@ export const CustomMessageVerifyContent = ({
   const showMethod = method.trim() !== ''
   const labelProps = isSettingsLook ? settingsLabelProps : defaultLabelProps
   const valueProps = isSettingsLook ? settingsValueProps : defaultValueProps
+  const ValueText = isSettingsLook ? SettingsBaselineText : Text
 
   return (
     <VStack gap={isSettingsLook ? 12 : 16}>
@@ -42,18 +45,16 @@ export const CustomMessageVerifyContent = ({
           <Text color="shy" {...labelProps}>
             {t('signing_method')}
           </Text>
-          <ReviewValue $isSettingsLook={isSettingsLook} {...valueProps}>
-            {method}
-          </ReviewValue>
+          <ValueText {...valueProps}>{method}</ValueText>
         </ReviewItem>
       )}
       <ReviewItem $isSettingsLook={isSettingsLook}>
         <Text color="shy" {...labelProps}>
           {t('message_to_sign')}
         </Text>
-        <MessageText $isSettingsLook={isSettingsLook} {...valueProps}>
-          {formattedMessage}
-        </MessageText>
+        <MessageFrame>
+          <ValueText {...valueProps}>{formattedMessage}</ValueText>
+        </MessageFrame>
       </ReviewItem>
     </VStack>
   )
@@ -73,16 +74,7 @@ const ReviewItem = styled.div<{ $isSettingsLook: boolean }>`
   min-width: 0;
 `
 
-const ReviewValue = styled(Text)<{ $isSettingsLook: boolean }>`
-  ${({ $isSettingsLook }) =>
-    $isSettingsLook &&
-    css`
-      position: relative;
-      top: 1px;
-    `}
-`
-
-const MessageText = styled(ReviewValue)`
+const MessageFrame = styled.div`
   white-space: pre-wrap;
   word-break: break-word;
 `

@@ -63,9 +63,9 @@ const SignerText = styled(VStack)`
   flex: 1;
   gap: 2px;
   min-width: 0;
-  overflow-wrap: anywhere;
 `
 
+/** The vault's name, share, keys and signers, also rendered into the saved image. */
 export const VaultDetailsContent = () => {
   const { t } = useTranslation()
   const { name, publicKeys, publicKeyMldsa, signers, localPartyId, libType } =

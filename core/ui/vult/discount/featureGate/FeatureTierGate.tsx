@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { currentProductBrand } from '../../../product/brand'
 import { SettingsBaselineText } from '../../../settings/SettingsBaselineText'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useVultBalanceQuery } from '../queries/balance'
@@ -270,6 +271,10 @@ const IconBadge = styled.div<{ $isSettingsLook: boolean }>`
   ${({ $isSettingsLook }) =>
     $isSettingsLook &&
     css`
+      ${currentProductBrand !== 'vultisig' &&
+      css`
+        background: ${getColor('foreground')};
+      `}
       box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.25);
       color: ${getColor('buttonNeutral')};
       overflow: hidden;
@@ -336,6 +341,10 @@ const BalanceRow = styled(HStack)<{ $isSettingsLook: boolean }>`
   ${({ $isSettingsLook }) =>
     $isSettingsLook &&
     css`
+      ${currentProductBrand !== 'vultisig' &&
+      css`
+        background: ${getColor('foregroundDark')};
+      `}
       border-radius: 14px;
       margin-top: 12px;
       padding: 15px;

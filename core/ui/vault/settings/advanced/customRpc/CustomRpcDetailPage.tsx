@@ -52,6 +52,7 @@ const getDefaultRpcUrl = (chain: Chain) => {
   return undefined
 }
 
+/** Sets, tests or clears one chain's custom RPC endpoint. */
 export const CustomRpcDetailPage = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()

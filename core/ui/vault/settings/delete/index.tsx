@@ -26,6 +26,7 @@ const terms = [
   'vault_delete_page_term_3',
 ] as const
 
+/** Deletes the current vault's share from this device once every term is accepted. */
 export const DeleteVaultPage = () => {
   const { t } = useTranslation()
   const [termsAccepted, setTermsAccepted] = useState(terms.map(() => false))
@@ -182,7 +183,6 @@ const Item = styled.div`
   ${borderRadius.lg};
   ${settingsReadOnlySurface};
   min-width: 0;
-  overflow-wrap: anywhere;
   padding: 19px;
 `
 
@@ -192,7 +192,6 @@ const VItem = styled.div`
   ${settingsReadOnlySurface};
   flex: 1;
   min-width: 0;
-  overflow-wrap: anywhere;
   padding: 15px 19px;
 `
 

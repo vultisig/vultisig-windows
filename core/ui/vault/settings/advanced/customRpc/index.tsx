@@ -19,6 +19,7 @@ import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+/** Lists the chains that accept a custom RPC, marking those with an override. */
 export const CustomRpcPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()

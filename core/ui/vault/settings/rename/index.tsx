@@ -70,6 +70,7 @@ const createSchema = ({ t, existingNames, currentName }: CreateSchemaInput) => {
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
+/** Renames the current vault, rejecting names another vault already uses. */
 export const VaultRenamePage = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()
