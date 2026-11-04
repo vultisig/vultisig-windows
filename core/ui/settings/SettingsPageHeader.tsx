@@ -51,6 +51,13 @@ const Header = styled(PageHeader)`
 
 const BackButton = styled(IconButton)`
   margin-left: ${(backIconSize - iconButtonSize.sm) / 2}px;
+  position: relative;
+
+  &::after {
+    content: '';
+    inset: ${(iconButtonSize.sm - iconButtonSize.md) / 2}px;
+    position: absolute;
+  }
 `
 
 // Same 1px baseline offset as the rows; Figma also centers the title half a pixel right.
