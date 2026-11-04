@@ -46,8 +46,6 @@ export const it = {
   amount_required: "L'importo è richiesto",
   amount_to_unstake: 'Importo da rimuovere dallo staking',
   app_lock_passcode: 'Codice di accesso al blocco app',
-  app_lock_passcode_description:
-    "Aggiungi un ulteriore livello di sicurezza richiedendo un codice di accesso per sbloccare l'app.",
   app_locked: 'App bloccata',
   app_locked_description: 'Inserisci il tuo codice di accesso per continuare.',
   app_permissions: "Autorizzazioni dell'app",
@@ -62,7 +60,6 @@ export const it = {
   available: 'Disponibile',
   back: 'Indietro',
   before_you_start: 'Prima di iniziare...',
-  backup: 'Backup',
   backupsTitle:
     '<highlight>Backup,</highlight> il tuo nuovo metodo di recupero',
   backupsDescription:
@@ -300,7 +297,6 @@ export const it = {
     'Genera una chiave MLDSA-44 per la resistenza quantistica',
   enable_token_instruction:
     'Abilita almeno un token per visualizzare i saldi e gestire le posizioni.',
-  enter: 'Entra',
   enter_address: "Inserisci l'indirizzo",
   enter_address_here: "Inserisci qui l'indirizzo",
   enter_amount: "Inserisci l'importo",
@@ -901,6 +897,8 @@ export const it = {
   session_init_failed: 'Impossibile inizializzare la sessione',
   set_expiration: 'Imposta scadenza (in anni)',
   set_passcode: 'Imposta codice di accesso',
+  set_passcode_description:
+    'Scegli un codice di accesso di 6 cifre. Evita cifre ripetute o consecutive.',
   settings: 'Impostazioni',
   share: 'Condividi',
   share_app: "Condividi l'app",

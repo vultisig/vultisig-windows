@@ -51,8 +51,6 @@ export const en = {
   amount_required: 'Amount is required',
   amount_to_unstake: 'Amount to unstake',
   app_lock_passcode: 'App Lock Passcode',
-  app_lock_passcode_description:
-    'Add an extra layer of security by requiring a passcode to unlock the app.',
   app_locked: 'App Locked',
   app_locked_description: 'Enter your passcode to continue.',
   app_permissions: 'App Permissions',
@@ -73,7 +71,6 @@ export const en = {
   before_you_reshare: 'Before you reshare',
   before_you_reshare_subtitle:
     'Resharing regenerates your vault shares. There are a few things to know first.',
-  backup: 'Backup',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
     "Backups power your vault. Each device has its <w>own</w> backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
@@ -384,7 +381,6 @@ export const en = {
     'Generate MLDSA-44 key for quantum resistance',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
-  enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
   external_recipient_tooltip_content:
@@ -1162,6 +1158,8 @@ export const en = {
   session_init_failed: 'Failed to initialize session',
   set_expiration: 'Set Expiration (in years)',
   set_passcode: 'Set Passcode',
+  set_passcode_description:
+    'Choose a 6-digit passcode. Avoid repeating or sequential digits.',
   settings: 'Settings',
   share: 'Share',
   share_app: 'Share The App',
