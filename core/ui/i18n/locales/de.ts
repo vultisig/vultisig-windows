@@ -477,7 +477,6 @@ export const de = {
   home_display_combined_description:
     'Beide Tabs zeigen Ihr kombiniertes Wallet- und DeFi-Guthaben.',
   home_display_combined_title: 'Wallet + DeFi',
-  home_display_description: 'Anzeige des Wallet-Guthabens bearbeiten',
   gold: 'Gold',
   grant_camera_permission: 'Kameraerlaubnis erteilen',
   gwei: 'GWEI',

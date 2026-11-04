@@ -467,7 +467,6 @@ export const ru = {
   home_display_combined_description:
     'Обе вкладки показывают общий баланс кошелька и DeFi.',
   home_display_combined_title: 'Кошелёк + DeFi',
-  home_display_description: 'Изменить отображение баланса кошелька',
   gold: 'Золото',
   grant_camera_permission: 'Разрешить доступ к камере',
   gwei: 'GWEI',
