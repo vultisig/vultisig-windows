@@ -1,3 +1,4 @@
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import {
   settingsFieldValidation,
@@ -9,10 +10,14 @@ import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
 import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { passwordLengthConfig } from '@vultisig/core-config/password'
@@ -23,7 +28,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-const Field = styled(PasswordInput)`
+const SettingsField = styled(PasswordInput)`
   ${settingsOutlinedTextInput};
   ${settingsFieldValidation};
 `
@@ -56,7 +61,9 @@ export const VaultBackupWithPassword = ({
   onFinish,
   onBack,
   vaultIds,
-}: OnFinishProp & OnBackProp & { vaultIds: string[] }) => {
+  isSettingsLook,
+}: OnFinishProp &
+  OnBackProp & { vaultIds: string[]; isSettingsLook: boolean }) => {
   const { t } = useTranslation()
 
   const schema = useMemo(() => createSchema(t), [t])
@@ -79,19 +86,37 @@ export const VaultBackupWithPassword = ({
     mutate({ password })
   }
 
+  const Content = isSettingsLook ? SettingsPageContent : PageContent
+  const Footer = isSettingsLook ? SettingsPageFooter : PageFooter
+  const Field = isSettingsLook ? SettingsField : PasswordInput
+  const SaveButton = isSettingsLook ? SettingsCtaButton : Button
+  const fieldHeight = isSettingsLook ? settingsInputHeight : undefined
+
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <SettingsPageHeader title={null} onBack={onBack} />
-      <SettingsPageContent gap={24} flexGrow scrollable>
-        <Text color="regular" variant="stationTitle1">
-          {t('vault_backup_page_password_protection')}
-        </Text>
-        <Warning>{t('vault_backup_page_password_info')}</Warning>
+      {isSettingsLook ? (
+        <SettingsPageHeader title={null} onBack={onBack} />
+      ) : (
+        <FlowPageHeader title={t('backup')} onBack={onBack} />
+      )}
+      <Content gap={isSettingsLook ? 24 : 16} flexGrow scrollable>
+        {isSettingsLook ? (
+          <>
+            <Text color="regular" variant="stationTitle1">
+              {t('vault_backup_page_password_protection')}
+            </Text>
+            <Warning>{t('vault_backup_page_password_info')}</Warning>
+          </>
+        ) : (
+          <Text size={16} weight="600">
+            {t('vault_backup_page_password_protection')}
+          </Text>
+        )}
         <VStack gap={8}>
           <Field
             {...register('password')}
             error={errors.password?.message}
-            inputHeight={settingsInputHeight}
+            inputHeight={fieldHeight}
             placeholder={t('enter_password')}
             validation={
               isValid ? 'valid' : errors.password ? 'invalid' : undefined
@@ -100,16 +125,19 @@ export const VaultBackupWithPassword = ({
           <Field
             {...register('confirmPassword')}
             error={errors.confirmPassword?.message}
-            inputHeight={settingsInputHeight}
+            inputHeight={fieldHeight}
             placeholder={t('reenter_password')}
             validation={
               isValid ? 'valid' : errors.confirmPassword ? 'invalid' : undefined
             }
           />
         </VStack>
-      </SettingsPageContent>
-      <SettingsPageFooter gap={16}>
-        <SettingsCtaButton
+      </Content>
+      <Footer gap={16}>
+        {!isSettingsLook && (
+          <InfoBlock>{t('vault_backup_page_password_info')}</InfoBlock>
+        )}
+        <SaveButton
           disabled={!isValid || isPending}
           loading={isPending}
           type="submit"
@@ -117,13 +145,13 @@ export const VaultBackupWithPassword = ({
           {isPending
             ? t('vault_backup_page_submit_loading_button_text')
             : t('save')}
-        </SettingsCtaButton>
+        </SaveButton>
         {error?.message && (
           <Text color="danger" size={12}>
             {error.message}
           </Text>
         )}
-      </SettingsPageFooter>
+      </Footer>
     </VStack>
   )
 }

@@ -59,6 +59,7 @@ export const nl = {
   available: 'Beschikbaar',
   back: 'Terug',
   before_you_start: 'Voordat je begint...',
+  backup: 'Back-up',
   backupsTitle: '<highlight>Back-ups,</highlight> jouw nieuwe herstelmethode',
   backupsDescription:
     'Back-ups ondersteunen je kluis. Elk apparaat heeft zijn <w>eigen</w> back-up. Een back-up alleen kan geen geld verplaatsen, die is alleen voor herstel. Importeer en herstel elk verloren apparaat.',

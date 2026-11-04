@@ -71,6 +71,7 @@ export const en = {
   before_you_reshare: 'Before you reshare',
   before_you_reshare_subtitle:
     'Resharing regenerates your vault shares. There are a few things to know first.',
+  backup: 'Backup',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
     "Backups power your vault. Each device has its <w>own</w> backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",

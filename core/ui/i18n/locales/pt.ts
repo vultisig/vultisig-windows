@@ -60,6 +60,7 @@ export const pt = {
   available: 'Disponível',
   back: 'Voltar',
   before_you_start: 'Antes de começar...',
+  backup: 'Backup',
   backupsTitle:
     '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
   backupsDescription:

@@ -8,22 +8,18 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const Container = styled(HStack)`
-  ${borderRadius.lg};
+  ${borderRadius.xl};
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  padding: 15px;
+  padding: 16px;
 `
 
-// Browsers draw Brockmann 1px above Figma at this size.
 const Content = styled.p`
-  position: relative;
-  top: 1px;
   ${text({
     color: 'shy',
     size: 13,
     weight: '500',
-    height: 18 / 13,
-    letterSpacing: 0.06,
+    height: 'large',
   })};
 
   b {

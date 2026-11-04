@@ -60,6 +60,7 @@ export const ru = {
   available: 'Доступно',
   back: 'Назад',
   before_you_start: 'Перед началом...',
+  backup: 'Резервная копия',
   backupsTitle:
     '<highlight>Резервные копии,</highlight> ваш новый метод восстановления',
   backupsDescription:

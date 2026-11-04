@@ -9,6 +9,7 @@ export const VaultBackupPage = () => {
 
   return (
     <VaultBackupFlow
+      isSettingsLook
       vaultIds={[getVaultId(currentVault)]}
       onFinish={() => {
         navigate({ id: 'vault' })

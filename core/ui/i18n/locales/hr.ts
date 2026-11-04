@@ -59,6 +59,7 @@ export const hr = {
   available: 'Dostupno',
   back: 'Nazad',
   before_you_start: 'Prije nego što počnete...',
+  backup: 'Sigurnosna kopija',
   backupsTitle:
     '<highlight>Sigurnosne kopije,</highlight> vaša nova metoda oporavka',
   backupsDescription:

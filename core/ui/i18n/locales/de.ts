@@ -60,6 +60,7 @@ export const de = {
   available: 'Verfügbar',
   back: 'Zurück',
   before_you_start: 'Bevor Sie beginnen...',
+  backup: 'Backup',
   backupsTitle:
     '<highlight>Backups,</highlight> Ihre neue Wiederherstellungsmethode',
   backupsDescription:

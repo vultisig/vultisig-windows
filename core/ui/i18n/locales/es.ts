@@ -58,6 +58,7 @@ export const es = {
   available: 'Disponible',
   back: 'Atrás',
   before_you_start: 'Antes de empezar...',
+  backup: 'Respaldo',
   backupsTitle:
     '<highlight>Copias de seguridad,</highlight> tu nuevo método de recuperación',
   backupsDescription:

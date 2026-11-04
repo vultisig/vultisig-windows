@@ -56,6 +56,7 @@ export const zh = {
   available: '可用',
   back: '返回',
   before_you_start: '开始之前…',
+  backup: '备份',
   backupsTitle: '<highlight>备份，</highlight>您的全新恢复方式',
   backupsDescription:
     '备份是您保险库的基础。每台设备都有<w>各自的</w>备份。单独一份备份无法转移资金，仅用于恢复。导入备份即可恢复任何丢失的设备。',

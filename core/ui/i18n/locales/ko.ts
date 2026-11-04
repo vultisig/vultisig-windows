@@ -58,6 +58,7 @@ export const ko = {
   available: '사용 가능',
   back: '뒤로',
   before_you_start: '시작하기 전에...',
+  backup: '백업',
   backupsTitle: '<highlight>백업,</highlight> 새로운 복구 방법',
   backupsDescription:
     '백업은 볼트의 핵심입니다. 각 기기에는 <w>자체</w> 백업이 있습니다. 백업만으로는 자금을 이동할 수 없으며 복구에만 사용됩니다. 분실한 기기를 가져와 복구하세요',
