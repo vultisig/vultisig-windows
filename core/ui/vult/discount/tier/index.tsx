@@ -7,7 +7,6 @@ import { CSSProperties, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ActiveDiscountTierFooter } from './active-indicator'
-import { DiscountTierBps } from './bps'
 import {
   DiscountTierContainer,
   DiscountTierContent,
@@ -18,6 +17,7 @@ import {
 } from './container'
 import { VultDiscountTierHeader } from './header'
 import { DiscountTierMinBalance } from './minBalance'
+import { DiscountTierPercent } from './percent'
 import { UnlockDiscountTier } from './unlock'
 
 type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
@@ -79,7 +79,7 @@ export const VultDiscountTier = ({
           </HStack>
           <AnimatedVisibility isOpen={showDetails} animationConfig="exitToTop">
             <VStack alignItems="center" gap={12}>
-              <DiscountTierBps value={value} />
+              <DiscountTierPercent value={value} />
               <Text size={13} color="shy">
                 {t('more_coming_soon')}
               </Text>

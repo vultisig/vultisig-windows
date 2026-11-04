@@ -1,15 +1,15 @@
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { PopupOptions } from '../../resolver'
+import { openInSidePanel } from './inSidePanel'
 import { trackPendingRequest } from './pendingRequestsBadge'
+import { PopupSurface } from './popupSurface'
 
-type ExecuteInput = {
-  abortSignal: AbortSignal
-  close: () => void
-}
+type ExecuteInput = Pick<PopupSurface, 'abortSignal' | 'close'>
 
 type Input<T> = PopupOptions & {
   url: string
+  windowId?: number
   execute: (input: ExecuteInput) => Promise<T>
 }
 
@@ -48,77 +48,94 @@ const getPopupPosition = async (): Promise<
   return { left: left + width - windowWidth, top }
 }
 
+const openPopupWindow = async (url: string): Promise<PopupSurface> => {
+  const position = await getPopupPosition()
+  const newWindow = await new Promise<chrome.windows.Window | undefined>(
+    resolve =>
+      chrome.windows.create(
+        {
+          url,
+          type: 'popup',
+          height: windowHeight,
+          width: windowWidth,
+          focused: true,
+          ...(position ?? {}),
+        },
+        resolve
+      )
+  )
+  const windowId = newWindow?.id
+  if (!windowId) {
+    throw new Error('Failed to create new window')
+  }
+
+  // Firefox ignores left/top on create; apply via update
+  const shouldReposition =
+    position !== undefined &&
+    newWindow.state !== 'fullscreen' &&
+    (newWindow.left !== position.left || newWindow.top !== position.top)
+
+  // `drawAttention` is the fallback for platforms that refuse to raise a
+  // window on behalf of a background page: it flashes the taskbar entry or
+  // bounces the dock icon instead.
+  await attempt(() =>
+    chrome.windows.update(windowId, {
+      focused: true,
+      drawAttention: true,
+      ...(shouldReposition ? position : {}),
+    })
+  )
+
+  const controller = new AbortController()
+  const handleRemoved = (removedId: number) => {
+    if (removedId === windowId) {
+      chrome.windows.onRemoved.removeListener(handleRemoved)
+      controller.abort()
+    }
+  }
+  chrome.windows.onRemoved.addListener(handleRemoved)
+
+  const release = () => chrome.windows.onRemoved.removeListener(handleRemoved)
+
+  return {
+    abortSignal: controller.signal,
+    close: () => {
+      release()
+      chrome.windows.remove(windowId)
+    },
+    release,
+  }
+}
+
 let popupQueue: Promise<unknown> = Promise.resolve()
 
 /**
- * Opens the extension popup window for a dApp request and resolves once the
- * user has answered it. Requests are served one at a time; every one of them
- * badges the toolbar icon for as long as it waits, since the operating system
- * is free to ignore the raise-to-front and leave the window behind the browser.
+ * Shows a dApp request and resolves once the user has answered it. A side
+ * panel open in the dApp's browser window (`windowId`) takes the request;
+ * otherwise it opens in a popup window of its own. Requests are served one at
+ * a time; every one of them badges the toolbar icon for as long as it waits,
+ * since the operating system is free to ignore the raise-to-front and leave
+ * the window behind the browser.
  */
 export const inNewWindow = async <T>({
   url,
+  windowId,
   execute,
 }: Input<T>): Promise<T> => {
   const retirePendingRequest = trackPendingRequest()
 
   const run = async (): Promise<T> => {
-    const position = await getPopupPosition()
-    const newWindow = await new Promise<chrome.windows.Window | undefined>(
-      resolve =>
-        chrome.windows.create(
-          {
-            url,
-            type: 'popup',
-            height: windowHeight,
-            width: windowWidth,
-            focused: true,
-            ...(position ?? {}),
-          },
-          resolve
-        )
-    )
-    const windowId = newWindow?.id
-    if (!windowId) {
-      throw new Error('Failed to create new window')
-    }
-
-    // Firefox ignores left/top on create; apply via update
-    const shouldReposition =
-      position !== undefined &&
-      newWindow.state !== 'fullscreen' &&
-      (newWindow.left !== position.left || newWindow.top !== position.top)
-
-    // `drawAttention` is the fallback for platforms that refuse to raise a
-    // window on behalf of a background page: it flashes the taskbar entry or
-    // bounces the dock icon instead.
-    await attempt(() =>
-      chrome.windows.update(windowId, {
-        focused: true,
-        drawAttention: true,
-        ...(shouldReposition ? position : {}),
-      })
-    )
-
-    const controller = new AbortController()
-    const handleRemoved = (removedId: number) => {
-      if (removedId === windowId) {
-        chrome.windows.onRemoved.removeListener(handleRemoved)
-        controller.abort()
-      }
-    }
-    chrome.windows.onRemoved.addListener(handleRemoved)
+    const sidePanel =
+      windowId === undefined
+        ? undefined
+        : await openInSidePanel({ windowId, url })
+    const { abortSignal, close, release } =
+      sidePanel ?? (await openPopupWindow(url))
 
     try {
-      return await execute({
-        abortSignal: controller.signal,
-        close: () => {
-          chrome.windows.onRemoved.removeListener(handleRemoved)
-          chrome.windows.remove(windowId)
-        },
-      })
+      return await execute({ abortSignal, close })
     } finally {
-      chrome.windows.onRemoved.removeListener(handleRemoved)
+      release()
     }
   }
 

@@ -115,7 +115,7 @@ export const SettingsPage: FC<Props> = props => {
                   </ListItemIconWrapper>
                 }
                 onClick={() => navigate({ id: 'vultDiscount' })}
-                title={`$${vult.ticker} ${t('discount_tiers')}`}
+                title={t('discount_tiers', { ticker: `$${vult.ticker}` })}
                 showArrow
               />
             )}

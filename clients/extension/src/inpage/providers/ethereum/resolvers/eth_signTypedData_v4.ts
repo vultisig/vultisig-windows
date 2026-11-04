@@ -1,5 +1,8 @@
 import { callPopup } from '@core/inpage-provider/popup'
-import { getEip712PayloadIssue } from '@core/inpage-provider/popup/eip712'
+import {
+  getEip712PayloadIssue,
+  pruneEip712PayloadTypes,
+} from '@core/inpage-provider/popup/eip712'
 import {
   Eip712V4Payload,
   isEip712V4Payload,
@@ -23,7 +26,8 @@ const isEvmAddress = (value: unknown): value is string =>
  * payload can never look like an address. The payload is hash-checked up
  * front so a malformed message (e.g. an empty string in a bytes field)
  * rejects with a descriptive `InvalidParams` error at request time instead
- * of failing mid-keysign after the user has approved.
+ * of failing mid-keysign after the user has approved. Types the hash does
+ * not cover are dropped before the request reaches keysign.
  */
 export const signEthTypedDataV4 = async ([first, second]: [
   string | Eip712V4Payload,
@@ -77,7 +81,7 @@ export const signEthTypedDataV4 = async ([first, second]: [
       signMessage: {
         eth_signTypedData_v4: {
           chain,
-          message: parsed,
+          message: pruneEip712PayloadTypes(parsed),
         },
       },
     },

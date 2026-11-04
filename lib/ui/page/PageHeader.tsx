@@ -34,8 +34,15 @@ const StyledSecondaryControls = styled(HStack)`
   right: ${pageConfig.horizontalPadding}px;
 `
 
+// Two balanced lines; an over-long single word (vault name) breaks, then ellipsizes.
 const StyledTitle = styled(Text)`
   max-width: 60%;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 `
 
 type PageHeaderProps = {
@@ -70,7 +77,7 @@ export const PageHeader = ({
       {isValidElement(title) ? (
         title
       ) : (
-        <StyledTitle as="span" size={18} weight={500} cropped>
+        <StyledTitle as="span" size={18} weight={500} centerHorizontally>
           {title}
         </StyledTitle>
       )}
