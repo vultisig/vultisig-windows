@@ -1,23 +1,18 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsFlushCard } from '@core/ui/settings/SettingsCard'
+import { SettingsOptionItem } from '@core/ui/settings/SettingsOptionItem'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import {
   useFiatCurrency,
   useSetFiatCurrencyMutation,
 } from '@core/ui/storage/fiatCurrency'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { getColor } from '@lib/ui/theme/getters'
 import {
   fiatCurrencies,
   fiatCurrencyNameRecord,
   fiatCurrencySymbolRecord,
 } from '@vultisig/core-config/FiatCurrency'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 export const CurrencyPage = () => {
   const { t } = useTranslation()
@@ -26,31 +21,19 @@ export const CurrencyPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('currency')}
-        hasBorder
-      />
-      <PageContent flexGrow scrollable>
-        <List>
+      <SettingsPageHeader title={t('currency')} />
+      <SettingsPageContent flexGrow scrollable>
+        <SettingsFlushCard>
           {fiatCurrencies.map(key => (
-            <ListItem
-              extra={key === currencyValue && <CircleCheckIcon />}
+            <SettingsOptionItem
+              isSelected={key === currencyValue}
               key={key}
               onClick={() => currencyMutation.mutate(key)}
               title={`${fiatCurrencyNameRecord[key]} (${fiatCurrencySymbolRecord[key]})`}
-              hoverable
             />
           ))}
-        </List>
-      </PageContent>
+        </SettingsFlushCard>
+      </SettingsPageContent>
     </VStack>
   )
 }
-
-const CircleCheckIcon = styled(CheckIcon)`
-  background-color: ${getColor('buttonPrimary')};
-  ${borderRadius.pill};
-  font-size: 16px;
-  padding: 2px;
-`
