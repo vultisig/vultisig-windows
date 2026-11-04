@@ -9,7 +9,6 @@ import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { CloudArrowUpIcon } from '@lib/ui/icons/CloudArrowUpIcon'
 import { FileSearchIcon } from '@lib/ui/icons/FileSearchIcon'
-import { GridLayout7Icon } from '@lib/ui/icons/GridLayout7Icon'
 import { LockFilledIcon } from '@lib/ui/icons/LockFilledIcon'
 import { PenWritingIcon } from '@lib/ui/icons/PenWritingIcon'
 import { ReferralMegaphoneIcon } from '@lib/ui/icons/ReferralMegaphoneIcon'
@@ -54,12 +53,6 @@ export const VaultSettingsPage = () => {
             icon={<PenWritingIcon />}
             onClick={() => navigate({ id: 'renameVault' })}
             title={t('rename')}
-          />
-          <SettingsItem
-            description={t('home_display_description')}
-            icon={<GridLayout7Icon />}
-            onClick={() => navigate({ id: 'homeDisplaySettings' })}
-            title={t('home_display')}
           />
           {areReferralsEnabled && (
             <SettingsItem

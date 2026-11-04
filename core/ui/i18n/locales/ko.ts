@@ -458,7 +458,6 @@ export const ko = {
   home_display_combined_description:
     '두 탭 모두 지갑과 DeFi를 합산한 잔액을 표시합니다.',
   home_display_combined_title: '지갑 + DeFi',
-  home_display_description: '지갑 잔액 표시 편집',
   gold: '골드',
   grant_camera_permission: '카메라 권한 허용',
   gwei: 'GWEI',

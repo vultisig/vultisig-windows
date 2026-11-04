@@ -474,7 +474,6 @@ export const it = {
   home_display_combined_description:
     'Entrambe le schede mostrano il saldo combinato di portafoglio e DeFi.',
   home_display_combined_title: 'Portafoglio + DeFi',
-  home_display_description: 'Modifica la visualizzazione del saldo del wallet',
   gold: 'Oro',
   grant_camera_permission: "Concedi l'autorizzazione alla telecamera",
   gwei: 'GWEI',

@@ -464,7 +464,6 @@ export const nl = {
   home_display_combined_description:
     'Beide tabbladen tonen je gecombineerde wallet- en DeFi-saldo.',
   home_display_combined_title: 'Wallet + DeFi',
-  home_display_description: 'Weergave van het walletsaldo bewerken',
   gold: 'Goud',
   grant_camera_permission: 'Cameratoestemming geven',
   gwei: 'GWEI',

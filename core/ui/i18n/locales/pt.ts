@@ -469,7 +469,6 @@ export const pt = {
   home_display_combined_description:
     'As duas abas mostram o saldo combinado da carteira e DeFi.',
   home_display_combined_title: 'Carteira + DeFi',
-  home_display_description: 'Editar a exibição do saldo da carteira',
   gold: 'Ouro',
   grant_camera_permission: 'Conceder permissão à câmera',
   gwei: 'GWEI',

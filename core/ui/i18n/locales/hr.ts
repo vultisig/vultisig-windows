@@ -467,7 +467,6 @@ export const hr = {
   home_display_combined_description:
     'Obje kartice prikazuju zbirno stanje novčanika i DeFi-ja.',
   home_display_combined_title: 'Novčanik + DeFi',
-  home_display_description: 'Uredi prikaz stanja novčanika',
   gold: 'Zlato',
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   gwei: 'GWEI',

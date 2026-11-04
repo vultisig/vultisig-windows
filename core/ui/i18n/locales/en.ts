@@ -558,7 +558,6 @@ export const en = {
   home_display_combined_description:
     'Both tabs show your combined wallet and DeFi balance.',
   home_display_combined_title: 'Wallet + DeFi',
-  home_display_description: 'Edit wallet balance display',
   gold: 'Gold',
   grant_camera_permission: 'Grant Camera Permission',
   gwei: 'GWEI',
