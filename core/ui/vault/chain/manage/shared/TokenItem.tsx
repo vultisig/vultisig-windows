@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { SecuredAssetSourceChainLabel } from '@core/ui/chain/coin/thorchain/SecuredAssetSourceChainLabel'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -55,6 +56,7 @@ export const TokenItem = ({
       </TokenIconWrapper>
       <TokenNameWrapper>
         <CoinTicker ticker={coin.ticker} size={12} weight={500} />
+        <SecuredAssetSourceChainLabel value={coin} size={10} />
         <TokenVerificationBadge value={coin} />
       </TokenNameWrapper>
     </TokenCard>
