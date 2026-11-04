@@ -357,6 +357,8 @@ export const en = {
   complete_fee_waive: 'No Fee',
   discount_tiers: '{{ticker}} Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
+  discount_tiers_thorguard_boost:
+    'Holding a ThorGuard instantly boosts your discount tier.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
   earn: 'Earn',

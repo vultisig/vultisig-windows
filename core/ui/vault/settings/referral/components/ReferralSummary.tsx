@@ -15,6 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../../../../product/brand'
 import { Overlay } from './Referrals.styled'
 
 /** The onboarding guide explaining how referrals work. */
@@ -47,7 +48,7 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
   return (
     <>
       <GuideContent alignItems="center">
-        <Overlay />
+        {currentProductBrand === 'vultisig' && <Overlay />}
         <VStack
           animationConfig="bottomToTop"
           as={AnimatedVisibility}

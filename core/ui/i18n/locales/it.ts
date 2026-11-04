@@ -274,6 +274,8 @@ export const it = {
   discount_tiers: 'Livelli di sconto {{ticker}}',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
+  discount_tiers_thorguard_boost:
+    'Possedere un ThorGuard aumenta subito il tuo livello di sconto.',
   discovering_mediator: 'Ricerca del servizio di mediazione, attendi...',
   done: 'Fatto',
   earn: 'Guadagna',

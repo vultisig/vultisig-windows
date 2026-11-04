@@ -270,6 +270,8 @@ export const nl = {
   complete_fee_waive: 'Geen kosten',
   discount_tiers: '{{ticker}}-kortingsniveaus',
   discount_tiers_description: 'Houd $VULT aan voor lagere handelskosten.',
+  discount_tiers_thorguard_boost:
+    'Met een ThorGuard stijgt je kortingsniveau direct.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
   earn: 'Verdienen',

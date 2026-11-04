@@ -18,6 +18,7 @@ import { useCore } from '../../state/core'
 import { useVultDiscountTierQuery } from './queries/tier'
 import { VultDiscountTier } from './tier'
 
+/** The $VULT tier list; Station has no VULT discounts, so it renders nothing there. */
 export const VultDiscountPage = () => {
   if (currentProductBrand === 'station') {
     return null
@@ -52,9 +53,14 @@ const VultDiscountPageContent = () => {
           maxWidth={isTabletOrLarger ? 600 : undefined}
           style={{ position: 'relative' }}
         >
-          <Text height={20 / 14} size={14} weight={400}>
-            {t('discount_tiers_description')}
-          </Text>
+          <VStack gap={4}>
+            <Text height={20 / 14} size={14} weight={400}>
+              {t('discount_tiers_description')}
+            </Text>
+            <Text color="shyExtra" variant="caption">
+              {t('discount_tiers_thorguard_boost')}
+            </Text>
+          </VStack>
           <MatchQuery
             value={tierQuery}
             pending={() => <Spinner />}
@@ -81,7 +87,7 @@ const heroWidth = 360
 const heroHeight = 280
 // Where the frame's art starts and the text below it, measured from the page body.
 const heroTop = -11
-const heroClearance = 233
+const heroClearance = 213
 
 const GlobeButton = styled(IconButton)`
   font-size: 20px;
