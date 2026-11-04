@@ -1,10 +1,11 @@
 import { useCore } from '@core/ui/state/core'
 import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftSmallIcon } from '@lib/ui/icons/ChevronLeftSmallIcon'
+import { StationChevronLeftIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 const backIconSize = 20
 
@@ -19,6 +20,7 @@ export const SettingsPageHeader = ({
   onBack,
 }: SettingsPageHeaderProps) => {
   const { goBack } = useCore()
+  const { iconStyle } = useTheme()
 
   return (
     <Header
@@ -29,11 +31,20 @@ export const SettingsPageHeader = ({
           onClick={onBack ?? goBack}
           size="sm"
         >
-          <ChevronLeftSmallIcon />
+          {iconStyle === 'station' ? (
+            <StationChevronLeftIcon />
+          ) : (
+            <ChevronLeftSmallIcon />
+          )}
         </BackButton>
       }
       title={
-        <Title as="span" color="regular" variant="stationBodyS" cropped>
+        <Title
+          as="span"
+          color="regular"
+          variant="stationBodyS"
+          centerHorizontally
+        >
           {title}
         </Title>
       }
@@ -59,8 +70,14 @@ const BackButton = styled(IconButton)`
 
 // Same 1px baseline offset as the rows; Figma also centers the title half a pixel right.
 const Title = styled(Text)`
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
   left: 0.5px;
   max-width: 60%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
   position: relative;
+  text-wrap: balance;
   top: 1px;
 `
