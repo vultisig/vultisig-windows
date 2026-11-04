@@ -87,7 +87,7 @@ const heroWidth = 360
 const heroHeight = 280
 // Where the frame's art starts and the text below it, measured from the page body.
 const heroTop = -11
-const heroClearance = 213
+const heroClearance = 197
 
 const GlobeButton = styled(IconButton)`
   font-size: 20px;
