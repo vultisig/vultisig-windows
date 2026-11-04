@@ -43,6 +43,22 @@ export const settingsOutlinedTextInput = css`
   }
 `
 
+const validationBorder = (color: 'primary' | 'danger') => css`
+  &,
+  &:focus,
+  &:active {
+    border-color: ${getColor(color)};
+  }
+`
+
+/** Keeps a settings field's validation border over its resting one. */
+export const settingsFieldValidation = css<{
+  validation?: 'valid' | 'invalid' | 'warning'
+}>`
+  ${({ validation }) => validation === 'valid' && validationBorder('primary')}
+  ${({ validation }) => validation === 'invalid' && validationBorder('danger')}
+`
+
 // Figma Backgrounds/disabled; no theme token carries it.
 const readOnlyBackground = 'rgba(11, 26, 58, 0.5)'
 

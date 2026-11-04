@@ -23,6 +23,7 @@ import styled, { css } from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { currentProductBrand } from '../../../product/brand'
+import { settingsBackdropStyles } from '../../../settings/constants'
 import { SettingsBaselineText } from '../../../settings/SettingsBaselineText'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useVultBalanceQuery } from '../queries/balance'
@@ -47,10 +48,6 @@ type FeatureTierGateProps = {
 
 // eslint-disable-next-line local/no-hardcoded-border-radius -- the sheet component's own radius, off the scale
 const settingsDrawerStyles = { borderRadius: '38px 38px 0 0' }
-const settingsBackdropStyles = {
-  backdropFilter: 'blur(6px)',
-  background: 'rgba(0, 0, 0, 0.7)',
-}
 const settingsFootnoteHeight = 18 / 13
 // The drawer's grabber row takes 28 of the frame's 54 above the badge.
 const settingsDrawerPadding = '26px 16px 24px'
