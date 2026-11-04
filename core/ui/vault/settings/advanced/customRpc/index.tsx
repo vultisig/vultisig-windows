@@ -2,15 +2,15 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useCustomRpcOverrides } from '@core/ui/storage/customRpcOverrides'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { PencilIcon } from '@lib/ui/icons/PenciIcon'
+import { PenIcon } from '@lib/ui/icons/PenIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent as BasePageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { customRpcSupportedChains } from '@vultisig/core-chain/chains/customRpc/customRpcSupportedChains'
@@ -38,16 +38,19 @@ export const CustomRpcPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('custom_rpc')}
-      />
+      <SettingsPageHeader title={t('custom_rpc')} />
       <PageContent flexGrow scrollable>
         <ContentFrame>
           <VStack gap={16}>
-            <Text as="h2" size={22} weight="500">
+            <SettingsBaselineText
+              as="h2"
+              height={24 / 22}
+              letterSpacing={-0.36}
+              size={22}
+              weight="500"
+            >
               {t('select_chain')}
-            </Text>
+            </SettingsBaselineText>
             <SearchInput
               value={search}
               onChange={event => setSearch(event.currentTarget.value)}
@@ -73,7 +76,7 @@ export const CustomRpcPage = () => {
                       />
                       {customUrl && (
                         <EditBadge aria-label={t('custom_rpc_chip_custom')}>
-                          <PencilIcon />
+                          <PenIcon />
                         </EditBadge>
                       )}
                     </ChainIconFrame>
@@ -95,7 +98,7 @@ export const CustomRpcPage = () => {
   )
 }
 
-const PageContent = styled(BasePageContent)`
+const PageContent = styled(SettingsPageContent)`
   align-items: center;
 `
 
@@ -137,9 +140,9 @@ const SearchWrapper = styled.div`
   width: 100%;
 
   svg {
+    color: ${getColor('text')};
     flex: none;
     font-size: 16px;
-    stroke-width: 2.5px;
   }
 `
 
@@ -155,23 +158,20 @@ const StyledSearchInput = styled.input`
   line-height: 18px;
   min-width: 0;
   outline: 0;
+  padding: 2px 0 0;
 
   &::placeholder {
     color: ${getColor('textShy')};
   }
 `
 
-/**
- * Four columns that share whatever width the page gives them. Fixed 74px
- * tracks came to more than the popup can show and overflowed into a sideways
- * scroll; `minmax(0, …)` also stops a long chain name widening its own track.
- */
+/** Four columns capped at the 74 tile; the frame's row overhangs its column by 2 a side. */
 const ChainGrid = styled.div`
   display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  width: 100%;
-  max-width: 344px;
+  gap: 16px 12px;
+  grid-template-columns: repeat(4, minmax(0, 74px));
+  justify-content: center;
+  margin-inline: -2px;
 `
 
 const ChainTile = styled.button`
@@ -199,7 +199,7 @@ const ChainIconFrame = styled.div<{ $isCustom: boolean }>`
   height: 74px;
   justify-content: center;
   position: relative;
-  width: 74px;
+  width: 100%;
 `
 
 const EditBadge = styled.div`
@@ -215,7 +215,11 @@ const EditBadge = styled.div`
   justify-content: center;
   position: absolute;
   right: 0;
-  width: 30px;
+  width: 28px;
+
+  path {
+    stroke-width: 1.67;
+  }
 `
 
 const ChainName = styled(Text)`
