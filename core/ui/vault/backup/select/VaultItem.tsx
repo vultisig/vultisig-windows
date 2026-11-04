@@ -37,6 +37,7 @@ const ShareBadge = styled.div`
 const Name = styled(SettingsBaselineText)`
   min-width: 0;
   overflow-wrap: anywhere;
+  text-align: left;
 `
 
 /** A vault's name and which share of it this device holds. */
