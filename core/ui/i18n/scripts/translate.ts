@@ -47,26 +47,100 @@ const topLevelTranslationOverrides: Partial<
     // on a transaction approval surface. Keep the THORChain operation name.
     signed_tx_you_are_rebonding: '재본딩 중이에요',
     signed_tx_rebonded: '재본딩됨',
+    // Machine translation drops the particles after {{name}} and uses the
+    // -십시오 form the rest of the file doesn't.
+    send_receiver_name_lookup_failed:
+      '{{name}}을(를) 조회할 네임 서비스에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.',
+    send_receiver_name_no_address_for_chain:
+      '{{name}}에 등록된 {{chain}} 주소가 없습니다.',
+    send_receiver_name_not_found:
+      '{{name}}은(는) 등록되지 않았습니다. 이름을 확인하고 다시 시도하세요.',
+    send_receiver_name_unsupported_chain:
+      '{{name}}은(는) {{chain}}에서 사용할 수 없습니다. 대신 {{chain}} 주소를 입력하세요.',
   },
   es: {
     // Machine translation leaves stray spaces before punctuation around placeholders.
     ton_gasless_description:
       'No se necesita GRAM: un relé paga el gas de la red y cobra en su lugar una pequeña comisión en {{ticker}}.',
+    // Same stray spaces, and machine translation picks the formal "usted" the rest of the file doesn't use.
+    send_receiver_name_lookup_failed:
+      'No se pudo acceder al servicio de nombres para buscar {{name}}. Comprueba tu conexión e inténtalo de nuevo.',
+    send_receiver_name_no_address_for_chain:
+      'No hay ninguna dirección {{chain}} registrada para {{name}}.',
+    send_receiver_name_not_found:
+      '{{name}} no está registrado. Comprueba el nombre e inténtalo de nuevo.',
+    send_receiver_name_unsupported_chain:
+      '{{name}} no se puede usar en {{chain}}. Ingresa una dirección {{chain}} en su lugar.',
   },
   hr: {
     // Machine translation leaves stray spaces before punctuation around placeholders.
     ton_gasless_description:
       'Nije potreban GRAM: relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju u {{ticker}}.',
+    send_receiver_name_lookup_failed:
+      'Nije moguće pristupiti servisu imena za pretraživanje {{name}}. Provjerite vezu i pokušajte ponovno.',
+    send_receiver_name_no_address_for_chain:
+      'Nije registrirana nijedna adresa {{chain}} za {{name}}.',
+    send_receiver_name_unsupported_chain:
+      '{{name}} se ne može koristiti na {{chain}}. Umjesto toga unesite adresu {{chain}}.',
   },
   pt: {
     // Machine translation leaves stray spaces before punctuation around placeholders.
     ton_gasless_description:
       'Não é necessário GRAM: um relay paga o gás da rede e cobra, em vez disso, uma pequena comissão em {{ticker}}.',
+    send_receiver_name_lookup_failed:
+      'Não foi possível acessar o serviço de nomes para consultar {{name}}. Verifique sua conexão e tente novamente.',
+    send_receiver_name_no_address_for_chain:
+      'Nenhum endereço {{chain}} está registrado para {{name}}.',
+    send_receiver_name_unsupported_chain:
+      '{{name}} não pode ser usado em {{chain}}. Insira um endereço {{chain}} em vez disso.',
   },
   it: {
     // Machine translation leaves stray spaces before punctuation around placeholders.
     ton_gasless_description:
       'GRAM non è necessario: un relay paga il gas di rete e addebita invece una piccola commissione in {{ticker}}.',
+    send_receiver_name_lookup_failed:
+      'Impossibile raggiungere il servizio di risoluzione dei nomi per cercare {{name}}. Verifica la connessione e riprova.',
+    send_receiver_name_no_address_for_chain:
+      'Nessun indirizzo {{chain}} è registrato per {{name}}.',
+    // Machine translation also switches to the formal infinitive here.
+    send_receiver_name_unsupported_chain:
+      '{{name}} non può essere utilizzato su {{chain}}. Inserisci invece un indirizzo {{chain}}.',
+  },
+  de: {
+    // Machine translation leaves a space before the hyphen in "{{chain}}-Adresse".
+    send_receiver_name_no_address_for_chain:
+      'Für {{name}} ist keine {{chain}}-Adresse registriert.',
+    send_receiver_name_unsupported_chain:
+      '{{name}} kann nicht für {{chain}} verwendet werden. Geben Sie stattdessen eine {{chain}}-Adresse ein.',
+  },
+  nl: {
+    // Machine translation leaves stray spaces around placeholders, picks the
+    // formal "uw" the rest of the file doesn't use, and says "naamserver" (DNS).
+    send_receiver_name_lookup_failed:
+      'De naamservice kon niet worden bereikt om {{name}} op te zoeken. Controleer je verbinding en probeer het opnieuw.',
+    send_receiver_name_no_address_for_chain:
+      'Er is geen {{chain}}-adres geregistreerd voor {{name}}.',
+    send_receiver_name_unsupported_chain:
+      '{{name}} kan niet worden gebruikt op {{chain}}. Voer in plaats daarvan een {{chain}}-adres in.',
+  },
+  ru: {
+    // Machine translation leaves stray spaces before punctuation around
+    // placeholders, and swaps the name and chain in the missing-address string.
+    send_receiver_name_lookup_failed:
+      'Не удалось подключиться к службе имен для поиска {{name}}. Проверьте соединение и повторите попытку.',
+    send_receiver_name_no_address_for_chain:
+      'Для {{name}} не зарегистрирован адрес {{chain}}.',
+    send_receiver_name_unsupported_chain:
+      '{{name}} нельзя использовать с {{chain}}. Вместо этого введите адрес {{chain}}.',
+  },
+  zh: {
+    // Machine translation leaves stray spaces before punctuation around
+    // placeholders, and swaps the name and chain in the missing-address string.
+    send_receiver_name_lookup_failed:
+      '无法连接到名称服务以查找{{name}}。请检查您的连接并重试。',
+    send_receiver_name_no_address_for_chain: '{{name}}没有注册{{chain}}地址。',
+    send_receiver_name_unsupported_chain:
+      '{{name}}不能用于{{chain}}。请改用{{chain}}地址。',
   },
 }
 
