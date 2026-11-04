@@ -1,20 +1,20 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsCheckbox } from '@core/ui/settings/SettingsCheckbox'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { settingsReadOnlySurface } from '@core/ui/settings/settingsField'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useDeleteVaultMutation, useVaults } from '@core/ui/storage/vaults'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
-import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { TriangleWarningFilledIcon } from '@lib/ui/icons/TriangleWarningFilledIcon'
+import { HStack, hStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -58,87 +58,81 @@ export const DeleteVaultPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('vault_delete_page_header_title')}
-        hasBorder
-      />
-      <PageContent gap={24} flexGrow scrollable>
-        <GradientBackground />
+      <SettingsPageHeader title={t('vault_delete_page_header_title')} />
+      <Content gap={14} flexGrow scrollable>
         <VStack alignItems="center" gap={14}>
           <IconWrapper size={24} color="danger">
-            <TriangleAlertIcon />
+            <TriangleWarningFilledIcon />
           </IconWrapper>
-          <VStack gap={8}>
-            <Text color="danger" size={22} weight={500} centerHorizontally>
+          <VStack alignItems="center" gap={8}>
+            <SettingsBaselineText
+              color="danger"
+              height={24 / 22}
+              letterSpacing={-0.36}
+              size={22}
+              weight={500}
+              centerHorizontally
+            >
               {t('vault_delete_page_header_title')}
-            </Text>
-            <Text color="shy" size={13} weight={500} centerHorizontally>
+            </SettingsBaselineText>
+            <Subtitle color="shy" variant="footnote" centerHorizontally>
               {t('vault_delete_page_header_subtitle')}
-            </Text>
+            </Subtitle>
           </VStack>
         </VStack>
         <VStack gap={12}>
           <Item>
-            <Text size={13} weight={500}>
-              {t('vault_name')}:
-            </Text>
-            <Text size={14} weight={500}>
-              {vault.name}
-            </Text>
+            <ItemText variant="footnote">{t('vault_name')}:</ItemText>
+            <ItemValue variant="stationBodyS">{vault.name}</ItemValue>
           </Item>
           <Item>
-            <Text size={13} weight={500}>
-              {t('vault_value')}:
-            </Text>
-            <Text size={14} weight={500}>
+            <ItemText variant="footnote">{t('vault_value')}:</ItemText>
+            <ItemValue variant="stationBodyS">
               {vaultBalance !== undefined && formatFiatAmount(vaultBalance)}
-            </Text>
+            </ItemValue>
           </Item>
 
-          <HStack gap={12} alignItems="center">
+          <HStack gap={12} alignItems="start">
             <VItem>
-              <Text size={13} weight={500}>
+              <ItemText color="shyExtra" variant="footnote">
                 {t('vault_delete_page_vault_part')}:
-              </Text>
-              <Text size={14} weight={500}>
+              </ItemText>
+              <ItemText variant="footnote">
                 {t('vault_share_position', {
                   index: vault.signers.indexOf(vault.localPartyId) + 1,
                   total: vault.signers.length,
                 })}
-              </Text>
+              </ItemText>
             </VItem>
             <VItem>
-              <Text size={13} weight={500}>
+              <ItemText color="shyExtra" variant="footnote">
                 {t('vault_delete_page_device_id')}:
-              </Text>
-              <Text cropped size={14} weight={500} color="shy">
-                {vault.localPartyId}
-              </Text>
+              </ItemText>
+              <ItemText variant="footnote">{vault.localPartyId}</ItemText>
             </VItem>
           </HStack>
-          <HStack gap={12} alignItems="center">
+          <HStack gap={12} alignItems="start">
             <VItem>
-              <Text size={13} weight={500}>
+              <ItemText variant="footnote">
                 {t('vault_delete_page_ecdsa_key')}:
-              </Text>
-              <Text cropped size={14} weight={500} color="shy">
+              </ItemText>
+              <Text color="shy" variant="caption">
                 {vault.publicKeys.ecdsa}
               </Text>
             </VItem>
             <VItem>
-              <Text size={13} weight={500}>
+              <ItemText variant="footnote">
                 {t('vault_delete_page_eddsa_key')}:
-              </Text>
-              <Text cropped size={14} weight={500} color="shy">
+              </ItemText>
+              <Text color="shy" variant="caption">
                 {vault.publicKeys.eddsa}
               </Text>
             </VItem>
           </HStack>
         </VStack>
-        <VStack gap={8} data-testid="delete-vault-terms">
+        <Terms data-testid="delete-vault-terms">
           {terms.map((term, index) => (
-            <Checkbox
+            <SettingsCheckbox
               key={index}
               onChange={() => toggleCheckbox(index)}
               label={t(term)}
@@ -146,15 +140,15 @@ export const DeleteVaultPage = () => {
               data-testid={`delete-confirm-${index + 1}`}
             />
           ))}
-        </VStack>
+        </Terms>
         {error?.message && (
           <Text color="danger" size={12}>
             {error.message}
           </Text>
         )}
-      </PageContent>
-      <PageFooter>
-        <Button
+      </Content>
+      <Footer>
+        <DeleteButton
           disabled={isDisabled}
           loading={isPending}
           onClick={handleConfirm}
@@ -162,47 +156,65 @@ export const DeleteVaultPage = () => {
           data-testid="delete-vault-button"
         >
           {t('vault_delete_page_button')}
-        </Button>
-      </PageFooter>
+        </DeleteButton>
+      </Footer>
     </VStack>
   )
 }
 
-const Item = styled.div`
-  padding: 20px;
+const Content = styled(SettingsPageContent)`
+  padding-bottom: 0;
+`
 
+const Footer = styled(SettingsPageFooter)`
+  padding-top: 14px;
+`
+
+const Subtitle = styled(SettingsBaselineText)`
+  max-width: 283px;
+`
+
+const Item = styled.div`
   ${hStack({
-    justifyContent: 'space-between',
     alignItems: 'center',
     gap: 12,
   })};
+  ${borderRadius.lg};
+  ${settingsReadOnlySurface};
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 19px;
+`
 
-  ${borderRadius.md};
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: ${getColor('foreground')};
+const VItem = styled.div`
+  ${vStack({ gap: 2 })};
+  ${borderRadius.lg};
+  ${settingsReadOnlySurface};
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 15px 19px;
+`
+
+const ItemText = styled(SettingsBaselineText)`
+  flex: 1;
   min-width: 0;
 `
 
-const VItem = styled(Item)`
-  display: block;
-  flex: 1;
+const ItemValue = styled(ItemText)`
+  text-align: right;
 `
 
-// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
-const GradientBackground = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
-  border-radius: 512px;
-  background: linear-gradient(
-    82deg,
-    rgba(211, 40, 41, 0.1) 8.02%,
-    rgba(255, 92, 92, 0.1) 133.75%
-  );
-  filter: blur(126.94499969482422px);
-  pointer-events: none;
-  z-index: 0;
+const Terms = styled.div`
+  ${vStack({ gap: 2 })};
+  padding-top: 8px;
+
+  > :first-child {
+    min-height: 32px;
+  }
+`
+
+const DeleteButton = styled(SettingsCtaButton)`
+  box-shadow: none;
+  font-weight: 600;
 `
