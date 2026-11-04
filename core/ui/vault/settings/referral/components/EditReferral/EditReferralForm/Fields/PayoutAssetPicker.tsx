@@ -11,6 +11,7 @@ import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { useState } from 'react'
+import FocusLock from 'react-focus-lock'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -38,46 +39,48 @@ export const PayoutAssetPicker = ({
 
   return (
     <BodyPortal>
-      <FixedWrapper>
-        <VStack fullHeight fullWidth>
-          <SettingsPageHeader
-            onBack={() => onFinish()}
-            title={t('choose_payout_asset')}
-          />
-          <ReferralFormContent flexGrow gap={24} scrollable>
-            {options.length > 1 || query ? (
-              <SearchField
-                onSearch={setQuery}
-                showPlaceholderWhenFocused
-                style={{ flexShrink: 0, height: 42 }}
-                value={query}
-                variant="pill"
-              />
-            ) : null}
-            <VStack gap={16}>
-              <HStack alignItems="center" gap={6}>
-                <Text color="shy" variant="caption">
-                  {t('chain')}
-                </Text>
-                <ChainEntityIcon
-                  style={{ fontSize: 16 }}
-                  value={getChainLogoSrc(chain)}
+      <FocusLock returnFocus>
+        <FixedWrapper>
+          <VStack fullHeight fullWidth>
+            <SettingsPageHeader
+              onBack={() => onFinish()}
+              title={t('choose_payout_asset')}
+            />
+            <ReferralFormContent flexGrow gap={24} scrollable>
+              {options.length > 1 || query ? (
+                <SearchField
+                  onSearch={setQuery}
+                  showPlaceholderWhenFocused
+                  style={{ flexShrink: 0, height: 42 }}
+                  value={query}
+                  variant="pill"
                 />
-                <Text variant="caption">{chain}</Text>
-              </HStack>
-              <Options>
-                {filtered.map(coin => (
-                  <PayoutAssetOption
-                    key={coin.id ?? coin.ticker}
-                    onClick={() => onFinish(coin)}
-                    value={coin}
+              ) : null}
+              <VStack gap={16}>
+                <HStack alignItems="center" gap={6}>
+                  <Text color="shy" variant="caption">
+                    {t('chain')}
+                  </Text>
+                  <ChainEntityIcon
+                    style={{ fontSize: 16 }}
+                    value={getChainLogoSrc(chain)}
                   />
-                ))}
-              </Options>
-            </VStack>
-          </ReferralFormContent>
-        </VStack>
-      </FixedWrapper>
+                  <Text variant="caption">{chain}</Text>
+                </HStack>
+                <Options>
+                  {filtered.map(coin => (
+                    <PayoutAssetOption
+                      key={coin.id ?? coin.ticker}
+                      onClick={() => onFinish(coin)}
+                      value={coin}
+                    />
+                  ))}
+                </Options>
+              </VStack>
+            </ReferralFormContent>
+          </VStack>
+        </FixedWrapper>
+      </FocusLock>
     </BodyPortal>
   )
 }

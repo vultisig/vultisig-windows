@@ -74,7 +74,7 @@ export const PayoutAssetField = () => {
                 <HStack alignItems="center" gap={6}>
                   <CoinIcon coin={currentValue} style={{ fontSize: 32 }} />
                   <Text height={24 / 16} size={16} weight={500}>
-                    {currentValue.ticker}
+                    {currentValue.id}
                   </Text>
                 </HStack>
               </>
@@ -101,7 +101,7 @@ export const PayoutAssetField = () => {
               setCurrentValue(newValue)
               onClose()
             }}
-            options={allowedCoins.filter(c => c.chain === coin?.chain)}
+            options={allowedCoins.filter(c => c.chain === coin.chain)}
           />
         )}
       />

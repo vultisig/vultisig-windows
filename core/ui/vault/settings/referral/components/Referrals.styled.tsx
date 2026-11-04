@@ -130,7 +130,7 @@ export const ReferralTextInput = styled(TextInput)`
     `}
 `
 
-/** Full-window layer the vault menu opens in. */
+/** Full-window layer the vault menu and payout chooser open in. */
 export const FixedWrapper = styled(CenterAbsolutely)`
   position: fixed;
   background-color: ${getColor('background')};
