@@ -9,13 +9,16 @@ import { currentProductBrand } from '../product/brand'
 const fieldBackground = new HSLA(216, 83.3, 11.8)
 const fieldBorder = new HSLA(0, 0, 100, 0.03)
 
+/** The settings input fields' faint resting border colour. */
+export const settingsFieldHairline = fieldBorder.toCssValue()
+
 /** Fill, border and radius of the settings input fields. */
 export const settingsFieldSurface = css`
   ${borderRadius.lg};
   background: ${currentProductBrand === 'vultisig'
     ? fieldBackground.toCssValue()
     : getColor('foreground')};
-  border: 1px solid ${fieldBorder.toCssValue()};
+  border: 1px solid ${settingsFieldHairline};
 `
 
 export const settingsInputHeight = 52
