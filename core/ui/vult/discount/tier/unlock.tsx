@@ -1,4 +1,4 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { SettingsStrongCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { ValueProp } from '@lib/ui/props'
@@ -14,35 +14,46 @@ import {
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { CSSProperties, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { formatDiscountPercentOfBaseFee } from '../../../vault/swap/affiliate/affiliateBps'
-import { discountTierColors } from './colors'
+import { VultDiscountTierBadge } from './badge'
 import { DiscountTierFooterBox } from './container'
-import { discountTierIcons } from './icons'
-import { UltimateGradientText } from './UltimateGradientText'
 
-const Title = styled.p<ValueProp<VultDiscountTier>>`
+const sheetInset = 16
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the frame's own sheet radius, off the scale
+const sheetRadius = 20
+const sheetBackdropStyles = { background: 'rgba(0, 0, 0, 0.7)' }
+const sheetGrabberStyles = { background: 'transparent' }
+
+const Title = styled.p`
   ${text({
     size: 28,
+    weight: 500,
     centerHorizontally: true,
+    color: 'shyExtra',
+    height: 34 / 28,
+    letterSpacing: -0.64,
   })}
 
   b {
-    color: ${({ value }) => discountTierColors[value].toCssValue()};
-    font-weight: 500;
+    font-weight: inherit;
   }
 `
 
 const Description = styled.p`
   ${text({
     size: 14,
+    weight: 400,
     centerHorizontally: true,
-    color: 'shy',
-    height: 'large',
+    color: 'shyExtra',
+    height: 20 / 14,
   })}
+
+  position: relative;
+  top: 1px;
 
   b {
     color: ${getColor('text')};
@@ -54,6 +65,7 @@ type UnlockDiscountTierProps = ValueProp<VultDiscountTier> & {
   style?: CSSProperties
 }
 
+/** A tier's Unlock footer and the sheet it opens, which leads to the $VULT swap. */
 export const UnlockDiscountTier = ({
   value,
   style,
@@ -62,7 +74,8 @@ export const UnlockDiscountTier = ({
   const navigate = useCoreNavigate()
   const [isOpen, setIsOpen] = useState(false)
 
-  const Icon = discountTierIcons[value]
+  const { colors } = useTheme()
+  const surface = colors.foreground.toCssValue()
 
   const { mutate: createCoin } = useCreateCoinMutation()
 
@@ -82,17 +95,24 @@ export const UnlockDiscountTier = ({
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         grabbable
+        mobileFullWidth={false}
+        backdropStyles={sheetBackdropStyles}
+        drawerHeaderStyles={sheetGrabberStyles}
+        drawerStyles={{
+          background: `linear-gradient(transparent, ${surface} 45%), radial-gradient(${colors.primaryAlt.withAlpha(0.3).toCssValue()} 1px, transparent 1.5px) 0 0 / 12px 12px, ${surface}`,
+          border: `1px solid ${colors.foregroundExtra.toCssValue()}`,
+          borderRadius: sheetRadius,
+          bottom: sheetInset,
+        }}
       >
-        <VStack alignItems="center" gap={36} padding="8px 24px 24px">
+        <VStack alignItems="center" gap={20} padding="16px 15px 15px">
           <VStack alignItems="center" gap={26}>
-            <Icon fontSize={72} />
-            <Title value={value}>
+            <VultDiscountTierBadge size={46} value={value} />
+            <Title>
               <Trans
                 i18nKey="unlock_discount_tier"
                 values={{ tier: t(value) }}
-                components={{
-                  b: value === 'ultimate' ? <UltimateGradientText /> : <b />,
-                }}
+                components={{ b: <b /> }}
               />
             </Title>
           </VStack>
@@ -115,7 +135,7 @@ export const UnlockDiscountTier = ({
               components={{ b: <b /> }}
             />
           </Description>
-          <Button
+          <SettingsStrongCtaButton
             onClick={() =>
               createCoin(vult, {
                 onSuccess: coin => {
@@ -128,7 +148,7 @@ export const UnlockDiscountTier = ({
             }
           >
             {t('unlock_tier')}
-          </Button>
+          </SettingsStrongCtaButton>
         </VStack>
       </ResponsiveModal>
     </>
