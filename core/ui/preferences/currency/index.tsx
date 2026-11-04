@@ -1,3 +1,4 @@
+import { getFiatCurrencySymbol } from '@core/ui/chain/utils/getFiatCurrencySymbol'
 import { SettingsFlushCard } from '@core/ui/settings/SettingsCard'
 import { SettingsOptionItem } from '@core/ui/settings/SettingsOptionItem'
 import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
@@ -10,7 +11,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import {
   fiatCurrencies,
   fiatCurrencyNameRecord,
-  fiatCurrencySymbolRecord,
 } from '@vultisig/core-config/FiatCurrency'
 import { useTranslation } from 'react-i18next'
 
@@ -29,7 +29,7 @@ export const CurrencyPage = () => {
               isSelected={key === currencyValue}
               key={key}
               onClick={() => currencyMutation.mutate(key)}
-              title={`${fiatCurrencyNameRecord[key]} (${fiatCurrencySymbolRecord[key]})`}
+              title={`${fiatCurrencyNameRecord[key]} (${getFiatCurrencySymbol(key)})`}
             />
           ))}
         </SettingsFlushCard>
