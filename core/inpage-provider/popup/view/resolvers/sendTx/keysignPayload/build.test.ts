@@ -5,24 +5,45 @@ import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import { getRippleSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ripple'
+import { getTronSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/tron'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import { RippleTransaction } from '../core/ripple/sanitizeRippleDappTx'
+import { TransactionDetails, TronMsgType } from '../interfaces'
 import { buildSendTxKeysignPayload } from './build'
 
 vi.mock('@vultisig/core-mpc/keysign/chainSpecific', () => ({
-  getChainSpecific: vi.fn(async ({ keysignPayload }) =>
-    keysignPayload.coin?.chain === Chain.Ripple
-      ? {
-          case: 'rippleSpecific',
-          value: {
-            gas: 12n,
-            sequence: 10n,
-            lastLedgerSequence: 20n,
-          },
-        }
-      : undefined
-  ),
+  getChainSpecific: vi.fn(async ({ keysignPayload }) => {
+    if (keysignPayload.coin?.chain === Chain.Ripple) {
+      return {
+        case: 'rippleSpecific',
+        value: {
+          gas: 12n,
+          sequence: 10n,
+          lastLedgerSequence: 20n,
+        },
+      }
+    }
+
+    if (keysignPayload.coin?.chain === Chain.Tron) {
+      return {
+        case: 'tronSpecific',
+        value: {
+          timestamp: 1_700_000_000_000n,
+          expiration: 1_700_000_060_000n,
+          blockHeaderTimestamp: 1_700_000_000_000n,
+          blockHeaderNumber: 1n,
+          blockHeaderVersion: 30n,
+          blockHeaderTxTrieRoot: '',
+          blockHeaderParentHash: '',
+          blockHeaderWitnessAddress: '',
+          gasEstimation: 100_000_000n,
+        },
+      }
+    }
+
+    return undefined
+  }),
 }))
 
 const solanaCoin: AccountCoin = {
@@ -75,6 +96,146 @@ const buildRipplePayload = ({
       coin: rippleCoin,
       customTxData: { ripple: { transaction } },
       skipBroadcast,
+    },
+    publicKey,
+    walletCore,
+    vaultId: 'vault-id',
+    localPartyId: 'local-party',
+  })
+
+const tronVaultAddress = 'TBXSw8fM4jpQkGc6zZjsVABFpVN7UvXPdV'
+const tronRecipientHex = '22'.repeat(20)
+const tronRecipient = 'TD5gsCwxykWsLN9aPrq2TAfNjByuZKYp4E'
+const usdtAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'
+const trxCoin: AccountCoin = {
+  ...chainFeeCoin[Chain.Tron],
+  address: tronVaultAddress,
+}
+const usdtCoin: AccountCoin = {
+  chain: Chain.Tron,
+  id: usdtAddress,
+  ticker: 'USDT',
+  decimals: 6,
+  address: tronVaultAddress,
+}
+const tronMeta = {
+  timestamp: 1_700_000_000_000,
+  expiration: 1_700_000_060_000,
+  refBlockBytesHex: '0001',
+  refBlockHashHex: '0102030405060708',
+}
+const abiWord = (hex: string) => hex.padStart(64, '0')
+const trc20TransferData = `a9059cbb${abiWord(tronRecipientHex)}${abiWord((1_000_000).toString(16))}`
+const trc20ApproveData = `095ea7b3${abiWord(tronRecipientHex)}${'f'.repeat(64)}`
+
+type TronDappCase = {
+  name: string
+  coin: AccountCoin
+  transactionDetails: TransactionDetails
+}
+
+// The reviewed fields as the extension's TronWeb provider fills them from
+// the contract it is asked to sign.
+const tronDappCases: TronDappCase[] = [
+  {
+    name: 'TRX transfer',
+    coin: trxCoin,
+    transactionDetails: {
+      asset: { ticker: 'TRX' },
+      from: tronVaultAddress,
+      to: tronRecipient,
+      amount: { amount: '1', decimals: 6 },
+      msgPayload: {
+        case: TronMsgType.TRON_TRANSFER_CONTRACT,
+        value: {
+          owner_address: tronVaultAddress,
+          to_address: tronRecipient,
+          amount: 1,
+        },
+        meta: tronMeta,
+      },
+      skipBroadcast: true,
+    },
+  },
+  {
+    name: 'TRC-20 transfer',
+    coin: usdtCoin,
+    transactionDetails: {
+      asset: { ticker: 'USDT', contractAddress: usdtAddress },
+      from: tronVaultAddress,
+      to: tronRecipient,
+      amount: { amount: '1000000', decimals: 6 },
+      msgPayload: {
+        case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT,
+        value: {
+          owner_address: tronVaultAddress,
+          contract_address: usdtAddress,
+          data: trc20TransferData,
+        },
+        meta: tronMeta,
+      },
+      skipBroadcast: true,
+    },
+  },
+  {
+    name: 'TRC-20 approve',
+    coin: trxCoin,
+    transactionDetails: {
+      asset: { ticker: 'TRX' },
+      from: tronVaultAddress,
+      to: usdtAddress,
+      amount: { amount: '0', decimals: 6 },
+      msgPayload: {
+        case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT,
+        value: {
+          owner_address: tronVaultAddress,
+          contract_address: usdtAddress,
+          data: trc20ApproveData,
+        },
+        meta: tronMeta,
+      },
+      skipBroadcast: true,
+    },
+  },
+  {
+    name: 'payable contract call',
+    coin: trxCoin,
+    transactionDetails: {
+      asset: { ticker: 'TRX' },
+      from: tronVaultAddress,
+      to: usdtAddress,
+      amount: { amount: '5', decimals: 6 },
+      msgPayload: {
+        case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT,
+        value: {
+          owner_address: tronVaultAddress,
+          contract_address: usdtAddress,
+          call_value: 5,
+          data: trc20ApproveData,
+        },
+        meta: tronMeta,
+      },
+      skipBroadcast: true,
+    },
+  },
+]
+
+const buildTronDappPayload = ({
+  coin,
+  transactionDetails,
+}: Omit<TronDappCase, 'name'>) =>
+  buildSendTxKeysignPayload({
+    parsedTx: {
+      coin,
+      customTxData: {
+        regular: {
+          chain: Chain.Tron,
+          coin,
+          transactionDetails,
+          isEvmContractCall: false,
+        },
+      },
+      skipBroadcast: true,
     },
     publicKey,
     walletCore,
@@ -251,4 +412,25 @@ describe('buildSendTxKeysignPayload', () => {
       ).toHaveLength(1)
     }
   )
+
+  it.each(tronDappCases)(
+    'keeps a TRON dApp $name signable',
+    async ({ coin, transactionDetails }) => {
+      const payload = await buildTronDappPayload({ coin, transactionDetails })
+
+      expect(
+        getTronSigningInputs({ keysignPayload: payload, walletCore })
+      ).toHaveLength(1)
+    }
+  )
+
+  it('refuses a TRON dApp payload whose reviewed recipient was changed', async () => {
+    const [, trc20Transfer] = tronDappCases
+    const payload = await buildTronDappPayload(trc20Transfer)
+    payload.toAddress = tronVaultAddress
+
+    expect(() =>
+      getTronSigningInputs({ keysignPayload: payload, walletCore })
+    ).toThrow(/recipient/)
+  })
 })
