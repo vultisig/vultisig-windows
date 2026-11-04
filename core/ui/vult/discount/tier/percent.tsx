@@ -7,6 +7,8 @@ import {
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { formatDiscountPercentOfBaseFee } from '../../../vault/swap/affiliate/affiliateBps'
+
 const Container = styled.div`
   display: inline-flex;
   padding: 8px 16px;
@@ -23,14 +25,15 @@ const Container = styled.div`
   line-height: 20px;
 `
 
-export const DiscountTierBps = ({ value }: ValueProp<VultDiscountTier>) => {
+/** Pill stating the share of the base swap fee a tier waives. */
+export const DiscountTierPercent = ({ value }: ValueProp<VultDiscountTier>) => {
   const { t } = useTranslation()
 
   return (
     <Container>
       {value === 'ultimate'
         ? t('complete_fee_waive')
-        : `${t('swap_discount')}: ${vultDiscountTierBps[value]}bps`}
+        : `${t('swap_discount')}: ${formatDiscountPercentOfBaseFee(vultDiscountTierBps[value])}`}
     </Container>
   )
 }
