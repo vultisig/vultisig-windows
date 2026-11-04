@@ -13,7 +13,6 @@ export const hr = {
   add_memo: 'Dodaj MEMO',
   add_new_vault: 'Dodaj novi trezor',
   add_referral: 'Dodaj preporuku',
-  add_referral_code: 'Spremi referalni kod',
   add_to_address_book: 'Dodaj u adresar',
   add_suggested_token: 'Dodaj predloženi token',
   bech32_prefix: 'Prefiks adrese',
@@ -221,7 +220,6 @@ export const hr = {
   copy_address: 'Kopiraj adresu',
   create_new_vault: 'Izradi novi trezor',
   create_vault: 'Izradi trezor',
-  create_referral_form: 'Izradi preporuku',
   create_referral_title: 'Izradi preporuku',
   create_referral: 'Izradi preporuku',
   create_referral_desc:
@@ -816,7 +814,6 @@ export const hr = {
   save_backup_n_of_n_to_cloud:
     'Spremi sigurnosnu kopiju {{current}} od {{total}} u oblak',
   save_backup_to_cloud: 'Spremi sigurnosnu kopiju u oblak',
-  save_code: 'Spremi kod',
   save_swap_fees_with_referral:
     'Uštedite <blue>10%</blue> na zamjenama - Dodajte preporuku',
   saving_vault: 'Spremanje trezora...',
@@ -1049,7 +1046,6 @@ export const hr = {
   upload_qr_code_image: 'Prenesi QR kod',
   upload_qr_code_to_join_keysign: 'Prenesite QR kod za pridruživanje Keysignu',
   upload_qr_code_with_address: 'Prenesite QR kod s adresom',
-  use_referral_code: 'Koristite referalni kod',
   used_referral_error:
     'Korišteni referalni kod ne može biti isti kao vaš referalni kod',
   validator_address: 'Adresa validatora',
@@ -1239,7 +1235,7 @@ export const hr = {
   },
   your_friends_referral_code: 'Kod preporuke vašeg prijatelja',
   your_referral_code: 'Vaš referalni kod',
-  your_referrals: 'Vaše preporuke',
+  your_referrals: 'Moja preporuka',
   your_seedphrase: 'Vaša početna fraza',
   your_seedphrase_subtitle: 'Unesite je, izradite trezor i ne osvrćite se',
   youre_swapping: 'Zamjenjujete',

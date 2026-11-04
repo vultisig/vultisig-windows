@@ -1,11 +1,9 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsStrongCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { Match } from '@lib/ui/base/Match'
-import { Button } from '@lib/ui/buttons/Button'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
-import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +13,7 @@ import {
   useFriendReferralQuery,
   useSetFriendReferralMutation,
 } from '../../../../../storage/referrals'
-import { DecorationLine, ReferralPageWrapper } from '../Referrals.styled'
+import { ReferralFormContent, ReferralFormFooter } from '../Referrals.styled'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 import { useFriendReferralValidation } from './hooks/useFriendReferralValidation'
 
@@ -47,38 +45,30 @@ export const EditFriendReferralForm = ({ onFinish }: OnFinishProp) => {
         </CenterAbsolutely>
       )}
       success={() => (
-        <VStack flexGrow gap={40}>
-          <PageHeader
-            primaryControls={
-              <PageHeaderBackButton onClick={() => onFinish()} />
-            }
-            title={t('referrals_default_title')}
+        <VStack flexGrow>
+          <SettingsPageHeader
+            onBack={() => onFinish()}
+            title={t('save_referral')}
           />
-          <ReferralPageWrapper flexGrow justifyContent="space-between">
-            <VStack flexGrow justifyContent="space-between">
-              <StackSeparatedBy
-                direction="column"
-                separator={<DecorationLine />}
-                gap={14}
-              >
-                <ReferralCodeField
-                  value={referralName}
-                  onChange={setReferralName}
-                  error={error}
-                />
-              </StackSeparatedBy>
-              <Button
-                onClick={() => {
-                  setFriendReferral(referralName)
-                  onFinish()
-                }}
-                disabled={Boolean(error) || isValidating}
-                type="submit"
-              >
-                {t('save_code')}
-              </Button>
-            </VStack>
-          </ReferralPageWrapper>
+          <ReferralFormContent flexGrow scrollable>
+            <ReferralCodeField
+              value={referralName}
+              onChange={setReferralName}
+              error={error}
+            />
+          </ReferralFormContent>
+          <ReferralFormFooter>
+            <SettingsStrongCtaButton
+              onClick={() => {
+                setFriendReferral(referralName)
+                onFinish()
+              }}
+              disabled={Boolean(error) || isValidating}
+              type="submit"
+            >
+              {t('save_referral')}
+            </SettingsStrongCtaButton>
+          </ReferralFormFooter>
         </VStack>
       )}
     />

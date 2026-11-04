@@ -12,7 +12,6 @@ export const ko = {
   add_memo: '메모 추가',
   add_new_vault: '새 볼트 추가',
   add_referral: '추천 코드 추가',
-  add_referral_code: '추천 코드 저장',
   add_to_address_book: '주소록에 추가',
   add_suggested_token: '제안된 토큰 추가',
   bech32_prefix: '주소 접두사',
@@ -214,7 +213,6 @@ export const ko = {
   copy_address: '주소 복사',
   create_new_vault: '새 볼트 생성',
   create_vault: '볼트 생성',
-  create_referral_form: '추천 코드 생성',
   create_referral_title: '추천 코드 생성',
   create_referral: '추천 코드 생성',
   create_referral_desc:
@@ -787,7 +785,6 @@ export const ko = {
   save_backup_n_of_n_to_cloud:
     '백업 {{current}}/{{total}}을(를) 클라우드에 저장하세요',
   save_backup_to_cloud: '클라우드에 백업을 저장하세요',
-  save_code: '코드 저장',
   save_swap_fees_with_referral:
     '스왑 수수료 <blue>10%</blue> 절약 - 추천 코드 추가',
   saving_vault: '볼트 저장 중...',
@@ -1018,7 +1015,6 @@ export const ko = {
   upload_qr_code_image: 'QR 코드 업로드',
   upload_qr_code_to_join_keysign: '서명에 참여하려면 QR 코드를 업로드하세요.',
   upload_qr_code_with_address: '주소가 포함된 QR 코드 업로드',
-  use_referral_code: '추천 코드 사용',
   used_referral_error:
     '사용한 추천 코드는 본인의 추천 코드와 동일할 수 없습니다.',
   validator_address: '검증인 주소',
@@ -1232,7 +1228,7 @@ export const ko = {
   },
   your_friends_referral_code: '친구의 추천 코드',
   your_referral_code: '내 추천 코드',
-  your_referrals: '내 추천 현황',
+  your_referrals: '내 추천',
   your_seedphrase: '시드 문구',
   your_seedphrase_subtitle: '입력하고, 볼트를 만들고, 다시는 돌아보지 마세요.',
   youre_swapping: '스왑하고 있습니다',

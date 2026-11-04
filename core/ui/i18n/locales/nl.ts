@@ -12,7 +12,6 @@ export const nl = {
   add_memo: 'MEMO toevoegen',
   add_new_vault: 'Nieuwe kluis toevoegen',
   add_referral: 'Referral toevoegen',
-  add_referral_code: 'Referralcode opslaan',
   add_to_address_book: 'Toevoegen aan adresboek',
   add_suggested_token: 'Voorgestelde token toevoegen',
   bech32_prefix: 'Adresvoorvoegsel',
@@ -220,7 +219,6 @@ export const nl = {
   copy_address: 'Adres kopiëren',
   create_new_vault: 'Nieuwe kluis aanmaken',
   create_vault: 'Maak een kluis aan',
-  create_referral_form: 'Referral aanmaken',
   create_referral_title: 'Referral aanmaken',
   create_referral: 'Referral aanmaken',
   create_referral_desc:
@@ -807,7 +805,6 @@ export const nl = {
   save_backup_n_of_n_to_cloud:
     'Sla back-up {{current}} van {{total}} op in de cloud',
   save_backup_to_cloud: 'Sla de back-up op in de cloud.',
-  save_code: 'Code opslaan',
   save_swap_fees_with_referral:
     'Bespaar <blue>10%</blue> op swaps - Voeg een referral toe',
   saving_vault: 'Kluis opslaan...',
@@ -1037,7 +1034,6 @@ export const nl = {
   upload_qr_code_image: 'QR-code uploaden',
   upload_qr_code_to_join_keysign: 'Upload QR-code om deel te nemen aan Keysign',
   upload_qr_code_with_address: 'Upload QR-code met adres',
-  use_referral_code: 'Referralcode gebruiken',
   used_referral_error:
     'Gebruikte referralcode mag niet gelijk zijn aan je eigen referralcode',
   validator_address: 'Validatoradres',
@@ -1225,7 +1221,7 @@ export const nl = {
   },
   your_friends_referral_code: 'Referralcode van je vriend',
   your_referral_code: 'Jouw referralcode',
-  your_referrals: 'Jouw referrals',
+  your_referrals: 'Mijn referral',
   your_seedphrase: 'Jouw seed phrase',
   your_seedphrase_subtitle:
     'Voer het in, maak een kluis, kijk nooit meer terug',

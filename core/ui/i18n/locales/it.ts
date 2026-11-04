@@ -12,7 +12,6 @@ export const it = {
   add_memo: 'Aggiungi MEMO',
   add_new_vault: 'Aggiungi nuovo vault',
   add_referral: 'Aggiungi referral',
-  add_referral_code: 'Salva il codice referral',
   add_to_address_book: 'Aggiungi alla rubrica',
   add_suggested_token: 'Aggiungi token suggerito',
   bech32_prefix: 'Prefisso di indirizzo',
@@ -222,7 +221,6 @@ export const it = {
   copy_address: 'Copia indirizzo',
   create_new_vault: 'Crea nuovo vault',
   create_vault: 'Crea vault',
-  create_referral_form: 'Crea referral',
   create_referral_title: 'Crea referral',
   create_referral: 'Crea referral',
   create_referral_desc:
@@ -818,7 +816,6 @@ export const it = {
   save_backup_n_of_n_to_cloud:
     'Salva il backup {{current}} di {{total}} sul cloud',
   save_backup_to_cloud: 'Salva il backup sul cloud',
-  save_code: 'Salva il codice',
   save_swap_fees_with_referral:
     'Risparmia il <blue>10%</blue> sugli scambi - Aggiungi un referral',
   saving_vault: 'Salvataggio Vault...',
@@ -1050,7 +1047,6 @@ export const it = {
   upload_qr_code_image: 'Carica codice QR',
   upload_qr_code_to_join_keysign: 'Carica il codice QR per unirti a Keysign',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
-  use_referral_code: 'Usa il codice referral',
   used_referral_error: 'Il codice referral usato non può essere uguale al tuo',
   validator_address: 'Indirizzo del validatore',
   value: 'Valore',
@@ -1241,7 +1237,7 @@ export const it = {
   },
   your_friends_referral_code: 'Codice referral del tuo amico',
   your_referral_code: 'Il tuo codice referral',
-  your_referrals: 'I tuoi referral',
+  your_referrals: 'Il mio referral',
   your_seedphrase: 'La tua frase seed',
   your_seedphrase_subtitle:
     'Inseriscila, crea un vault e non guardarti più indietro',

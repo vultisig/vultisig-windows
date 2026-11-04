@@ -12,7 +12,6 @@ export const de = {
   add_memo: 'Memo hinzufügen',
   add_new_vault: 'Neuen Tresor hinzufügen',
   add_referral: 'Empfehlung hinzufügen',
-  add_referral_code: 'Empfehlungscode speichern',
   add_to_address_book: 'Zum Adressbuch hinzufügen',
   add_suggested_token: 'Vorgeschlagenes Token hinzufügen',
   bech32_prefix: 'Adresspräfix',
@@ -222,7 +221,6 @@ export const de = {
   copy_address: 'Adresse kopieren',
   create_new_vault: 'Neuen Tresor erstellen',
   create_vault: 'Tresor erstellen',
-  create_referral_form: 'Empfehlung erstellen',
   create_referral_title: 'Empfehlung erstellen',
   create_referral: 'Empfehlung erstellen',
   create_referral_desc:
@@ -822,7 +820,6 @@ export const de = {
   save_backup_n_of_n_to_cloud:
     'Backup {{current}} von {{total}} in der Cloud speichern',
   save_backup_to_cloud: 'Backup in der Cloud speichern',
-  save_code: 'Code speichern',
   save_swap_fees_with_referral:
     '<blue>10 %</blue> bei Swaps sparen – Empfehlungscode hinzufügen',
   saving_vault: 'Tresor wird gespeichert...',
@@ -1059,7 +1056,6 @@ export const de = {
   upload_qr_code_to_join_keysign:
     'Laden Sie den QR-Code hoch, um Keysign beizutreten.',
   upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
-  use_referral_code: 'Empfehlungscode verwenden',
   used_referral_error:
     'Der verwendete Empfehlungscode darf nicht mit Ihrem Empfehlungscode übereinstimmen.',
   validator_address: 'Validatoradresse',
@@ -1251,7 +1247,7 @@ export const de = {
   },
   your_friends_referral_code: 'Empfehlungscode Ihres Freundes',
   your_referral_code: 'Ihr Empfehlungscode',
-  your_referrals: 'Ihre Empfehlungen',
+  your_referrals: 'Meine Empfehlung',
   your_seedphrase: 'Ihre Seedphrase',
   your_seedphrase_subtitle:
     'Geben Sie sie ein, erstellen Sie einen Tresor – fertig.',

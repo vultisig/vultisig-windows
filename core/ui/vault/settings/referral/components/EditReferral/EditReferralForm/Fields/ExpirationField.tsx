@@ -58,10 +58,8 @@ export const ExpirationField = ({ initialExpiration }: Props) => {
         {error && isDirty && <FormFieldErrorText>{error}</FormFieldErrorText>}
       </FormField>
       <HStack justifyContent="space-between" alignItems="center">
-        <Text size={14} color="supporting">
-          {t('expiration_date')}
-        </Text>
-        <Text>{formattedExpirationDate}</Text>
+        <Text variant="caption">{t('expiration_date')}</Text>
+        <Text variant="caption">{formattedExpirationDate}</Text>
       </HStack>
     </VStack>
   )

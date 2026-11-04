@@ -1,7 +1,8 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { TextInput } from '@lib/ui/inputs/TextInput'
+import { textInputHeight } from '@lib/ui/css/textInput'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -18,6 +19,7 @@ import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
+  ReferralTextInput,
 } from '../../../Referrals.styled'
 
 export const ReferralCodeField = () => {
@@ -54,17 +56,24 @@ export const ReferralCodeField = () => {
           {t('pick_referral_code')}
         </FormFieldLabel>
         <HStack gap={8}>
-          <TextInput
+          <ReferralTextInput
             id="referral-name"
             value={localInput}
             placeholder={t('enter_up_to_4_characters_placeholder')}
+            validation={
+              status === 'success'
+                ? 'valid'
+                : status === 'error'
+                  ? 'invalid'
+                  : undefined
+            }
             onValueChange={value => {
               setLocalInput(value)
               reset()
               setValue('referralName', '')
             }}
           />
-          <Button
+          <SearchButton
             disabled={isSearchDisabled}
             onClick={() => {
               checkAvailability(trimmedInput, {
@@ -78,10 +87,9 @@ export const ReferralCodeField = () => {
                 },
               })
             }}
-            style={{ maxWidth: 97, fontSize: 14 }}
           >
             {t('search')}
-          </Button>
+          </SearchButton>
         </HStack>
         {(errors.referralName || inputError) && (
           <FormFieldErrorText>
@@ -103,11 +111,11 @@ export const ReferralCodeField = () => {
           )}
           error={() => (
             <>
-              <Text size={14} color="supporting">
+              <StatusLabel color="shy" variant="stationBodyS">
                 {t('referral_status')}
-              </Text>
+              </StatusLabel>
               <StatusPill>
-                <Text size={13} color="danger">
+                <Text color="danger" variant="footnote">
                   {extractErrorMsg(error)}
                 </Text>
               </StatusPill>
@@ -115,13 +123,13 @@ export const ReferralCodeField = () => {
           )}
           success={() => (
             <>
-              <Text size={14} color="supporting">
+              <StatusLabel color="shy" variant="stationBodyS">
                 {t('referral_status')}
-              </Text>
+              </StatusLabel>
               <StatusPill>
-                <Text size={13} color="success">
+                <AvailableText variant="footnote">
                   {t('available')}
-                </Text>
+                </AvailableText>
               </StatusPill>
             </>
           )}
@@ -132,17 +140,35 @@ export const ReferralCodeField = () => {
   )
 }
 
+const SearchButton = styled(Button)`
+  ${borderRadius.md};
+  flex-shrink: 0;
+  font-weight: 600;
+  height: ${textInputHeight}px;
+  padding-inline: 0;
+  width: 97px;
+`
+
 const StatusWrapper = styled(HStack)<{
   isHidden?: boolean
 }>`
   ${({ isHidden }) => (isHidden ? 'display: none' : '')}
-  height: 52px;
+  gap: 12px;
+  min-height: 52px;
   position: relative;
+`
+
+const StatusLabel = styled(SettingsBaselineText)`
+  flex-shrink: 0;
+`
+
+const AvailableText = styled(Text)`
+  color: ${getColor('success')};
 `
 
 const StatusPill = styled.div`
   display: flex;
-  padding: 8px 12px;
+  padding: 6.5px 10.5px;
   align-items: center;
   gap: 4px;
   ${borderRadius.pill};

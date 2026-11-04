@@ -2,7 +2,6 @@ import { Opener } from '@lib/ui/base/Opener'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -12,15 +11,16 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CoinIcon } from '../../../../../../../chain/coin/icon/CoinIcon'
-import { CoinOption } from '../../../../../../../chain/coin/inputs/CoinOption'
 import { useCurrentVaultCoins } from '../../../../../../state/currentVaultCoins'
 import { useReferralPayoutAsset } from '../../../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../../../queries/useActivePoolsQuery'
 import { FormField, FormFieldLabel } from '../../../Referrals.styled'
 import { normaliseChainToMatchPoolChain } from '../config'
+import { PayoutAssetPicker } from './PayoutAssetPicker'
 
 const normTicker = (t: string) => t.split('-')[0].toUpperCase()
 
+/** The Edit Referral row showing the payout asset and opening its picker. */
 export const PayoutAssetField = () => {
   const coins = useCurrentVaultCoins()
   const { t } = useTranslation()
@@ -72,9 +72,9 @@ export const PayoutAssetField = () => {
             {currentValue ? (
               <>
                 <HStack alignItems="center" gap={6}>
-                  <CoinIcon coin={currentValue} style={{ fontSize: 16 }} />
-                  <Text size={16} weight={500}>
-                    {currentValue.id}
+                  <CoinIcon coin={currentValue} style={{ fontSize: 32 }} />
+                  <Text height={24 / 16} size={16} weight={500}>
+                    {currentValue.ticker}
                   </Text>
                 </HStack>
               </>
@@ -91,12 +91,8 @@ export const PayoutAssetField = () => {
           </PayoutAssetTrigger>
         )}
         renderContent={({ onClose }) => (
-          <SelectItemModal
-            filterFunction={(option, query) =>
-              option.ticker.toLowerCase().startsWith(query.toLowerCase())
-            }
-            title={t('choose_payout_asset')}
-            optionComponent={CoinOption}
+          <PayoutAssetPicker
+            chain={coin.chain}
             onFinish={(newValue: AccountCoin | undefined) => {
               if (!newValue) {
                 onClose()
@@ -114,7 +110,8 @@ export const PayoutAssetField = () => {
 }
 
 const PayoutAssetTrigger = styled(HStack)`
-  padding: 16px;
+  min-height: 56px;
+  padding: 11px 15px;
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   cursor: pointer;

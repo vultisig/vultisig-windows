@@ -6,6 +6,11 @@ export const SettingsCtaButton = styled(Button)`
   padding-top: 2px;
 `
 
+/** A settings primary button whose frame sets its label in SemiBold. */
+export const SettingsStrongCtaButton = styled(SettingsCtaButton)`
+  font-weight: 600;
+`
+
 /** The content-sized primary button of the settings empty and status screens. */
 export const SettingsHugCtaButton = styled(SettingsCtaButton)`
   font-weight: 600;

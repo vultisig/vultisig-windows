@@ -6,6 +6,7 @@ import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { panel } from '@lib/ui/panel/Panel'
@@ -22,10 +23,15 @@ import styled from 'styled-components'
 import { CoinOptionFiatAmount } from './CoinOptionFiatAmount'
 import { CoinOptionFiatValue } from './CoinOptionFiatValue'
 
-export const CoinOption = ({
-  value,
-  onClick,
-}: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
+type CoinOptionProps = ValueProp<Coin> &
+  OnClickProp &
+  IsActiveProp & {
+    /** Names the coin's chain in a pill beside its ticker. */
+    showChain?: boolean
+  }
+
+/** A coin to choose, with the vault's balance of it. */
+export const CoinOption = ({ value, onClick, showChain }: CoinOptionProps) => {
   const { ticker } = value
   const coins = useCurrentVaultCoins()
   const vaultCoin = coins.find(c => areEqualCoins(c, value))
@@ -45,9 +51,19 @@ export const CoinOption = ({
         <CoinLabel gap={8} alignItems="center">
           <CoinTicker ticker={ticker} size={13} weight="500" />
           <TokenVerificationBadge value={value} />
+          {showChain && (
+            <ChainPill color="shyExtra" nowrap variant="caption">
+              {value.chain}
+            </ChainPill>
+          )}
         </CoinLabel>
       </CoinDetails>
-      <BalanceColumn gap={4} justifyContent="center" alignItems="flex-end">
+      <BalanceColumn
+        alignItems="flex-end"
+        gap={4}
+        justifyContent="center"
+        style={showChain ? { height: 'auto' } : undefined}
+      >
         {vaultCoin ? (
           <VaultCoinBalance value={vaultCoin} />
         ) : (
@@ -151,6 +167,13 @@ const CoinDetails = styled(HStack)`
 
 const CoinLabel = styled(HStack)`
   min-width: 0;
+`
+
+const ChainPill = styled(Text)`
+  ${borderRadius.pill};
+  background: ${getColor('foreground')};
+  border: 1.5px solid ${getColor('foregroundExtra')};
+  padding: 5.5px 10.5px;
 `
 
 /**

@@ -12,7 +12,6 @@ export const es = {
   add_memo: 'Agregar MEMO',
   add_new_vault: 'Agregar nueva bóveda',
   add_referral: 'Agregar referido',
-  add_referral_code: 'Guardar código de referido',
   add_to_address_book: 'Agregar a la libreta de direcciones',
   add_suggested_token: 'Agregar token sugerido',
   bech32_prefix: 'Prefijo de dirección',
@@ -221,7 +220,6 @@ export const es = {
   copy_address: 'Copiar dirección',
   create_new_vault: 'Crear nueva bóveda',
   create_vault: 'Crear bóveda',
-  create_referral_form: 'Crear código de referido',
   create_referral_title: 'Crear código de referido',
   create_referral: 'Crear código de referido',
   create_referral_desc:
@@ -811,7 +809,6 @@ export const es = {
   save_backup_n_of_n_to_cloud:
     'Guarda la copia de seguridad {{current}} de {{total}} en la nube.',
   save_backup_to_cloud: 'Guarda la copia de seguridad en la nube.',
-  save_code: 'Guardar código',
   save_swap_fees_with_referral:
     'Ahorra un <blue>10%</blue> en swaps: agrega un código de referido',
   saving_vault: 'Guardando la bóveda...',
@@ -1048,7 +1045,6 @@ export const es = {
   upload_qr_code_image: 'Subir código QR',
   upload_qr_code_to_join_keysign: 'Sube el código QR para unirte a Keysign',
   upload_qr_code_with_address: 'Subir código QR con dirección',
-  use_referral_code: 'Usar código de referido',
   used_referral_error:
     'El código de referido usado no puede ser igual a tu propio código',
   validator_address: 'Dirección del validador',
@@ -1238,7 +1234,7 @@ export const es = {
   },
   your_friends_referral_code: 'Código de referido de tu amigo',
   your_referral_code: 'Tu código de referido',
-  your_referrals: 'Tus referidos',
+  your_referrals: 'Mi referido',
   your_seedphrase: 'Tu frase semilla',
   your_seedphrase_subtitle: 'Ingrésala, crea una bóveda y no mires atrás.',
   youre_swapping: 'Estás intercambiando',

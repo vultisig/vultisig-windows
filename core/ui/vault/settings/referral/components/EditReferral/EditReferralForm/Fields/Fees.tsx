@@ -1,11 +1,11 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
-import { Text } from '@lib/ui/text'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
@@ -75,37 +75,39 @@ export const Fees = () => {
           return (
             <>
               <RowWrapper>
-                <Text size={13} color="supporting">
+                <SettingsBaselineText color="shy" variant="footnote">
                   {t('current_expiry')}
-                </Text>
-                <Text size={14}>{Math.ceil(remaining)} yrs</Text>
+                </SettingsBaselineText>
+                <SettingsBaselineText variant="stationBodyS">
+                  {Math.ceil(remaining)} yrs
+                </SettingsBaselineText>
               </RowWrapper>
 
               <RowWrapper>
-                <Text size={13} color="supporting">
+                <SettingsBaselineText color="shy" variant="footnote">
                   {t('referral_annual_fee')}
-                </Text>
+                </SettingsBaselineText>
                 <VStack alignItems="flex-end">
-                  <Text size={14}>
+                  <SettingsBaselineText variant="stationBodyS">
                     {formatAmount(perYearFee, { ticker: 'RUNE' })} / yr
-                  </Text>
-                  <Text size={14} color="supporting">
+                  </SettingsBaselineText>
+                  <SettingsBaselineText color="shy" variant="stationBodyS">
                     {perYearFiat}
-                  </Text>
+                  </SettingsBaselineText>
                 </VStack>
               </RowWrapper>
 
               <RowWrapper>
-                <Text size={13} color="supporting">
+                <SettingsBaselineText color="shy" variant="footnote">
                   {t('referral_extension_fee', { years: yearsToAdd })}
-                </Text>
+                </SettingsBaselineText>
                 <VStack alignItems="flex-end">
-                  <Text size={14}>
+                  <SettingsBaselineText variant="stationBodyS">
                     {formatAmount(extensionFee, { ticker: 'RUNE' })}
-                  </Text>
-                  <Text size={14} color="supporting">
+                  </SettingsBaselineText>
+                  <SettingsBaselineText color="shy" variant="stationBodyS">
                     {totalFiat}
-                  </Text>
+                  </SettingsBaselineText>
                 </VStack>
               </RowWrapper>
             </>
