@@ -1,19 +1,19 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsStrongCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { Opener } from '@lib/ui/base/Opener'
-import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ArrowUndoIcon } from '@lib/ui/icons/ArrowUndoIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { ChevronRightSmallIcon } from '@lib/ui/icons/ChevronRightSmallIcon'
+import { CopiesFilledIcon } from '@lib/ui/icons/CopiesFilledIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { Image } from '@lib/ui/image/Image'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -32,7 +32,8 @@ import {
   FixedWrapper,
   HorizontalFieldWrapper,
   Overlay,
-  ReferralPageWrapper,
+  ReferralPageBody,
+  ReferralPanel,
   VaultFieldWrapper,
   VerticalFieldWrapper,
 } from './Referrals.styled'
@@ -43,6 +44,7 @@ type Props = {
   nameDetails?: ValidThorchainNameDetails
 }
 
+/** My Referral for a vault with a code: rewards, the code, its expiry and the way to edit it. */
 export const ManageExistingReferral = ({
   nameDetails: {
     name,
@@ -63,31 +65,28 @@ export const ManageExistingReferral = ({
     <Opener
       renderOpener={({ onOpen }) => (
         <>
-          <PageHeader
-            hasBorder
-            primaryControls={<PageHeaderBackButton />}
-            title={t('your_referrals')}
-          />
-          <ReferralPageWrapper>
+          <SettingsPageHeader title={t('your_referrals')} />
+          <ReferralPageBody>
             <AnimatedVisibility
               animationConfig="bottomToTop"
               config={{ duration: 1000 }}
               delay={300}
               overlayStyles={{
-                flexGrow: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 14,
+                gap: 8,
               }}
             >
-              <Wrapper gap={14}>
+              {!friendsReferralCode && (
+                <AddFriendsReferralPrompt
+                  onUpdateFriendReferral={onEditFriendReferral}
+                />
+              )}
+              <ReferralPanel>
                 <Overlay />
-                {!friendsReferralCode && (
-                  <AddFriendsReferralPrompt
-                    onUpdateFriendReferral={onEditFriendReferral}
-                  />
-                )}
-                <Text size={14}>{t('vault_selected')}</Text>
+                <SettingsBaselineText variant="stationBodyS">
+                  {t('vault_selected')}
+                </SettingsBaselineText>
                 <VaultFieldWrapper onClick={onOpen}>
                   <HStack alignItems="center" gap={10}>
                     <Image
@@ -99,32 +98,26 @@ export const ManageExistingReferral = ({
                       width={28}
                       height={28}
                     />
-                    <Text size={16}>{vaultName}</Text>
+                    <Text height={1} size={16} weight={400}>
+                      {vaultName}
+                    </Text>
                   </HStack>
-                  <IconWrapper
-                    style={{
-                      fontSize: 16,
-                    }}
-                  >
-                    <ChevronRightIcon />
+                  <IconWrapper size={16}>
+                    <ChevronRightSmallIcon />
                   </IconWrapper>
                 </VaultFieldWrapper>
 
                 <RewardsCollectedWrapper>
-                  <FieldIconWrapper
-                    style={{
-                      color: colors.buttonPrimary.toCssValue(),
-                    }}
-                  >
+                  <FieldIconWrapper>
                     <TrophyIcon />
                   </FieldIconWrapper>
                   <VStack>
-                    <Text size={14} color="shy">
+                    <SettingsBaselineText color="shy" variant="stationBodyS">
                       {t('collected_rewards')}
-                    </Text>
-                    <Text>
+                    </SettingsBaselineText>
+                    <FieldValue>
                       {formatAmount(collectedRune, { ticker: 'RUNE' })}
-                    </Text>
+                    </FieldValue>
                   </VStack>
                   <ReferralsThorchainLogoWrapper>
                     <Image
@@ -138,31 +131,43 @@ export const ManageExistingReferral = ({
                     />
                   </ReferralsThorchainLogoWrapper>
                 </RewardsCollectedWrapper>
-                <Text size={14}>{t('your_referral_code')}</Text>
-                <HorizontalFieldWrapper>
-                  <Text>{name}</Text>
-                  <FieldIconWrapper>
-                    <UnstyledButton onClick={() => copyToClipboard(name)}>
-                      <CopyIcon />
-                    </UnstyledButton>
-                  </FieldIconWrapper>
-                </HorizontalFieldWrapper>
-                <VerticalFieldWrapper gap={10}>
-                  <Text size={14} color="shy">
+                <VStack gap={8}>
+                  <SettingsBaselineText color="shy" variant="stationBodyS">
+                    {t('your_referral_code')}
+                  </SettingsBaselineText>
+                  <HorizontalFieldWrapper>
+                    <SettingsBaselineText variant="stationBodyS">
+                      {name}
+                    </SettingsBaselineText>
+                    <FieldIconWrapper>
+                      <UnstyledButton onClick={() => copyToClipboard(name)}>
+                        <CopiesFilledIcon />
+                      </UnstyledButton>
+                    </FieldIconWrapper>
+                  </HorizontalFieldWrapper>
+                </VStack>
+                <VerticalFieldWrapper>
+                  <SettingsBaselineText color="shy" variant="stationBodyS">
                     {t('expires_on')}
-                  </Text>
-                  <Text size={18}>
+                  </SettingsBaselineText>
+                  <FieldValue>
                     {formatReferralDateExpiration(expiresOn)}
-                  </Text>
+                  </FieldValue>
                 </VerticalFieldWrapper>
-                <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
-                <DecorationLine />
+                <SettingsStrongCtaButton onClick={onEditReferral}>
+                  {t('edit_referral')}
+                </SettingsStrongCtaButton>
                 {Boolean(friendsReferralCode) && (
                   <VStack gap={14}>
+                    <DecorationLine />
                     <VStack gap={8}>
-                      <Text>{t('your_friends_referral_code')}</Text>
+                      <SettingsBaselineText variant="stationBodyS">
+                        {t('your_friends_referral_code')}
+                      </SettingsBaselineText>
                       <FriendsReferralCode>
-                        <Text>{friendsReferralCode || '--'}</Text>
+                        <SettingsBaselineText variant="stationBodyS">
+                          {friendsReferralCode || '--'}
+                        </SettingsBaselineText>
                       </FriendsReferralCode>
                     </VStack>
                     <DecorationLine />
@@ -191,7 +196,9 @@ export const ManageExistingReferral = ({
                           >
                             <ArrowUndoIcon />
                           </FieldIconWrapper>
-                          <Text>{t('change_your_friends_referral')}</Text>
+                          <SettingsBaselineText variant="stationBodyS">
+                            {t('change_your_friends_referral')}
+                          </SettingsBaselineText>
                         </VStack>
                         <IconWrapper
                           style={{
@@ -204,28 +211,19 @@ export const ManageExistingReferral = ({
                     </VerticalFieldWrapper>
                   </VStack>
                 )}
-              </Wrapper>
+              </ReferralPanel>
             </AnimatedVisibility>
-          </ReferralPageWrapper>
+          </ReferralPageBody>
         </>
       )}
       renderContent={({ onClose }) => (
         <FixedWrapper>
-          <VaultsPage onFinish={onClose} />
+          <VaultsPage isSettingsLook onFinish={onClose} />
         </FixedWrapper>
       )}
     />
   )
 }
-
-const Wrapper = styled(VStack)`
-  position: relative;
-
-  border: 1px solid ${getColor('foregroundExtra')};
-  padding: 14px;
-  ${borderRadius.md};
-  background: rgba(2, 18, 43, 0.5);
-`
 
 const RewardsCollectedWrapper = styled(VStack)`
   position: relative;
@@ -252,21 +250,26 @@ const RewardsCollectedWrapper = styled(VStack)`
   height: 108px;
 `
 
+const FieldValue = styled(Text)`
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.09px;
+  line-height: 28px;
+`
+
 const FieldIconWrapper = styled(IconWrapper)`
   font-size: 20px;
 `
 
 const FriendsReferralCode = styled(VStack)`
-  padding: 16px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  ${borderRadius.md};
+  ${fieldWrapperStyles};
 `
 
 const ReferralsThorchainLogoWrapper = styled.div`
-  width: 145px;
-  height: 145px;
+  width: 201px;
+  height: 206px;
 
   position: absolute;
-  right: -45px;
-  bottom: -45px;
+  right: -79px;
+  top: -23px;
 `

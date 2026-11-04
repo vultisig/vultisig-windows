@@ -1,14 +1,15 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { FileQuestionIcon } from '@lib/ui/icons/FileQuestionIcon'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
+import { ChevronRightSmallIcon } from '@lib/ui/icons/ChevronRightSmallIcon'
+import { CircleDashedIcon } from '@lib/ui/icons/CircleDashedIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { Image } from '@lib/ui/image/Image'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +21,8 @@ import { AddFriendsReferralPrompt } from './AddFriendsReferralPrompt'
 import {
   FixedWrapper,
   Overlay,
-  ReferralPageWrapper,
+  ReferralPageBody,
+  ReferralPanel,
   VaultFieldWrapper,
 } from './Referrals.styled'
 
@@ -29,6 +31,7 @@ type Props = {
   onEditFriendReferral: () => void
 }
 
+/** My Referral for a vault with no code of its own: the vault, and the way to create one. */
 export const ManageMissingReferral = ({
   onCreateReferral,
   onEditFriendReferral,
@@ -41,101 +44,93 @@ export const ManageMissingReferral = ({
     <Opener
       renderOpener={({ onOpen }) => (
         <>
-          <PageHeader
-            primaryControls={<PageHeaderBackButton />}
-            title={t('your_referrals')}
-          />
-          <ReferralPageWrapper>
+          <SettingsPageHeader title={t('your_referrals')} />
+          <ReferralPageBody>
             <AnimatedVisibility
               animationConfig="bottomToTop"
               config={{ duration: 1000 }}
               delay={300}
               overlayStyles={{
-                flexGrow: 1,
                 display: 'flex',
                 flexDirection: 'column',
+                gap: 8,
               }}
             >
-              <ReferralPageWrapper>
-                <Wrapper gap={14}>
-                  <Overlay />
-                  <AddFriendsReferralPrompt
-                    onUpdateFriendReferral={onEditFriendReferral}
-                  />
-                  <Text size={14}>{t('vault_selected')}</Text>
-                  <VaultFieldWrapper onClick={onOpen}>
-                    <HStack alignItems="center" gap={10}>
-                      <Image
-                        style={{
-                          objectFit: 'contain',
-                        }}
-                        src="/core/images/vault-image-placeholder.png"
-                        alt=""
-                        width={28}
-                        height={28}
-                      />
-                      <Text size={16}>{vaultName}</Text>
-                    </HStack>
-                    <IconWrapper
+              <AddFriendsReferralPrompt
+                onUpdateFriendReferral={onEditFriendReferral}
+              />
+              <ReferralPanel>
+                <Overlay />
+                <SettingsBaselineText variant="stationBodyS">
+                  {t('vault_selected')}
+                </SettingsBaselineText>
+                <VaultFieldWrapper onClick={onOpen}>
+                  <HStack alignItems="center" gap={10}>
+                    <Image
                       style={{
-                        fontSize: 16,
+                        objectFit: 'contain',
                       }}
-                    >
-                      <ChevronRightIcon />
-                    </IconWrapper>
-                  </VaultFieldWrapper>
-                  <NoReferralDescriptionWrapper>
+                      src="/core/images/vault-image-placeholder.png"
+                      alt=""
+                      width={28}
+                      height={28}
+                    />
+                    <Text height={1} size={16} weight={400}>
+                      {vaultName}
+                    </Text>
+                  </HStack>
+                  <IconWrapper size={16}>
+                    <ChevronRightSmallIcon />
+                  </IconWrapper>
+                </VaultFieldWrapper>
+                <NoReferralDescriptionWrapper>
+                  <VStack alignItems="center" gap={12}>
                     <IconWrapper
-                      style={{
-                        fontSize: 24,
-                        color: colors.primaryAlt.toCssValue(),
-                      }}
+                      size={24}
+                      style={{ color: colors.primaryAlt.toCssValue() }}
                     >
-                      <FileQuestionIcon />
+                      <CircleDashedIcon />
                     </IconWrapper>
-                    <Text centerHorizontally size={16}>
-                      {t('no_referral_yet')}
-                    </Text>
-                    <Text centerHorizontally size={13} color="shyExtra">
-                      {t('turn_your_vault_into_rewards_machine')}
-                    </Text>
-                    <Button onClick={onCreateReferral}>
-                      {t('create_referral')}
-                    </Button>
-                  </NoReferralDescriptionWrapper>
-                </Wrapper>
-              </ReferralPageWrapper>
+                    <VStack
+                      alignItems="center"
+                      gap={8}
+                      style={{ position: 'relative', top: 1 }}
+                    >
+                      <Text centerHorizontally variant="title3">
+                        {t('no_referral_yet')}
+                      </Text>
+                      <Text centerHorizontally color="shy" variant="footnote">
+                        {t('turn_your_vault_into_rewards_machine')}
+                      </Text>
+                    </VStack>
+                  </VStack>
+                  <Button
+                    icon={<PlusIcon />}
+                    onClick={onCreateReferral}
+                    size="xs"
+                  >
+                    {t('create_referral')}
+                  </Button>
+                </NoReferralDescriptionWrapper>
+              </ReferralPanel>
             </AnimatedVisibility>
-          </ReferralPageWrapper>
+          </ReferralPageBody>
         </>
       )}
       renderContent={({ onClose }) => (
         <FixedWrapper>
-          <VaultsPage onFinish={onClose} />
+          <VaultsPage isSettingsLook onFinish={onClose} />
         </FixedWrapper>
       )}
     />
   )
 }
 
-const Wrapper = styled(VStack)`
-  position: relative;
-
-  border: 1px solid ${getColor('foregroundExtra')};
-  padding: 14px;
-  ${borderRadius.md};
-  background: rgba(2, 18, 43, 0.5);
-`
-
 const NoReferralDescriptionWrapper = styled(VStack)`
-  ${vStack({
-    alignItems: 'center',
-    gap: 20,
-  })};
-
-  padding: 36px 12px 24px 12px;
-  gap: 20px;
-  ${borderRadius.md};
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: rgba(2, 18, 43, 0.5);
+  align-items: center;
+  background: ${getColor('foreground')};
+  border-radius: ${borderRadiusPx.xl - 4}px;
+  gap: 16px;
+  padding: 32px 40px;
+  position: relative;
 `
