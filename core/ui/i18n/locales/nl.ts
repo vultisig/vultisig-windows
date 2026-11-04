@@ -998,7 +998,7 @@ export const nl = {
   ultimate: 'Ultimate',
   unlock_discount_tier: '<b>{{tier}}</b>-niveau ontgrendelen',
   unlock_discount_tier_description:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>{{bps}} bps korting op handelskosten</b> bij alle swaps.',
+    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>{{percent}} korting op de Vultisig-swapkosten</b> bij alle swaps.',
   unlock_discount_tier_description_ultimate:
     'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en betaal je <b>geen Vultisig-kosten</b> op alle swaps.',
   unlock_tier: 'Niveau ontgrendelen',
