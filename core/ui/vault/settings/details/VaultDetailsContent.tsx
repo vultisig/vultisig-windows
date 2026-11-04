@@ -66,31 +66,6 @@ const SignerText = styled(VStack)`
   overflow-wrap: anywhere;
 `
 
-type RowProps = { label: string; value: string }
-
-const Row = ({ label, value }: RowProps) => (
-  <Item>
-    <SettingsBaselineText variant="stationBodyS">{label}</SettingsBaselineText>
-    <SettingsBaselineText variant="stationBodyS">{value}</SettingsBaselineText>
-  </Item>
-)
-
-const KeyRow = ({ label, value }: RowProps) => (
-  <KeyItem>
-    <TruncatingCol flexGrow>
-      <SettingsBaselineText variant="subtitle">{label}</SettingsBaselineText>
-      <Text cropped color="shy" variant="caption">
-        {value}
-      </Text>
-    </TruncatingCol>
-    <CopyButton onClick={() => navigator.clipboard.writeText(value)}>
-      <IconWrapper size={20}>
-        <CopiesFilledIcon />
-      </IconWrapper>
-    </CopyButton>
-  </KeyItem>
-)
-
 export const VaultDetailsContent = () => {
   const { t } = useTranslation()
   const { name, publicKeys, publicKeyMldsa, signers, localPartyId, libType } =
@@ -98,6 +73,24 @@ export const VaultDetailsContent = () => {
   const totalSigners = signers.length
   const localPartyIndex = signers.indexOf(localPartyId) + 1
   const threshold = getKeygenThreshold(totalSigners)
+  const infoRows = [
+    { label: t('vault_name'), value: name },
+    {
+      label: t('vault_part'),
+      value: t('vault_share_position', {
+        index: localPartyIndex,
+        total: totalSigners,
+      }),
+    },
+    { label: t('vault_details_page_vault_type'), value: libType },
+  ]
+  const keyRows = [
+    { label: t('vault_delete_page_ecdsa_key'), value: publicKeys.ecdsa },
+    { label: t('vault_delete_page_eddsa_key'), value: publicKeys.eddsa },
+    ...(publicKeyMldsa
+      ? [{ label: t('vault_details_page_vault_MLDSA'), value: publicKeyMldsa }]
+      : []),
+  ]
 
   return (
     <>
@@ -105,35 +98,39 @@ export const VaultDetailsContent = () => {
         <Text color="shy" variant="caption">
           {t('vault_info')}
         </Text>
-        <Row label={t('vault_name')} value={name} />
-        <Row
-          label={t('vault_part')}
-          value={t('vault_share_position', {
-            index: localPartyIndex,
-            total: totalSigners,
-          })}
-        />
-        <Row label={t('vault_details_page_vault_type')} value={libType} />
+        {infoRows.map(({ label, value }) => (
+          <Item key={label}>
+            <SettingsBaselineText variant="stationBodyS">
+              {label}
+            </SettingsBaselineText>
+            <SettingsBaselineText variant="stationBodyS">
+              {value}
+            </SettingsBaselineText>
+          </Item>
+        ))}
       </VStack>
 
       <VStack gap={12}>
         <Text color="shy" variant="caption">
           {t('keys')}
         </Text>
-        <KeyRow
-          label={t('vault_delete_page_ecdsa_key')}
-          value={publicKeys.ecdsa}
-        />
-        <KeyRow
-          label={t('vault_delete_page_eddsa_key')}
-          value={publicKeys.eddsa}
-        />
-        {publicKeyMldsa && (
-          <KeyRow
-            label={t('vault_details_page_vault_MLDSA')}
-            value={publicKeyMldsa}
-          />
-        )}
+        {keyRows.map(({ label, value }) => (
+          <KeyItem key={label}>
+            <TruncatingCol flexGrow>
+              <SettingsBaselineText variant="subtitle">
+                {label}
+              </SettingsBaselineText>
+              <Text cropped color="shy" variant="caption">
+                {value}
+              </Text>
+            </TruncatingCol>
+            <CopyButton onClick={() => navigator.clipboard.writeText(value)}>
+              <IconWrapper size={20}>
+                <CopiesFilledIcon />
+              </IconWrapper>
+            </CopyButton>
+          </KeyItem>
+        ))}
       </VStack>
       <VStack gap={12}>
         <Text color="shy" variant="caption">

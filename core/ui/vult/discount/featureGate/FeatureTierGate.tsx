@@ -4,7 +4,10 @@ import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
+import {
+  mediaQuery,
+  useIsTabletDeviceAndUp,
+} from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
@@ -19,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { currentProductBrand } from '../../../product/brand'
+import { SettingsBaselineText } from '../../../settings/SettingsBaselineText'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useVultBalanceQuery } from '../queries/balance'
 import { discountTierColors } from '../tier/colors'
@@ -47,6 +50,10 @@ const settingsBackdropStyles = {
   backdropFilter: 'blur(6px)',
   background: 'rgba(0, 0, 0, 0.7)',
 }
+const settingsFootnoteHeight = 18 / 13
+// The drawer's grabber row takes 28 of the frame's 54 above the badge.
+const settingsDrawerPadding = '26px 16px 24px'
+const settingsModalPadding = '40px 16px 24px'
 
 /**
  * Reusable responsive prompt shown when a tier-locked feature is tapped without
@@ -67,6 +74,9 @@ export const FeatureTierGate = ({
   const navigate = useCoreNavigate()
   const { mutate: createCoin, isPending } = useCreateCoinMutation()
   const balanceQuery = useVultBalanceQuery()
+  const isTabletAndUp = useIsTabletDeviceAndUp()
+  const LookText = isSettingsLook ? SettingsBaselineText : Text
+  const footnoteHeight = isSettingsLook ? settingsFootnoteHeight : undefined
 
   const TierIcon = discountTierIcons[requiredTier]
   const accent = discountTierColors[requiredTier].toCssValue()
@@ -90,65 +100,116 @@ export const FeatureTierGate = ({
         aria-modal
         aria-label={dialogLabel}
       >
-        <Content alignItems="center" gap={20} padding="40px 15px 16px">
+        <VStack
+          alignItems="center"
+          gap={20}
+          padding={
+            !isSettingsLook
+              ? '40px 15px 16px'
+              : isTabletAndUp
+                ? settingsModalPadding
+                : settingsDrawerPadding
+          }
+        >
           <VStack alignItems="center" gap={32} fullWidth>
-            <IconBadge>{icon}</IconBadge>
-            <Copy alignItems="center" gap={16}>
-              <Title size={22} weight={500} centerHorizontally>
+            <IconBadge $isSettingsLook={isSettingsLook}>{icon}</IconBadge>
+            <VStack
+              alignItems="center"
+              gap={16}
+              padding={isSettingsLook ? '0 12px' : undefined}
+            >
+              <LookText
+                size={22}
+                weight={500}
+                centerHorizontally
+                height={isSettingsLook ? 24 / 22 : undefined}
+                letterSpacing={isSettingsLook ? -0.36 : undefined}
+              >
                 {title}
-              </Title>
-              <Description
+              </LookText>
+              <LookText
                 size={14}
                 weight={500}
                 color="shy"
                 centerHorizontally
-                height="large"
+                height={isSettingsLook ? 20 / 14 : 'large'}
               >
                 {description}
-              </Description>
-            </Copy>
+              </LookText>
+            </VStack>
           </VStack>
           <FooterGroup>
-            <RequirementCard>
-              <Text size={13} weight={500} color="shy">
+            <RequirementCard $isSettingsLook={isSettingsLook}>
+              <LookText
+                size={13}
+                weight={500}
+                color="shy"
+                height={footnoteHeight}
+              >
                 {t('feature_gate_requires')}
-              </Text>
+              </LookText>
               <HStack alignItems="center" gap={12}>
-                <TierIcon fontSize={36} />
-                <TierCopy gap={2}>
-                  <TierName size={14} weight={500}>
+                <TierIcon
+                  fontSize={36}
+                  style={isSettingsLook ? { flexShrink: 0 } : undefined}
+                />
+                <VStack
+                  gap={2}
+                  padding={isSettingsLook ? '2px 0 0' : undefined}
+                >
+                  <LookText
+                    size={14}
+                    weight={500}
+                    height={isSettingsLook ? 20 / 14 : undefined}
+                  >
                     {t('feature_gate_requires_tier', {
                       tier: t(requiredTier),
                     })}
-                  </TierName>
-                  <Text size={13} weight={500} color="shy">
+                  </LookText>
+                  <LookText
+                    size={13}
+                    weight={500}
+                    color="shy"
+                    height={footnoteHeight}
+                  >
                     {t('feature_gate_hold_at_least', {
                       amount: formatAmount(
                         vultDiscountTierMinBalances[requiredTier],
                         { ticker: vult.ticker }
                       ),
                     })}
-                  </Text>
-                </TierCopy>
+                  </LookText>
+                </VStack>
               </HStack>
-              <BalanceRow>
+              <BalanceRow $isSettingsLook={isSettingsLook}>
                 <HStack alignItems="center" gap={6}>
                   <IconWrapper>
                     <WalletIcon />
                   </IconWrapper>
-                  <Text size={13} weight={500} color="shy">
+                  <LookText
+                    size={13}
+                    weight={500}
+                    color="shy"
+                    height={footnoteHeight}
+                  >
                     {t('feature_gate_your_balance')}
-                  </Text>
+                  </LookText>
                 </HStack>
-                <Text size={13} weight={500} style={{ color: accent }}>
+                <LookText
+                  size={13}
+                  weight={500}
+                  height={footnoteHeight}
+                  style={{ color: accent }}
+                >
                   {formatAmount(balanceQuery.data ?? 0, {
                     ticker: vult.ticker,
                   })}
-                </Text>
+                </LookText>
               </BalanceRow>
             </RequirementCard>
             <GetVultButton
               $gradient={discountTierGradients[requiredTier]}
+              $isSettingsLook={isSettingsLook}
               disabled={isPending}
               onClick={() =>
                 createCoin(vult, {
@@ -164,23 +225,11 @@ export const FeatureTierGate = ({
               {isPending ? <Spinner /> : t('get_vult')}
             </GetVultButton>
           </FooterGroup>
-        </Content>
+        </VStack>
       </DialogFrame>
     </ResponsiveModal>
   )
 }
-
-const Content = styled(VStack)``
-
-const Copy = styled(VStack)``
-
-const Title = styled(Text)``
-
-const Description = styled(Text)``
-
-const TierCopy = styled(VStack)``
-
-const TierName = styled(Text)``
 
 const DialogFrame = styled.div<{ $isSettingsLook: boolean }>`
   width: 100%;
@@ -198,10 +247,14 @@ const DialogFrame = styled.div<{ $isSettingsLook: boolean }>`
     box-shadow: 0 15px 75px rgba(0, 0, 0, 0.18);
   }
 
-  ${({ $isSettingsLook }) => $isSettingsLook && settingsLook};
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
+      height: auto;
+    `}
 `
 
-const IconBadge = styled.div`
+const IconBadge = styled.div<{ $isSettingsLook: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,6 +266,26 @@ const IconBadge = styled.div`
   box-shadow: 0 8px 18px rgba(12, 78, 255, 0.18);
   font-size: 20px;
   color: #0439c7;
+
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
+      box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.25);
+      color: ${getColor('buttonNeutral')};
+      overflow: hidden;
+      position: relative;
+
+      &::after {
+        background: ${getColor('buttonPrimary')};
+        bottom: -3px;
+        content: '';
+        filter: blur(9.26px);
+        height: 8px;
+        left: 11.8px;
+        position: absolute;
+        width: 15.9px;
+      }
+    `}
 `
 
 const IconWrapper = styled.div`
@@ -227,7 +300,7 @@ const FooterGroup = styled.div`
   align-self: stretch;
 `
 
-const RequirementCard = styled(VStack)`
+const RequirementCard = styled(VStack)<{ $isSettingsLook: boolean }>`
   position: relative;
   z-index: 1;
   align-self: stretch;
@@ -236,9 +309,17 @@ const RequirementCard = styled(VStack)`
   ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
+
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
+      border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 20px 20px;
+      padding: 23px 19px 15px;
+    `}
 `
 
-const BalanceRow = styled(HStack)`
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the sheet component's own radius, off the scale
+const BalanceRow = styled(HStack)<{ $isSettingsLook: boolean }>`
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
@@ -251,9 +332,20 @@ const BalanceRow = styled(HStack)`
   > * {
     min-width: 0;
   }
+
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
+      border-radius: 14px;
+      margin-top: 12px;
+      padding: 15px;
+    `}
 `
 
-const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`
+const GetVultButton = styled(UnstyledButton)<{
+  $gradient: string
+  $isSettingsLook: boolean
+}>`
   position: relative;
   z-index: 0;
   display: flex;
@@ -272,87 +364,11 @@ const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`
     opacity: 0.6;
     cursor: default;
   }
-`
 
-// The drawer's grabber row takes 28 of the frame's 54 above the badge.
-// eslint-disable-next-line local/no-hardcoded-border-radius -- the sheet component's own radii, off the scale
-const settingsLook = css`
-  height: auto;
-
-  ${Content} {
-    padding: 26px 16px 24px;
-
-    @media ${mediaQuery.tabletDeviceAndUp} {
-      padding-top: 40px;
-    }
-  }
-
-  ${Copy} {
-    padding-inline: 12px;
-  }
-
-  ${Title} {
-    letter-spacing: -0.36px;
-    line-height: 24px;
-    position: relative;
-    top: 1px;
-  }
-
-  ${Description} {
-    line-height: 20px;
-    position: relative;
-    top: 1px;
-  }
-
-  ${IconBadge} {
-    box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
-    position: relative;
-    ${currentProductBrand === 'vultisig' && 'color: #2155df;'}
-
-    &::after {
-      background: #0c4eff;
-      bottom: -3px;
-      content: '';
-      filter: blur(9.26px);
-      height: 8px;
-      left: 11.8px;
-      position: absolute;
-      width: 15.9px;
-    }
-  }
-
-  ${RequirementCard} {
-    border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 20px 20px;
-    padding: 23px 19px 15px;
-
-    svg {
-      flex-shrink: 0;
-    }
-
-    ${Text} {
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
       line-height: 18px;
-      position: relative;
-      top: 1px;
-    }
-  }
-
-  ${TierCopy} {
-    padding-top: 2px;
-  }
-
-  ${RequirementCard} ${TierName} {
-    line-height: 20px;
-  }
-
-  ${BalanceRow} {
-    border-radius: 14px;
-    margin-top: 12px;
-    padding: 15px;
-  }
-
-  ${GetVultButton} {
-    line-height: 18px;
-    padding: 37px 32px 18px;
-  }
+      padding: 38px 32px 17px;
+    `}
 `

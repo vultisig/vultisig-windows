@@ -24,7 +24,17 @@ export const SettingsCheckbox = ({
 }: SettingsCheckboxProps) => (
   <Row>
     <Ring aria-hidden $isChecked={value}>
-      {value && <CheckMark />}
+      {value && (
+        <svg fill="none" height="24" viewBox="0 0 24 24" width="24">
+          <path
+            d="M9.20052 12.4003L11.0005 14.4003L14.8005 9.60026"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+        </svg>
+      )}
     </Ring>
     <Text color="shyExtra" variant="caption">
       {label}
@@ -36,18 +46,6 @@ export const SettingsCheckbox = ({
       type="checkbox"
     />
   </Row>
-)
-
-const CheckMark = () => (
-  <svg fill="none" height="24" viewBox="0 0 24 24" width="24">
-    <path
-      d="M9.20052 12.4003L11.0005 14.4003L14.8005 9.60026"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-    />
-  </svg>
 )
 
 const Ring = styled.div<{ $isChecked: boolean }>`
