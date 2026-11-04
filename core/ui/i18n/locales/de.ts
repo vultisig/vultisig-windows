@@ -281,6 +281,7 @@ export const de = {
   done: 'Erledigt',
   earn: 'Verdienen',
   edit_address: 'Adresse bearbeiten',
+  edit_address_book: 'Adressbuch bearbeiten',
   edit_friends_referral: 'Freundesempfehlung bearbeiten',
   edit_referral: 'Empfehlung bearbeiten',
   remove_friends_referral: 'Empfehlung entfernen',
@@ -469,6 +470,7 @@ export const de = {
   go_to_vault: 'Zum Tresor',
   go_to_wallet: 'Zur Wallet',
   home_display: 'Startansicht',
+  home_display_balance_caption: 'Saldoanzeige',
   home_display_separate_description:
     'Der Wallet-Tab zeigt nur Ihr Wallet-Guthaben, der DeFi-Tab Ihr DeFi-Guthaben.',
   home_display_separate_title: 'Wallet & DeFi getrennt',
@@ -1067,7 +1069,7 @@ export const de = {
   vault: 'Tresor',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Die Anwendung ist auf dem neuesten Stand.',
-    downloadButton: 'Jetzt aktualisieren',
+    downloadButton: 'App aktualisieren',
     errorFetchingLatestVersion:
       'Fehler beim Abrufen der neuesten Version: {{error}}',
     fetchingLatestVersion: 'Die neueste Version wird abgerufen...',

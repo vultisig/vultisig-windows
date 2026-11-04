@@ -282,6 +282,7 @@ export const it = {
   done: 'Fatto',
   earn: 'Guadagna',
   edit_address: 'Modifica indirizzo',
+  edit_address_book: 'Modifica rubrica',
   edit_friends_referral: 'Modifica referral amico',
   edit_referral: 'Modifica referral',
   remove_friends_referral: 'Rimuovi referral',
@@ -468,6 +469,7 @@ export const it = {
   go_to_vault: 'Vai al vault',
   go_to_wallet: 'Vai al portafoglio',
   home_display: 'Schermata iniziale',
+  home_display_balance_caption: 'Visualizzazione del saldo',
   home_display_separate_description:
     'La scheda Portafoglio mostra solo il saldo del portafoglio e la scheda DeFi mostra il tuo saldo DeFi.',
   home_display_separate_title: 'Portafoglio e DeFi separati',
@@ -1057,7 +1059,7 @@ export const it = {
   vault: 'Vault',
   vaultCheckUpdatePage: {
     applicationUpToDate: "L'applicazione è aggiornata.",
-    downloadButton: 'Aggiorna ora',
+    downloadButton: 'Aggiorna app',
     errorFetchingLatestVersion:
       "Errore durante il recupero dell'ultima versione: {{error}}",
     fetchingLatestVersion: "Recupero dell'ultima versione...",

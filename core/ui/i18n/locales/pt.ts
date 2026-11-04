@@ -280,6 +280,7 @@ export const pt = {
   done: 'Feito',
   earn: 'Ganhar',
   edit_address: 'Editar endereço',
+  edit_address_book: 'Editar agenda de endereços',
   edit_friends_referral: 'Editar Indicação de Amigo',
   edit_referral: 'Editar indicação',
   remove_friends_referral: 'Remover indicação',
@@ -463,6 +464,7 @@ export const pt = {
   go_to_vault: 'Vá para o cofre',
   go_to_wallet: 'Acesse a carteira',
   home_display: 'Exibição inicial',
+  home_display_balance_caption: 'Exibição do saldo',
   home_display_separate_description:
     'A aba Carteira mostra apenas o saldo da carteira, e a aba DeFi mostra seu saldo em DeFi.',
   home_display_separate_title: 'Carteira e DeFi separados',
@@ -1057,7 +1059,7 @@ export const pt = {
   vault: 'Cofre',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'O aplicativo está atualizado.',
-    downloadButton: 'Atualize agora',
+    downloadButton: 'Atualizar app',
     errorFetchingLatestVersion:
       'Erro ao obter a versão mais recente: {{error}}',
     fetchingLatestVersion: 'Buscando a versão mais recente...',

@@ -278,6 +278,7 @@ export const ru = {
   done: 'Готово',
   earn: 'Доход',
   edit_address: 'Редактировать адрес',
+  edit_address_book: 'Редактировать адресную книгу',
   edit_friends_referral: 'Изменить реферальный код друга',
   edit_referral: 'Изменить реферальный код',
   remove_friends_referral: 'Удалить реферал',
@@ -459,6 +460,7 @@ export const ru = {
   go_to_vault: 'Перейти в хранилище',
   go_to_wallet: 'Перейти в кошелек',
   home_display: 'Главный экран',
+  home_display_balance_caption: 'Отображение баланса',
   home_display_separate_description:
     'Вкладка «Кошелёк» показывает только баланс кошелька, а вкладка DeFi — ваш баланс в DeFi.',
   home_display_separate_title: 'Кошелёк и DeFi отдельно',
@@ -1050,7 +1052,7 @@ export const ru = {
   vault: 'Хранилище',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Приложение обновлено.',
-    downloadButton: 'Обновить сейчас',
+    downloadButton: 'Обновить приложение',
     errorFetchingLatestVersion: 'Ошибка получения последней версии: {{error}}',
     fetchingLatestVersion: 'Получение последней версии...',
     title: 'Проверка обновлений',
