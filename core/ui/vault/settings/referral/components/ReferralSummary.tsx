@@ -15,6 +15,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { Overlay } from './Referrals.styled'
+
 /** The onboarding guide explaining how referrals work. */
 export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
@@ -44,7 +46,8 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
 
   return (
     <>
-      <GuideContent alignItems="center" scrollable>
+      <GuideContent alignItems="center">
+        <Overlay />
         <VStack
           animationConfig="bottomToTop"
           as={AnimatedVisibility}
@@ -88,7 +91,9 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
 
 const GuideContent = styled(PageContent)`
   min-height: 0;
+  overflow: hidden auto;
   padding-block: 5px 0;
+  position: relative;
 `
 
 const Heading = styled(Text)`

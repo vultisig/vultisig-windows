@@ -40,7 +40,7 @@ export const ReferralFormFooter = styled(SettingsPageFooter)`
   ${desktopColumn};
 `
 
-/** Label above a referral form field. */
+/** A label stacked over its input. */
 export const FormField = styled.div`
   ${vStack({
     gap: 8,

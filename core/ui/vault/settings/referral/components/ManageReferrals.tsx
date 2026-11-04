@@ -88,7 +88,7 @@ export const ManageReferrals = ({
                       />
                     </ActionDescription>
                   </VStack>
-                  <ChevronRightIcon fontSize={20} />
+                  <ChevronRightIcon fontSize={20} style={{ flexShrink: 0 }} />
                 </ActionItem>
                 <ActionItem onClick={() => setView('createReferral')}>
                   <VStack gap={12}>
@@ -107,7 +107,7 @@ export const ManageReferrals = ({
                       />
                     </ActionDescription>
                   </VStack>
-                  <ChevronRightIcon fontSize={20} />
+                  <ChevronRightIcon fontSize={20} style={{ flexShrink: 0 }} />
                 </ActionItem>
               </VStack>
             </DiscoveryContent>
