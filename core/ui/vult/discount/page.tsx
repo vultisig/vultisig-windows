@@ -37,7 +37,7 @@ const VultDiscountPageContent = () => {
   return (
     <VStack fullHeight gap={10}>
       <PageHeader
-        title={`$${vult.ticker} ${t('discount_tiers')}`}
+        title={t('discount_tiers', { ticker: `$${vult.ticker}` })}
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
           <IconButton onClick={() => openUrl(vultWebsiteUrl)}>

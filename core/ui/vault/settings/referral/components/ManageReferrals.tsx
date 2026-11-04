@@ -50,124 +50,131 @@ export const ManageReferrals = ({
   const { data: friendReferral } = useFriendReferralQuery(vaultId)
 
   return (
-    <ReferralPayoutAssetProvider>
-      <Match
-        value={view}
-        default={() => (
-          <>
-            <PageHeader
-              primaryControls={<PageHeaderBackButton />}
-              title={t('manage_referral_title')}
-            />
-            <PageContent alignItems="center" scrollable>
-              <DiscoveryContent
-                fullWidth
-                maxWidth={480}
-                flexGrow
-                justifyContent="space-between"
-                gap={16}
-              >
-                <HeroIllustration src="/core/referral-hero.webp" alt="" />
-                <VStack gap={14} fullWidth>
-                  <ActionItem onClick={() => setView('saveReferral')}>
-                    <VStack gap={12}>
-                      <HStack alignItems="center" gap={8} wrap="wrap">
-                        <Text as={MegaphoneIcon} color="primaryAlt" size={24} />
-                        <ActionTitle as="span">
-                          {t('save_referral')}
-                        </ActionTitle>
-                        {Boolean(friendReferral) && (
-                          <Text as="span" color="success" size={13}>
-                            {t('active')}
-                          </Text>
-                        )}
-                      </HStack>
-                      <ActionDescription color="shy" as="span">
-                        <Trans
-                          i18nKey="save_referral_desc"
-                          components={{
-                            c: <Text as="span" color="primaryAlt" size={13} />,
-                          }}
-                        />
-                      </ActionDescription>
-                    </VStack>
-                    <ChevronRightIcon fontSize={20} />
-                  </ActionItem>
-                  <ActionItem onClick={() => setView('createReferral')}>
-                    <VStack gap={12}>
-                      <HStack alignItems="center" gap={8} wrap="wrap">
-                        <Text as={UserSparkleIcon} color="info" size={24} />
-                        <ActionTitle as="span">
-                          {t('create_referral')}
-                        </ActionTitle>
-                      </HStack>
-                      <ActionDescription color="shy" as="span">
-                        <Trans
-                          i18nKey="create_referral_desc"
-                          components={{
-                            c: <Text as="span" color="primaryAlt" size={13} />,
-                          }}
-                        />
-                      </ActionDescription>
-                    </VStack>
-                    <ChevronRightIcon fontSize={20} />
-                  </ActionItem>
-                </VStack>
-              </DiscoveryContent>
-            </PageContent>
-          </>
-        )}
-        createReferral={() => (
+    <Match
+      value={view}
+      default={() => (
+        <>
+          <PageHeader
+            primaryControls={<PageHeaderBackButton />}
+            title={t('manage_referral_title')}
+          />
+          <PageContent alignItems="center" scrollable>
+            <DiscoveryContent
+              fullWidth
+              maxWidth={480}
+              flexGrow
+              justifyContent="space-between"
+              gap={16}
+            >
+              <HeroIllustration src="/core/referral-hero.webp" alt="" />
+              <VStack gap={14} fullWidth>
+                <ActionItem onClick={() => setView('saveReferral')}>
+                  <VStack gap={12}>
+                    <HStack alignItems="center" gap={8} wrap="wrap">
+                      <Text as={MegaphoneIcon} color="primaryAlt" size={24} />
+                      <ActionTitle as="span">{t('save_referral')}</ActionTitle>
+                      {Boolean(friendReferral) && (
+                        <Text as="span" color="success" size={13}>
+                          {t('active')}
+                        </Text>
+                      )}
+                    </HStack>
+                    <ActionDescription color="shy" as="span">
+                      <Trans
+                        i18nKey="save_referral_desc"
+                        components={{
+                          c: <Text as="span" color="primaryAlt" size={13} />,
+                        }}
+                      />
+                    </ActionDescription>
+                  </VStack>
+                  <ChevronRightIcon fontSize={20} />
+                </ActionItem>
+                <ActionItem onClick={() => setView('createReferral')}>
+                  <VStack gap={12}>
+                    <HStack alignItems="center" gap={8} wrap="wrap">
+                      <Text as={UserSparkleIcon} color="info" size={24} />
+                      <ActionTitle as="span">
+                        {t('create_referral')}
+                      </ActionTitle>
+                    </HStack>
+                    <ActionDescription color="shy" as="span">
+                      <Trans
+                        i18nKey="create_referral_desc"
+                        components={{
+                          c: <Text as="span" color="primaryAlt" size={13} />,
+                        }}
+                      />
+                    </ActionDescription>
+                  </VStack>
+                  <ChevronRightIcon fontSize={20} />
+                </ActionItem>
+              </VStack>
+            </DiscoveryContent>
+          </PageContent>
+        </>
+      )}
+      createReferral={() => (
+        <ReferralPayoutAssetProvider>
           <CreateReferralFormProvider>
             <StepTransition
               from={({ onFinish }) => (
-                <CreateReferralForm onFinish={onFinish} />
+                <CreateReferralForm
+                  onFinish={onFinish}
+                  onBack={() => setView('default')}
+                />
               )}
               to={({ onBack }) => <CreateReferralVerify onBack={onBack} />}
             />
           </CreateReferralFormProvider>
-        )}
-        editFriendReferral={() => (
-          <EditFriendReferralForm
-            onFinish={() =>
-              validNameDetails
-                ? setView('referralManagement')
-                : setView('default')
-            }
-          />
-        )}
-        editReferral={() => (
+        </ReferralPayoutAssetProvider>
+      )}
+      editFriendReferral={() => (
+        <EditFriendReferralForm
+          onFinish={() =>
+            validNameDetails
+              ? setView('referralManagement')
+              : setView('default')
+          }
+        />
+      )}
+      editReferral={() => (
+        <ReferralPayoutAssetProvider>
           <EditReferralFormProvider>
             <StepTransition
               from={({ onFinish }) => (
                 <EditReferralForm
                   nameDetails={shouldBePresent(validNameDetails)}
                   onFinish={onFinish}
+                  onBack={() => setView('referralManagement')}
                 />
               )}
               to={({ onBack }) => <EditReferralVerify onBack={onBack} />}
             />
           </EditReferralFormProvider>
-        )}
-        referralManagement={() =>
-          validNameDetails ? (
-            <ManageExistingReferral
-              onEditFriendReferral={() => setView('editFriendReferral')}
-              onEditReferral={() => setView('editReferral')}
-              nameDetails={shouldBePresent(validNameDetails)}
-            />
-          ) : (
-            <ManageMissingReferral
-              onCreateReferral={() => setView('createReferral')}
-              onEditFriendReferral={() => setView('editFriendReferral')}
-            />
-          )
-        }
-        saveReferral={() => (
-          <ManageReferralsForm onFinish={() => setView('editFriendReferral')} />
-        )}
-      />
-    </ReferralPayoutAssetProvider>
+        </ReferralPayoutAssetProvider>
+      )}
+      referralManagement={() =>
+        validNameDetails ? (
+          <ManageExistingReferral
+            onEditFriendReferral={() => setView('editFriendReferral')}
+            onEditReferral={() => setView('editReferral')}
+            nameDetails={shouldBePresent(validNameDetails)}
+          />
+        ) : (
+          <ManageMissingReferral
+            onCreateReferral={() => setView('createReferral')}
+            onEditFriendReferral={() => setView('editFriendReferral')}
+          />
+        )
+      }
+      saveReferral={() => (
+        <ManageReferralsForm
+          onFinish={() => setView('editFriendReferral')}
+          onBack={() => setView('default')}
+        />
+      )}
+    />
   )
 }
 

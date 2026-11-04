@@ -45,13 +45,6 @@ export const getVaultsAppSessions = async (): Promise<VaultsAppSessions> => {
   return getStorageValue<VaultsAppSessions>(StorageKey.appSessions, {})
 }
 
-export const getVaultAppSessions = async (
-  vaultId: string
-): Promise<Record<string, AppSession>> => {
-  const allSessions = await getVaultsAppSessions()
-  return allSessions[vaultId] ?? {}
-}
-
 export const updateAppSession = ({
   vaultId,
   host,

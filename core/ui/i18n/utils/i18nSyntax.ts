@@ -286,10 +286,40 @@ export const findTranslationIntegrityIssues = ({
     )
   })
 
-  targetEntries.values.forEach((_, key) => {
-    if (!sourceEntries.values.has(key)) {
-      issues.push({ key, locale, kind: 'extra-key' })
+  const pluralCategories: readonly string[] = new Intl.PluralRules(
+    locale
+  ).resolvedOptions().pluralCategories
+
+  // Locales with richer plural rules (ru, hr) add _few/_many beside the source's _one/_other.
+  const getPluralSourceValue = (key: string) => {
+    const separator = key.lastIndexOf('_')
+    if (
+      separator <= 0 ||
+      !pluralCategories.includes(key.slice(separator + 1))
+    ) {
+      return undefined
     }
+
+    return sourceEntries.values.get(`${key.slice(0, separator)}_other`)
+  }
+
+  targetEntries.values.forEach((targetValue, key) => {
+    if (sourceEntries.values.has(key)) return
+
+    const pluralSourceValue = getPluralSourceValue(key)
+    if (pluralSourceValue === undefined) {
+      issues.push({ key, locale, kind: 'extra-key' })
+      return
+    }
+
+    issues.push(
+      ...findI18nSyntaxIssues({
+        key,
+        locale,
+        source: pluralSourceValue,
+        target: targetValue,
+      })
+    )
   })
 
   return issues

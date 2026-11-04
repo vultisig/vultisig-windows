@@ -1,4 +1,5 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
+import { UnreadableVaultKeySharesError } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -9,31 +10,45 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ImportVaultBackupButton } from './ImportVaultBackupButton'
+import { SwitchFromUnreadableVault } from './SwitchFromUnreadableVault'
+
+type UnreadableVaultRecoveryProps = {
+  name: string
+  error: UnreadableVaultKeySharesError
+}
 
 /**
- * Dead end for a vault whose key shares cannot be read. Offers the backup
- * import where the host has a navigation stack to reach it; a host without
- * one (the extension's dApp popup) can only be closed, and the vault is
- * recovered from the main app instead.
+ * Dead end for a vault whose key shares cannot be read. Names the vault and
+ * shows the validation failure behind the exact-error card. Offers the backup
+ * import and a switch to any other vault where the host has a navigation
+ * stack to reach them; a host without one (the extension's dApp popup) can
+ * only be closed, and the vault is recovered from the main app instead.
  */
-export const UnreadableVaultRecovery = () => {
+export const UnreadableVaultRecovery = ({
+  name,
+  error,
+}: UnreadableVaultRecoveryProps) => {
   const { t } = useTranslation()
   const { goBack } = useCore()
-  const canImportBackup = useOptionalNavigationHistory() !== undefined
+  const hasNavigationStack = useOptionalNavigationHistory() !== undefined
   const [isNoBackupExpanded, setIsNoBackupExpanded] = useState(false)
 
   return (
     <VStack fullSize>
       <PageHeader />
       <FlowErrorPageContent
-        title={t('vault_cannot_be_opened')}
+        title={t('vault_cannot_be_opened', { name })}
+        error={error.cause}
         description={`${t('vault_cannot_be_opened_description')} ${t(
           'vault_cannot_be_opened_backup_description'
         )}`}
         action={
           <VStack gap={8} fullWidth>
-            {canImportBackup ? (
-              <ImportVaultBackupButton />
+            {hasNavigationStack ? (
+              <>
+                <ImportVaultBackupButton />
+                <SwitchFromUnreadableVault />
+              </>
             ) : (
               <Button onClick={goBack}>{t('close')}</Button>
             )}

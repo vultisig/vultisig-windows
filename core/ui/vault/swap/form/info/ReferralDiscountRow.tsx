@@ -4,7 +4,7 @@ import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { formatAffiliateBpsPercent } from '../../affiliate/affiliateBps'
+import { formatDiscountPercentOfBaseFee } from '../../affiliate/affiliateBps'
 import { DiscountLabel } from './DiscountLabel'
 import { SwapDiscountAmount } from './SwapDiscountAmount'
 import { SwapFeeRowRenderer } from './swapFeeRow'
@@ -22,10 +22,10 @@ type ReferralDiscountRowProps = {
 }
 
 /**
- * Reports a friend referral as the share of the swap it waives, and the money
- * that share takes off the fee row. The referrer's own cut is not a row of its
- * own — it is charged inside the list rate stated above, so only the user's
- * saving belongs in the breakdown.
+ * Reports a friend referral as the share of the base swap fee it waives, and
+ * the money that share takes off the fee row. The referrer's own cut is not a
+ * row of its own — it is charged inside the list rate stated above, so only the
+ * user's saving belongs in the breakdown.
  */
 export const ReferralDiscountRow = ({
   renderRow,
@@ -39,7 +39,7 @@ export const ReferralDiscountRow = ({
       {renderRow({
         label: (
           <DiscountLabel icon={<StyledMegaphoneIcon />}>
-            {`${t('referrals_default_title')}: ${formatAffiliateBpsPercent(bps)}`}
+            {`${t('referrals_default_title')}: ${formatDiscountPercentOfBaseFee(bps)}`}
           </DiscountLabel>
         ),
         value: <SwapDiscountAmount value={fee} />,

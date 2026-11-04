@@ -91,6 +91,7 @@ import {
   toEncodeObjects,
 } from './cosmosStaking/encodeStakingMsgs'
 import { scaleCosmosStakingFee } from './cosmosStaking/scaleCosmosStakingFee'
+import { applyMayaLpInbound } from './mayaLp/applyMayaLpInbound'
 import { applyGovVoteSignData } from './vote/applyGovVoteSignData'
 
 export type BuildDepositKeysignPayloadInput = {
@@ -214,6 +215,11 @@ export const buildDepositKeysignPayload = async ({
 
   const isNonThorChainLp =
     action === 'add_thor_lp' && coin.chain !== Chain.THORChain
+  const isMayaAssetSideLp =
+    action === 'add_maya_lp' && coin.chain !== Chain.MayaChain
+  // The asset side of an LP add is a plain transfer to the protocol's inbound
+  // vault; the RUNE/CACAO side is a MsgDeposit.
+  const isInboundLp = isNonThorChainLp || isMayaAssetSideLp
 
   // Address the vault before the fee lookup below: the TRON fee resolver
   // queries the recipient account and rejects an empty address (#5150).
@@ -263,10 +269,19 @@ export const buildDepositKeysignPayload = async ({
     })
   }
 
+  if (action === 'add_maya_lp') {
+    keysignPayload = await applyMayaLpInbound({
+      coin,
+      pool: shouldBePresent(asOptionalString(depositData['pool']), 'Pool'),
+      amountUnits,
+      keysignPayload,
+    })
+  }
+
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
     walletCore,
-    isDeposit: !isNonThorChainLp,
+    isDeposit: !isInboundLp,
     transactionType,
   })
 
@@ -491,8 +506,8 @@ export const buildDepositKeysignPayload = async ({
     }
   }
 
-  if (action === 'add_thor_lp') {
-    if (isNonThorChainLp) {
+  if (isOneOf(action, ['add_thor_lp', 'add_maya_lp'])) {
+    if (isInboundLp) {
       return keysignPayload
     }
 

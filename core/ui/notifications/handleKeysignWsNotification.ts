@@ -1,3 +1,4 @@
+import { isKeysignDeeplinkUrl } from '@core/ui/deeplink/isKeysignDeeplinkUrl'
 import type { TFunction } from 'i18next'
 
 import type { KeysignWsNotification } from './keysignNotificationWebSocket'
@@ -49,6 +50,12 @@ export const handleKeysignWsNotification = async (
     showOsNotification,
   } = input
 
+  const openKeysign = () => {
+    if (isKeysignDeeplinkUrl(msg.qr_code_data)) {
+      navigateToKeysign()
+    }
+  }
+
   let parsed: Awaited<
     ReturnType<typeof parseKeysignQrForNotificationBanner>
   > | null = null
@@ -92,7 +99,7 @@ export const handleKeysignWsNotification = async (
         description:
           parsed?.description ?? t('foreground_notification_generic'),
         isFastVault,
-        onAction: navigateToKeysign,
+        onAction: openKeysign,
       })
     }
 
@@ -100,9 +107,7 @@ export const handleKeysignWsNotification = async (
       showOsNotification?.({
         title: t('join_transaction'),
         body: `${t('vault')}: ${msg.vault_name}`,
-        onClick: () => {
-          navigateToKeysign()
-        },
+        onClick: openKeysign,
       })
     }
 

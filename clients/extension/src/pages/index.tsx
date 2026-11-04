@@ -1,6 +1,7 @@
 import '../polyfills/installFirefoxProcessGlobal'
 import '@core/ui/animations/configureRiveRuntime'
 
+import { SidePanelPopupHost } from '@clients/extension/src/components/side-panel/SidePanelPopupHost'
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import {
   viewLoaders,
@@ -96,6 +97,7 @@ const App = () => {
       <ActiveView views={views} />
       <PrefetchViews loaders={prefetchLoaders} priority={prefetchPriority} />
       <ExtensionNotificationManager />
+      {isPopup ? null : <SidePanelPopupHost />}
     </ExtensionCoreApp>
   )
 }

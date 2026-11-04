@@ -1,3 +1,5 @@
+import { getEip712SignedTypes } from '@core/ui/mpc/keysign/customMessage/getEip712SignedTypes'
+import { getTypedDataHex } from '@core/ui/mpc/keysign/customMessage/getTypedDataHex'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { omit } from '@vultisig/lib-utils/record/omit'
@@ -72,38 +74,62 @@ export const findEmptyEip712BytesFields = ({
 
 /**
  * The struct type the keysign hash signs. `getCustomMessageHex` hands the
- * types to ethers, which infers the primary type from them and ignores the
- * payload's `primaryType`, so the review screen follows the same inference
- * or a page could label one struct and sign another. Falls back to the
- * declared `primaryType` when the types cannot be resolved; such a payload
- * cannot be hashed for signing anyway.
+ * types reachable from `primaryType` to ethers, which infers the primary type
+ * from them, so the review screen follows the same inference or a page could
+ * label one struct and sign another. When `primaryType` is not a struct the
+ * types define, the inference runs over all of them, and falls back to the
+ * declared `primaryType` when even that fails; such payloads cannot be hashed
+ * for signing anyway.
  */
 export const getEip712SignedPrimaryType = ({
   primaryType,
   types,
 }: Eip712V4Payload): string =>
   withFallback(
-    attempt(() => TypedDataEncoder.getPrimaryType(omit(types, 'EIP712Domain'))),
-    primaryType
+    attempt(() =>
+      TypedDataEncoder.getPrimaryType(
+        getEip712SignedTypes({ types, primaryType })
+      )
+    ),
+    withFallback(
+      attempt(() =>
+        TypedDataEncoder.getPrimaryType(omit(types, 'EIP712Domain'))
+      ),
+      primaryType
+    )
   )
 
 /**
+ * The payload with only the types its hash covers, plus `EIP712Domain` when
+ * it declares one. The popup hands this to keysign so co-signing devices get
+ * no unused types to trip their own EIP-712 encoders on. Only call it on a
+ * payload `getEip712PayloadIssue` accepted; it throws otherwise.
+ */
+export const pruneEip712PayloadTypes = (
+  payload: Eip712V4Payload
+): Eip712V4Payload => {
+  const { types } = payload
+  const signedTypes = getEip712SignedTypes(payload)
+
+  return {
+    ...payload,
+    types: Object.prototype.hasOwnProperty.call(types, 'EIP712Domain')
+      ? { EIP712Domain: types.EIP712Domain, ...signedTypes }
+      : signedTypes,
+  }
+}
+
+/**
  * Why the payload cannot be hashed for signing, or `undefined` when it can.
- * Runs the same ethers `TypedDataEncoder` hashing the keysign pipeline
- * performs (see `getCustomMessageHex`), so an unsignable dApp payload is
- * rejected at request time — with empty bytes fields called out by path —
- * instead of failing deep in keysign after the user has already approved.
+ * Runs the keysign pipeline's own `getTypedDataHex` on the string the popup
+ * puts in the keysign payload, so an unsignable dApp payload is rejected at
+ * request time — with empty bytes fields called out by path — instead of
+ * failing deep in keysign after the user has already approved.
  */
 export const getEip712PayloadIssue = (
   payload: Eip712V4Payload
 ): string | undefined => {
-  const result = attempt(() =>
-    TypedDataEncoder.hash(
-      payload.domain,
-      omit(payload.types, 'EIP712Domain'),
-      payload.message
-    )
-  )
+  const result = attempt(() => getTypedDataHex(JSON.stringify(payload)))
   if ('data' in result) {
     return undefined
   }

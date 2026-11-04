@@ -11,7 +11,7 @@ import type { ToolHandler } from '../types'
 
 const eip712PayloadSchema = z.object({
   id: z.string(),
-  primaryType: z.string().optional(),
+  primaryType: z.string(),
   domain: z.record(z.string(), z.unknown()),
   types: z.record(z.string(), z.array(z.unknown())),
   message: z.record(z.string(), z.unknown()),
@@ -33,6 +33,11 @@ const resolveChain = (chain: string): CustomMessageSupportedChain => {
   return chain as CustomMessageSupportedChain
 }
 
+/**
+ * Signs the agent's EIP-712 payloads with the fast vault. Each payload must
+ * name its `primaryType`, as the agent's tool contract requires and its
+ * approval prompt shows, and that type must be the struct the hash signs.
+ */
 export const handleSignTypedData: ToolHandler = async (input, context) => {
   const vault = context.vault
   if (!vault) {

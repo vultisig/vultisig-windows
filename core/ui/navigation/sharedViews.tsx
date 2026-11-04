@@ -54,6 +54,8 @@ export type SharedViewId = Extract<
   | 'vaultSettingsAdvanced'
   | 'customRpc'
   | 'customRpcDetail'
+  | 'tokenApprovals'
+  | 'revokeTokenApproval'
   | 'vaults'
   | 'managePasscodeEncryption'
   | 'passcodeAutoLock'
@@ -254,6 +256,14 @@ export const sharedViewLoaders: ViewLoaders<SharedViewId> = {
   customRpcDetail: () =>
     import('@core/ui/vault/settings/advanced/customRpc/CustomRpcDetailPage').then(
       ({ CustomRpcDetailPage }) => CustomRpcDetailPage
+    ),
+  tokenApprovals: () =>
+    import('@core/ui/vault/settings/advanced/tokenApprovals').then(
+      ({ TokenApprovalsPage }) => TokenApprovalsPage
+    ),
+  revokeTokenApproval: () =>
+    import('@core/ui/vault/settings/advanced/tokenApprovals/revoke/RevokeTokenApprovalPage').then(
+      ({ RevokeTokenApprovalPage }) => RevokeTokenApprovalPage
     ),
   vaults: () =>
     import('@core/ui/vaultsOrganisation').then(({ VaultsPage }) => VaultsPage),

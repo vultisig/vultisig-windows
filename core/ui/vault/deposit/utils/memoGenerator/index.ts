@@ -203,6 +203,21 @@ export const generateMemo = ({
       const basisPoints = Math.floor(pct * 100)
       return `-:${pool}:${basisPoints}`
     },
+    add_maya_lp: () => {
+      const pool = shouldBePresent(depositFormData.pool as string, 'Pool name')
+      const pairedAddress = depositFormData.pairedAddress as string | undefined
+      if (pairedAddress) {
+        return `+:${pool}:${pairedAddress}`
+      }
+      // An asset-side add without the CACAO address would land as an
+      // asymmetric asset deposit the vault never meant to make.
+      if (chain !== Chain.MayaChain) {
+        throw new Error(
+          'A MayaChain asset-side LP add must name a CACAO address'
+        )
+      }
+      return `+:${pool}`
+    },
     // A TrustSet carries no memo — the trust line is encoded as the signed
     // OperationTrustSet, not a memo string.
     open_trust_line: () => '',

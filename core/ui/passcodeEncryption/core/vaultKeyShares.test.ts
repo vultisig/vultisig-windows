@@ -245,6 +245,62 @@ describe('readVaultAllKeyShares', () => {
     expect(error.cause).toBeInstanceOf(Error)
   })
 
+  it('keeps legacy keyshare text out of the unreadable error cause', async () => {
+    const error = await readVaultAllKeyShares({
+      keyShares: {
+        ecdsa: '{"local_party_key":SECRET-SHARE-MATERIAL}',
+        eddsa: '{"local_party_key":SECRET-SHARE-MATERIAL}',
+      },
+      libType: 'GG20',
+      publicKeys: { ecdsa: '01', eddsa: '01' },
+      validateLegacyVaultKeyShares: async () => {},
+      hasPasscodeEncryption: false,
+      key: null,
+    }).catch(error => error)
+
+    expect(error).toBeInstanceOf(UnreadableVaultKeySharesError)
+    expect(error.cause.message).toBe('Invalid legacy keyshare')
+  })
+
+  it('keeps legacy validator text out of the unreadable error cause', async () => {
+    const legacyShare = JSON.stringify({
+      pub_key: '01',
+      local_party_key: 'device-1',
+      keygen_committee_keys: ['device-1', 'device-2'],
+    })
+
+    const error = await readVaultAllKeyShares({
+      keyShares: { ecdsa: legacyShare, eddsa: legacyShare },
+      libType: 'GG20',
+      publicKeys: { ecdsa: '01', eddsa: '01' },
+      validateLegacyVaultKeyShares: async () => {
+        throw new Error(`bad share ${legacyShare}`)
+      },
+      hasPasscodeEncryption: false,
+      key: null,
+    }).catch(error => error)
+
+    expect(error.cause.message).toBe('Invalid legacy keyshare')
+  })
+
+  it('reports the decrypted share failure, not the stored ciphertext, as the cause', async () => {
+    const encrypted = await encryptVaultAllKeyShares({
+      ...plainShares,
+      key: passcode,
+    })
+
+    const error = await readVaultAllKeyShares({
+      ...encrypted,
+      ...vaultMetadata,
+      hasPasscodeEncryption: true,
+      key: 'wrong-passcode',
+    }).catch(error => error)
+
+    expect(error).toBeInstanceOf(UnreadableVaultKeySharesError)
+    expect(error.cause).toBeDefined()
+    expect(error.cause.message).not.toBe('Invalid MPC keyshare')
+  })
+
   it('rejects a readable share for a different public key', async () => {
     await expect(
       readVaultAllKeyShares({

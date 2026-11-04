@@ -250,6 +250,10 @@ export const en = {
   current_expiry: 'Current expiry',
   current_passcode: 'Current Passcode',
   custom: 'Custom Action',
+  custom_message_unsupported_format:
+    "This message isn't in a recognised signing format, so it can't be signed.",
+  custom_message_unsupported_method:
+    'Unsupported signing method. Use personal_sign or eth_signTypedData_v4.',
   custom_rpc: 'Custom RPCs',
   custom_rpc_chip_custom: 'Custom',
   custom_rpc_description: 'Use your own nodes per chain',
@@ -353,7 +357,7 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   complete_fee_waive: 'No Fee',
-  discount_tiers: 'Discount Tiers',
+  discount_tiers: '{{ticker}} Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
@@ -395,7 +399,7 @@ export const en = {
   enter_vault_name: 'Enter Vault Name',
   enter_your_email: 'Enter your email',
   enter_your_email_description:
-    'This email is used for cloud backup and shared with no third party',
+    "Used once to send your vault backup. {{productName}} doesn't store it.",
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
@@ -493,7 +497,7 @@ export const en = {
     },
     connectingWithServer: 'Connecting with server...',
     emailSetupTitle:
-      'This email is used for cloud backup and shared with no third party',
+      "Used once to send your vault backup. {{productName}} doesn't store it.",
     enterEmail: 'Enter your email',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
     passwordTooltip:
@@ -665,6 +669,7 @@ export const en = {
   low_24h: '24h Low',
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
+  m_of_n: '{{m}}-of-{{n}}',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
   malicious_dapp_detected: 'Malicious dApp detected',
   malicious_dapp_detected_description:
@@ -774,7 +779,6 @@ export const en = {
   nothing_to_add: 'Nothing to add',
   nothing_to_add_hint: 'All your vaults are already sorted.',
   nothing_to_add_hint_secondary: 'Create a new vault to add it here.',
-  of: 'of',
   off: 'Off',
   on: 'On',
   onboarding_description_1:
@@ -790,7 +794,6 @@ export const en = {
   optionalDevice: 'Optional Device',
   other: 'Other',
   overview: 'Overview',
-  part: 'part',
   passcodes_do_not_match: 'Passcodes do not match.',
   password: 'Password',
   password_do_not_match: 'Passwords do not match',
@@ -947,9 +950,9 @@ export const en = {
   reshare_threshold_not_met_description:
     "You're trying to reduce the number of devices from <w>{{from}} to {{to}}</w>, but this vault <w>requires {{count}} active signers</w> to stay secure.",
   plugin_store_compatible: 'Plugin Store compatible',
-  reshare_backup_old_backups_wont_work: "Old backups won't work",
+  reshare_backup_old_backups_wont_work: 'Make fresh backups',
   reshare_backup_old_backups_wont_work_description:
-    "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",
+    "Backups from before this reshare can't be combined with the new ones. Save a new backup from every device first. After that, old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
   reshare_min_devices_required: 'At least {{count}} devices required',
   reshare_vault_description: 'Reshare vault with a new committee',
   reshare_vault_subtitle:
@@ -957,14 +960,19 @@ export const en = {
   reshare_warning_cosigners_title: 'All co-signers must be online',
   reshare_warning_cosigners_description:
     'Every current device in your vault needs to participate in the reshare session.',
-  reshare_warning_old_backups_title: 'Old backups will stop working',
+  reshare_warning_old_backups_title: 'Make fresh backups',
   reshare_warning_old_backups_description:
-    "Any existing .vult files become invalid. You'll need to create fresh backups after resharing.",
+    "Backups from before this reshare can't be combined with the new ones. Save a new backup from every device first. After that, old backups still work together, so keep them safe or delete them. If a device was lost or compromised, move your funds to a new vault.",
   reshare_success_title: 'Vault reshared',
   reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
+  revoke: 'Revoke access',
+  revoke_approval: 'Revoke Access',
+  revoke_approval_explanation:
+    "Sets this contract's allowance to 0, so it can no longer move this token from your vault. You pay a network fee.",
+  revoke_approval_new_allowance: 'New spending limit',
   ripple_transaction_summary: 'Transaction summary',
   ripple_undecoded_notice:
     'This transaction could not be decoded. Review the raw details below before approving.',
@@ -1416,6 +1424,21 @@ export const en = {
   today: 'Today',
   token: 'Token',
   token_approval: 'Token Approval',
+  token_approvals: 'Token Approvals',
+  token_approvals_count: 'Approvals: {{count}}',
+  token_approvals_description:
+    'Review and revoke contracts that can spend your tokens',
+  token_approvals_disconnect_note:
+    'Disconnecting a dApp doesn’t remove these approvals. Each revoke is a separate on-chain transaction with a network fee.',
+  token_approvals_empty_description:
+    'Contracts you allow to spend your tokens on this network will show up here.',
+  token_approvals_empty_title: 'No active approvals on {{chain}}',
+  token_approvals_not_supported: 'Not supported',
+  token_approvals_switch_network: 'Choose another network',
+  token_approvals_unlimited_count: 'Unlimited: {{count}}',
+  token_approvals_unsupported_description:
+    'Token approvals on this network can’t be shown yet. Choose another network to review them.',
+  token_approvals_unsupported_title: 'Not available on {{chain}}',
   token_info: 'Token Info',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
@@ -1467,7 +1490,7 @@ export const en = {
   ultimate: 'Ultimate',
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
-    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.",
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{percent}} Vultisig swap fee discount</b> on all swaps.",
   unlock_discount_tier_description_ultimate:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
@@ -1625,7 +1648,7 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
-  vault_cannot_be_opened: "This vault can't be opened on this device",
+  vault_cannot_be_opened: '"{{name}}" can\'t be opened on this device',
   vault_cannot_be_opened_backup_description:
     'Your .vult backup is the way back. Import it and this vault works again.',
   vault_cannot_be_opened_description:
@@ -1669,6 +1692,7 @@ export const en = {
   vault_name_required: 'Vault name is required',
   vault_notifications: 'Vault Notifications',
   vault_part: 'Vault Share',
+  vault_share_position: 'Share {{index}} of {{total}}',
   vault_password: 'Vault Password',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
@@ -1722,6 +1746,17 @@ export const en = {
   remove_cacao_pool: 'Remove from CACAO Pool',
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
+  add_maya_lp: 'Add MayaChain LP',
+  maya_lp_checking_position: 'Checking your MayaChain position in this pool…',
+  maya_lp_position_unavailable:
+    "Couldn't read your MayaChain position in this pool, so this deposit can't be checked. Try again later.",
+  maya_lp_cacao_only_position:
+    'Your {{pool}} position holds CACAO only. MayaChain refunds a paired deposit to it, so add CACAO alone instead.',
+  maya_lp_paired_with_other_address:
+    'Your {{pool}} position is paired with a different address. MayaChain would refund this deposit.',
+  maya_lp_pending_address_mismatch:
+    "A pending deposit to {{pool}} uses a CACAO or asset address that doesn't match this vault. MayaChain would refund this deposit.",
+  maya_lp_cacao_alone: 'This adds CACAO alone, with no paired asset.',
   open_trust_line: 'Open Trust Line',
   activate: 'Activate',
   trust_line: 'Trust Line',

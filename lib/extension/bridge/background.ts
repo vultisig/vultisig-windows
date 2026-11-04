@@ -7,6 +7,10 @@ type BackgroundRequestHandler<TMessage = unknown, TResponse = unknown> = {
   reply: (response: TResponse) => void
 }
 
+/**
+ * Listens in the background for bridge requests from inpage scripts and hands
+ * each one to `handleRequest` together with the sender's context.
+ */
 export const runBridgeBackgroundAgent = <
   TMessage = unknown,
   TResponse = unknown,
@@ -32,6 +36,7 @@ export const runBridgeBackgroundAgent = <
           requestFavicon: isTopFrame ? tab?.favIconUrl : undefined,
           requestName: isTopFrame ? tab?.title : undefined,
           requestOrigin: origin,
+          requestWindowId: tab?.windowId,
         },
         reply: (response: TResponse) => {
           sendResponse({

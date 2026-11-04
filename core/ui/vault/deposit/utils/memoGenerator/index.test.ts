@@ -60,4 +60,66 @@ describe('generateMemo', () => {
 
     expect(memo).toBe(tronWithdrawExpireUnfreezeMemo)
   })
+
+  describe('add_maya_lp', () => {
+    const cacaoCoin = {
+      chain: Chain.MayaChain,
+      ticker: 'CACAO',
+      decimals: 10,
+    } as AccountCoin
+
+    const btcCoin = {
+      chain: Chain.Bitcoin,
+      ticker: 'BTC',
+      decimals: 8,
+    } as AccountCoin
+
+    it('names the asset address on the CACAO side', () => {
+      const memo = generateMemo({
+        selectedChainAction: 'add_maya_lp',
+        depositFormData: { pool: 'BTC.BTC', pairedAddress: 'bc1qvault' },
+        bondableAsset: 'BTC.BTC',
+        chain: Chain.MayaChain,
+        coin: cacaoCoin,
+      })
+
+      expect(memo).toBe('+:BTC.BTC:bc1qvault')
+    })
+
+    it('adds CACAO alone when no address pairs', () => {
+      const memo = generateMemo({
+        selectedChainAction: 'add_maya_lp',
+        depositFormData: { pool: 'ETH.USDC-0XA0B8', pairedAddress: '' },
+        bondableAsset: 'ETH.USDC-0XA0B8',
+        chain: Chain.MayaChain,
+        coin: cacaoCoin,
+      })
+
+      expect(memo).toBe('+:ETH.USDC-0XA0B8')
+    })
+
+    it('names the CACAO address on the asset side', () => {
+      const memo = generateMemo({
+        selectedChainAction: 'add_maya_lp',
+        depositFormData: { pool: 'BTC.BTC', pairedAddress: 'maya1vault' },
+        bondableAsset: 'BTC.BTC',
+        chain: Chain.Bitcoin,
+        coin: btcCoin,
+      })
+
+      expect(memo).toBe('+:BTC.BTC:maya1vault')
+    })
+
+    it('refuses an asset-side add without the CACAO address', () => {
+      expect(() =>
+        generateMemo({
+          selectedChainAction: 'add_maya_lp',
+          depositFormData: { pool: 'BTC.BTC', pairedAddress: '' },
+          bondableAsset: 'BTC.BTC',
+          chain: Chain.Bitcoin,
+          coin: btcCoin,
+        })
+      ).toThrow()
+    })
+  })
 })

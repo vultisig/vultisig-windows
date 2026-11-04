@@ -3,8 +3,8 @@ import { getAppSession } from '@core/inpage-provider/background/core/appSession'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
 /**
- * Reports whether the requesting origin holds an active `appSession` against
- * the current vault. Backs `Keplr.isEnabled` (and any future analogue) so
+ * Reports whether the requesting origin holds an active `appSession` with the
+ * vault serving it. Backs `Keplr.isEnabled` (and any future analogue) so
  * cosmos-kit / graz adapters can probe connection state without rounding
  * through `getKey`.
  *

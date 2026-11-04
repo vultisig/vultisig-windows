@@ -44,10 +44,10 @@ type DappRequestBannerProps = {
 }
 
 /**
- * "Request from" banner identifying the dApp that initiated the transaction.
- * Reads from the keysign payload's `dappMetadata`, so it is available on every
- * cosigning device (initiator and joiner alike). Renders nothing for non-dApp
- * transactions, where `dappMetadata` is absent.
+ * "Request from" banner identifying the dApp that initiated the transaction or
+ * custom message. Reads from the payload's `dappMetadata`, so it is available
+ * on every cosigning device (initiator and joiner alike). Renders nothing for
+ * requests that did not come from a dApp, where `dappMetadata` is absent.
  */
 export const DappRequestBanner = ({ value }: DappRequestBannerProps) => {
   const { t } = useTranslation()

@@ -58,7 +58,7 @@ test('unreadable shares fail closed and route to backup import', async ({
         passcodeEncryption: null,
         vaults: [
           {
-            name: 'Ciphertext must not render',
+            name: 'Bricked vault',
             publicKeys: {
               ecdsa: currentVaultId,
               eddsa: '04'.repeat(32),
@@ -84,7 +84,11 @@ test('unreadable shares fail closed and route to backup import', async ({
   await extensionPage.setViewportSize({ width: 480, height: 600 })
 
   await expect(
-    extensionPage.getByText("This vault can't be opened on this device").first()
+    extensionPage
+      .getByText(`"Bricked vault" can't be opened on this device`, {
+        exact: true,
+      })
+      .first()
   ).toBeVisible()
   await expect(
     extensionPage.getByText(
@@ -92,8 +96,17 @@ test('unreadable shares fail closed and route to backup import', async ({
     )
   ).toBeVisible()
   await expect(
-    extensionPage.getByText('Ciphertext must not render')
+    extensionPage.getByText('Bricked vault', { exact: true })
   ).not.toBeVisible()
+
+  await extensionPage.getByText('Show exact error').click()
+  await expect(
+    extensionPage.getByText('Error message', { exact: true })
+  ).toBeVisible()
+  await expect(
+    extensionPage.getByText(malformedShare, { exact: false })
+  ).not.toBeVisible()
+  await extensionPage.keyboard.press('Escape')
 
   const importButton = extensionPage.getByRole('button', {
     name: 'Import .vult backup',
@@ -203,4 +216,71 @@ test('a valid recovery backup replaces the exact unreadable vault', async ({
       }, vaultId)
     )
     .toEqual({ isBackedUp: true, name: 'Recovered vault' })
+})
+
+test('an unreadable vault does not lock the other vaults', async ({
+  extensionPage,
+}) => {
+  const { vault } = await createRecoveryBackup()
+  // Real curve points (the secp256k1 and ed25519 generators), so address
+  // derivation for every stored vault succeeds; only the shares are unreadable.
+  const brickedVault = {
+    ...vault,
+    publicKeys: {
+      ecdsa:
+        '0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798',
+      eddsa: '5866666666666666666666666666666666666666666666666666666666666666',
+    },
+  }
+
+  await extensionPage.evaluate(
+    async ({ readableVault, unreadableVault }) => {
+      await chrome.storage.local.set({
+        currentVaultId: unreadableVault.publicKeys.ecdsa,
+        hasFinishedOnboarding: true,
+        latestInstalledVersion: chrome.runtime.getManifest().version,
+        latestMigration: 'removeDuplicateCoins',
+        language: 'en',
+        passcodeEncryption: null,
+        vaults: [
+          {
+            ...unreadableVault,
+            name: 'Bricked vault',
+            keyShares: {
+              ecdsa: 'not-a-valid-keyshare',
+              eddsa: 'not-a-valid-keyshare',
+            },
+            order: 0,
+          },
+          { ...readableVault, name: 'Readable vault', order: 1 },
+        ],
+      })
+    },
+    { readableVault: vault, unreadableVault: brickedVault }
+  )
+
+  await extensionPage.reload()
+  await extensionPage.getByRole('button', { name: 'Select a Vault' }).click()
+  await extensionPage.getByText('Readable vault', { exact: true }).click()
+
+  await expect
+    .poll(() =>
+      extensionPage.evaluate(async () => {
+        const { currentVaultId } =
+          await chrome.storage.local.get('currentVaultId')
+        return currentVaultId
+      })
+    )
+    .toBe(vault.publicKeys.ecdsa)
+  await expect(
+    extensionPage.getByRole('button', { name: 'Import .vult backup' })
+  ).toHaveCount(0)
+  await expect(
+    extensionPage.getByText('Readable vault', { exact: true }).first()
+  ).toBeVisible()
+
+  const screenshotPath = process.env.QA_SWITCH_SCREENSHOT_PATH
+  if (screenshotPath) {
+    await extensionPage.screenshot({ path: screenshotPath })
+  }
 })

@@ -1,5 +1,7 @@
+import { fromBinary, toBinary } from '@bufbuild/protobuf'
 import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { Hex, recoverMessageAddress } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { describe, expect, it } from 'vitest'
@@ -79,5 +81,24 @@ describe('buildManualCustomMessagePayload', () => {
 
     expect(payload.method).toBe('eth_sign')
     expect(payload.message).toBe('Hello from Vultisig')
+  })
+
+  // A message the user typed has no requesting dApp, so co-signers must not be
+  // shown a "request from" banner for it.
+  it('leaves the dApp identity unset, as built and as decoded by a co-signer', () => {
+    const payload = buildManualCustomMessagePayload({
+      method: 'personal_sign',
+      message: 'hello',
+      vaultPublicKeyEcdsa: 'vault-id',
+    })
+
+    expect(payload.dappMetadata).toBeUndefined()
+
+    const decoded = fromBinary(
+      CustomMessagePayloadSchema,
+      toBinary(CustomMessagePayloadSchema, payload)
+    )
+
+    expect(decoded.dappMetadata).toBeUndefined()
   })
 })

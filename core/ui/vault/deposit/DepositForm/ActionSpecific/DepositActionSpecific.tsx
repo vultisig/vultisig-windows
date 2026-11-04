@@ -14,6 +14,7 @@ import { CustomSpecific } from './CustomSpecific'
 import { FreezeSpecific } from './FreezeSpecific/FreezeSpecific'
 import { TronUnfreezeSpecific } from './FreezeSpecific/TronUnfreezeSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
+import { MayaLpSpecific } from './MayaLpSpecific'
 import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
 import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecific'
 import { OpenTrustLineSpecific } from './OpenTrustLineSpecific/OpenTrustLineSpecific'
@@ -59,6 +60,7 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         unfreeze: () => <TronUnfreezeSpecific />,
         custom: () => <CustomSpecific />,
         add_thor_lp: () => <ThorLpSpecific />,
+        add_maya_lp: () => <MayaLpSpecific />,
         open_trust_line: () => <OpenTrustLineSpecific />,
         delegate: () => <DelegateSpecific />,
         undelegate: () => <UndelegateSpecific />,

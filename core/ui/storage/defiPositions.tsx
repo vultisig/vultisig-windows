@@ -356,7 +356,9 @@ const lpPoolResolvers: Record<LpSupportedChain, () => Promise<MidgardPool[]>> =
     [Chain.MayaChain]: fetchMayachainPools,
   }
 
-const fetchLpPools = (chain: LpSupportedChain) => lpPoolResolvers[chain]()
+/** Fetches the pools open for adds on THORChain or MayaChain from Midgard. */
+export const fetchLpPools = (chain: LpSupportedChain) =>
+  lpPoolResolvers[chain]()
 
 type MapLpPoolsToPositionsInput = {
   chain: LpSupportedChain

@@ -700,6 +700,28 @@ export const getDepositFormConfig = ({
         pairedAddress: z.string().optional(),
       }),
     }),
+    add_maya_lp: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
+        pool: z.string().min(1),
+        // Set by MayaLpSpecific once it has read the vault's LP record; empty
+        // means a CACAO-only add. Unset blocks the form while it loads or
+        // when MayaChain would refund the add.
+        pairedAddress: z.string(),
+      }),
+    }),
     // The trust-line limit is a token-denominated cap, unrelated to the wallet's
     // XRP balance, so it is NOT bounded by `totalAmountAvailable`. issuer +
     // currency are set by the OpenTrustLineSpecific picker.

@@ -119,6 +119,16 @@ const vultisigMpcDedupe: readonly string[] = [
   '@vultisig/mpc-wasm',
 ]
 
+/**
+ * Every build writes its assets into the same dist/assets, and each numbers
+ * same-named files on its own: lib-dkls and lib-mldsa both ship
+ * vs_wasm_bg.wasm, so one build's vs_wasm_bg2.wasm could be another's
+ * vs_wasm_bg.wasm, and the build that ran last overwrote the popup's MPC WASM
+ * with the wrong binary. A content hash gives distinct files distinct names
+ * while identical ones still share a single copy.
+ */
+const extensionAssetFileNames = 'assets/[name]-[hash].[ext]'
+
 const getFirefoxManualChunk = (buildName: string, id: string) => {
   const normalized = id.replace(/\\/g, '/')
   const nodeModulesIndex = normalized.lastIndexOf('/node_modules/')
@@ -256,7 +266,7 @@ export default defineConfig(async ({ mode }) => {
           },
           onwarn: () => {},
           output: {
-            assetFileNames: 'assets/[name].[ext]',
+            assetFileNames: extensionAssetFileNames,
             // Every build writes into the same dist/assets. The app build owns the
             // bare chunk names; the service worker and inpage builds prefix theirs,
             // otherwise a chunk both graphs emit (the SDK entry, once the app loads
@@ -311,7 +321,7 @@ export default defineConfig(async ({ mode }) => {
           },
           onwarn: () => {},
           output: {
-            assetFileNames: 'assets/[name].[ext]',
+            assetFileNames: extensionAssetFileNames,
             chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
             manualChunks: isFirefoxBuild

@@ -49,6 +49,7 @@ export type ChainAction =
   | 'withdraw_ruji_rewards'
   | 'add_thor_lp'
   | 'remove_thor_lp'
+  | 'add_maya_lp'
   | 'open_trust_line'
   | CacaoPoolAction
   | CosmosStakingAction
@@ -74,6 +75,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'leave',
     'custom',
     ...cacaoPoolActions,
+    'add_maya_lp',
   ],
   [Chain.Dydx]: ['vote'],
   [Chain.Solana]: [...solanaStakingActions],
@@ -87,12 +89,12 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Base]: ['add_thor_lp'],
   [Chain.BitcoinCash]: ['add_thor_lp'],
   [Chain.BSC]: ['add_thor_lp'],
-  [Chain.Bitcoin]: ['add_thor_lp'],
-  [Chain.Dash]: ['add_thor_lp'],
+  [Chain.Bitcoin]: ['add_thor_lp', 'add_maya_lp'],
+  [Chain.Dash]: ['add_thor_lp', 'add_maya_lp'],
   [Chain.Dogecoin]: ['add_thor_lp'],
-  [Chain.Ethereum]: ['add_thor_lp'],
+  [Chain.Ethereum]: ['add_thor_lp', 'add_maya_lp'],
   [Chain.Litecoin]: ['add_thor_lp'],
   [Chain.Ripple]: ['add_thor_lp', 'open_trust_line'],
-  [Chain.Arbitrum]: ['add_thor_lp'],
-  [Chain.Zcash]: ['add_thor_lp'],
+  [Chain.Arbitrum]: ['add_thor_lp', 'add_maya_lp'],
+  [Chain.Zcash]: ['add_thor_lp', 'add_maya_lp'],
 }

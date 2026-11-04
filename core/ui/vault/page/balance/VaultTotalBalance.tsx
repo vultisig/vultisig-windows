@@ -1,4 +1,5 @@
 import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
+import { getFiatCurrencyAffixes } from '@core/ui/chain/utils/getFiatCurrencySymbol'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -10,7 +11,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { fiatCurrencySymbolRecord } from '@vultisig/core-config/FiatCurrency'
 import { useTranslation } from 'react-i18next'
 
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility'
@@ -33,7 +33,7 @@ export const VaultTotalBalance = ({
 }: VaultTotalBalanceProps) => {
   const { client } = useCore()
   const isExtension = client === 'extension'
-  const fiatCurrency = useFiatCurrency()
+  const { prefix, suffix } = getFiatCurrencyAffixes(useFiatCurrency())
 
   const { t } = useTranslation()
 
@@ -44,8 +44,9 @@ export const VaultTotalBalance = ({
         error={() => t('failed_to_load')}
         pending={() => (
           <HStack gap={6} alignItems="center">
-            {fiatCurrencySymbolRecord[fiatCurrency]}
+            {prefix.trim()}
             <Spinner size="1.5em" />
+            {suffix.trim()}
           </HStack>
         )}
         success={value => (

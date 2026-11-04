@@ -18,6 +18,7 @@ import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
+import { formatDiscountPercentOfBaseFee } from '../../../vault/swap/affiliate/affiliateBps'
 import { discountTierColors } from './colors'
 import { DiscountTierFooterBox } from './container'
 import { discountTierIcons } from './icons'
@@ -107,7 +108,9 @@ export const UnlockDiscountTier = ({
                 minBalance: formatAmount(vultDiscountTierMinBalances[value], {
                   ticker: `$${vult.ticker}`,
                 }),
-                bps: vultDiscountTierBps[value],
+                percent: formatDiscountPercentOfBaseFee(
+                  vultDiscountTierBps[value]
+                ),
               }}
               components={{ b: <b /> }}
             />

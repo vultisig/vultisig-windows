@@ -5,11 +5,14 @@ const mockCallPopupFromBackground = vi.hoisted(() => vi.fn())
 const storageState = vi.hoisted(() => ({
   values: {} as Record<string, unknown>,
   currentVaultId: 'vault-1' as string | null,
+  vaultIds: [] as string[],
 }))
 
 vi.mock('@core/extension/storage', () => ({
   storage: {
     getCurrentVaultId: async () => storageState.currentVaultId,
+    getVaults: async () =>
+      storageState.vaultIds.map(ecdsa => ({ publicKeys: { ecdsa } })),
   },
 }))
 
@@ -29,6 +32,8 @@ vi.mock('../../popup/resolvers/background', () => ({
   callPopupFromBackground: (...args: unknown[]) =>
     mockCallPopupFromBackground(...args),
 }))
+
+import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { PopupError } from '../../popup/error'
 import {
@@ -77,6 +82,7 @@ describe('suggestKeplrChain', () => {
   beforeEach(() => {
     storageState.values = {}
     storageState.currentVaultId = 'vault-1'
+    storageState.vaultIds = []
     mockCallPopupFromBackground.mockReset()
     mockCallPopupFromBackground.mockResolvedValue(true)
   })
@@ -142,7 +148,7 @@ describe('suggestKeplrChain', () => {
         origin: 'https://good.example.com',
         chainInfo: makeChainInfo('good'),
       })
-    ).rejects.toThrow('currentVaultId')
+    ).rejects.toThrow('siteVaultId')
 
     expect(mockCallPopupFromBackground).not.toHaveBeenCalled()
   })
@@ -171,6 +177,26 @@ describe('suggestKeplrChain', () => {
       'test-chain-1',
     ])
     storageState.currentVaultId = 'vault-1'
+    expect(await getChains('https://good.example.com')).toEqual({})
+  })
+
+  it('stores and reads the chain under the vault the site is connected to', async () => {
+    storageState.vaultIds = ['vault-1', 'vault-2']
+    storageState.values[StorageKey.appSessions] = {
+      'vault-2': {
+        'example.com': { host: 'example.com', url: 'https://good.example.com' },
+      },
+    }
+
+    await suggest({
+      origin: 'https://good.example.com',
+      chainInfo: makeChainInfo('good'),
+    })
+
+    expect(Object.keys(await getChains('https://good.example.com'))).toEqual([
+      'test-chain-1',
+    ])
+    storageState.vaultIds = ['vault-1']
     expect(await getChains('https://good.example.com')).toEqual({})
   })
 

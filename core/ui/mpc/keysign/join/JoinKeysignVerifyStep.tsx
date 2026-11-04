@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { isSignableCustomMessage } from '@core/ui/mpc/keysign/customMessage/isSignableCustomMessage'
 import { JoinKeysignCustomMessageVerify } from '@core/ui/mpc/keysign/join/JoinKeysignCustomMessageVerify'
 import { JoinKeysignQbtcClaimVerify } from '@core/ui/mpc/keysign/join/JoinKeysignQbtcClaimVerify'
 import { JoinKeysignButton } from '@core/ui/mpc/keysign/join/tx/JoinKeysignButton'
@@ -10,10 +11,15 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
+import { ErrorBlock } from '@lib/ui/status/ErrorBlock'
 import { getKeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * The joining device's review of what it is asked to sign. A custom message
+ * the device refuses to sign shows why, and the user cannot join.
+ */
 export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
@@ -51,18 +57,30 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
                 onFinish={onFinish}
               />
             ),
-          custom: value => (
-            <>
-              <PageContent scrollable>
-                <VStack flexGrow>
-                  <JoinKeysignCustomMessageVerify value={value} />
-                </VStack>
-              </PageContent>
-              <PageFooter>
-                <JoinKeysignButton onClick={onFinish} />
-              </PageFooter>
-            </>
-          ),
+          custom: value => {
+            const unsignableMessage = isSignableCustomMessage(value)
+              ? undefined
+              : t('custom_message_unsupported_format')
+
+            return (
+              <>
+                <PageContent scrollable>
+                  <VStack flexGrow gap={16}>
+                    {unsignableMessage && (
+                      <ErrorBlock>{unsignableMessage}</ErrorBlock>
+                    )}
+                    <JoinKeysignCustomMessageVerify value={value} />
+                  </VStack>
+                </PageContent>
+                <PageFooter>
+                  <JoinKeysignButton
+                    onClick={onFinish}
+                    disabled={unsignableMessage}
+                  />
+                </PageFooter>
+              </>
+            )
+          },
         }}
       />
     </>
