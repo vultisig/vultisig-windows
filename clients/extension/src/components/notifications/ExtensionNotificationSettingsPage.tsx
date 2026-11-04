@@ -1,10 +1,9 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { NotificationSettingsContent } from '@core/ui/notifications/settings/NotificationSettingsContent'
 import { toVaultNotificationItems } from '@core/ui/notifications/settings/toVaultNotificationItems'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useVaults } from '@core/ui/storage/vaults'
+import { VaultSettingsContent } from '@core/ui/vault/settings/VaultSettingsContent'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useTranslation } from 'react-i18next'
 
@@ -32,12 +31,8 @@ export const ExtensionNotificationSettingsPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        hasBorder
-        primaryControls={<PageHeaderBackButton />}
-        title={t('notifications')}
-      />
-      <PageContent flexGrow gap={14} scrollable>
+      <SettingsPageHeader title={t('notifications')} />
+      <VaultSettingsContent flexGrow gap={14} scrollable>
         <NotificationSettingsContent
           isEnabled={anyEnabled}
           isPending={isPending}
@@ -66,7 +61,7 @@ export const ExtensionNotificationSettingsPage = () => {
           }}
           vaults={vaults}
         />
-      </PageContent>
+      </VaultSettingsContent>
     </VStack>
   )
 }
