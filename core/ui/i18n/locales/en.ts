@@ -1683,8 +1683,6 @@ export const en = {
   vault_details_description: 'View vault name, part and type',
   vault_details_edit_vault_description: 'Edit your vault name',
   vault_details_page_signer_word: 'Signer',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA key',
   vault_details_page_vault_type: 'Vault Type',
   vault_info: 'Vault Info',

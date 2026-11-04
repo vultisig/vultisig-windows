@@ -1093,8 +1093,6 @@ export const ru = {
   vault_details_description: 'Посмотреть имя хранилища, часть и тип',
   vault_details_edit_vault_description: 'Редактировать имя хранилища',
   vault_details_page_signer_word: 'Подписант',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Ключ MLDSA',
   vault_details_page_vault_type: 'Тип хранилища',
   vault_info: 'Информация о хранилище',

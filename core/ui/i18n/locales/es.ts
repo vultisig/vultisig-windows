@@ -1097,8 +1097,6 @@ export const es = {
   vault_details_description: 'Ver el nombre, la parte y el tipo de bóveda',
   vault_details_edit_vault_description: 'Editar el nombre de tu bóveda',
   vault_details_page_signer_word: 'Firmante',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Clave MLDSA',
   vault_details_page_vault_type: 'Tipo de bóveda',
   vault_info: 'Información de la bóveda',

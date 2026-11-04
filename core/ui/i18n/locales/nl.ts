@@ -1087,8 +1087,6 @@ export const nl = {
   vault_details_description: 'Bekijk kluisnaam, deel en type',
   vault_details_edit_vault_description: 'Bewerk je kluisnaam',
   vault_details_page_signer_word: 'Ondertekenaar',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA-sleutel',
   vault_details_page_vault_type: 'Kluistype',
   vault_info: 'Kluisinfo',

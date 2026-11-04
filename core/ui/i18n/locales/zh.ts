@@ -1016,8 +1016,6 @@ export const zh = {
   vault_details_description: '查看保险库名称、份额和类型',
   vault_details_edit_vault_description: '编辑您的保险库名称',
   vault_details_page_signer_word: '签名者',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA 密钥',
   vault_details_page_vault_type: '保险库类型',
   vault_info: '保险库信息',

@@ -1092,8 +1092,6 @@ export const ko = {
   vault_details_description: '볼트 이름, 셰어, 유형 확인',
   vault_details_edit_vault_description: '볼트 이름 수정',
   vault_details_page_signer_word: '서명자',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA 키',
   vault_details_page_vault_type: '볼트 유형',
   vault_info: '볼트 정보',

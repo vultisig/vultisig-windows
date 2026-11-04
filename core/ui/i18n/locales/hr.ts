@@ -1101,8 +1101,6 @@ export const hr = {
   vault_details_description: 'Prikaži naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Uredite naziv svog trezora',
   vault_details_page_signer_word: 'Potpisnik',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Ključ MLDSA-e',
   vault_details_page_vault_type: 'Vrsta trezora',
   vault_info: 'Informacije o trezoru',

@@ -17,3 +17,34 @@ export const settingsFieldSurface = css`
     : getColor('foreground')};
   border: 1px solid ${fieldBorder.toCssValue()};
 `
+
+export const settingsInputHeight = 52
+
+/** A settings text input with the frames' visible outline. */
+export const settingsOutlinedTextInput = css`
+  ${settingsFieldSurface};
+  border-color: ${getColor('foregroundSuper')};
+  color: ${getColor('text')};
+  font-weight: 500;
+  height: ${settingsInputHeight}px;
+  line-height: 20px;
+  padding: 15px;
+
+  &::placeholder {
+    color: ${getColor('textShy')};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+`
+
+// Figma Backgrounds/disabled; no theme token carries it.
+const readOnlyBackground = 'rgba(11, 26, 58, 0.5)'
+
+/** Fill and border of the read-only cards on the vault settings screens. */
+export const settingsReadOnlySurface = css`
+  background: ${currentProductBrand === 'vultisig'
+    ? readOnlyBackground
+    : getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+`

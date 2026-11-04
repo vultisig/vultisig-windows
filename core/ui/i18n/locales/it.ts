@@ -1100,8 +1100,6 @@ export const it = {
   vault_details_description: 'Visualizza nome, quota e tipo del vault',
   vault_details_edit_vault_description: 'Modifica il nome del tuo vault',
   vault_details_page_signer_word: 'Firmatario',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Chiave MLDSA',
   vault_details_page_vault_type: 'Tipo di vault',
   vault_info: 'Informazioni sul vault',

@@ -1100,8 +1100,6 @@ export const pt = {
   vault_details_description: 'Veja o nome, a parte e o tipo do cofre.',
   vault_details_edit_vault_description: 'Edite o nome do seu cofre',
   vault_details_page_signer_word: 'Signatário',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Chave MLDSA',
   vault_details_page_vault_type: 'Tipo de cofre',
   vault_info: 'Informações do cofre',

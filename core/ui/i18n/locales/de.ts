@@ -1110,8 +1110,6 @@ export const de = {
   vault_details_description: 'Tresorname, Anteil und Typ anzeigen',
   vault_details_edit_vault_description: 'Bearbeiten Sie Ihren Tresornamen',
   vault_details_page_signer_word: 'Signierer',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
   vault_details_page_vault_type: 'Tresortyp',
   vault_info: 'Tresorinformationen',
