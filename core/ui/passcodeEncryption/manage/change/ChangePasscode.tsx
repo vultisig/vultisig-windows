@@ -3,18 +3,41 @@ import { isWeakPasscode } from '@core/ui/passcodeEncryption/core/passcodePolicy'
 import { useChangePasscodeMutation } from '@core/ui/passcodeEncryption/manage/change/mutations/changePasscode'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
+import { securityRow } from '../securityRow'
+
+const OpenerRow = styled(UnstyledButton)`
+  ${securityRow};
+  text-align: left;
+
+  &:hover {
+    background: ${getColor('foregroundExtra')};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${getColor('primary')};
+    outline-offset: -2px;
+  }
+`
+
+/** The Change Passcode row of the Security card and the modal it opens. */
 export const ChangePasscode = () => {
   const { t } = useTranslation()
   const [passcode] = usePasscode()
@@ -95,7 +118,20 @@ export const ChangePasscode = () => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <Button onClick={onOpen}>{t('change_passcode')}</Button>
+        <OpenerRow onClick={onOpen}>
+          <SettingsBaselineText
+            as="span"
+            color="regular"
+            height={24 / 16}
+            size={16}
+            weight={500}
+          >
+            {t('change_passcode')}
+          </SettingsBaselineText>
+          <IconWrapper color="textShy" size={16}>
+            <StationChevronRightSmallIcon />
+          </IconWrapper>
+        </OpenerRow>
       )}
       renderContent={({ onClose }) => (
         <Modal
