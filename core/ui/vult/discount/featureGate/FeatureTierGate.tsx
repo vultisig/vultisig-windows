@@ -16,9 +16,10 @@ import {
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { currentProductBrand } from '../../../product/brand'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useVultBalanceQuery } from '../queries/balance'
 import { discountTierColors } from '../tier/colors'
@@ -36,6 +37,15 @@ type FeatureTierGateProps = {
   description: string
   /** Minimum tier (and VULT threshold) the feature requires. */
   requiredTier: VultDiscountTier
+  /** Draws the sheet from the settings frames. */
+  isSettingsLook?: boolean
+}
+
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the sheet component's own radius, off the scale
+const settingsDrawerStyles = { borderRadius: '38px 38px 0 0' }
+const settingsBackdropStyles = {
+  backdropFilter: 'blur(6px)',
+  background: 'rgba(0, 0, 0, 0.7)',
 }
 
 /**
@@ -51,6 +61,7 @@ export const FeatureTierGate = ({
   title,
   description,
   requiredTier,
+  isSettingsLook = false,
 }: FeatureTierGateProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
@@ -70,16 +81,23 @@ export const FeatureTierGate = ({
       grabbable
       mobileFullWidth
       modalProps={{ withDefaultStructure: false }}
+      drawerStyles={isSettingsLook ? settingsDrawerStyles : undefined}
+      backdropStyles={isSettingsLook ? settingsBackdropStyles : undefined}
     >
-      <DialogFrame role="dialog" aria-modal aria-label={dialogLabel}>
-        <VStack alignItems="center" gap={20} padding="40px 15px 16px">
+      <DialogFrame
+        $isSettingsLook={isSettingsLook}
+        role="dialog"
+        aria-modal
+        aria-label={dialogLabel}
+      >
+        <Content alignItems="center" gap={20} padding="40px 15px 16px">
           <VStack alignItems="center" gap={32} fullWidth>
             <IconBadge>{icon}</IconBadge>
-            <VStack alignItems="center" gap={16}>
-              <Text size={22} weight={500} centerHorizontally>
+            <Copy alignItems="center" gap={16}>
+              <Title size={22} weight={500} centerHorizontally>
                 {title}
-              </Text>
-              <Text
+              </Title>
+              <Description
                 size={14}
                 weight={500}
                 color="shy"
@@ -87,8 +105,8 @@ export const FeatureTierGate = ({
                 height="large"
               >
                 {description}
-              </Text>
-            </VStack>
+              </Description>
+            </Copy>
           </VStack>
           <FooterGroup>
             <RequirementCard>
@@ -97,12 +115,12 @@ export const FeatureTierGate = ({
               </Text>
               <HStack alignItems="center" gap={12}>
                 <TierIcon fontSize={36} />
-                <VStack gap={2}>
-                  <Text size={14} weight={500}>
+                <TierCopy gap={2}>
+                  <TierName size={14} weight={500}>
                     {t('feature_gate_requires_tier', {
                       tier: t(requiredTier),
                     })}
-                  </Text>
+                  </TierName>
                   <Text size={13} weight={500} color="shy">
                     {t('feature_gate_hold_at_least', {
                       amount: formatAmount(
@@ -111,7 +129,7 @@ export const FeatureTierGate = ({
                       ),
                     })}
                   </Text>
-                </VStack>
+                </TierCopy>
               </HStack>
               <BalanceRow>
                 <HStack alignItems="center" gap={6}>
@@ -146,13 +164,25 @@ export const FeatureTierGate = ({
               {isPending ? <Spinner /> : t('get_vult')}
             </GetVultButton>
           </FooterGroup>
-        </VStack>
+        </Content>
       </DialogFrame>
     </ResponsiveModal>
   )
 }
 
-const DialogFrame = styled.div`
+const Content = styled(VStack)``
+
+const Copy = styled(VStack)``
+
+const Title = styled(Text)``
+
+const Description = styled(Text)``
+
+const TierCopy = styled(VStack)``
+
+const TierName = styled(Text)``
+
+const DialogFrame = styled.div<{ $isSettingsLook: boolean }>`
   width: 100%;
   height: min(627px, calc(100vh - 48px));
   min-height: 0;
@@ -167,6 +197,8 @@ const DialogFrame = styled.div`
     ${borderRadius.xl};
     box-shadow: 0 15px 75px rgba(0, 0, 0, 0.18);
   }
+
+  ${({ $isSettingsLook }) => $isSettingsLook && settingsLook};
 `
 
 const IconBadge = styled.div`
@@ -239,5 +271,88 @@ const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`
   &:disabled {
     opacity: 0.6;
     cursor: default;
+  }
+`
+
+// The drawer's grabber row takes 28 of the frame's 54 above the badge.
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the sheet component's own radii, off the scale
+const settingsLook = css`
+  height: auto;
+
+  ${Content} {
+    padding: 26px 16px 24px;
+
+    @media ${mediaQuery.tabletDeviceAndUp} {
+      padding-top: 40px;
+    }
+  }
+
+  ${Copy} {
+    padding-inline: 12px;
+  }
+
+  ${Title} {
+    letter-spacing: -0.36px;
+    line-height: 24px;
+    position: relative;
+    top: 1px;
+  }
+
+  ${Description} {
+    line-height: 20px;
+    position: relative;
+    top: 1px;
+  }
+
+  ${IconBadge} {
+    box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: relative;
+    ${currentProductBrand === 'vultisig' && 'color: #2155df;'}
+
+    &::after {
+      background: #0c4eff;
+      bottom: -3px;
+      content: '';
+      filter: blur(9.26px);
+      height: 8px;
+      left: 11.8px;
+      position: absolute;
+      width: 15.9px;
+    }
+  }
+
+  ${RequirementCard} {
+    border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 20px 20px;
+    padding: 23px 19px 15px;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    ${Text} {
+      line-height: 18px;
+      position: relative;
+      top: 1px;
+    }
+  }
+
+  ${TierCopy} {
+    padding-top: 2px;
+  }
+
+  ${RequirementCard} ${TierName} {
+    line-height: 20px;
+  }
+
+  ${BalanceRow} {
+    border-radius: 14px;
+    margin-top: 12px;
+    padding: 15px;
+  }
+
+  ${GetVultButton} {
+    line-height: 18px;
+    padding: 37px 32px 18px;
   }
 `
