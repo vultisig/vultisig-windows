@@ -438,7 +438,6 @@ export const zh = {
   home_display_combined_description:
     '两个标签页均显示您钱包与 DeFi 的合计余额。',
   home_display_combined_title: '钱包 + DeFi',
-  home_display_description: '编辑钱包余额显示',
   gold: '黄金',
   grant_camera_permission: '授予摄像头权限',
   gwei: 'Gwei',

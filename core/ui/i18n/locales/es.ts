@@ -471,7 +471,6 @@ export const es = {
   home_display_combined_description:
     'Ambas pestañas muestran el saldo combinado de tu billetera y DeFi.',
   home_display_combined_title: 'Billetera + DeFi',
-  home_display_description: 'Editar la visualización del saldo de la billetera',
   gold: 'Oro',
   grant_camera_permission: 'Conceder permiso para la cámara',
   gwei: 'GWEI',
