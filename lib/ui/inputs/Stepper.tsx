@@ -17,7 +17,7 @@ type StepperProps = InputProps<number | null> & {
   max: number
 } & Partial<ComponentProps<typeof TextInput>>
 
-/** Number field between minus and plus buttons, clamped to `min` and `max`. */
+/** Number field between minus and plus buttons; the buttons stop at `min` and `max`, typed values pass through. */
 export const Stepper = ({
   value,
   onChange,

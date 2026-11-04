@@ -20,6 +20,7 @@ import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 
 const debounceDelayMs = 300
 
+/** Create Referral's registration fee and total cost, in RUNE and fiat. */
 export const Fees = () => {
   const { t } = useTranslation()
   const { control, setValue, trigger } = useCreateReferralForm()

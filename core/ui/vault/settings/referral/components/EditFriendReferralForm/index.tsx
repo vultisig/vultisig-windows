@@ -17,6 +17,7 @@ import { ReferralFormContent, ReferralFormFooter } from '../Referrals.styled'
 import { ReferralCodeField } from './Fields/ReferralCodeField'
 import { useFriendReferralValidation } from './hooks/useFriendReferralValidation'
 
+/** Save or replace a friend's referral code from My Referral. */
 export const EditFriendReferralForm = ({ onFinish }: OnFinishProp) => {
   const [referralName, setReferralName] = useState('')
   const currentVaultId = useAssertCurrentVaultId()

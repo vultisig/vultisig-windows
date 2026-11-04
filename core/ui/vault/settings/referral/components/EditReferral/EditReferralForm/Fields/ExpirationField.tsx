@@ -15,6 +15,7 @@ type Props = {
   initialExpiration: number
 }
 
+/** Edit Referral's years stepper, the date they lead to, and the error when they do not rise. */
 export const ExpirationField = ({ initialExpiration }: Props) => {
   const { t } = useTranslation()
   const { control } = useEditReferralFormData()

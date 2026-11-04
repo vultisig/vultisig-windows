@@ -9,6 +9,7 @@ import {
   ReferralTextInput,
 } from '../../Referrals.styled'
 
+/** The friend's code field with its validation error. */
 export const ReferralCodeField = ({
   value,
   onChange,

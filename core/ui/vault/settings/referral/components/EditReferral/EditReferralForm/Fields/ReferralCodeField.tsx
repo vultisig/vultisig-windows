@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 import { FormField } from '../../../Referrals.styled'
 
+/** Edit Referral's read-only code, with a copy action. */
 export const ReferralCodeField = () => {
   const { data: nameDetails } = useUserValidThorchainNameQuery()
   const [, copyToClipboard] = useCopyToClipboard()

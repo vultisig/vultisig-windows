@@ -22,6 +22,7 @@ import {
   ReferralTextInput,
 } from '../../../Referrals.styled'
 
+/** The Create Referral name field, its availability search and the status it returns. */
 export const ReferralCodeField = () => {
   const [localInput, setLocalInput] = useState('')
 

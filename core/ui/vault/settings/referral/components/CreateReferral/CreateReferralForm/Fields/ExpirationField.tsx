@@ -11,6 +11,7 @@ import {
   FormFieldLabel,
 } from '../../../Referrals.styled'
 
+/** Create Referral's years stepper and the date they lead to. */
 export const ExpirationField = () => {
   const { t } = useTranslation()
   const {

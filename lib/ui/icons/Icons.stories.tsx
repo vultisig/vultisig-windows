@@ -66,7 +66,6 @@ import { EyeIcon } from './EyeIcon'
 import { EyeOffIcon } from './EyeOffIcon'
 import { FacebookIcon } from './FacebookIcon'
 import { FileIcon } from './FileIcon'
-import { FileQuestionIcon } from './FileQuestionIcon'
 import { FileTextIcon } from './FileTextIcon'
 import { FileUpIcon } from './FileUpIcon'
 import { FileWarningIcon } from './FileWarningIcon'
@@ -78,7 +77,6 @@ import { FolderUploadIcon } from './FolderUploadIcon'
 import { FrameIcon } from './FrameIcon'
 import { FuelIcon } from './FuelIcon'
 import { GlobusIcon } from './GlobusIcon'
-import { GroupOneIcon } from './GroupOneIcon'
 import { IconFileEdit } from './IconFileEdit'
 import { InfoCircleIcon } from './InfoCircleIcon'
 import { InfoIcon } from './InfoIcon'
@@ -115,7 +113,6 @@ import { SeedphraseIcon } from './SeedphraseIcon'
 import { SendIcon } from './SendIcon'
 import { SettingsIcon } from './SettingsIcon'
 import { ShapesPlusXSquareCircleIcon } from './ShapesPlusXSquareCircleIcon'
-import { ShareAndroidIcon } from './ShareAndroidIcon'
 import { ShareIcon } from './ShareIcon'
 import { ShieldCheckFilledIcon } from './ShieldCheckFilledIcon'
 import { ShieldCheckIcon } from './ShieldCheckIcon'
@@ -233,7 +230,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   EyeOffIcon,
   FacebookIcon,
   FileIcon,
-  FileQuestionIcon,
   FileTextIcon,
   FileUpIcon,
   FileWarningIcon,
@@ -245,7 +241,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   FrameIcon,
   FuelIcon,
   GlobusIcon,
-  GroupOneIcon,
   IconFileEdit,
   UserSparkleIcon,
   InfoCircleIcon,
@@ -283,7 +278,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   SendIcon,
   SettingsIcon,
   ShapesPlusXSquareCircleIcon,
-  ShareAndroidIcon,
   ShareIcon,
   ShieldCheckFilledIcon,
   ShieldCheckIcon,

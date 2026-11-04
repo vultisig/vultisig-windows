@@ -19,6 +19,7 @@ import { useEditReferralFormData } from '../../../../providers/EditReferralFormP
 import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
 
+/** Edit Referral's current expiry, annual fee and extension fee, in RUNE and fiat. */
 export const Fees = () => {
   const { t } = useTranslation()
   const { control, setValue, trigger } = useEditReferralFormData()
