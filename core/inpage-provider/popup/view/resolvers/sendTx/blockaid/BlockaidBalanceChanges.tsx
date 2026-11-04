@@ -5,6 +5,7 @@ import {
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import type { BlockaidEvmBalanceChange } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { formatFiatAmount } from '@core/ui/chain/utils/formatFiatAmount'
 import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { TransactionReceiveIcon } from '@lib/ui/icons/TransactionReceiveIcon'
@@ -98,7 +99,7 @@ const BalanceChangeRow = ({ change }: BalanceChangeRowProps) => {
       </HStack>
       {usdValue !== undefined ? (
         <Text color="shy" size={13}>
-          ~{formatAmount(usdValue, { currency: 'usd' })}
+          ~{formatFiatAmount({ value: usdValue, currency: 'usd' })}
         </Text>
       ) : null}
     </HStack>

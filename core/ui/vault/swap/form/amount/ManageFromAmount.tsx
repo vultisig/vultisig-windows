@@ -1,5 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { getFiatCurrencySymbol } from '@core/ui/chain/utils/getFiatCurrencySymbol'
+import { getFiatCurrencyAffixes } from '@core/ui/chain/utils/getFiatCurrencySymbol'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -10,7 +10,7 @@ import { textInputHeight } from '@lib/ui/css/textInput'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
-import { Text, text } from '@lib/ui/text'
+import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
@@ -104,6 +104,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
   const swapCoin = useCurrentVaultCoin(fromCoinKey)
   const { decimals } = swapCoin
   const fiatCurrency = useFiatCurrency()
+  const fiatAffixes = getFiatCurrencyAffixes(fiatCurrency)
   const priceQuery = useCoinPriceQuery({ coin: swapCoin })
   const price =
     priceQuery.data !== undefined && priceQuery.data > 0
@@ -271,9 +272,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
               fiat={() => (
                 <>
                   <FiatInputRow alignItems="center" justifyContent="flex-end">
-                    <Text size={22} weight={500} color="contrast">
-                      {getFiatCurrencySymbol(fiatCurrency)}
-                    </Text>
+                    <FiatAffix>{fiatAffixes.prefix}</FiatAffix>
                     <FiatInputSizer>
                       <FiatInputMeasure aria-hidden>
                         {fiatInputValue || fiatInputPlaceholder}
@@ -296,6 +295,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
                         data-testid="swap-from-fiat-amount-input"
                       />
                     </FiatInputSizer>
+                    <FiatAffix>{fiatAffixes.suffix}</FiatAffix>
                   </FiatInputRow>
                   <TokenAmountButton
                     onClick={enterTokenMode}
@@ -416,6 +416,11 @@ const fiatInputFont = css`
   font-family: inherit;
   font-size: 22px;
   font-weight: 500;
+`
+
+const FiatAffix = styled.span`
+  ${text({ color: 'contrast', size: 22, weight: '500' })};
+  white-space: pre;
 `
 
 /**

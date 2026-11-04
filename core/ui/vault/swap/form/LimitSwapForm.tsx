@@ -1,5 +1,8 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
+import { formatFiatAmount } from '@core/ui/chain/utils/formatFiatAmount'
+import { getFiatCurrencyAffixes } from '@core/ui/chain/utils/getFiatCurrencySymbol'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -60,6 +63,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   onFinish,
 }) => {
   const { t } = useTranslation()
+  const fiatCurrency = useFiatCurrency()
+  const fiatAffixes = getFiatCurrencyAffixes(fiatCurrency)
+  // A limit price is verified before signing, so it is never compacted.
+  const formatFiatPrice = (value: number) =>
+    formatFiatAmount({ value, currency: fiatCurrency, compact: false })
 
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
@@ -289,7 +297,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   const formatDisplayPrice = (value: number) =>
     unit === 'fiat'
-      ? `$${formatNumber(value, 2)}`
+      ? formatFiatPrice(value)
       : `${formatNumber(value)} ${toCoin.ticker}`
 
   const marketDisplayPrice = marketRate
@@ -329,7 +337,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
         ? rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: toCoinFiatPrice })
         : null
 
-    return fiat !== null ? `$${formatNumber(fiat, 2)}` : undefined
+    return fiat !== null ? formatFiatPrice(fiat) : undefined
   })()
 
   // Fiat value of one sell unit, only when the (ungated, independently-loaded)
@@ -365,9 +373,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       unitPrice:
         rate !== null ? `${formatNumber(rate)} ${toCoin.ticker}` : undefined,
       targetPriceLabel:
-        targetFiatPrice !== null
-          ? `$${formatNumber(targetFiatPrice, 2)}`
-          : undefined,
+        targetFiatPrice !== null ? formatFiatPrice(targetFiatPrice) : undefined,
       expiryHours,
     })
   }
@@ -402,8 +408,16 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               }}
               unit={unit}
               onUnitChange={handleUnitChange}
-              valueSuffix={unit === 'fiat' ? undefined : toCoin.ticker}
-              valuePrefix={unit === 'fiat' ? '$' : undefined}
+              valueSuffix={
+                unit === 'fiat'
+                  ? fiatAffixes.suffix.trim() || undefined
+                  : toCoin.ticker
+              }
+              valuePrefix={
+                unit === 'fiat'
+                  ? fiatAffixes.prefix.trim() || undefined
+                  : undefined
+              }
               secondaryLabel={secondaryLabel}
               marketLabel={
                 marketDisplayPrice !== null

@@ -7,7 +7,9 @@ import { SwapDiscount } from '@vultisig/core-chain/swap/discount/SwapDiscount'
 import { nativeSwapAffiliateConfig } from '@vultisig/core-chain/swap/native/nativeSwapAffiliateConfig'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { sum } from '@vultisig/lib-utils/array/sum'
+import { enforceRange } from '@vultisig/lib-utils/enforceRange'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { toPercents } from '@vultisig/lib-utils/toPercents'
 
 import { currentProductBrand } from '../../../product/brand'
 import { stationSwapAffiliateConfig } from './stationSwapAffiliateConfig'
@@ -70,6 +72,10 @@ export const getSwapQuoteAffiliateBps = (
 /** Renders affiliate basis points as the percentage shown in a fee row title. */
 export const formatAffiliateBpsPercent = (bps: number): string =>
   `${(bps / 100).toFixed(percentFractionDigits)}%`
+
+/** Share of the base affiliate fee a discount removes (5 bps → 10%, the whole base → 100%). */
+export const formatDiscountPercentOfBaseFee = (bps: number): string =>
+  toPercents(enforceRange(bps, 0, baseAffiliateBps) / baseAffiliateBps, 'round')
 
 type FormatFeeRateLabelInput = {
   name: string
