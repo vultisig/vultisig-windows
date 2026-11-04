@@ -33,6 +33,12 @@ const ShareBadge = styled.div`
   padding: 6.5px 10.5px;
 `
 
+// Wraps, so two long names can't crop to the same text on this choice.
+const Name = styled(SettingsBaselineText)`
+  min-width: 0;
+  overflow-wrap: anywhere;
+`
+
 /** A vault's name and which share of it this device holds. */
 export const VaultItem = ({ value }: ValueProp<Vault>) => {
   const { t } = useTranslation()
@@ -41,17 +47,16 @@ export const VaultItem = ({ value }: ValueProp<Vault>) => {
 
   return (
     <Container>
-      <SettingsBaselineText
-        color="regular"
-        cropped
-        height={20 / 14}
-        size={14}
-        weight={500}
-      >
+      <Name color="regular" height={20 / 14} size={14} weight={500}>
         {name}
-      </SettingsBaselineText>
+      </Name>
       <ShareBadge>
-        <IconWrapper color={isFast ? 'idle' : 'success'} size={16}>
+        <IconWrapper
+          aria-label={t(isFast ? 'fast' : 'secure')}
+          color={isFast ? 'idle' : 'success'}
+          role="img"
+          size={16}
+        >
           {isFast ? <BoltFilledIcon /> : <ShieldFilledIcon />}
         </IconWrapper>
         <Text color="shy" nowrap variant="caption">
