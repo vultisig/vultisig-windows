@@ -3,9 +3,10 @@ import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftSmallIcon } from '@lib/ui/icons/ChevronLeftSmallIcon'
 import { StationChevronLeftIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled, { useTheme } from 'styled-components'
+
+import { SettingsBaselineText } from './SettingsBaselineText'
 
 const backIconSize = 20
 
@@ -73,8 +74,8 @@ const BackButton = styled(IconButton)`
   }
 `
 
-// Same 1px baseline offset as the rows; Figma also centers the title half a pixel right.
-const Title = styled(Text)`
+// Figma centers the title half a pixel right of the rows' baseline text.
+const Title = styled(SettingsBaselineText)`
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   display: -webkit-box;
@@ -82,7 +83,5 @@ const Title = styled(Text)`
   max-width: 60%;
   overflow: hidden;
   overflow-wrap: anywhere;
-  position: relative;
   text-wrap: balance;
-  top: 1px;
 `

@@ -1,9 +1,10 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { SettingsHugCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { GradientText, Text } from '@lib/ui/text'
+import { GradientText } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -19,19 +20,13 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
         <ImageWrapper justifyContent="flex-end">
           <PositionedImage src="/core/images/referrals-landing.png" alt="" />
         </ImageWrapper>
-        <VStack gap={12} style={{ position: 'relative', top: 1 }}>
-          <Text
-            centerHorizontally
-            height={24 / 22}
-            letterSpacing={-0.36}
-            size={22}
-            weight={500}
-          >
+        <VStack gap={12}>
+          <SettingsBaselineText centerHorizontally variant="title2">
             <Trans
               i18nKey="referral_landing_title"
               components={{ g: <GradientText as="span" size={22} /> }}
             />
-          </Text>
+          </SettingsBaselineText>
           <Description
             centerHorizontally
             color="shyExtra"
@@ -82,7 +77,7 @@ const Overlay = styled.div`
   z-index: 0;
 `
 
-const Description = styled(Text)`
+const Description = styled(SettingsBaselineText)`
   margin-inline: auto;
   max-width: 245px;
 `

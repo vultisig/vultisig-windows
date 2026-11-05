@@ -1,3 +1,4 @@
+import { settingsBaselineOffset } from '@core/ui/settings/SettingsBaselineText'
 import {
   settingsFieldHairline,
   settingsInputHeight,
@@ -55,8 +56,7 @@ export const FormFieldLabel = styled.label`
     height: 20 / 14,
     color: 'regular',
   })}
-  position: relative;
-  top: 1px;
+  ${settingsBaselineOffset};
 `
 
 /**

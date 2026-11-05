@@ -91,17 +91,17 @@ export const ManageMissingReferral = ({
                     >
                       <CircleDashedIcon />
                     </IconWrapper>
-                    <VStack
-                      alignItems="center"
-                      gap={8}
-                      style={{ position: 'relative', top: 1 }}
-                    >
-                      <Text centerHorizontally variant="title3">
+                    <VStack alignItems="center" gap={8}>
+                      <SettingsBaselineText centerHorizontally variant="title3">
                         {t('no_referral_yet')}
-                      </Text>
-                      <Text centerHorizontally color="shy" variant="footnote">
+                      </SettingsBaselineText>
+                      <SettingsBaselineText
+                        centerHorizontally
+                        color="shy"
+                        variant="footnote"
+                      >
                         {t('turn_your_vault_into_rewards_machine')}
-                      </Text>
+                      </SettingsBaselineText>
                     </VStack>
                   </VStack>
                   <Button

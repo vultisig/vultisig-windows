@@ -1,3 +1,4 @@
+import { settingsBaselineOffset } from '@core/ui/settings/SettingsBaselineText'
 import { SettingsStrongCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
@@ -52,8 +53,7 @@ const Description = styled.p`
     height: 20 / 14,
   })}
 
-  position: relative;
-  top: 1px;
+  ${settingsBaselineOffset};
 
   b {
     color: ${getColor('text')};

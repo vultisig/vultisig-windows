@@ -1,3 +1,4 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useFriendReferralQuery } from '@core/ui/storage/referrals'
@@ -211,22 +212,18 @@ const HeroIllustration = styled.img`
   width: calc(100% + 15px);
 `
 
-const ActionTitle = styled(Text)`
+const ActionTitle = styled(SettingsBaselineText)`
   line-height: ${20 / 17};
   font-size: 17px;
   font-weight: 500;
   letter-spacing: -0.3px;
-  position: relative;
-  top: 1px;
 `
 
-const ActionDescription = styled(Text)`
+const ActionDescription = styled(SettingsBaselineText)`
   line-height: ${18 / 13};
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.06px;
-  position: relative;
-  top: 1px;
 `
 
 const ActionItem = styled(HStack)`
