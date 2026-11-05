@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
+import { SecuredAssetSourceChainLabel } from '@core/ui/chain/coin/thorchain/SecuredAssetSourceChainLabel'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import {
@@ -48,15 +49,18 @@ export const CoinOption = ({ value, onClick, showChain }: CoinOptionProps) => {
     >
       <CoinDetails alignItems="center" gap={12}>
         <CoinIcon coin={value} style={{ fontSize: 32 }} />
-        <CoinLabel gap={8} alignItems="center">
-          <CoinTicker ticker={ticker} size={13} weight="500" />
-          <TokenVerificationBadge value={value} />
-          {showChain && (
-            <ChainPill color="shyExtra" nowrap variant="caption">
-              {value.chain}
-            </ChainPill>
-          )}
-        </CoinLabel>
+        <CoinName gap={2}>
+          <CoinLabel gap={8} alignItems="center">
+            <CoinTicker ticker={ticker} size={13} weight="500" />
+            <TokenVerificationBadge value={value} />
+            {showChain && (
+              <ChainPill color="shyExtra" nowrap variant="caption">
+                {value.chain}
+              </ChainPill>
+            )}
+          </CoinLabel>
+          <SecuredAssetSourceChainLabel value={value} size={12} />
+        </CoinName>
       </CoinDetails>
       <BalanceColumn
         alignItems="flex-end"
@@ -163,6 +167,10 @@ const CoinDetails = styled(HStack)`
   > img {
     flex-shrink: 0;
   }
+`
+
+const CoinName = styled(VStack)`
+  min-width: 0;
 `
 
 const CoinLabel = styled(HStack)`

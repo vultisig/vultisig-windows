@@ -2096,18 +2096,26 @@ export const es = {
   custom_message_unsupported_method:
     'Método de firma no compatible. Usa personal_sign o eth_signTypedData_v4.',
   revoke: 'Revocar el acceso',
-  token_approvals: 'Aprobaciones de tokens',
+  token_approvals_delegate: 'Delegado',
+  token_approvals_partial:
+    'No se pudieron comprobar del todo las aprobaciones de Permit2 en: {{chains}}',
+  token_approvals_not_checked: 'Aún no comprobado: {{chains}}',
+  granted_approvals: 'Aprobaciones concedidas',
+  token_approvals_checking: 'Aún comprobando: {{chains}}',
+  token_approvals_failed: 'No se pudo comprobar: {{chains}}',
+  token_approvals_via: 'Aprobado mediante',
+  revoke_approval_permit2_explanation:
+    'Establece en 0 el límite de Permit2 de este contrato. Un permiso que firmaste y que nadie ha usado todavía puede restaurarlo; para bloquear Permit2 por completo, revoca también la aprobación de este token a Permit2. Se aplica una comisión de red.',
+  revoke_approval_spl_explanation:
+    'Quita el delegado de esta cuenta de token, por lo que ya no podrá mover este token de tu bóveda. Se aplica una comisión de red.',
+  revoke_approval_unreadable:
+    'Esta transacción no coincide con la aprobación que elegiste, así que no se puede firmar.',
+  token_approvals_empty_title: 'No hay aprobaciones activas',
+  token_approvals_empty_description:
+    'Los contratos a los que autorices a gastar tus tokens en las cadenas de esta bóveda aparecerán aquí.',
   token_approvals_disconnect_note:
     'Desconectar un dApp no elimina estas aprobaciones. Cada revocación es una transacción independiente en la cadena de bloques con una comisión de red.',
-  token_approvals_empty_description:
-    'Los contratos a los que autorices a gastar tus tokens en esta red aparecerán aquí.',
-  token_approvals_empty_title: 'No hay aprobaciones activas en {{chain}}',
-  token_approvals_not_supported: 'No compatible',
-  token_approvals_switch_network: 'Elige otra red',
   token_approvals_unlimited_count: 'Ilimitado: {{count}}',
-  token_approvals_unsupported_description:
-    'Aún no se pueden mostrar las aprobaciones de tokens en esta red. Elige otra red para revisarlas.',
-  token_approvals_unsupported_title: 'No disponible en {{chain}}',
   revoke_approval: 'Revocar el acceso',
   revoke_approval_explanation:
     'Establece el límite de este contrato en 0, por lo que ya no podrá mover este token de tu bóveda. Se aplica una comisión de red.',

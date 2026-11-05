@@ -2085,18 +2085,26 @@ export const nl = {
   custom_message_unsupported_method:
     'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
   revoke: 'Toegang intrekken',
-  token_approvals: 'Tokengoedkeuringen',
+  token_approvals_delegate: 'Gemachtigde',
+  token_approvals_partial:
+    'Permit2-goedkeuringen konden niet volledig worden gecontroleerd op: {{chains}}',
+  token_approvals_not_checked: 'Nog niet gecontroleerd: {{chains}}',
+  granted_approvals: 'Verleende goedkeuringen',
+  token_approvals_checking: 'Nog bezig met controleren: {{chains}}',
+  token_approvals_failed: 'Kon niet controleren: {{chains}}',
+  token_approvals_via: 'Goedgekeurd via',
+  revoke_approval_permit2_explanation:
+    'Hiermee wordt de Permit2-limiet van dit contract op 0 gezet. Een permit die je hebt ondertekend en die nog niemand heeft gebruikt, kan die limiet herstellen. Trek daarom ook de goedkeuring van dit token voor Permit2 in om Permit2 volledig af te sluiten. Je betaalt netwerkkosten.',
+  revoke_approval_spl_explanation:
+    'Hiermee wordt de gemachtigde van dit tokenaccount verwijderd, zodat die dit token niet meer uit je kluis kan verplaatsen. Je betaalt netwerkkosten.',
+  revoke_approval_unreadable:
+    'Deze transactie komt niet overeen met de goedkeuring die je hebt gekozen en kan daarom niet worden ondertekend.',
+  token_approvals_empty_title: 'Geen actieve goedkeuringen',
+  token_approvals_empty_description:
+    'Contracten die je toestaat je tokens op de chains van deze kluis uit te geven, verschijnen hier.',
   token_approvals_disconnect_note:
     'Het verbreken van de verbinding met een dApp heft deze goedkeuringen niet op. Elke intrekking is een afzonderlijke on-chain transactie met netwerkkosten.',
-  token_approvals_empty_description:
-    'Contracten die je toestaat je tokens op dit netwerk uit te geven, verschijnen hier.',
-  token_approvals_empty_title: 'Geen actieve goedkeuringen voor {{chain}}',
-  token_approvals_not_supported: 'Niet ondersteund',
-  token_approvals_switch_network: 'Kies een ander netwerk',
   token_approvals_unlimited_count: 'Onbeperkt: {{count}}',
-  token_approvals_unsupported_description:
-    'De goedgekeurde tokens op dit netwerk kunnen nog niet worden weergegeven. Kies een ander netwerk om ze te bekijken.',
-  token_approvals_unsupported_title: 'Niet beschikbaar op {{chain}}',
   revoke_approval: 'Toegang intrekken',
   revoke_approval_explanation:
     'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het dit token niet meer uit je kluis kan verplaatsen. Je betaalt netwerkkosten.',
