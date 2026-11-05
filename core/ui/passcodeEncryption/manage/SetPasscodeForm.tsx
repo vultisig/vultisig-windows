@@ -1,8 +1,6 @@
 import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { LockPasswordIcon } from '@lib/ui/icons/LockPasswordIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -15,6 +13,7 @@ import styled from 'styled-components'
 import { passcodeEncryptionConfig } from '../core/config'
 import { isWeakPasscode } from '../core/passcodePolicy'
 import { PasscodeInput } from './PasscodeInput'
+import { SetPasscodeHeading } from './SetPasscodeHeading'
 
 type SetPasscodeFormProps = {
   error: Error | null
@@ -44,14 +43,6 @@ const Glow = styled.div`
 
 const Fields = styled(VStack)`
   position: relative;
-`
-
-const LockIcon = styled(IconWrapper)`
-  margin-bottom: 9px;
-`
-
-const Description = styled(Text)`
-  max-width: 283px;
 `
 
 const SubmitButton = styled(SettingsCtaButton)`
@@ -120,23 +111,7 @@ export const SetPasscodeForm = ({
         <Glow />
       </GlowClip>
       <Fields alignItems="center" gap={15}>
-        <LockIcon color="primaryAccentFour" size={46}>
-          <LockPasswordIcon />
-        </LockIcon>
-        <VStack alignItems="center" gap={14}>
-          <Text centerHorizontally color="regular" variant="title3">
-            {t('enter_passcode')}
-          </Text>
-          <Description
-            centerHorizontally
-            color="shyExtra"
-            height={20 / 14}
-            size={14}
-            weight={400}
-          >
-            {t('set_passcode_description')}
-          </Description>
-        </VStack>
+        <SetPasscodeHeading />
         <PasscodeInput
           appearance="dots"
           onChange={setPasscode}

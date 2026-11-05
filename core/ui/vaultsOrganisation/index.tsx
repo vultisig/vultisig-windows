@@ -183,23 +183,20 @@ export const VaultsPage = ({
 
   const hasNoSearchResults =
     isSearching && displayedFolders.length === 0 && displayedVaults.length === 0
+  const doneControl = onFinish ? <DoneButton onClick={handleDone} /> : undefined
 
   return (
     <VStack fullHeight>
       {isSettingsLook ? (
         <SettingsPageHeader
           onBack={handleBack}
-          secondaryControls={
-            onFinish ? <DoneButton onClick={handleDone} /> : undefined
-          }
+          secondaryControls={doneControl}
           title={t('select_vault')}
         />
       ) : (
         <PageHeader
           primaryControls={<PageHeaderBackButton onClick={handleBack} />}
-          secondaryControls={
-            onFinish ? <DoneButton onClick={handleDone} /> : undefined
-          }
+          secondaryControls={doneControl}
           title={t('vaults')}
         />
       )}
