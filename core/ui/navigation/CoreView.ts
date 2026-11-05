@@ -2,10 +2,11 @@ import { DefiChainPageTab } from '@core/ui/defi/chain/tabs/core'
 import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { TokenApproval } from '@core/ui/vault/settings/advanced/tokenApprovals/core/TokenApproval'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
-import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { QbtcVoteSelection } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/proposal'
-import { Coin, CoinKey, Token } from '@vultisig/core-chain/coin/Coin'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
@@ -165,11 +166,8 @@ export type CoreView =
   | { id: 'vaultSettingsAdvanced' }
   | { id: 'customRpc' }
   | { id: 'customRpcDetail'; state: { chain: Chain } }
-  | { id: 'tokenApprovals'; state?: { chain: EvmChain } }
-  | {
-      id: 'revokeTokenApproval'
-      state: { token: Token<Coin<EvmChain>>; spender: string }
-    }
+  | { id: 'tokenApprovals' }
+  | { id: 'revokeTokenApproval'; state: { approval: TokenApproval } }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
