@@ -158,6 +158,7 @@ export const getCosmosKeplrBridgeTxHash = ({
         aminoTypes.fromAmino({ type: msg.type, value: msg.value })
       ),
       memo: stdTx.memo,
+      timeoutHeight: signData.value.timeoutHeight,
     },
   })
 
