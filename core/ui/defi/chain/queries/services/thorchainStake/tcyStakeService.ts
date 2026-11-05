@@ -25,10 +25,11 @@ const getTcyModuleBalance = () =>
     `${thornodeBaseUrl}/balance/module/tcy_stake`
   )
 
-const getTcyUserDistributions = (address: string) =>
-  queryUrl<{ distributions?: Array<{ date?: string; amount?: string }> }>(
-    `${midgardBaseUrl}/tcy/distribution/${address}`
-  )
+/** Unsorted; `distributions` is `null` for an address that never staked. */
+export const getTcyUserDistributions = (address: string) =>
+  queryUrl<{
+    distributions?: Array<{ date?: string; amount?: string }> | null
+  }>(`${midgardBaseUrl}/tcy/distribution/${address}`)
 
 const getTcyStakers = () =>
   queryUrl<{ tcy_stakers?: Array<{ amount?: string }> }>(
