@@ -982,7 +982,7 @@ export const ko = {
   ultimate: '얼티밋',
   unlock_discount_tier: '<b>{{tier}}</b> 티어 잠금 해제',
   unlock_discount_tier_description:
-    '{{minBalance}}을(를) 보유하면 {{tier}} 티어가 잠금 해제되어 모든 스왑에서 <b>{{bps}}bps 거래 수수료 할인</b>을 받습니다.',
+    '{{minBalance}}을(를) 보유하면 {{tier}} 티어가 잠금 해제되어 모든 스왑에서 <b>{{percent}} Vultisig 스왑 수수료 할인</b>을 받습니다.',
   unlock_discount_tier_description_ultimate:
     '{{minBalance}}을(를) 보유하면 {{tier}} 티어가 잠금 해제되어 모든 스왑에서 <b>Vultisig 수수료가 전액 면제</b>됩니다.',
   unlock_tier: '티어 잠금 해제',
@@ -2024,19 +2024,28 @@ export const ko = {
     '지원되지 않는 서명 방식입니다. personal_sign 또는 eth_signTypedData_v4를 사용하세요.',
   revoke: '접근 권한 취소',
   token_approvals: '토큰 승인',
+  token_approvals_delegate: '위임자',
+  token_approvals_partial:
+    '다음에서 Permit2 승인을 모두 확인하지 못했습니다: {{chains}}',
+  token_approvals_not_checked: '아직 확인하지 않음: {{chains}}',
+  granted_approvals: '부여된 승인',
+  token_approvals_checking: '확인 중: {{chains}}',
+  token_approvals_failed: '확인 실패: {{chains}}',
+  token_approvals_via: '승인 경로',
+  revoke_approval_permit2_explanation:
+    '이 컨트랙트의 Permit2 한도를 0으로 설정합니다. 서명했지만 아직 사용되지 않은 퍼밋으로 한도가 다시 복원될 수 있으므로, Permit2를 완전히 차단하려면 이 토큰의 Permit2 승인도 취소하세요. 네트워크 수수료가 부과됩니다.',
+  revoke_approval_spl_explanation:
+    '이 토큰 계정에서 위임자를 제거해 더 이상 볼트에서 이 토큰을 옮길 수 없게 합니다. 네트워크 수수료가 부과됩니다.',
+  revoke_approval_unreadable:
+    '이 트랜잭션이 선택한 승인과 일치하지 않아 서명할 수 없습니다.',
+  token_approvals_empty_title: '활성 승인이 없습니다',
+  token_approvals_empty_description:
+    '이 볼트의 체인에서 토큰 사용을 허용한 컨트랙트가 여기에 표시됩니다.',
   token_approvals_description:
     '토큰을 사용할 수 있는 컨트랙트를 검토하고 승인을 취소하세요.',
   token_approvals_disconnect_note:
     'dApp 연결을 해제해도 이 승인은 삭제되지 않습니다. 승인 취소는 각각 네트워크 수수료가 드는 별도의 온체인 거래입니다.',
-  token_approvals_empty_description:
-    '이 네트워크에서 토큰 사용을 허용한 컨트랙트가 여기에 표시됩니다.',
-  token_approvals_empty_title: '{{chain}}에 활성 승인이 없습니다',
-  token_approvals_not_supported: '지원되지 않음',
-  token_approvals_switch_network: '다른 네트워크 선택',
   token_approvals_unlimited_count: '무제한: {{count}}',
-  token_approvals_unsupported_description:
-    '이 네트워크의 토큰 승인 내역은 아직 표시할 수 없습니다. 다른 네트워크를 선택하여 확인하세요.',
-  token_approvals_unsupported_title: '{{chain}}에서는 사용할 수 없습니다',
   revoke_approval: '접근 권한 취소',
   revoke_approval_explanation:
     '이 컨트랙트의 허용 한도를 0으로 설정해 더 이상 볼트에서 이 토큰을 옮길 수 없게 합니다. 네트워크 수수료가 부과됩니다.',

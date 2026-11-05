@@ -1011,7 +1011,7 @@ export const hr = {
   ultimate: 'Krajnji',
   unlock_discount_tier: 'Otključaj razinu <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{percent}} na Vultisig naknadu za swap</b> na sve swapove.',
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   unlock_tier: 'Otključaj razinu',
@@ -2068,19 +2068,28 @@ export const hr = {
     'Nepodržana metoda potpisivanja. Koristite personal_sign ili eth_signTypedData_v4.',
   revoke: 'Opoziv pristupa',
   token_approvals: 'Odobrenja tokena',
+  token_approvals_delegate: 'Delegat',
+  token_approvals_partial:
+    'Permit2 odobrenja nisu u potpunosti provjerena na: {{chains}}',
+  token_approvals_not_checked: 'Još nije provjereno: {{chains}}',
+  granted_approvals: 'Dodijeljena odobrenja',
+  token_approvals_checking: 'Još se provjerava: {{chains}}',
+  token_approvals_failed: 'Provjera nije uspjela: {{chains}}',
+  token_approvals_via: 'Odobreno putem',
+  revoke_approval_permit2_explanation:
+    'Postavlja Permit2 ograničenje ovog ugovora na 0. Dozvola koju ste potpisali, a još nije iskorištena, može ga vratiti, pa da biste potpuno isključili Permit2, opozovite i odobrenje ovog tokena za Permit2. Plaćate mrežnu naknadu.',
+  revoke_approval_spl_explanation:
+    'Uklanja delegata s ovog računa tokena, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
+  revoke_approval_unreadable:
+    'Ova transakcija ne odgovara odabranom odobrenju, pa se ne može potpisati.',
+  token_approvals_empty_title: 'Nema aktivnih odobrenja',
+  token_approvals_empty_description:
+    'Ugovori kojima dopustite trošenje vaših tokena na lancima ovog trezora prikazat će se ovdje.',
   token_approvals_description:
     'Pregledajte i opozovite ugovore koji mogu trošiti vaše tokene',
   token_approvals_disconnect_note:
     'Prekidanje veze s dApp ne uklanja ova odobrenja. Svako opoziv je zasebna transakcija na lancu s mrežnom naknadom.',
-  token_approvals_empty_description:
-    'Ugovori kojima dopustite trošenje vaših tokena na ovoj mreži prikazat će se ovdje.',
-  token_approvals_empty_title: 'Nema aktivnih odobrenja na {{chain}}',
-  token_approvals_not_supported: 'Nije podržano',
-  token_approvals_switch_network: 'Odaberite drugu mrežu',
   token_approvals_unlimited_count: 'Neograničeno: {{count}}',
-  token_approvals_unsupported_description:
-    'Odobrenja tokena na ovoj mreži još se ne mogu prikazati. Odaberite drugu mrežu da biste ih pregledali.',
-  token_approvals_unsupported_title: 'Nije dostupno na {{chain}}',
   revoke_approval: 'Opozovi pristup',
   revoke_approval_explanation:
     'Postavlja dopuštenu količinu za ovaj ugovor na 0, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
