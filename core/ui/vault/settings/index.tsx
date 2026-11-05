@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingsSection } from '../../settings/SettingsSection'
+import { PrefetchTokenApprovals } from './advanced/tokenApprovals/queries/PrefetchTokenApprovals'
 import { VaultSettingsBackup } from './backup'
 import { DescriptionText, ListItemIconWrapper } from './vaultSettingsListStyles'
 
@@ -29,6 +30,7 @@ export const VaultSettingsPage: FC = () => {
         primaryControls={<PageHeaderBackButton />}
         title={t('vault_settings')}
       />
+      <PrefetchTokenApprovals />
       <PageContent gap={14} flexGrow scrollable>
         <SettingsSection title={t('vault')}>
           <ListItem
