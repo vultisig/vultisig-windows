@@ -1,18 +1,11 @@
-import { EvmChain } from '@vultisig/core-chain/Chain'
+import { EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 /**
- * Every EVM chain the vault supports, in the order the network picker lists
- * them.
+ * EVM chains whose approvals can be listed: the networks the 1inch History
+ * and Balance APIs cover. Blast, Mantle and Sei are not covered.
  */
-export const tokenApprovalsChains = Object.values(EvmChain)
-
-/**
- * EVM chains whose approvals can be listed. They match the networks the 1inch
- * History and Balance APIs cover; Blast, Mantle and Sei are not covered, so
- * they show an unsupported state instead of a list.
- */
-const tokenApprovalsSupportedChains = [
+export const tokenApprovalsEvmChains = [
   EvmChain.Ethereum,
   EvmChain.Base,
   EvmChain.Arbitrum,
@@ -26,8 +19,12 @@ const tokenApprovalsSupportedChains = [
   EvmChain.Robinhood,
 ] as const satisfies readonly EvmChain[]
 
-/**
- * Whether the approvals list can be loaded for this chain.
- */
-export const isTokenApprovalsSupportedChain = (chain: EvmChain) =>
-  isOneOf(chain, tokenApprovalsSupportedChains)
+/** EVM chains whose approvals cannot be listed yet, named on the page. */
+export const tokenApprovalsUncheckedEvmChains = Object.values(EvmChain).filter(
+  chain => !isOneOf(chain, tokenApprovalsEvmChains)
+)
+
+/** Every chain whose approvals the page can list. */
+export type TokenApprovalsChain =
+  | (typeof tokenApprovalsEvmChains)[number]
+  | typeof OtherChain.Solana

@@ -26,6 +26,7 @@ import styled from 'styled-components'
 import { AddCustomTokenForm } from '../../../chain/coin/addCustomToken/AddCustomTokenForm'
 import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
+import { useThorchainSecuredAssetsQuery } from '../../../chain/coin/queries/useThorchainSecuredAssetsQuery'
 import { useWhitelistedCoinsQuery } from '../../../chain/coin/queries/useWhitelistedCoinsQuery'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { useCreateCoinMutation } from '../../../storage/coins'
@@ -70,14 +71,20 @@ export const SwapCoinsExplorer = ({
     isPlaceholderData,
     isPending,
   } = useWhitelistedCoinsQuery(deferredChain)
+  const { data: securedAssets, isLoading: isSecuredAssetsLoading } =
+    useThorchainSecuredAssetsQuery(deferredChain)
 
   // Keep the loading overlay up while the list doesn't yet reflect the selected
   // chain: during the deferred render pass (`currentChain !== deferredChain`),
   // while a warm switch serves the previous chain's data (`isPlaceholderData`),
   // and on a cold switch where the new query has no data yet (`isPending`) so an
-  // incomplete list can't flash before the whitelist arrives.
+  // incomplete list can't flash before the whitelist (or, on THORChain, the
+  // secured-asset catalog) arrives.
   const isCoinListLoading =
-    currentChain !== deferredChain || isPlaceholderData || isPending
+    currentChain !== deferredChain ||
+    isPlaceholderData ||
+    isPending ||
+    isSecuredAssetsLoading
 
   const sortedSwapCoins = useSortedByBalanceCoins(deferredChain)
   const options = useMemo(() => {
@@ -94,7 +101,10 @@ export const SwapCoinsExplorer = ({
     const allOptions = withoutDuplicates(
       [
         ...sortedSwapCoins,
-        ...(knownTokens[deferredChain] ?? []).filter(
+        ...[
+          ...(knownTokens[deferredChain] ?? []),
+          ...(securedAssets ?? []),
+        ].filter(
           coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
         ),
         ...(whitelisted ?? []).filter(
@@ -123,7 +133,14 @@ export const SwapCoinsExplorer = ({
     }
 
     return allOptions
-  }, [deferredChain, sortedSwapCoins, whitelisted, coins, chainFilter])
+  }, [
+    deferredChain,
+    sortedSwapCoins,
+    securedAssets,
+    whitelisted,
+    coins,
+    chainFilter,
+  ])
 
   const { t } = useTranslation()
 
