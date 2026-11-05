@@ -1,4 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
+import { throwIfBroadcastRejected } from '@core/ui/mpc/keysign/throwIfBroadcastRejected'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
@@ -107,11 +108,13 @@ export const handleSignTx: ToolHandler = async (input, context) => {
     const signingOutput = decodeSigningOutput(chain, compiled)
     const txHash = await getTxHash({ chain, tx: signingOutput })
 
-    await broadcastTx({
-      chain,
-      tx: signingOutput,
-      lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
-    })
+    throwIfBroadcastRejected(
+      await broadcastTx({
+        chain,
+        tx: signingOutput,
+        lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
+      })
+    )
 
     if (conversationId && emitEvent) {
       void pollTxReceipt({ chain, txHash, conversationId, label, emitEvent })

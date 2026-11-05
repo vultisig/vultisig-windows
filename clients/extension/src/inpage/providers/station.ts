@@ -1,5 +1,6 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
+import { throwIfBroadcastRejected } from '@core/ui/mpc/keysign/throwIfBroadcastRejected'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
 import { getCosmosAccountInfo } from '@vultisig/core-chain/chains/cosmos/account/getCosmosAccountInfo'
@@ -615,7 +616,7 @@ export class Station {
       }),
     })
 
-    await broadcastTx({ chain, tx: signingOutput })
+    throwIfBroadcastRejected(await broadcastTx({ chain, tx: signingOutput }))
     const hash = await getTxHash({ chain, tx: signingOutput })
 
     return {

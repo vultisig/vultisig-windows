@@ -10,7 +10,7 @@ import { ReactNode } from 'react'
 import { BondChurn } from '../../../queries/bondRewards/churns'
 import { BondChain } from '../../../queries/bondRewards/config'
 import { useBondLastRewardQuery } from '../../../queries/bondRewards/useBondLastRewardQuery'
-import { noBondRewardValue } from './config'
+import { noRewardValue } from '../../rewards/config'
 
 type BondLastRewardAmountProps = {
   chain: BondChain
@@ -42,11 +42,11 @@ export const BondLastRewardAmount = ({
     <MatchQuery
       value={query}
       pending={() => <Skeleton width="64px" height="17px" />}
-      error={() => renderValue(noBondRewardValue)}
+      error={() => renderValue(noRewardValue)}
       success={amount =>
         renderValue(
           amount === null ? (
-            noBondRewardValue
+            noRewardValue
           ) : (
             <BalanceVisibilityAware>
               {formatAmount(fromChainAmount(amount, coin.decimals), {
