@@ -1,4 +1,5 @@
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { throwIfBroadcastRejected } from '@core/ui/mpc/keysign/throwIfBroadcastRejected'
 import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
 import { broadcastTx as broadcastChainTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
@@ -15,8 +16,10 @@ import { getTxHash } from '@vultisig/core-chain/tx/hash'
  * The dApp's `TxRaw` bytes are wrapped in the Cosmos signing-output shape the
  * SDK's broadcast/hash resolvers expect (`serialized.tx_bytes`), then handed to
  * the shared `broadcastTx` — which swallows duplicate-broadcast errors and
- * verifies inclusion by hash — and `getTxHash`. Broadcast rejection (e.g.
- * insufficient fee) propagates so the dApp sees the real failure.
+ * verifies inclusion by hash — and `getTxHash`. A chain rejection (e.g.
+ * insufficient fee) rejects the dApp's promise with the chain's reason; an
+ * unconfirmed transport failure still returns the hash, since the tx may have
+ * landed and the dApp tracks inclusion by it.
  */
 export const broadcastTx: BackgroundResolver<'broadcastTx'> = async ({
   input: { chain, txBytes },
@@ -27,7 +30,7 @@ export const broadcastTx: BackgroundResolver<'broadcastTx'> = async ({
 
   const txHash = await getTxHash({ chain, tx })
 
-  await broadcastChainTx({ chain, tx })
+  throwIfBroadcastRejected(await broadcastChainTx({ chain, tx }))
 
   return { txHash }
 }
