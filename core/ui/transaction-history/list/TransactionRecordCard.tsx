@@ -342,6 +342,7 @@ export const TransactionRecordCard = ({
     <div
       role="button"
       tabIndex={0}
+      data-testid="transaction-record-row"
       style={{ cursor: 'pointer' }}
       onClick={handleClick}
       onKeyDown={e => {

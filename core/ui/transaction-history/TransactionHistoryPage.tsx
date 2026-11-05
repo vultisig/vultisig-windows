@@ -1,3 +1,4 @@
+import { CoreView } from '@core/ui/navigation/CoreView'
 import { useTransactionRecordsQuery } from '@core/ui/storage/transactionHistory'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
 import { Tab, Tabs } from '@lib/ui/base/Tabs'
@@ -5,9 +6,11 @@ import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { ChildrenProp, IsActiveProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
@@ -18,6 +21,7 @@ import { TransactionHistoryList } from './list/TransactionHistoryList'
 import { useHealFailedTransactions } from './status/useHealFailedTransactions'
 import { useResolveSwapFailureReasons } from './status/useResolveSwapFailureReasons'
 import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
+import { isRecordOnChain } from './utils/isRecordOnChain'
 
 const transactionHistoryTabs = [
   'overview',
@@ -57,11 +61,15 @@ const FilteredTransactionList = ({
   return <TransactionHistoryList records={tabFiltered} />
 }
 
+type TransactionHistoryContentProps = {
+  records: TransactionRecord[]
+  chain?: Chain
+}
+
 const TransactionHistoryContent = ({
   records,
-}: {
-  records: TransactionRecord[]
-}) => {
+  chain,
+}: TransactionHistoryContentProps) => {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
   const [search, setSearch] = useState('')
@@ -76,8 +84,13 @@ const TransactionHistoryContent = ({
   // is open — the same page-mounted pattern as the healer above.
   useLimitOrderTracking()
 
+  // Scoped after the sweeps above, which keep covering the whole vault.
+  const chainRecords = chain
+    ? records.filter(record => isRecordOnChain({ record, chain }))
+    : records
+
   const searchFiltered = filterTransactionsBySearch({
-    records,
+    records: chainRecords,
     query: search,
   })
 
@@ -115,10 +128,17 @@ const TransactionHistoryContent = ({
   )
 }
 
+/**
+ * The current vault's transaction history. Opened from a chain's page, it
+ * lists only that chain's records, a swap included when either of its coins is
+ * on that chain; opened without a chain, it lists every record once.
+ */
 export const TransactionHistoryPage = () => {
   const goBack = useNavigateBack()
   const { t } = useTranslation()
   const query = useTransactionRecordsQuery()
+  const [viewState] =
+    useViewState<Extract<CoreView, { id: 'transactionHistory' }>['state']>()
 
   return (
     <ScreenLayout title={t('transaction_history')} onBack={goBack}>
@@ -128,7 +148,12 @@ export const TransactionHistoryPage = () => {
         error={() => (
           <Text color="danger">{t('failed_to_load_transactions')}</Text>
         )}
-        success={records => <TransactionHistoryContent records={records} />}
+        success={records => (
+          <TransactionHistoryContent
+            records={records}
+            chain={viewState?.chain}
+          />
+        )}
       />
     </ScreenLayout>
   )
