@@ -10,7 +10,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('primaryAccentFour')};
   font-size: 20px;
