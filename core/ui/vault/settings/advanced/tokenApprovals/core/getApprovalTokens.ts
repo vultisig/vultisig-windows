@@ -8,7 +8,7 @@ import { erc20Abi, getAddress } from 'viem'
 
 import { concurrentRequests, mapInBatches } from './mapInBatches'
 import { queryOneInchApi } from './queryOneInchApi'
-import { shortenEvmAddress } from './shortenEvmAddress'
+import { shortenAddress } from './shortenAddress'
 
 type OneInchCustomToken = {
   address: string
@@ -35,7 +35,7 @@ const readErc20Metadata = async ({ chain, id }: ReadErc20MetadataInput) => {
       attempt(() =>
         client.readContract({ address, abi: erc20Abi, functionName: 'symbol' })
       ),
-      shortenEvmAddress(address)
+      shortenAddress(address)
     ),
     client.readContract({ address, abi: erc20Abi, functionName: 'decimals' }),
   ])
