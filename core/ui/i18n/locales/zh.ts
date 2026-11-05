@@ -256,7 +256,8 @@ export const zh = {
   complete_fee_waive: '免手续费',
   discount_tiers: '{{ticker}} 折扣等级',
   discount_tiers_description: '持有 $VULT 即可解锁更低的交易手续费。',
-  discount_tiers_thorguard_boost: '持有 ThorGuard 可立即提升您的折扣等级。',
+  discount_tiers_thorguard_boost:
+    '持有 ThorGuard 可立即提升您的折扣等级，最高至铂金。',
   discovering_mediator: '正在查找中介服务，请稍候…',
   done: '完成',
   earn: '赚取收益',

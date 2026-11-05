@@ -275,7 +275,7 @@ export const es = {
   discount_tiers_description:
     'Ten $VULT para desbloquear comisiones de trading más bajas.',
   discount_tiers_thorguard_boost:
-    'Tener un ThorGuard aumenta al instante tu nivel de descuento.',
+    'Tener un ThorGuard aumenta al instante tu nivel de descuento, hasta Platino.',
   discovering_mediator: 'Descubriendo el servicio de mediación, espera...',
   done: 'Hecho',
   earn: 'Ganar',

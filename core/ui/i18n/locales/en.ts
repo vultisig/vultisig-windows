@@ -358,7 +358,7 @@ export const en = {
   discount_tiers: '{{ticker}} Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discount_tiers_thorguard_boost:
-    'Holding a ThorGuard instantly boosts your discount tier.',
+    'Holding a ThorGuard instantly boosts your discount tier, up to Platinum.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
   earn: 'Earn',

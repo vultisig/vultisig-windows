@@ -271,7 +271,7 @@ export const nl = {
   discount_tiers: '{{ticker}}-kortingsniveaus',
   discount_tiers_description: 'Houd $VULT aan voor lagere handelskosten.',
   discount_tiers_thorguard_boost:
-    'Met een ThorGuard stijgt je kortingsniveau direct.',
+    'Met een ThorGuard stijgt je kortingsniveau direct, tot en met Platina.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
   earn: 'Verdienen',

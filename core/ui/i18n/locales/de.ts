@@ -274,7 +274,7 @@ export const de = {
   discount_tiers_description:
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
   discount_tiers_thorguard_boost:
-    'Der Besitz eines ThorGuard erhöht sofort Ihre Rabattstufe.',
+    'Der Besitz eines ThorGuard erhöht sofort Ihre Rabattstufe, bis maximal Platin.',
   discovering_mediator: 'Mediatordienst wird ermittelt, bitte warten...',
   done: 'Erledigt',
   earn: 'Verdienen',

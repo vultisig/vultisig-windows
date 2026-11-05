@@ -266,7 +266,7 @@ export const ko = {
   discount_tiers: '{{ticker}} 할인 등급',
   discount_tiers_description: '$VULT를 보유하면 거래 수수료가 낮아집니다.',
   discount_tiers_thorguard_boost:
-    'ThorGuard를 보유하면 할인 등급이 즉시 상승합니다.',
+    'ThorGuard를 보유하면 할인 등급이 플래티넘까지 즉시 상승합니다.',
   discovering_mediator: '중재 서비스를 찾는 중입니다. 잠시 기다려 주세요...',
   done: '완료',
   earn: '수익',

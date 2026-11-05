@@ -273,7 +273,7 @@ export const hr = {
   discount_tiers_description:
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
   discount_tiers_thorguard_boost:
-    'Posjedovanje ThorGuarda odmah povećava vašu razinu popusta.',
+    'Posjedovanje ThorGuarda odmah povećava vašu razinu popusta, najviše do Platine.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
   done: 'Gotovo',
   earn: 'Zarada',

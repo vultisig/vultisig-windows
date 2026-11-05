@@ -271,7 +271,7 @@ export const ru = {
   discount_tiers_description:
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',
   discount_tiers_thorguard_boost:
-    'Владение ThorGuard мгновенно повышает ваш уровень скидки.',
+    'Владение ThorGuard мгновенно повышает ваш уровень скидки, вплоть до уровня Платина.',
   discovering_mediator: 'Поиск mediator-сервиса, пожалуйста подождите...',
   done: 'Готово',
   earn: 'Доход',
