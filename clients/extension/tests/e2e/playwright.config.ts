@@ -155,6 +155,7 @@ export default defineConfig({
         '**/long-vault-name-fit.spec.ts',
         '**/transaction-memo-fit.spec.ts',
         '**/chain-tokens-empty-state.spec.ts',
+        '**/chain-transaction-history.spec.ts',
       ],
       use: {
         launchOptions: {

@@ -9,7 +9,7 @@ import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-type BondRewardHistoryRowProps = {
+type RewardHistoryRowProps = {
   coin: Coin
   amount: ReactNode
   badge: string
@@ -33,13 +33,13 @@ const Badge = styled.div`
   border: 1px solid ${getColor('foregroundExtra')};
 `
 
-/** One reward in a bonded node's reward history, tagged with when it pays. */
-export const BondRewardHistoryRow = ({
+/** One reward in a reward history, tagged with when it pays. */
+export const RewardHistoryRow = ({
   coin,
   amount,
   badge,
   badgeColor,
-}: BondRewardHistoryRowProps) => (
+}: RewardHistoryRowProps) => (
   <HStack alignItems="center" gap={12} padding="12px 0">
     <CoinContainer>
       <CoinIcon coin={coin} />

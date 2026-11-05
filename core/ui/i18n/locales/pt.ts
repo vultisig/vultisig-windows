@@ -1008,7 +1008,7 @@ export const pt = {
   ultimate: 'Supremo',
   unlock_discount_tier: 'Desbloquear nível <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{percent}} na taxa de swap do Vultisig</b> em todos os swaps.',
   unlock_discount_tier_description_ultimate:
     'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa do Vultisig</b> em todos os swaps.',
   unlock_tier: 'Desbloquear nível',
@@ -2089,19 +2089,28 @@ export const pt = {
     'Método de assinatura não suportado. Use personal_sign ou eth_signTypedData_v4.',
   revoke: 'Revogar acesso',
   token_approvals: 'Aprovações de tokens',
+  token_approvals_delegate: 'Delegado',
+  token_approvals_partial:
+    'Não foi possível verificar totalmente as aprovações do Permit2 em: {{chains}}',
+  token_approvals_not_checked: 'Ainda não verificado: {{chains}}',
+  granted_approvals: 'Aprovações concedidas',
+  token_approvals_checking: 'Ainda verificando: {{chains}}',
+  token_approvals_failed: 'Não foi possível verificar: {{chains}}',
+  token_approvals_via: 'Aprovado via',
+  revoke_approval_permit2_explanation:
+    'Define o limite do Permit2 deste contrato como 0. Uma permissão que você assinou e que ninguém usou ainda pode restaurá-lo; para bloquear o Permit2 por completo, revogue também a aprovação deste token para o Permit2. Você paga uma taxa de rede.',
+  revoke_approval_spl_explanation:
+    'Remove o delegado desta conta de token, impedindo que ele mova este token do seu cofre. Você paga uma taxa de rede.',
+  revoke_approval_unreadable:
+    'Esta transação não corresponde à aprovação escolhida, por isso não pode ser assinada.',
+  token_approvals_empty_title: 'Não há aprovações ativas',
+  token_approvals_empty_description:
+    'Os contratos que você autorizar a gastar seus tokens nas redes deste cofre aparecerão aqui.',
   token_approvals_description:
     'Analise e revogue contratos que possam gastar seus tokens.',
   token_approvals_disconnect_note:
     'Desconectar um dApp não remove essas aprovações. Cada revogação é uma transação on-chain separada com uma taxa de rede.',
-  token_approvals_empty_description:
-    'Os contratos que você autorizar a gastar seus tokens nesta rede aparecerão aqui.',
-  token_approvals_empty_title: 'Não há aprovações ativas em {{chain}}',
-  token_approvals_not_supported: 'Não suportado',
-  token_approvals_switch_network: 'Escolha outra rede',
   token_approvals_unlimited_count: 'Ilimitado: {{count}}',
-  token_approvals_unsupported_description:
-    'As aprovações de tokens nesta rede ainda não podem ser exibidas. Escolha outra rede para analisá-las.',
-  token_approvals_unsupported_title: 'Não disponível em {{chain}}',
   revoke_approval: 'Revogar acesso',
   revoke_approval_explanation:
     'Define a permissão deste contrato como 0, impedindo que ele mova este token do seu cofre. Você paga uma taxa de rede.',

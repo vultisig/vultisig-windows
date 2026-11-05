@@ -10,7 +10,8 @@ import { fileURLToPath } from 'node:url'
 // 18.8 MB with every page in it, 14.1 MB after the view split, and 8.2 MB once
 // the SDK and the WalletCore glue moved behind loadMpcEngine / loadWalletCore
 // (the Vite build also rejects those two packages in the graph by module id);
-// raise the budget only for code that genuinely belongs on home.
+// raise the budget only for code that genuinely belongs on home. popup.html,
+// the dApp request window, shares the shell and so the budget.
 //
 // The Firefox build groups each package into one vendor chunk, which keeps
 // WalletCore on the static path through the core-mpc and core-chain chunks
@@ -24,46 +25,54 @@ const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const artifactDirectory = brand === 'station' ? 'dist-station' : 'dist'
 const distDir = path.resolve(currentDir, '..', artifactDirectory)
 
-const html = await readFile(path.resolve(distDir, 'index.html'), 'utf8')
-
-const entryGraphFiles = [
-  ...html.matchAll(
-    /<script[^>]*\ssrc="([^"]+)"|<link[^>]*rel="modulepreload"[^>]*\shref="([^"]+)"/g
-  ),
-].map(match => match[1] ?? match[2])
-
-if (entryGraphFiles.length === 0) {
-  throw new Error(
-    `No entry script found in ${path.join(distDir, 'index.html')}`
-  )
-}
-
 const formatMb = bytes => `${(bytes / 1024 / 1024).toFixed(2)} MB`
 
-const sizes = await Promise.all(
-  entryGraphFiles.map(async file => {
-    const { size } = await stat(path.resolve(distDir, file.replace(/^\//, '')))
+const checkEntryGraph = async htmlFile => {
+  const html = await readFile(path.resolve(distDir, htmlFile), 'utf8')
 
-    return { file, size }
-  })
-)
+  const entryGraphFiles = [
+    ...html.matchAll(
+      /<script[^>]*\ssrc="([^"]+)"|<link[^>]*rel="modulepreload"[^>]*\shref="([^"]+)"/g
+    ),
+  ].map(match => match[1] ?? match[2])
 
-const total = sizes.reduce((sum, { size }) => sum + size, 0)
+  if (entryGraphFiles.length === 0) {
+    throw new Error(`No entry script found in ${path.join(distDir, htmlFile)}`)
+  }
 
-console.log(
-  `Popup entry graph (${artifactDirectory}/index.html${isFirefoxBuild ? ', firefox' : ''}):`
-)
-for (const { file, size } of sizes) {
-  console.log(`  ${formatMb(size).padStart(10)}  ${file}`)
-}
-console.log(
-  `  ${formatMb(total).padStart(10)}  total (budget ${formatMb(maxEntryGraphBytes)})`
-)
+  const sizes = await Promise.all(
+    entryGraphFiles.map(async file => {
+      const { size } = await stat(path.resolve(distDir, file.replace(/^\//, '')))
 
-if (total > maxEntryGraphBytes) {
-  throw new Error(
-    `The popup entry graph is ${formatMb(total)}, over the ${formatMb(
-      maxEntryGraphBytes
-    )} budget. A page module is probably imported statically somewhere on the home path; keep pages behind the dynamic imports in the view registries.`
+      return { file, size }
+    })
   )
+
+  const total = sizes.reduce((sum, { size }) => sum + size, 0)
+
+  console.log(
+    `Entry graph (${artifactDirectory}/${htmlFile}${isFirefoxBuild ? ', firefox' : ''}):`
+  )
+  for (const { file, size } of sizes) {
+    console.log(`  ${formatMb(size).padStart(10)}  ${file}`)
+  }
+  console.log(
+    `  ${formatMb(total).padStart(10)}  total (budget ${formatMb(maxEntryGraphBytes)})`
+  )
+
+  return total > maxEntryGraphBytes
+    ? `The ${htmlFile} entry graph is ${formatMb(total)}, over the ${formatMb(
+        maxEntryGraphBytes
+      )} budget. A page module is probably imported statically on the first-paint path; keep pages and popup screens behind the dynamic imports in their registries.`
+    : null
+}
+
+const failures = []
+for (const htmlFile of ['index.html', 'popup.html']) {
+  const failure = await checkEntryGraph(htmlFile)
+  if (failure) failures.push(failure)
+}
+
+if (failures.length > 0) {
+  throw new Error(failures.join('\n'))
 }
