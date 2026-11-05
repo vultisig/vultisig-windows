@@ -278,6 +278,7 @@ export const nl = {
   done: 'Klaar',
   earn: 'Verdienen',
   edit_address: 'Adres bewerken',
+  edit_address_book: 'Adresboek bewerken',
   edit_friends_referral: 'Referral van vriend bewerken',
   edit_referral: 'Referral bewerken',
   remove_friends_referral: 'Verwijder verwijzing',
@@ -458,6 +459,7 @@ export const nl = {
   go_to_vault: 'Ga naar kluis',
   go_to_wallet: 'Ga naar de portemonnee',
   home_display: 'Startweergave',
+  home_display_balance_caption: 'Saldoweergave',
   home_display_separate_description:
     'Je Wallet-tabblad toont alleen je walletsaldo en je DeFi-tabblad toont je DeFi-saldo.',
   home_display_separate_title: 'Wallet en DeFi apart',
@@ -1044,7 +1046,7 @@ export const nl = {
   vault: 'Kluis',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Applicatie is up-to-date.',
-    downloadButton: 'Nu updaten',
+    downloadButton: 'App bijwerken',
     errorFetchingLatestVersion:
       'Fout bij ophalen van laatste versie: {{error}}',
     fetchingLatestVersion: 'Laatste versie ophalen...',

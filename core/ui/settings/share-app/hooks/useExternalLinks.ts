@@ -1,8 +1,8 @@
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
 import { RedditIcon } from '@lib/ui/icons/RedditIcon'
-import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
+import { XTileIcon } from '@lib/ui/icons/XTileIcon'
 import { desktopDownloadUrl, extensionDownloadUrl } from '@vultisig/core-config'
 
 import { useCore } from '../../../state/core'
@@ -31,7 +31,7 @@ export const useExternalLinks = () => {
       url: `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`,
     },
     {
-      icon: TwitterIcon,
+      icon: XTileIcon,
       url: `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`,
     },
   ]

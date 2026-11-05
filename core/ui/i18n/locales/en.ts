@@ -365,6 +365,7 @@ export const en = {
   done: 'Done',
   earn: 'Earn',
   edit_address: 'Edit Address',
+  edit_address_book: 'Edit Address Book',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
   remove_friends_referral: 'Remove Referral',
@@ -552,6 +553,7 @@ export const en = {
   go_to_vault: 'Go to vault',
   go_to_wallet: 'Go to wallet',
   home_display: 'Home display',
+  home_display_balance_caption: 'Balance display',
   home_display_separate_description:
     'Your Wallet tab shows your wallet balance only, and your DeFi tab shows your DeFi balance.',
   home_display_separate_title: 'Wallet & DeFi separate',
@@ -1650,7 +1652,7 @@ export const en = {
   vault: 'Vault',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Application is up to date.',
-    downloadButton: 'Update now',
+    downloadButton: 'Update App',
     errorFetchingLatestVersion: 'Error fetching latest version: {{error}}',
     fetchingLatestVersion: 'Fetching latest version...',
     title: 'Check Update',

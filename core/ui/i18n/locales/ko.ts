@@ -273,6 +273,7 @@ export const ko = {
   done: '완료',
   earn: '수익',
   edit_address: '주소 수정',
+  edit_address_book: '주소록 편집',
   edit_friends_referral: '친구 추천 코드 수정',
   edit_referral: '추천 코드 수정',
   remove_friends_referral: '추천 코드 제거',
@@ -452,6 +453,7 @@ export const ko = {
   go_to_vault: '볼트로 이동',
   go_to_wallet: '지갑으로 이동',
   home_display: '홈 화면 표시',
+  home_display_balance_caption: '잔액 표시',
   home_display_separate_description:
     '지갑 탭에는 지갑 잔액만, DeFi 탭에는 DeFi 잔액만 표시됩니다.',
   home_display_separate_title: '지갑과 DeFi 분리',
@@ -1053,7 +1055,7 @@ export const ko = {
   vault: '볼트',
   vaultCheckUpdatePage: {
     applicationUpToDate: '애플리케이션이 최신 버전입니다.',
-    downloadButton: '지금 업데이트',
+    downloadButton: '앱 업데이트',
     errorFetchingLatestVersion: '최신 버전을 가져오는 중 오류 발생: {{error}}',
     fetchingLatestVersion: '최신 버전을 가져오는 중...',
     title: '업데이트 확인',

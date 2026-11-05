@@ -282,6 +282,7 @@ export const es = {
   done: 'Hecho',
   earn: 'Ganar',
   edit_address: 'Editar dirección',
+  edit_address_book: 'Editar libreta de direcciones',
   edit_friends_referral: 'Editar código de referido de un amigo',
   edit_referral: 'Editar código de referido',
   remove_friends_referral: 'Eliminar referido',
@@ -463,6 +464,7 @@ export const es = {
   go_to_vault: 'Ir a la bóveda',
   go_to_wallet: 'Ir a la billetera',
   home_display: 'Pantalla de inicio',
+  home_display_balance_caption: 'Visualización del saldo',
   home_display_separate_description:
     'Tu pestaña Billetera muestra solo el saldo de tu billetera y tu pestaña DeFi muestra tu saldo DeFi.',
   home_display_separate_title: 'Billetera y DeFi por separado',
@@ -1055,7 +1057,7 @@ export const es = {
   vault: 'Bóveda',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'La aplicación está actualizada.',
-    downloadButton: 'Actualizar ahora',
+    downloadButton: 'Actualizar app',
     errorFetchingLatestVersion: 'Error al obtener la última versión: {{error}}',
     fetchingLatestVersion: 'Obteniendo la última versión...',
     title: 'Comprobar actualización',

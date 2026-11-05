@@ -79,7 +79,6 @@ import { FolderUploadIcon } from './FolderUploadIcon'
 import { FrameIcon } from './FrameIcon'
 import { FuelIcon } from './FuelIcon'
 import { GlobusIcon } from './GlobusIcon'
-import { GripVerticalIcon } from './GripVerticalIcon'
 import { GroupOneIcon } from './GroupOneIcon'
 import { IconFileEdit } from './IconFileEdit'
 import { InfoCircleIcon } from './InfoCircleIcon'
@@ -152,7 +151,6 @@ import { TransactionReceiveIcon } from './TransactionReceiveIcon'
 import { TransactionSendIcon } from './TransactionSendIcon'
 import { TransactionSwapIcon } from './TransactionSwapIcon'
 import { TrashIcon } from './TrashIcon'
-import { TrashIcon2 } from './TrashIcon2'
 import { TriangleAlertIcon } from './TriangleAlertIcon'
 import { TronBandwidthIcon } from './TronBandwidthIcon'
 import { TronEnergyIcon } from './TronEnergyIcon'
@@ -249,7 +247,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   FrameIcon,
   FuelIcon,
   GlobusIcon,
-  GripVerticalIcon,
   GroupOneIcon,
   IconFileEdit,
   UserSparkleIcon,
@@ -308,7 +305,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   TransactionSendIcon,
   TransactionSwapIcon,
   TrashIcon,
-  TrashIcon2,
   TriangleAlertIcon,
   TronBandwidthIcon,
   TronEnergyIcon,

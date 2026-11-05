@@ -9,6 +9,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useContext } from 'react'
 import styled from 'styled-components'
 
+import { SettingsBaselineText } from './SettingsBaselineText'
 import { SettingsItemTitleVariantContext } from './settingsItemTitleVariant'
 
 type SettingsItemTone = 'regular' | 'danger'
@@ -76,14 +77,14 @@ export const SettingsItem = ({
       }
       title={
         <HStack alignItems="center" gap={4}>
-          <BaselineText
+          <SettingsBaselineText
             as="span"
             color={isDanger ? 'danger' : 'regular'}
             variant={titleVariant}
             cropped
           >
             {title}
-          </BaselineText>
+          </SettingsBaselineText>
           {titleAccessory}
         </HStack>
       }
@@ -103,9 +104,14 @@ export const SettingsItem = ({
         (value || trailing) && (
           <HStack alignItems="center" gap={12}>
             {value && (
-              <BaselineText as="span" color="regular" variant="subtitle" nowrap>
+              <SettingsBaselineText
+                as="span"
+                color="regular"
+                variant="subtitle"
+                nowrap
+              >
                 {value}
-              </BaselineText>
+              </SettingsBaselineText>
             )}
             {trailing}
           </HStack>
@@ -139,10 +145,4 @@ const Description = styled(Text)<{ $isDanger: boolean }>`
 
 const IconSlot = styled(IconWrapper)<{ $width: number }>`
   width: ${({ $width }) => $width}px;
-`
-
-// Browsers round Brockmann's ascent down, which draws 13px and 15px text 1px above Figma.
-const BaselineText = styled(Text)`
-  position: relative;
-  top: 1px;
 `

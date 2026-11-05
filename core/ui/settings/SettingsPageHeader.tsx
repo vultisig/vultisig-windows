@@ -12,12 +12,14 @@ const backIconSize = 20
 type SettingsPageHeaderProps = {
   title: ReactNode
   onBack?: () => void
+  secondaryControls?: ReactNode
 }
 
 /** The compact 56px header of the settings list screens. */
 export const SettingsPageHeader = ({
   title,
   onBack,
+  secondaryControls,
 }: SettingsPageHeaderProps) => {
   const { goBack } = useCore()
   const { iconStyle } = useTheme()
@@ -38,6 +40,7 @@ export const SettingsPageHeader = ({
           )}
         </BackButton>
       }
+      secondaryControls={secondaryControls}
       title={
         <Title
           as="span"

@@ -263,6 +263,7 @@ export const zh = {
   done: '完成',
   earn: '赚取收益',
   edit_address: '编辑地址',
+  edit_address_book: '编辑地址簿',
   edit_friends_referral: '编辑好友推荐码',
   edit_referral: '编辑推荐码',
   remove_friends_referral: '移除推荐码',
@@ -430,6 +431,7 @@ export const zh = {
   go_to_vault: '前往保险库',
   go_to_wallet: '前往钱包',
   home_display: '首页显示',
+  home_display_balance_caption: '余额显示',
   home_display_separate_description:
     '钱包标签页仅显示您的钱包余额，DeFi 标签页显示您的 DeFi 余额。',
   home_display_separate_title: '钱包与 DeFi 分开显示',
@@ -979,7 +981,7 @@ export const zh = {
   vault: '保险库',
   vaultCheckUpdatePage: {
     applicationUpToDate: '应用已是最新版本。',
-    downloadButton: '立即更新',
+    downloadButton: '更新应用',
     errorFetchingLatestVersion: '获取最新版本时出错：{{error}}',
     fetchingLatestVersion: '正在获取最新版本…',
     title: '检查更新',

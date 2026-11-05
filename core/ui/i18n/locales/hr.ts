@@ -280,6 +280,7 @@ export const hr = {
   done: 'Gotovo',
   earn: 'Zarada',
   edit_address: 'Uredi adresu',
+  edit_address_book: 'Uredi adresar',
   edit_friends_referral: 'Uredi preporuku prijatelja',
   edit_referral: 'Uredi preporuku',
   remove_friends_referral: 'Ukloni preporuku',
@@ -461,6 +462,7 @@ export const hr = {
   go_to_vault: 'Idi u trezor',
   go_to_wallet: 'Idi na novčanik',
   home_display: 'Početni prikaz',
+  home_display_balance_caption: 'Prikaz stanja',
   home_display_separate_description:
     'Kartica Novčanik prikazuje samo stanje novčanika, a kartica DeFi prikazuje vaše DeFi stanje.',
   home_display_separate_title: 'Novčanik i DeFi odvojeno',
@@ -1056,7 +1058,7 @@ export const hr = {
   vault: 'Trezor',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Aplikacija je ažurna.',
-    downloadButton: 'Ažuriraj sada',
+    downloadButton: 'Ažuriraj aplikaciju',
     errorFetchingLatestVersion:
       'Greška pri dohvaćanju najnovije verzije: {{error}}',
     fetchingLatestVersion: 'Dohvaćanje najnovije verzije...',
