@@ -44,6 +44,17 @@ describe('getTronContractCall', () => {
         })
       )
     ).toBeUndefined()
+    expect(
+      getTronContractCall(
+        withContractPayload({
+          case: 'tronTriggerSmartContractPayload',
+          value: create(TronTriggerSmartContractPayloadSchema, {
+            contractAddress: usdt,
+            data: '0x',
+          }),
+        })
+      )
+    ).toBeUndefined()
   })
 
   it('returns nothing for a payload that is not a contract call', () => {
