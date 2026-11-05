@@ -1929,18 +1929,24 @@ export const zh = {
   custom_message_unsupported_method:
     '不支持的签名方法。请使用 personal_sign 或 eth_signTypedData_v4。',
   revoke: '撤销访问权限',
-  token_approvals: '代币授权',
+  token_approvals_delegate: '被授权方',
+  token_approvals_partial: '无法完整检查以下网络上的 Permit2 授权：{{chains}}',
+  token_approvals_not_checked: '尚未检查：{{chains}}',
+  granted_approvals: '已授予的授权',
+  token_approvals_checking: '仍在检查：{{chains}}',
+  token_approvals_failed: '无法检查：{{chains}}',
+  token_approvals_via: '授权途径',
+  revoke_approval_permit2_explanation:
+    '将此合约的 Permit2 额度设为 0。您已签名但尚未被使用的许可仍可恢复该额度，因此如需彻底切断 Permit2，请同时撤销此代币对 Permit2 的授权。您需要支付网络费。',
+  revoke_approval_spl_explanation:
+    '移除此代币账户的被授权方，使其无法再从您的保险库中转移此代币。您需要支付网络费。',
+  revoke_approval_unreadable: '此交易与您选择的授权不匹配，因此无法签名。',
+  token_approvals_empty_title: '没有有效授权',
+  token_approvals_empty_description:
+    '您在此保险库各链上授权动用您代币的合约将显示在这里。',
   token_approvals_disconnect_note:
     '断开 dApp 连接不会移除这些授权。每次撤销都是一笔单独的链上交易，需支付网络费。',
-  token_approvals_empty_description:
-    '您在此网络上授权动用您代币的合约将显示在这里。',
-  token_approvals_empty_title: '{{chain}}上没有有效授权',
-  token_approvals_not_supported: '不支持',
-  token_approvals_switch_network: '选择其他网络',
   token_approvals_unlimited_count: '无限额：{{count}}',
-  token_approvals_unsupported_description:
-    '暂无法显示此网络上的代币授权。请选择其他网络查看。',
-  token_approvals_unsupported_title: '{{chain}}上不可用',
   revoke_approval: '撤销访问权限',
   revoke_approval_explanation:
     '将此合约的授权额度设为 0，使其无法再从您的保险库中转移此代币。您需要支付网络费。',

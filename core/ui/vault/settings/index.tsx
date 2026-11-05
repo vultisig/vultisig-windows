@@ -18,6 +18,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
 
+import { PrefetchTokenApprovals } from './advanced/tokenApprovals/queries/PrefetchTokenApprovals'
 import { VaultSettingsBackup } from './backup'
 import { VaultSettingsContent } from './VaultSettingsContent'
 
@@ -40,6 +41,7 @@ export const VaultSettingsPage = () => {
   return (
     <VStack fullHeight>
       <SettingsPageHeader title={t('vault_settings')} />
+      <PrefetchTokenApprovals />
       <VaultSettingsContent gap={14} flexGrow scrollable>
         <SettingsSection title={t('vault_management')}>
           <SettingsItem
