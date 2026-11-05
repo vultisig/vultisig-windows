@@ -2090,19 +2090,28 @@ export const it = {
     'Metodo di firma non supportato. Utilizzare personal_sign o eth_signTypedData_v4.',
   revoke: "Revoca l'accesso",
   token_approvals: 'Approvazioni dei token',
+  token_approvals_delegate: 'Delegato',
+  token_approvals_partial:
+    'Non è stato possibile verificare del tutto le approvazioni Permit2 su: {{chains}}',
+  token_approvals_not_checked: 'Non ancora verificato: {{chains}}',
+  granted_approvals: 'Approvazioni concesse',
+  token_approvals_checking: 'Verifica ancora in corso: {{chains}}',
+  token_approvals_failed: 'Impossibile verificare: {{chains}}',
+  token_approvals_via: 'Approvato tramite',
+  revoke_approval_permit2_explanation:
+    "Imposta a 0 il limite Permit2 di questo contratto. Un permesso che hai firmato e che nessuno ha ancora usato può ripristinarlo: per bloccare del tutto Permit2, revoca anche l'approvazione di questo token a Permit2. Dovrai pagare una commissione di rete.",
+  revoke_approval_spl_explanation:
+    'Rimuove il delegato da questo account token, impedendogli di spostare il token dal tuo vault. Dovrai pagare una commissione di rete.',
+  revoke_approval_unreadable:
+    "Questa transazione non corrisponde all'approvazione scelta, quindi non può essere firmata.",
+  token_approvals_empty_title: 'Nessuna approvazione attiva',
+  token_approvals_empty_description:
+    "I contratti a cui autorizzi l'utilizzo dei tuoi token sulle chain di questo vault verranno visualizzati qui.",
   token_approvals_description:
     'Esamina e revoca i contratti che possono spendere i tuoi token',
   token_approvals_disconnect_note:
     'La disconnessione di un dApp non rimuove queste approvazioni. Ogni revoca è una transazione on-chain separata con una commissione di rete.',
-  token_approvals_empty_description:
-    "I contratti a cui autorizzi l'utilizzo dei tuoi token su questa rete verranno visualizzati qui.",
-  token_approvals_empty_title: 'Nessuna approvazione attiva su {{chain}}',
-  token_approvals_not_supported: 'Non supportato',
-  token_approvals_switch_network: "Scegli un'altra rete",
   token_approvals_unlimited_count: 'Illimitato: {{count}}',
-  token_approvals_unsupported_description:
-    "Le approvazioni dei token su questa rete non sono ancora visibili. Scegli un'altra rete per visualizzarle.",
-  token_approvals_unsupported_title: 'Non disponibile su {{chain}}',
   revoke_approval: "Revoca l'accesso",
   revoke_approval_explanation:
     'Imposta a 0 la quota consentita per questo contratto, impedendogli di spostare il token dal tuo vault. Dovrai pagare una commissione di rete.',

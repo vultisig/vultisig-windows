@@ -973,6 +973,12 @@ export const en = {
   revoke_approval_explanation:
     "Sets this contract's allowance to 0, so it can no longer move this token from your vault. You pay a network fee.",
   revoke_approval_new_allowance: 'New spending limit',
+  revoke_approval_permit2_explanation:
+    "Sets this contract's Permit2 limit to 0. A permit you signed that nobody has used yet can still restore it, so to cut off Permit2 completely, also revoke this token's approval to Permit2. You pay a network fee.",
+  revoke_approval_spl_explanation:
+    'Removes the delegate from this token account, so it can no longer move this token from your vault. You pay a network fee.',
+  revoke_approval_unreadable:
+    'This transaction does not match the approval you chose, so it cannot be signed.',
   ripple_transaction_summary: 'Transaction summary',
   ripple_undecoded_notice:
     'This transaction could not be decoded. Review the raw details below before approving.',
@@ -1416,21 +1422,24 @@ export const en = {
   today: 'Today',
   token: 'Token',
   token_approval: 'Token Approval',
+  granted_approvals: 'Granted Approvals',
   token_approvals: 'Token Approvals',
+  token_approvals_delegate: 'Delegate',
+  token_approvals_partial:
+    'Permit2 approvals could not be fully checked on: {{chains}}',
+  token_approvals_not_checked: 'Not checked yet: {{chains}}',
+  token_approvals_checking: 'Still checking: {{chains}}',
   token_approvals_count: 'Approvals: {{count}}',
   token_approvals_description:
     'Review and revoke contracts that can spend your tokens',
   token_approvals_disconnect_note:
     'Disconnecting a dApp doesn’t remove these approvals. Each revoke is a separate on-chain transaction with a network fee.',
   token_approvals_empty_description:
-    'Contracts you allow to spend your tokens on this network will show up here.',
-  token_approvals_empty_title: 'No active approvals on {{chain}}',
-  token_approvals_not_supported: 'Not supported',
-  token_approvals_switch_network: 'Choose another network',
+    'Contracts you allow to spend your tokens on this vault’s chains will show up here.',
+  token_approvals_empty_title: 'No active approvals',
+  token_approvals_failed: 'Could not check: {{chains}}',
   token_approvals_unlimited_count: 'Unlimited: {{count}}',
-  token_approvals_unsupported_description:
-    'Token approvals on this network can’t be shown yet. Choose another network to review them.',
-  token_approvals_unsupported_title: 'Not available on {{chain}}',
+  token_approvals_via: 'Approved through',
   token_info: 'Token Info',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
