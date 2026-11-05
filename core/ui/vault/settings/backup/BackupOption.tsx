@@ -10,7 +10,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { currentProductBrand } from '../../../product/brand'
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('primaryAccentFour')};
@@ -28,9 +27,7 @@ const Container = styled(UnstyledButton)`
     alignItems: 'center',
   })}
   ${borderRadius.xl};
-  background: ${currentProductBrand === 'vultisig'
-    ? '#0d2240'
-    : getColor('foregroundDark')};
+  background: ${getColor('settingsRaisedSurface')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 15px;
   text-align: left;

@@ -40,6 +40,13 @@ export type ThemeColors = {
   primaryAccentTwo: HSLA
   primaryAccentFour: HSLA
 
+  settingsFieldBackground: HSLA
+  settingsReadOnlyBackground: HSLA
+  settingsOptionSelected: HSLA
+  settingsRaisedSurface: HSLA
+  settingsBadgeBackground: HSLA
+  settingsClearIcon: HSLA
+
   transparent: HSLA
   white: HSLA
 
