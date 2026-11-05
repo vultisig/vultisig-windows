@@ -6,6 +6,7 @@ import {
 import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
 import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
@@ -219,4 +220,9 @@ export const VaultFieldWrapper = styled(HStack)`
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
+`
+
+/** A 20px icon inside a referral field. */
+export const ReferralFieldIcon = styled(IconWrapper)`
+  font-size: 20px;
 `
