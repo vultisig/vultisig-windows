@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 
+import { unknownTxHash } from '../unknownTxHash'
+
 type UseTxStatusQueryInput = {
   chain: Chain
   hash: string
@@ -20,7 +22,7 @@ type UseTxStatusQueryInput = {
 /**
  * Polls a broadcast transaction's on-chain status every few seconds and stops
  * once it reaches a terminal state. `not_found` keeps polling: the node may
- * simply not have indexed the hash yet.
+ * simply not have indexed the hash yet. An `unknownTxHash` is never queried.
  */
 export const useTxStatusQuery = ({
   chain,
@@ -29,6 +31,7 @@ export const useTxStatusQuery = ({
   senderAccountId,
 }: UseTxStatusQueryInput) => {
   return useQuery({
+    enabled: hash !== unknownTxHash,
     queryKey: ['txStatus', chain, hash, lastValidBlockHeight, senderAccountId],
     queryFn: () =>
       getTxStatus({ chain, hash, lastValidBlockHeight, senderAccountId }),
