@@ -55,7 +55,7 @@ export const darkTheme: DefaultTheme = {
     buttonSuccessHover: new HSLA(165, 85.44, 40.39), // #0fbf93
     buttonTextDisabled: new HSLA(215.68, 14.98, 51.57), // #718096
     primaryAccentTwo: new HSLA(224, 96, 40),
-    primaryAccentFour: new HSLA(224, 96, 64),
+    primaryAccentFour: new HSLA(223.76, 97.77, 63.73), // #4879fd
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),
