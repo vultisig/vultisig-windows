@@ -60,6 +60,7 @@ import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { parseAminoTimeoutHeight } from './cosmos/aminoTimeoutHeight'
 import { injectKeplrFeeIfMissing } from './cosmos/injectKeplrFeeIfMissing'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
 import { normalizeKeplrBytes } from './cosmos/normalizeKeplrBytes'
@@ -103,6 +104,7 @@ const aminoHandler = (
     aminoPayload: {
       msgs: signDoc.msgs as CosmosMsg[],
       fee: fee as CosmosFee,
+      timeoutHeight: parseAminoTimeoutHeight(signDoc.timeout_height),
     },
     skipBroadcast: true,
   } as TransactionDetails
@@ -832,6 +834,9 @@ export class XDEFIKeplrProvider extends Keplr {
         msgs: stdTx.msg,
         fee: stdTx.fee,
         memo: stdTx.memo,
+        ...(signDoc.timeout_height === undefined
+          ? {}
+          : { timeout_height: signDoc.timeout_height }),
       }
 
       return {
