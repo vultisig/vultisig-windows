@@ -55,7 +55,17 @@ export const darkTheme: DefaultTheme = {
     buttonSuccessHover: new HSLA(165, 85.44, 40.39), // #0fbf93
     buttonTextDisabled: new HSLA(215.68, 14.98, 51.57), // #718096
     primaryAccentTwo: new HSLA(224, 96, 40),
-    primaryAccentFour: new HSLA(224, 96, 64),
+    primaryAccentFour: new HSLA(223.76, 97.77, 63.73), // #4879fd
+
+    // Figma Input fields/background
+    settingsFieldBackground: new HSLA(216, 83.3, 11.8),
+    // Figma Backgrounds/disabled
+    settingsReadOnlyBackground: new HSLA(220.85, 68.12, 13.53, 0.5), // #0b1a3a at 50%
+    // Figma Backgrounds/surface-1-2
+    settingsOptionSelected: new HSLA(215.3, 66.2, 15.1),
+    settingsRaisedSurface: new HSLA(215.29, 66.23, 15.1), // #0d2240
+    settingsBadgeBackground: new HSLA(216.59, 87.23, 9.22), // #03132c
+    settingsClearIcon: new HSLA(208.5, 23.81, 67.06), // #97acbf
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),

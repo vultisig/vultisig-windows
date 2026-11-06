@@ -12,7 +12,6 @@ export const nl = {
   add_memo: 'MEMO toevoegen',
   add_new_vault: 'Nieuwe kluis toevoegen',
   add_referral: 'Referral toevoegen',
-  add_referral_code: 'Referralcode opslaan',
   add_to_address_book: 'Toevoegen aan adresboek',
   add_suggested_token: 'Voorgestelde token toevoegen',
   bech32_prefix: 'Adresvoorvoegsel',
@@ -45,8 +44,6 @@ export const nl = {
   amount_required: 'Bedrag is verplicht',
   amount_to_unstake: 'Bedrag om te unstaken',
   app_lock_passcode: 'App-vergrendelingspincode',
-  app_lock_passcode_description:
-    'Voeg een extra beveiligingslaag toe door een pincode te vereisen om de app te ontgrendelen.',
   app_locked: 'App vergrendeld',
   app_locked_description: 'Voer je pincode in om door te gaan.',
   app_permissions: 'App-machtigingen',
@@ -89,6 +86,7 @@ export const nl = {
   backup_share_sent: 'Back-up verzonden!',
   backup_share_sent_description:
     'We hebben je back-up zojuist naar je e-mail gestuurd. Zie je hem niet? Kijk dan in je spammap.',
+  backup_vault_share: 'Back-up van kluisdeel',
   backup_with_password: 'Back-up met wachtwoord',
   backup_without_password: 'Back-up zonder wachtwoord',
   balance: 'Saldo',
@@ -96,6 +94,8 @@ export const nl = {
   balance_changes: 'Balanswijzigingen',
   base_fee: 'Basiskosten',
   blockaid_security_scan: 'Blockaid-beveiligingsscan',
+  blockaid_security_scan_description:
+    'Controleer transacties voordat je ondertekent',
   blockaid_simulation_failed: 'Transactiesimulatie mislukt',
   blockaid_simulation_failed_description:
     'Kan deze transactie niet simuleren. Je kunt toch doorgaan, maar we raden aan de transactiedetails zorgvuldig te controleren.',
@@ -219,7 +219,6 @@ export const nl = {
   copy_address: 'Adres kopiëren',
   create_new_vault: 'Nieuwe kluis aanmaken',
   create_vault: 'Maak een kluis aan',
-  create_referral_form: 'Referral aanmaken',
   create_referral_title: 'Referral aanmaken',
   create_referral: 'Referral aanmaken',
   create_referral_desc:
@@ -253,7 +252,7 @@ export const nl = {
   },
   delete: 'Verwijderen',
   delete_folder: 'Map verwijderen',
-  delete_vault_description: 'Verwijder je kluis permanent',
+  delete_vault_description: 'Verwijder je kluisdeel permanent',
   deposit: 'Functie',
   description: 'Beschrijving',
   destination_address: 'Bestemmingsadres',
@@ -271,10 +270,13 @@ export const nl = {
   complete_fee_waive: 'Geen kosten',
   discount_tiers: '{{ticker}}-kortingsniveaus',
   discount_tiers_description: 'Houd $VULT aan voor lagere handelskosten.',
+  discount_tiers_thorguard_boost:
+    'Met een ThorGuard stijgt je kortingsniveau direct, tot en met Platina.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
   earn: 'Verdienen',
   edit_address: 'Adres bewerken',
+  edit_address_book: 'Adresboek bewerken',
   edit_friends_referral: 'Referral van vriend bewerken',
   edit_referral: 'Referral bewerken',
   remove_friends_referral: 'Verwijder verwijzing',
@@ -289,10 +291,9 @@ export const nl = {
   enable_tss_batching: 'TSS-batchverwerking inschakelen',
   post_quantum_keygen: 'Post-kwantum sleutelgeneratie',
   post_quantum_keygen_description:
-    'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
+    'Genereer een MLDSA-44-sleutel voor quantumbestendigheid',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
-  enter: 'Binnenkomen',
   enter_address: 'Adres invoeren',
   enter_address_here: 'Voer hier een adres in',
   enter_amount: 'Bedrag invoeren',
@@ -315,6 +316,8 @@ export const nl = {
   est_network_fee: 'Geschatte netwerkkosten',
   expand_view: 'Weergave uitvouwen',
   open_as_side_panel: 'Openen als zijpaneel',
+  open_as_side_panel_description:
+    'Houd {{productName}} open naast je tabbladen',
   opened_in_new_tab: 'Geopend in een nieuw tabblad',
   push_notifications: 'Pushmeldingen',
   push_notifications_description:
@@ -453,6 +456,7 @@ export const nl = {
   go_to_vault: 'Ga naar kluis',
   go_to_wallet: 'Ga naar de portemonnee',
   home_display: 'Startweergave',
+  home_display_balance_caption: 'Saldoweergave',
   home_display_separate_description:
     'Je Wallet-tabblad toont alleen je walletsaldo en je DeFi-tabblad toont je DeFi-saldo.',
   home_display_separate_title: 'Wallet en DeFi apart',
@@ -564,6 +568,9 @@ export const nl = {
   loading: 'Laden...',
   localMode: 'Je bent in lokale modus',
   lock_time: 'Vergrendeltijd',
+  lock_time_description:
+    'Stel in na hoeveel tijd de app automatisch vergrendelt',
+  lock_time_setting: 'Vergrendeltijd',
   lock_vultisig_automatically_after:
     '{{productName}} automatisch vergrendelen na...',
   looking_for_server: 'Zoeken naar FastVaultServer...',
@@ -584,6 +591,8 @@ export const nl = {
   message_to_sign: 'Te ondertekenen bericht',
   method: 'Methode',
   method_required: 'Ondertekenmethode is verplicht',
+  migrate: 'Migreren',
+  migrate_vault_description: 'GG20-kluis migreren naar DKLS',
   mint: 'Mint',
   minute_one: '{{count}} minuut',
   minute_other: '{{count}} minuten',
@@ -687,12 +696,15 @@ export const nl = {
   to_start_plugin_installation: 'Om de plugininstallatie te starten',
   portfolio_balance: 'Portfoliosaldo',
   positions: 'Posities',
+  post_quantum_key: 'Post-quantum sleutel',
   powered_by: 'Aangedreven door <provider></provider>',
   price: 'Prijs',
   price_impact_average: 'Gemiddeld',
   price_impact_good: 'Goed',
   price_impact_high: 'Hoge impact',
   prioritize_vultisig: '{{productName}} prioriteren',
+  prioritize_vultisig_description:
+    'Toon {{productName}} eerst wanneer je swapt',
   priority: 'Prioriteit',
   priority_fee: 'Prioriteitskosten',
   privacy_policy: 'Privacybeleid',
@@ -795,7 +807,6 @@ export const nl = {
   save_backup_n_of_n_to_cloud:
     'Sla back-up {{current}} van {{total}} op in de cloud',
   save_backup_to_cloud: 'Sla de back-up op in de cloud.',
-  save_code: 'Code opslaan',
   save_swap_fees_with_referral:
     'Bespaar <blue>10%</blue> op swaps - Voeg een referral toe',
   saving_vault: 'Kluis opslaan...',
@@ -832,6 +843,7 @@ export const nl = {
   secure_notifications_description:
     'Ontvang meldingen wanneer een ander apparaat wil deelnemen aan je kluis of wanneer je handtekening nodig is.',
   security: 'Beveiliging',
+  security_description: 'Beheer je pincode',
   select: 'Selecteren',
   select_asset: 'Asset selecteren',
   select_backup_file: 'Importeer je kluisdeel',
@@ -874,6 +886,8 @@ export const nl = {
   session_init_failed: 'Sessie initialiseren mislukt',
   set_expiration: 'Vervaldatum instellen (in jaren)',
   set_passcode: 'Pincode instellen',
+  set_passcode_description:
+    'Kies een pincode van 6 cijfers. Vermijd herhaalde of opeenvolgende cijfers.',
   settings: 'Instellingen',
   share: 'Delen',
   share_app: 'De app delen',
@@ -989,7 +1003,7 @@ export const nl = {
   try_again: 'Opnieuw proberen',
   turn_your_vault_into_rewards_machine:
     'Maak van je kluis een rewards-machine. Maak nu je referral aan en begin te verdienen.',
-  twitter: 'Twitter',
+  twitter: 'X',
   tx_hash: 'Transactie-hash',
   type: 'Type',
   type_here: 'Typ hier',
@@ -1022,7 +1036,6 @@ export const nl = {
   upload_qr_code_image: 'QR-code uploaden',
   upload_qr_code_to_join_keysign: 'Upload QR-code om deel te nemen aan Keysign',
   upload_qr_code_with_address: 'Upload QR-code met adres',
-  use_referral_code: 'Referralcode gebruiken',
   used_referral_error:
     'Gebruikte referralcode mag niet gelijk zijn aan je eigen referralcode',
   validator_address: 'Validatoradres',
@@ -1030,7 +1043,7 @@ export const nl = {
   vault: 'Kluis',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Applicatie is up-to-date.',
-    downloadButton: 'Nu updaten',
+    downloadButton: 'App bijwerken',
     errorFetchingLatestVersion:
       'Fout bij ophalen van laatste versie: {{error}}',
     fetchingLatestVersion: 'Laatste versie ophalen...',
@@ -1070,12 +1083,10 @@ export const nl = {
   vault_details_description: 'Bekijk kluisnaam, deel en type',
   vault_details_edit_vault_description: 'Bewerk je kluisnaam',
   vault_details_page_signer_word: 'Ondertekenaar',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA-sleutel',
   vault_details_page_vault_type: 'Kluistype',
   vault_info: 'Kluisinfo',
-  vault_management: 'Kluis',
+  vault_management: 'Kluisbeheer',
   vault_name: 'Kluisnaam',
   vault_name_already_exists: 'Kies een andere kluisnaam.',
   vault_name_description:
@@ -1120,9 +1131,9 @@ export const nl = {
   via: 'via',
   view_on_explorer: 'Bekijken in blockexplorer',
   vote: 'Stemmen',
+  vult_tier_badge: '{{ticker}}-NIVEAU',
   vultisig_community: '{{productName}}-community',
   vultisig_education: '{{productName}} Onderwijs',
-  vultisig_website: '{{productName}}-website',
   waitingOnDevices: 'Wachten op apparaten...',
   waiting_for_devices_to_join: 'Wachten tot andere apparaten deelnemen',
   waiting_for_devices_to_join_description:
@@ -1130,6 +1141,7 @@ export const nl = {
   waiting_for_keygen_start: 'Wachten tot de sleutelgeneratie start…',
   waiting_for_keysign_start: 'Wachten tot het ondertekenen begint...',
   wallet: 'Wallet',
+  website: 'Website',
   withdraw: 'Opnemen',
   withdraw_ruji_rewards: 'RUJI-beloningen opnemen',
   add_cacao_pool: 'Toevoegen aan CACAO-pool',
@@ -1211,7 +1223,7 @@ export const nl = {
   },
   your_friends_referral_code: 'Referralcode van je vriend',
   your_referral_code: 'Jouw referralcode',
-  your_referrals: 'Jouw referrals',
+  your_referrals: 'Mijn referral',
   your_seedphrase: 'Jouw seed phrase',
   your_seedphrase_subtitle:
     'Voer het in, maak een kluis, kijk nooit meer terug',
@@ -1321,6 +1333,8 @@ export const nl = {
   qbtc_claim_card_title: 'Claimbare QBTC',
   qbtc_claim_tab: 'Claim',
   qbtc_onboarding_title: 'Nieuwe kwantumbeveiliging',
+  quick_settings: 'Snelle instellingen',
+  rate_app: 'Beoordeel de app',
   qbtc_onboarding_subtitle:
     'Klassieke sleutels kunnen door kwantumcomputers worden gekraakt. Om QBTC te activeren, moet een nieuw sleutelpaar worden gegenereerd.',
   qbtc_onboarding_feature_generate_title: 'Genereer je kwantumsleutelpaar',
@@ -1452,7 +1466,6 @@ export const nl = {
     'Welkom bij de {{productName}} Plugin Marketplace.',
   plugin_permissions_brand_safety_notice:
     '{{productName}}-apps kunnen nooit transacties ondertekenen die je niet eerst zelf goedkeurt.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'De handel in dit actief is tijdelijk stopgezet. Probeer het later opnieuw.',
   sui_arguments: 'Argumenten',
@@ -2072,23 +2085,30 @@ export const nl = {
   custom_message_unsupported_method:
     'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
   revoke: 'Toegang intrekken',
-  token_approvals: 'Tokengoedkeuringen',
-  token_approvals_description:
-    'Bekijk en trek contracten in die je tokens kunnen uitgeven.',
+  token_approvals_delegate: 'Gemachtigde',
+  token_approvals_partial:
+    'Permit2-goedkeuringen konden niet volledig worden gecontroleerd op: {{chains}}',
+  token_approvals_not_checked: 'Nog niet gecontroleerd: {{chains}}',
+  granted_approvals: 'Verleende goedkeuringen',
+  token_approvals_checking: 'Nog bezig met controleren: {{chains}}',
+  token_approvals_failed: 'Kon niet controleren: {{chains}}',
+  token_approvals_via: 'Goedgekeurd via',
+  revoke_approval_permit2_explanation:
+    'Hiermee wordt de Permit2-limiet van dit contract op 0 gezet. Een permit die je hebt ondertekend en die nog niemand heeft gebruikt, kan die limiet herstellen. Trek daarom ook de goedkeuring van dit token voor Permit2 in om Permit2 volledig af te sluiten. Je betaalt netwerkkosten.',
+  revoke_approval_spl_explanation:
+    'Hiermee wordt de gemachtigde van dit tokenaccount verwijderd, zodat die dit token niet meer uit je kluis kan verplaatsen. Je betaalt netwerkkosten.',
+  revoke_approval_unreadable:
+    'Deze transactie komt niet overeen met de goedkeuring die je hebt gekozen en kan daarom niet worden ondertekend.',
+  token_approvals_empty_title: 'Geen actieve goedkeuringen',
+  token_approvals_empty_description:
+    'Contracten die je toestaat je tokens op de chains van deze kluis uit te geven, verschijnen hier.',
   token_approvals_disconnect_note:
     'Het verbreken van de verbinding met een dApp heft deze goedkeuringen niet op. Elke intrekking is een afzonderlijke on-chain transactie met netwerkkosten.',
-  token_approvals_empty_description:
-    'Contracten die je toestaat je tokens op dit netwerk uit te geven, verschijnen hier.',
-  token_approvals_empty_title: 'Geen actieve goedkeuringen voor {{chain}}',
-  token_approvals_not_supported: 'Niet ondersteund',
-  token_approvals_switch_network: 'Kies een ander netwerk',
   token_approvals_unlimited_count: 'Onbeperkt: {{count}}',
-  token_approvals_unsupported_description:
-    'De goedgekeurde tokens op dit netwerk kunnen nog niet worden weergegeven. Kies een ander netwerk om ze te bekijken.',
-  token_approvals_unsupported_title: 'Niet beschikbaar op {{chain}}',
   revoke_approval: 'Toegang intrekken',
   revoke_approval_explanation:
     'Hiermee wordt de limiet van dit contract op 0 gezet, waardoor het dit token niet meer uit je kluis kan verplaatsen. Je betaalt netwerkkosten.',
   revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
+  revoke_approvals: 'Goedkeuringen intrekken',
   token_approvals_count: 'Goedkeuringen: {{count}}',
 }

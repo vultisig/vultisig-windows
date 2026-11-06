@@ -23,6 +23,12 @@ type ResponsiveModalProps = {
   grabbable?: boolean
   mobileFullWidth?: boolean
   mobilePresentation?: 'drawer' | 'fullscreen'
+  /** Overrides on the mobile drawer's frame. */
+  drawerStyles?: React.CSSProperties
+  /** Overrides on the mobile drawer's grabber row. */
+  drawerHeaderStyles?: React.CSSProperties
+  /** Overrides on the mobile drawer's backdrop. */
+  backdropStyles?: React.CSSProperties
 }
 
 const MobileDrawer = styled(VStack)<{
@@ -112,6 +118,9 @@ export const ResponsiveModal = ({
   grabbable = false,
   mobileFullWidth = true,
   mobilePresentation = 'drawer',
+  drawerStyles,
+  drawerHeaderStyles,
+  backdropStyles,
 }: ResponsiveModalProps) => {
   const isTabletAndUp = useIsTabletDeviceAndUp()
   const drawerRef = useRef<HTMLDivElement | null>(null)
@@ -189,12 +198,13 @@ export const ResponsiveModal = ({
 
   return (
     <BodyPortal>
-      <MobileBackdrop onClick={onClose}>
+      <MobileBackdrop onClick={onClose} style={backdropStyles}>
         <MobileDrawer
           ref={drawerRef}
           $fullScreen={mobilePresentation === 'fullscreen'}
           $fullWidth={mobileFullWidth}
           style={{
+            ...drawerStyles,
             transform: `translate3d(0, ${translateY}px, 0)`,
             transition: isDragging ? 'none' : 'transform 180ms ease',
             willChange: 'transform',
@@ -204,6 +214,7 @@ export const ResponsiveModal = ({
         >
           {grabbable && (
             <MobileDrawerHeader
+              style={drawerHeaderStyles}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerEnd}

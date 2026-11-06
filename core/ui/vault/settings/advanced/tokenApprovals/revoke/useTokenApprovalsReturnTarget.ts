@@ -1,14 +1,12 @@
 import { useOptionalNavigationHistory } from '@lib/ui/navigation/state'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
-import {
-  getKeysignApprovalRevoke,
-  KeysignApprovalRevoke,
-} from '../core/getKeysignApprovalRevoke'
+import { readRevokeKeysignPayload } from '../core/readRevokeKeysignPayload'
+import { RevokeIntent } from '../core/RevokeIntent'
 
 /** A signed revoke and where the Token Approvals page sits in the history. */
 export type TokenApprovalsReturnTarget = {
-  revoke: KeysignApprovalRevoke
+  revoke: RevokeIntent
   pageIndex: number
 }
 
@@ -22,7 +20,7 @@ export const useTokenApprovalsReturnTarget = (
   // Optional: the done screen is also hosted in the dApp popup.
   const history = useOptionalNavigationHistory() ?? []
 
-  const revoke = getKeysignApprovalRevoke(keysignPayload)
+  const revoke = readRevokeKeysignPayload(keysignPayload)
   const pageIndex = history.map(({ id }) => id).lastIndexOf('tokenApprovals')
 
   return revoke && pageIndex !== -1 ? { revoke, pageIndex } : null

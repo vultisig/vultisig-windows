@@ -1,29 +1,27 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { WalletIcon } from '@lib/ui/icons/WalletIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { Text } from '@lib/ui/text'
+import {
+  mediaQuery,
+  useIsTabletDeviceAndUp,
+} from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
-import {
-  VultDiscountTier,
-  vultDiscountTierMinBalances,
-} from '@vultisig/core-chain/swap/affiliate/config'
-import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { settingsBackdropStyles } from '../../../settings/constants'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useVultBalanceQuery } from '../queries/balance'
-import { discountTierColors } from '../tier/colors'
 import { discountTierGradients } from '../tier/container'
-import { discountTierIcons } from '../tier/icons'
+import { FeatureTierGateHeading } from './FeatureTierGateHeading'
+import { FeatureTierGateRequirement } from './FeatureTierGateRequirement'
 
 type FeatureTierGateProps = {
   isOpen: boolean
@@ -36,7 +34,15 @@ type FeatureTierGateProps = {
   description: string
   /** Minimum tier (and VULT threshold) the feature requires. */
   requiredTier: VultDiscountTier
+  /** Draws the sheet from the settings frames. */
+  isSettingsLook?: boolean
 }
+
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the sheet component's own radius, off the scale
+const settingsDrawerStyles = { borderRadius: '38px 38px 0 0' }
+// The drawer's grabber row takes 28 of the frame's 54 above the badge.
+const settingsDrawerPadding = '26px 16px 24px'
+const settingsModalPadding = '40px 16px 24px'
 
 /**
  * Reusable responsive prompt shown when a tier-locked feature is tapped without
@@ -51,14 +57,14 @@ export const FeatureTierGate = ({
   title,
   description,
   requiredTier,
+  isSettingsLook = false,
 }: FeatureTierGateProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const { mutate: createCoin, isPending } = useCreateCoinMutation()
   const balanceQuery = useVultBalanceQuery()
+  const isTabletAndUp = useIsTabletDeviceAndUp()
 
-  const TierIcon = discountTierIcons[requiredTier]
-  const accent = discountTierColors[requiredTier].toCssValue()
   const dialogLabel = typeof title === 'string' ? title : undefined
 
   if (!isOpen) return null
@@ -70,67 +76,41 @@ export const FeatureTierGate = ({
       grabbable
       mobileFullWidth
       modalProps={{ withDefaultStructure: false }}
+      drawerStyles={isSettingsLook ? settingsDrawerStyles : undefined}
+      backdropStyles={isSettingsLook ? settingsBackdropStyles : undefined}
     >
-      <DialogFrame role="dialog" aria-modal aria-label={dialogLabel}>
-        <VStack alignItems="center" gap={20} padding="40px 15px 16px">
-          <VStack alignItems="center" gap={32} fullWidth>
-            <IconBadge>{icon}</IconBadge>
-            <VStack alignItems="center" gap={16}>
-              <Text size={22} weight={500} centerHorizontally>
-                {title}
-              </Text>
-              <Text
-                size={14}
-                weight={500}
-                color="shy"
-                centerHorizontally
-                height="large"
-              >
-                {description}
-              </Text>
-            </VStack>
-          </VStack>
+      <DialogFrame
+        $isSettingsLook={isSettingsLook}
+        role="dialog"
+        aria-modal
+        aria-label={dialogLabel}
+      >
+        <VStack
+          alignItems="center"
+          gap={20}
+          padding={
+            !isSettingsLook
+              ? '40px 15px 16px'
+              : isTabletAndUp
+                ? settingsModalPadding
+                : settingsDrawerPadding
+          }
+        >
+          <FeatureTierGateHeading
+            icon={icon}
+            title={title}
+            description={description}
+            isSettingsLook={isSettingsLook}
+          />
           <FooterGroup>
-            <RequirementCard>
-              <Text size={13} weight={500} color="shy">
-                {t('feature_gate_requires')}
-              </Text>
-              <HStack alignItems="center" gap={12}>
-                <TierIcon fontSize={36} />
-                <VStack gap={2}>
-                  <Text size={14} weight={500}>
-                    {t('feature_gate_requires_tier', {
-                      tier: t(requiredTier),
-                    })}
-                  </Text>
-                  <Text size={13} weight={500} color="shy">
-                    {t('feature_gate_hold_at_least', {
-                      amount: formatAmount(
-                        vultDiscountTierMinBalances[requiredTier],
-                        { ticker: vult.ticker }
-                      ),
-                    })}
-                  </Text>
-                </VStack>
-              </HStack>
-              <BalanceRow>
-                <HStack alignItems="center" gap={6}>
-                  <IconWrapper>
-                    <WalletIcon />
-                  </IconWrapper>
-                  <Text size={13} weight={500} color="shy">
-                    {t('feature_gate_your_balance')}
-                  </Text>
-                </HStack>
-                <Text size={13} weight={500} style={{ color: accent }}>
-                  {formatAmount(balanceQuery.data ?? 0, {
-                    ticker: vult.ticker,
-                  })}
-                </Text>
-              </BalanceRow>
-            </RequirementCard>
+            <FeatureTierGateRequirement
+              requiredTier={requiredTier}
+              balance={balanceQuery.data ?? 0}
+              isSettingsLook={isSettingsLook}
+            />
             <GetVultButton
               $gradient={discountTierGradients[requiredTier]}
+              $isSettingsLook={isSettingsLook}
               disabled={isPending}
               onClick={() =>
                 createCoin(vult, {
@@ -152,7 +132,7 @@ export const FeatureTierGate = ({
   )
 }
 
-const DialogFrame = styled.div`
+const DialogFrame = styled.div<{ $isSettingsLook: boolean }>`
   width: 100%;
   height: min(627px, calc(100vh - 48px));
   min-height: 0;
@@ -167,26 +147,12 @@ const DialogFrame = styled.div`
     ${borderRadius.xl};
     box-shadow: 0 15px 75px rgba(0, 0, 0, 0.18);
   }
-`
 
-const IconBadge = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  ${borderRadius.pill};
-  background: #03132c;
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 18px rgba(12, 78, 255, 0.18);
-  font-size: 20px;
-  color: #0439c7;
-`
-
-const IconWrapper = styled.div`
-  display: inline-flex;
-  font-size: 16px;
-  color: ${getColor('textShy')};
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
+      height: auto;
+    `}
 `
 
 const FooterGroup = styled.div`
@@ -195,33 +161,10 @@ const FooterGroup = styled.div`
   align-self: stretch;
 `
 
-const RequirementCard = styled(VStack)`
-  position: relative;
-  z-index: 1;
-  align-self: stretch;
-  gap: 12px;
-  padding: 24px 20px 16px;
-  ${borderRadius.xl};
-  background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-`
-
-const BalanceRow = styled(HStack)`
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-  gap: 12px;
-  padding: 16px;
-  ${borderRadius.lg};
-  background: #0d2240;
-  border: 1px solid ${getColor('foregroundExtra')};
-
-  > * {
-    min-width: 0;
-  }
-`
-
-const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`
+const GetVultButton = styled(UnstyledButton)<{
+  $gradient: string
+  $isSettingsLook: boolean
+}>`
   position: relative;
   z-index: 0;
   display: flex;
@@ -240,4 +183,11 @@ const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`
     opacity: 0.6;
     cursor: default;
   }
+
+  ${({ $isSettingsLook }) =>
+    $isSettingsLook &&
+    css`
+      line-height: 18px;
+      padding: 38px 32px 17px;
+    `}
 `
