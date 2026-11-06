@@ -2,7 +2,6 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '@core/ui/vault/components/action-form/ActionFormIconsWrapper'
-import { CollapsedFieldContainer } from '@core/ui/vault/components/action-form/CollapsedFieldContainer'
 import { PencilIconWrapper } from '@core/ui/vault/components/action-form/PencilIconWrapper'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
@@ -11,12 +10,14 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useBackupFormFieldState } from '../state/focusedField'
+import { ServerBackupCollapsedRow } from './serverBackupField'
 
 type EmailFieldCollapsedProps = {
   email: string
   isEmailValid: boolean
 }
 
+/** The closed email row of the Server Backup form; tapping it opens the field. */
 export const EmailFieldCollapsed = ({
   email,
   isEmailValid,
@@ -25,7 +26,7 @@ export const EmailFieldCollapsed = ({
   const [, setFocusedField] = useBackupFormFieldState()
 
   return (
-    <CollapsedFieldContainer
+    <ServerBackupCollapsedRow
       onClick={() => setFocusedField(state => ({ ...state, field: 'email' }))}
     >
       <HStack gap={12} alignItems="center">
@@ -48,6 +49,6 @@ export const EmailFieldCollapsed = ({
           </>
         )}
       </ActionFormIconsWrapper>
-    </CollapsedFieldContainer>
+    </ServerBackupCollapsedRow>
   )
 }

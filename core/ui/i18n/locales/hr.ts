@@ -45,8 +45,6 @@ export const hr = {
   amount_required: 'Potreban je iznos',
   amount_to_unstake: 'Iznos za povlačenje uloga',
   app_lock_passcode: 'Pristupni kod za zaključavanje aplikacije',
-  app_lock_passcode_description:
-    'Dodajte dodatni sloj sigurnosti tako da za otključavanje aplikacije zahtijevate pristupni kod.',
   app_locked: 'Aplikacija zaključana',
   app_locked_description: 'Unesite pristupni kod za nastavak.',
   app_permissions: 'Dozvole aplikacije',
@@ -298,7 +296,6 @@ export const hr = {
     'Generiraj MLDSA-44 ključ za kvantnu otpornost',
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
-  enter: 'Unesi',
   enter_address: 'Unesite adresu',
   enter_address_here: 'Unesite adresu ovdje',
   enter_amount: 'Unesite iznos',
@@ -901,6 +898,8 @@ export const hr = {
   session_init_failed: 'Nije uspjelo inicijaliziranje sesije',
   set_expiration: 'Postavi istek (u godinama)',
   set_passcode: 'Postavi pristupni kod',
+  set_passcode_description:
+    'Odaberite pristupni kod od 6 znamenki. Izbjegavajte ponavljajuće ili uzastopne znamenke.',
   settings: 'Postavke',
   share: 'Udio',
   share_app: 'Podijelite aplikaciju',
@@ -1100,8 +1099,6 @@ export const hr = {
   vault_details_description: 'Prikaži naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Uredite naziv svog trezora',
   vault_details_page_signer_word: 'Potpisnik',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Ključ MLDSA-e',
   vault_details_page_vault_type: 'Vrsta trezora',
   vault_info: 'Informacije o trezoru',

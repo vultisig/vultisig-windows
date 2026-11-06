@@ -73,15 +73,19 @@ const Ring = styled.div`
       theme.colors.primary.getVariant({ a: () => 0.05 }).toCssValue()};
 `
 
+// Holds the block at the frame's height: the frame also has a biometric row
+// under the panel, which these clients don't.
+const biometricRowSpace = 58
+
 const Container = styled.div`
   ${takeWholeSpace};
   position: relative;
-  padding: 0 16px;
+  padding: 0 16px ${biometricRowSpace}px;
 
   ${vStack({
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 36,
+    gap: 35,
   })}
 `
 

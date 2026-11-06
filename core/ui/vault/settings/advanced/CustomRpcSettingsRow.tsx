@@ -1,6 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsItem } from '@core/ui/settings/SettingsItem'
-import { MobileSignalIcon } from '@lib/ui/icons/MobileSignalIcon'
 import { SignatureIcon } from '@lib/ui/icons/SignatureIcon'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
 import { useState } from 'react'
@@ -48,10 +47,11 @@ export const CustomRpcSettingsRow = () => {
         <FeatureTierGate
           isOpen={isGateOpen}
           onClose={() => setIsGateOpen(false)}
-          icon={<MobileSignalIcon />}
+          icon={<SignatureIcon />}
           title={t('custom_rpc')}
           description={t('custom_rpc_gate_description')}
           requiredTier={requiredTier}
+          isSettingsLook
         />
       ) : null}
     </>
