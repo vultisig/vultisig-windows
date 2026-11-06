@@ -13,6 +13,7 @@ type GenerateClaimProofForClaimInput = {
   signatureR: string
   signatureS: string
   publicKey: string
+  bitcoinAddress: string
   utxos: UtxoRef[]
   claimerAddress: string
   chainId: string
@@ -44,6 +45,7 @@ const generateServerBroadcastClaimProof = async ({
   signatureR,
   signatureS,
   publicKey,
+  bitcoinAddress,
   utxos,
   claimerAddress,
   chainId,
@@ -61,6 +63,7 @@ const generateServerBroadcastClaimProof = async ({
         signature_r: signatureR,
         signature_s: signatureS,
         public_key: publicKey,
+        bitcoin_address: bitcoinAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         claimer_address: claimerAddress,
         chain_id: chainId,

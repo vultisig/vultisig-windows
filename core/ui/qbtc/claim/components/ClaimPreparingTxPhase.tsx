@@ -41,6 +41,8 @@ type ClaimPreparingTxPhaseProps = {
   utxos: ClaimableUtxo[]
   btcSig: KeysignSignature
   compressedPubkeyHex: string
+  /** The Bitcoin address being claimed; part of the signed claim message. */
+  bitcoinAddress: string
   qbtcAddress: string
   mldsaPublicKeyHex: string
   /**
@@ -79,6 +81,7 @@ export const ClaimPreparingTxPhase = ({
   utxos,
   btcSig,
   compressedPubkeyHex,
+  bitcoinAddress,
   qbtcAddress,
   mldsaPublicKeyHex,
   onReadyToSign,
@@ -98,6 +101,7 @@ export const ClaimPreparingTxPhase = ({
         signatureR: padSigHex(btcSig.r, proofServiceRBytes),
         signatureS: padSigHex(btcSig.s, proofServiceSBytes),
         publicKey: compressedPubkeyHex,
+        bitcoinAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         claimerAddress: qbtcAddress,
         chainId: qbtcChainId,
@@ -126,9 +130,6 @@ export const ClaimPreparingTxPhase = ({
         broadcaster: qbtcAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         proof: proof.proof,
-        messageHash: proof.message_hash,
-        addressHash: proof.address_hash,
-        qbtcAddressHash: proof.qbtc_address_hash,
         pubKeyHashSha256: proof.pub_key_hash_sha256,
       }
 
