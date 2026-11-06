@@ -1,12 +1,11 @@
 import { SaveAsImage } from '@core/ui/file/SaveAsImage'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { VaultDetailsContent } from '@core/ui/vault/settings/details/VaultDetailsContent'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -17,16 +16,15 @@ const ScreenshotWrapper = styled.div`
   padding: 24px;
 `
 
+/** Shows the current vault's details and saves them as an image. */
 export const VaultDetailsPage = () => {
   const { t } = useTranslation()
   const { name } = useCurrentVault()
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+      <SettingsPageHeader
         title={t('details')}
-        hasBorder
         secondaryControls={
           <SaveAsImage
             fileName={`${name}-vault-details`}
@@ -43,9 +41,9 @@ export const VaultDetailsPage = () => {
           />
         }
       />
-      <PageContent gap={24} flexGrow scrollable>
+      <SettingsPageContent gap={24} flexGrow scrollable>
         <VaultDetailsContent />
-      </PageContent>
+      </SettingsPageContent>
     </VStack>
   )
 }

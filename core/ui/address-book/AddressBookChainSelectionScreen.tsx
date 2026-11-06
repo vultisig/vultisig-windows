@@ -1,20 +1,15 @@
-import {
-  ChainContent,
-  ChainItem,
-  ChainList,
-  Content,
-  FullScreenContainer,
-} from '@core/ui/chain/chainSelection/ChainSelectionScreen.styles'
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { FullScreenContainer } from '@core/ui/chain/chainSelection/ChainSelectionScreen.styles'
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
-import { TextInput } from '@lib/ui/inputs/TextInput'
+import { ChainTile } from '@core/ui/vault/chain/manage/shared/ChainTile'
+import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
+import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { InputProps, OptionsProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
+import { EmptyState } from '@lib/ui/status/EmptyState'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -81,43 +76,34 @@ export const AddressBookChainSelectionScreen = ({
           <PageHeaderBackButton onClick={() => onChange(value)} />
         }
         title={t('select_chains')}
+        hasBorder
       />
-      <Content>
-        <TextInput
-          placeholder={t('search_field_placeholder')}
-          onValueChange={setSearch}
+      <PageContent gap={24} flexGrow scrollable>
+        <SearchInput
           value={search}
+          onChange={setSearch}
+          data-testid="chain-search-input"
         />
-        <Text size={12} weight={500} color="light" style={{ marginTop: 16 }}>
-          {t('chains')}
-        </Text>
-        <ChainList>
-          {filteredOptions.map(option => {
-            const key = option.kind === 'evm' ? 'evm' : `chain-${option.chain}`
-            return (
-              <ChainItem
-                key={key}
-                alignItems="center"
-                onClick={() => onChange(option)}
-              >
-                <ChainContent>
-                  <ChainEntityIcon
-                    value={getLogoSrc(option)}
-                    style={{ width: 24, height: 24, marginRight: 16 }}
-                  />
-                  <Text color="contrast" size={14} weight="500">
-                    {getDisplayName(option)}
-                  </Text>
-                </ChainContent>
-                <Checkbox
-                  value={isSelected(option)}
-                  onChange={() => onChange(option)}
+        {filteredOptions.length > 0 ? (
+          <ItemGrid data-testid="chain-grid">
+            {filteredOptions.map(option => {
+              const key = option.kind === 'evm' ? 'evm' : option.chain
+              return (
+                <ChainTile
+                  key={key}
+                  data-testid={`chain-item-${key}`}
+                  iconSrc={getLogoSrc(option)}
+                  name={getDisplayName(option)}
+                  isSelected={isSelected(option)}
+                  onClick={() => onChange(option)}
                 />
-              </ChainItem>
-            )
-          })}
-        </ChainList>
-      </Content>
+              )
+            })}
+          </ItemGrid>
+        ) : (
+          <EmptyState title={t('no_chains_found')} />
+        )}
+      </PageContent>
     </FullScreenContainer>
   )
 }

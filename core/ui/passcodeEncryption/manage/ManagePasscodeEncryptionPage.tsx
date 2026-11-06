@@ -1,25 +1,30 @@
-import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { AppLockSwitch } from './AppLockSwitch'
 
+// Holds the Set Passcode glow, and keeps its button 24 above the window edge.
+const Page = styled(VStack)`
+  position: relative;
+`
+
+const Content = styled(SettingsPageContent)`
+  padding-bottom: 24px;
+`
+
+/** The Security page: the App Lock card and, while setting one, the passcode form. */
 export const ManagePasscodeEncryptionPage = () => {
   const { t } = useTranslation()
 
   return (
-    <VStack fullHeight>
-      <FlowPageHeader title={t('security')} />
-      <PageContent alignItems="center" flexGrow scrollable>
-        {/* Centred content takes its intrinsic width, and the six passcode
-            boxes come to 336px — past the 328px the popup gives the page,
-            which turned into a horizontal scrollbar. Capping the column lets
-            the boxes shrink to fit. */}
-        <VStack maxWidth="100%">
-          <AppLockSwitch />
-        </VStack>
-      </PageContent>
-    </VStack>
+    <Page fullHeight>
+      <SettingsPageHeader title={t('security')} />
+      <Content flexGrow scrollable>
+        <AppLockSwitch />
+      </Content>
+    </Page>
   )
 }

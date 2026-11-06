@@ -1,6 +1,7 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import {
   useCurrentVaultId,
   useSetCurrentVaultIdMutation,
@@ -15,8 +16,10 @@ import {
   VaultListRow,
   VaultSearchField,
 } from '@core/ui/vaultsOrganisation/components'
+import { VaultMenuRow } from '@core/ui/vaultsOrganisation/components/VaultMenuRow'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
@@ -56,7 +59,16 @@ type FolderEntry = {
 const heavyBalanceCoinBudget = 100
 const heavyBalanceVaultCountThreshold = 30
 
-export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
+type VaultsPageProps = Partial<OnFinishProp> & {
+  /** Draws the page as the settings vault menu; its controls stay the same. */
+  isSettingsLook?: boolean
+}
+
+/** Vaults and folders, with search, manage and add; picking a vault makes it current. */
+export const VaultsPage = ({
+  onFinish,
+  isSettingsLook = false,
+}: VaultsPageProps) => {
   const { t } = useTranslation()
   const { goHome } = useCore()
   const goBack = useNavigateBack()
@@ -166,16 +178,23 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
   const hasNoSearchResults =
     isSearching && displayedFolders.length === 0 && displayedVaults.length === 0
+  const doneControl = onFinish ? <DoneButton onClick={handleDone} /> : undefined
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={handleBack} />}
-        secondaryControls={
-          onFinish ? <DoneButton onClick={handleDone} /> : undefined
-        }
-        title={t('vaults')}
-      />
+      {isSettingsLook ? (
+        <SettingsPageHeader
+          onBack={handleBack}
+          secondaryControls={doneControl}
+          title={t('select_vault')}
+        />
+      ) : (
+        <PageHeader
+          primaryControls={<PageHeaderBackButton onClick={handleBack} />}
+          secondaryControls={doneControl}
+          title={t('vaults')}
+        />
+      )}
       <PageContent gap={28} flexGrow scrollable>
         <SectionHeader
           title={t('vaults')}
@@ -262,17 +281,24 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
         )}
 
         {displayedVaults.length > 0 && (
-          <VStack gap={16}>
-            <Text size={13} weight={600} color="shy">
-              {t('vaults')}
-            </Text>
-            <VStack gap={12}>
+          <VStack gap={isSettingsLook ? 14 : 16}>
+            {isSettingsLook ? (
+              <Text color="shy" height={1} size={12} weight={500}>
+                {t('vaults')}
+              </Text>
+            ) : (
+              <Text size={13} weight={600} color="shy">
+                {t('vaults')}
+              </Text>
+            )}
+            <VaultRows $isSettingsLook={isSettingsLook}>
               {displayedVaults.map(vault => {
                 const vaultId = getVaultId(vault)
                 const value = vaultTotals?.[vaultId]
+                const VaultRow = isSettingsLook ? VaultMenuRow : VaultListItem
 
                 return (
-                  <VaultListItem
+                  <VaultRow
                     key={vaultId}
                     vault={vault}
                     onSelect={() => handleSelectVault(vaultId)}
@@ -281,7 +307,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                   />
                 )
               })}
-            </VStack>
+            </VaultRows>
           </VStack>
         )}
 
@@ -309,6 +335,15 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
     </VStack>
   )
 }
+
+const VaultRows = styled.div<{ $isSettingsLook: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ $isSettingsLook }) => ($isSettingsLook ? 0 : 12)}px;
+  ${({ $isSettingsLook }) => $isSettingsLook && borderRadius.md};
+  overflow: ${({ $isSettingsLook }) =>
+    $isSettingsLook ? 'hidden' : 'visible'};
+`
 
 const ActiveVaultSubtitle = styled.span`
   align-items: center;

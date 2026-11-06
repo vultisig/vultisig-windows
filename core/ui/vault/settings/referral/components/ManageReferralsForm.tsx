@@ -1,4 +1,9 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import {
+  SettingsCtaButton,
+  SettingsStrongCtaButton,
+} from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useCore } from '@core/ui/state/core'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import {
@@ -6,18 +11,10 @@ import {
   useSetFriendReferralMutation,
 } from '@core/ui/storage/referrals'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '@lib/ui/css/textInput'
+import { textInputHeight } from '@lib/ui/css/textInput'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { TextInput } from '@lib/ui/inputs/TextInput'
-import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -26,7 +23,15 @@ import { Trans } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 
 import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
-import { FormFieldErrorText } from './Referrals.styled'
+import {
+  FormField,
+  FormFieldErrorText,
+  ReferralFormContent,
+  ReferralFormFooter,
+  ReferralTextInput,
+} from './Referrals.styled'
+
+const pasteIconSize = 20
 
 type ManageReferralsFormProps = OnFinishProp & OnBackProp
 
@@ -84,74 +89,68 @@ export const ManageReferralsForm = ({
 
   return (
     <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={t('manage_referral_title')}
-      />
-      <PageContent alignItems="center">
-        <VStack gap={16} maxWidth={480} fullWidth>
-          <VStack gap={8}>
-            <Text centerHorizontally size={14}>
-              <Trans
-                i18nKey="save_swap_fees_with_referral"
-                components={{
-                  blue: <Text as="span" color="primaryAlt" size={14} />,
-                }}
+      <SettingsPageHeader onBack={onBack} title={t('save_referral')} />
+      <ReferralFormContent flexGrow scrollable>
+        <FormField>
+          <SettingsBaselineText
+            color="shyExtra"
+            height={20 / 15}
+            size={15}
+            weight={500}
+          >
+            <Trans
+              i18nKey="save_swap_fees_with_referral"
+              components={{
+                blue: (
+                  <Text as="span" color="primaryAlt" size={15} weight={500} />
+                ),
+              }}
+            />
+          </SettingsBaselineText>
+          <ActionInsideInteractiveElement
+            render={() => (
+              <ReferralTextInput
+                disabled={Boolean(friendReferral)}
+                onValueChange={val => setValue(val)}
+                placeholder={t('enter_referral_code_placeholder')}
+                validation={!friendReferral && error ? 'invalid' : undefined}
+                value={value}
               />
-            </Text>
-            <VStack gap={2}>
-              <ActionInsideInteractiveElement
-                render={() => (
-                  <TextInput
-                    disabled={Boolean(friendReferral)}
-                    onValueChange={val => setValue(val)}
-                    placeholder={t('enter_referral_code_placeholder')}
-                    value={value}
-                  />
-                )}
-                action={
-                  <UnstyledButton onClick={handlePaste}>
-                    <IconWrapper
-                      style={{
-                        fontSize: 20,
-                      }}
-                    >
-                      <ClipboardCopyIcon />
-                    </IconWrapper>
-                  </UnstyledButton>
-                }
-                actionPlacerStyles={{
-                  bottom: (textInputHeight - 28) / 2,
-                  right: textInputHorizontalPadding,
-                }}
-              />
-              {!friendReferral && error && (
-                <FormFieldErrorText>{error}</FormFieldErrorText>
-              )}
-            </VStack>
-          </VStack>
-          <VStack gap={8}>
-            <Button
-              kind="secondary"
-              disabled={disabled}
-              onClick={() => (friendReferral ? onFinish() : handleSave())}
-            >
-              {friendReferral
-                ? t('edit_friends_referral')
-                : t('add_referral_code')}
-            </Button>
-            {friendReferral && (
-              <Button
-                kind="secondary"
-                disabled={isRemoving}
-                onClick={handleRemoveReferral}
-              >
-                {t('remove_friends_referral')}
-              </Button>
             )}
-          </VStack>
-        </VStack>
-      </PageContent>
+            action={
+              <UnstyledButton onClick={handlePaste}>
+                <IconWrapper size={pasteIconSize}>
+                  <ClipboardCopyIcon />
+                </IconWrapper>
+              </UnstyledButton>
+            }
+            actionPlacerStyles={{
+              bottom: (textInputHeight - pasteIconSize) / 2,
+              right: 16,
+            }}
+          />
+          {!friendReferral && error && (
+            <FormFieldErrorText>{error}</FormFieldErrorText>
+          )}
+        </FormField>
+      </ReferralFormContent>
+      <ReferralFormFooter gap={8}>
+        <SettingsStrongCtaButton
+          disabled={disabled}
+          onClick={() => (friendReferral ? onFinish() : handleSave())}
+        >
+          {friendReferral ? t('edit_friends_referral') : t('save_referral')}
+        </SettingsStrongCtaButton>
+        {friendReferral && (
+          <SettingsCtaButton
+            kind="secondary"
+            disabled={isRemoving}
+            onClick={handleRemoveReferral}
+          >
+            {t('remove_friends_referral')}
+          </SettingsCtaButton>
+        )}
+      </ReferralFormFooter>
     </>
   )
 }
