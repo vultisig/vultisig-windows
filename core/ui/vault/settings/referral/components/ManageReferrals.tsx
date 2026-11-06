@@ -1,4 +1,5 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useFriendReferralQuery } from '@core/ui/storage/referrals'
 import { Match } from '@lib/ui/base/Match'
@@ -9,7 +10,6 @@ import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { UserSparkleIcon } from '@lib/ui/icons/UserSparkleIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -39,6 +39,7 @@ type ManageReferralUIState =
   | 'referralManagement'
   | 'saveReferral'
 
+/** The referral hub: the two entry cards, or the view the user opened from them. */
 export const ManageReferrals = ({
   value: validNameDetails = null,
 }: Partial<ValueProp<ValidThorchainNameDetails | null>>) => {
@@ -54,17 +55,17 @@ export const ManageReferrals = ({
       value={view}
       default={() => (
         <>
-          <PageHeader
-            primaryControls={<PageHeaderBackButton />}
+          <SettingsPageHeader
+            hasBorder={false}
             title={t('manage_referral_title')}
           />
-          <PageContent alignItems="center" scrollable>
+          <MainContent alignItems="center" scrollable>
             <DiscoveryContent
               fullWidth
               maxWidth={480}
               flexGrow
               justifyContent="space-between"
-              gap={16}
+              gap={8}
             >
               <HeroIllustration src="/core/referral-hero.webp" alt="" />
               <VStack gap={14} fullWidth>
@@ -74,12 +75,12 @@ export const ManageReferrals = ({
                       <Text as={MegaphoneIcon} color="primaryAlt" size={24} />
                       <ActionTitle as="span">{t('save_referral')}</ActionTitle>
                       {Boolean(friendReferral) && (
-                        <Text as="span" color="success" size={13}>
+                        <ActivePill as="span" variant="footnote">
                           {t('active')}
-                        </Text>
+                        </ActivePill>
                       )}
                     </HStack>
-                    <ActionDescription color="shy" as="span">
+                    <ActionDescription as="span" color="shyExtra">
                       <Trans
                         i18nKey="save_referral_desc"
                         components={{
@@ -88,7 +89,7 @@ export const ManageReferrals = ({
                       />
                     </ActionDescription>
                   </VStack>
-                  <ChevronRightIcon fontSize={20} />
+                  <ChevronRightIcon fontSize={20} style={{ flexShrink: 0 }} />
                 </ActionItem>
                 <ActionItem onClick={() => setView('createReferral')}>
                   <VStack gap={12}>
@@ -98,7 +99,7 @@ export const ManageReferrals = ({
                         {t('create_referral')}
                       </ActionTitle>
                     </HStack>
-                    <ActionDescription color="shy" as="span">
+                    <ActionDescription as="span" color="shyExtra">
                       <Trans
                         i18nKey="create_referral_desc"
                         components={{
@@ -107,11 +108,11 @@ export const ManageReferrals = ({
                       />
                     </ActionDescription>
                   </VStack>
-                  <ChevronRightIcon fontSize={20} />
+                  <ChevronRightIcon fontSize={20} style={{ flexShrink: 0 }} />
                 </ActionItem>
               </VStack>
             </DiscoveryContent>
-          </PageContent>
+          </MainContent>
         </>
       )}
       createReferral={() => (
@@ -178,39 +179,51 @@ export const ManageReferrals = ({
   )
 }
 
+const MainContent = styled(PageContent)`
+  padding-top: 9px;
+`
+
 const DiscoveryContent = styled(VStack)`
   min-height: 100%;
 `
 
+const ActivePill = styled(Text)`
+  ${borderRadius.lg};
+  background: ${({ theme }) =>
+    theme.colors.success.withAlpha(0.05).toCssValue()};
+  border: 1px solid ${getColor('success')};
+  color: ${getColor('success')};
+  padding: 3px 9px;
+`
+
 /**
- * Scales the illustration into whatever height the two action cards leave.
- * The webp is 375x405, so drawn at the popup's width it alone outgrows the
- * 600px viewport; without `min-height: 0` a flex item never shrinks below
- * its content height and the screen scrolls instead. Where there is room
- * (desktop, expanded view) it still draws at full size.
+ * Fills whatever height the two action cards leave, cropping the webp's empty
+ * margin rather than shrinking the art. It is 375x405, so drawn at the popup's
+ * width it alone outgrows the 600px viewport; without `min-height: 0` a flex
+ * item never shrinks below its content height and the screen scrolls instead.
  */
 const HeroIllustration = styled.img`
   align-self: center;
   display: block;
-  height: auto;
+  flex: 1 1 0;
   max-width: 375px;
   min-height: 0;
-  object-fit: contain;
-  width: 100%;
+  object-fit: cover;
+  width: calc(100% + 15px);
 `
 
-const ActionTitle = styled(Text)`
+const ActionTitle = styled(SettingsBaselineText)`
   line-height: ${20 / 17};
   font-size: 17px;
   font-weight: 500;
-  letter-spacing: 0;
+  letter-spacing: -0.3px;
 `
 
-const ActionDescription = styled(Text)`
+const ActionDescription = styled(SettingsBaselineText)`
   line-height: ${18 / 13};
   font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0;
+  letter-spacing: 0.06px;
 `
 
 const ActionItem = styled(HStack)`

@@ -1,10 +1,11 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { SettingsStrongCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { GroupOneIcon } from '@lib/ui/icons/GroupOneIcon'
-import { Keyboard3Icon } from '@lib/ui/icons/Keyboard3Icon'
+import { KeyboardFilledIcon } from '@lib/ui/icons/KeyboardFilledIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
-import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
+import { ShareUpRight2Icon } from '@lib/ui/icons/ShareUpRight2Icon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
+import { UsersFilledIcon } from '@lib/ui/icons/UsersFilledIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -14,6 +15,10 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../../../../product/brand'
+import { Overlay } from './Referrals.styled'
+
+/** The onboarding guide explaining how referrals work. */
 export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
@@ -21,12 +26,12 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
     {
       title: t('referrals_summary.item_1.title'),
       description: t('referrals_summary.item_1.description'),
-      icon: Keyboard3Icon,
+      icon: KeyboardFilledIcon,
     },
     {
       title: t('referrals_summary.item_2.title'),
       description: t('referrals_summary.item_2.description'),
-      icon: ShareAndroidIcon,
+      icon: ShareUpRight2Icon,
     },
     {
       title: t('referrals_summary.item_3.title'),
@@ -36,55 +41,72 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
     {
       title: t('referrals_summary.item_4.title'),
       description: t('referrals_summary.item_4.description'),
-      icon: GroupOneIcon,
+      icon: UsersFilledIcon,
     },
   ]
 
   return (
-    <PageContent alignItems="center" scrollable>
-      <VStack
-        animationConfig="bottomToTop"
-        as={AnimatedVisibility}
-        config={{ duration: 1000 }}
-        delay={300}
-        gap={32}
-        maxWidth={480}
-        fullWidth
-      >
-        <VStack gap={24} overflow="hidden">
-          <Label>
-            <Text as={MegaphoneIcon} color="primaryAlt" size={16} />
-            {t('referral_program')}
-          </Label>
-          <VStack gap={16} padding="0 0 0 24px">
-            <Text as="span" size={34} weight={500}>
-              {t('how_it_works')}
-            </Text>
-            {items.map(({ title, icon, description }, index) => (
-              <Item key={index}>
-                <Icon as={icon} />
-                <VStack gap={4}>
-                  <Text color="contrast" weight={500} size={13}>
-                    {title}
-                  </Text>
-                  <Text color="shyExtra" weight={500} size={13}>
-                    {description}
-                  </Text>
-                </VStack>
-              </Item>
-            ))}
+    <>
+      <GuideContent alignItems="center">
+        {currentProductBrand === 'vultisig' && <Overlay />}
+        <VStack
+          animationConfig="bottomToTop"
+          as={AnimatedVisibility}
+          config={{ duration: 1000 }}
+          delay={300}
+          maxWidth={480}
+          fullWidth
+        >
+          <VStack gap={32} overflow="hidden">
+            <Label>
+              <Text as={MegaphoneIcon} color="primaryAlt" size={16} />
+              {t('referral_program')}
+            </Label>
+            <VStack gap={16} padding="0 0 0 22px">
+              <Heading as="span" size={34} weight={500}>
+                {t('how_it_works')}
+              </Heading>
+              {items.map(({ title, icon, description }, index) => (
+                <Item key={index}>
+                  <Icon as={icon} />
+                  <VStack gap={4}>
+                    <Text variant="footnote">{title}</Text>
+                    <Text color="shyExtra" variant="stationCaption2">
+                      {description}
+                    </Text>
+                  </VStack>
+                </Item>
+              ))}
+            </VStack>
           </VStack>
         </VStack>
-        <Button onClick={onFinish}>{t('get_started')}</Button>
-      </VStack>
-    </PageContent>
+      </GuideContent>
+      <SettingsPageFooter>
+        <SettingsStrongCtaButton onClick={onFinish}>
+          {t('get_started')}
+        </SettingsStrongCtaButton>
+      </SettingsPageFooter>
+    </>
   )
 }
+
+const GuideContent = styled(PageContent)`
+  min-height: 0;
+  overflow: hidden auto;
+  padding-block: 5px 0;
+  position: relative;
+`
+
+const Heading = styled(Text)`
+  letter-spacing: -1px;
+  line-height: ${37 / 34};
+  margin: 0 0 32px 20px;
+`
 
 const Icon = styled.div`
   color: ${getColor('primaryAlt')};
   flex: none;
-  font-size: 24px;
+  font-size: 20px;
 `
 
 const Item = styled(HStack)`
@@ -93,18 +115,18 @@ const Item = styled(HStack)`
   border: 1px solid ${getColor('foregroundExtra')};
   ${borderRadius.lg};
   gap: 12px;
-  padding: 16px;
+  padding: 15px;
   position: relative;
 
   &::before {
     background-color: ${getColor('foreground')};
     content: '';
     height: 2px;
-    left: -24px;
+    left: -23px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 23px;
+    width: 22px;
   }
 
   &:last-child {
@@ -112,7 +134,7 @@ const Item = styled(HStack)`
       background-color: ${getColor('foreground')};
       bottom: 50%;
       content: '';
-      left: -24px;
+      left: -23px;
       position: absolute;
       top: -1000px;
       width: 2px;

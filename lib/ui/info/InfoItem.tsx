@@ -39,6 +39,7 @@ type InfoItemProps = {
   icon: ReactNode
 } & ChildrenProp
 
+/** A card with a leading icon and a short message; `<b>` picks out key words. */
 export const InfoItem = ({ icon, children, ...rest }: InfoItemProps) => {
   return (
     <Container alignItems="center" gap={12} {...rest} fullWidth>

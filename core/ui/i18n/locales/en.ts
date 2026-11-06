@@ -13,7 +13,6 @@ export const en = {
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
   add_referral: 'Add Referral',
-  add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
   bech32_prefix: 'Address Prefix',
@@ -51,8 +50,6 @@ export const en = {
   amount_required: 'Amount is required',
   amount_to_unstake: 'Amount to unstake',
   app_lock_passcode: 'App Lock Passcode',
-  app_lock_passcode_description:
-    'Add an extra layer of security by requiring a passcode to unlock the app.',
   app_locked: 'App Locked',
   app_locked_description: 'Enter your passcode to continue.',
   app_permissions: 'App Permissions',
@@ -99,6 +96,7 @@ export const en = {
   backup_share_sent: 'Backup share sent!',
   backup_share_sent_description:
     'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
+  backup_vault_share: 'Backup Vault Share',
   backup_with_password: 'Backup with password',
   backup_without_password: 'Backup without password',
   balance: 'Balance',
@@ -106,6 +104,7 @@ export const en = {
   balance_changes: 'Balance Changes',
   base_fee: 'Base Fee',
   blockaid_security_scan: 'Blockaid Security Scan',
+  blockaid_security_scan_description: 'Check transactions before you sign',
   blockaid_simulation_failed: 'Transaction Simulation Failed',
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
@@ -237,7 +236,6 @@ export const en = {
   copy_link: 'Copy Link',
   create_new_vault: 'Create new Vault',
   create_vault: 'Create vault',
-  create_referral_form: 'Create referral',
   create_referral_title: 'Create Referral',
   create_referral: 'Create Referral',
   create_referral_desc:
@@ -341,7 +339,7 @@ export const en = {
   },
   delete: 'Delete',
   delete_folder: 'Delete Folder',
-  delete_vault_description: 'Delete your vault permanently',
+  delete_vault_description: 'Delete your vault share permanently',
   deposit: 'Function',
   description: 'Description',
   destination_address: 'Destination Address',
@@ -359,10 +357,13 @@ export const en = {
   complete_fee_waive: 'No Fee',
   discount_tiers: '{{ticker}} Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
+  discount_tiers_thorguard_boost:
+    'Holding a ThorGuard instantly boosts your discount tier, up to Platinum.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
   earn: 'Earn',
   edit_address: 'Edit Address',
+  edit_address_book: 'Edit Address Book',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
   remove_friends_referral: 'Remove Referral',
@@ -378,10 +379,9 @@ export const en = {
   enable_tss_batching: 'Enable TSS Batching',
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
-    'Generate a post-quantum (MLDSA) key for this vault',
+    'Generate MLDSA-44 key for quantum resistance',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
-  enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
   external_recipient_tooltip_content:
@@ -408,6 +408,7 @@ export const en = {
   expand_view: 'Expand View',
   on_chain: 'on {{chain}}',
   open_as_side_panel: 'Open as Side Panel',
+  open_as_side_panel_description: 'Keep {{productName}} open beside your tabs',
   opened_in_new_tab: 'Opened in a new tab',
   push_notifications: 'Push Notifications',
   push_notifications_description:
@@ -549,6 +550,7 @@ export const en = {
   go_to_vault: 'Go to vault',
   go_to_wallet: 'Go to wallet',
   home_display: 'Home display',
+  home_display_balance_caption: 'Balance display',
   home_display_separate_description:
     'Your Wallet tab shows your wallet balance only, and your DeFi tab shows your DeFi balance.',
   home_display_separate_title: 'Wallet & DeFi separate',
@@ -661,6 +663,8 @@ export const en = {
   loading: 'Loading...',
   localMode: "You're in local mode",
   lock_time: 'Lock Time',
+  lock_time_description: 'Set the time until the app locks automatically',
+  lock_time_setting: 'Lock time',
   lock_vultisig_automatically_after:
     'Lock {{productName}} automatically after...',
   looking_for_server: 'Looking for FastVaultServer...',
@@ -691,6 +695,8 @@ export const en = {
   message_to_sign: 'Message to sign',
   method: 'Method',
   method_required: 'Signing method is required',
+  migrate: 'Migrate',
+  migrate_vault_description: 'Migrate GG20 vault to DKLS',
   mint: 'Mint',
   minute_one: '{{count}} minute',
   minute_other: '{{count}} minutes',
@@ -820,10 +826,10 @@ export const en = {
   app_install_timeout: 'App Install Timeout (ms)',
   app_install_timeout_invalid: 'Please enter a valid number.',
   app_install_timeout_min: 'Must be 0 or greater.',
-  extension_version: '{{brand}} V{{version}}',
   to_start_plugin_installation: 'To start the plugin installation',
   portfolio_balance: 'Portfolio Balance',
   positions: 'Positions',
+  post_quantum_key: 'Post-Quantum Key',
   powered_by: 'Powered by <provider></provider>',
   price: 'Price',
   price_impact: 'Price Impact',
@@ -833,6 +839,7 @@ export const en = {
   price_impact_high: 'High Impact',
   primary_type: 'Primary type',
   prioritize_vultisig: 'Prioritize {{productName}}',
+  prioritize_vultisig_description: 'Show {{productName}} first when you swap',
   priority: 'Priority',
   priority_fee: 'Priority fee',
   privacy_policy: 'Privacy Policy',
@@ -850,6 +857,8 @@ export const en = {
   qbtc_claim_card_title: 'Claimable QBTC',
   qbtc_claim_tab: 'Claim',
   qbtc_onboarding_title: 'New quantum security',
+  quick_settings: 'Quick settings',
+  rate_app: 'Rate the App',
   qbtc_onboarding_subtitle:
     'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
   qbtc_onboarding_key_warning:
@@ -973,6 +982,7 @@ export const en = {
   revoke_approval_explanation:
     "Sets this contract's allowance to 0, so it can no longer move this token from your vault. You pay a network fee.",
   revoke_approval_new_allowance: 'New spending limit',
+  revoke_approvals: 'Revoke Approvals',
   revoke_approval_permit2_explanation:
     "Sets this contract's Permit2 limit to 0. A permit you signed that nobody has used yet can still restore it, so to cut off Permit2 completely, also revoke this token's approval to Permit2. You pay a network fee.",
   revoke_approval_spl_explanation:
@@ -1040,7 +1050,6 @@ export const en = {
   save_backup_n_of_n_to_cloud:
     'Save backup {{current}} of {{total}} to the cloud',
   save_backup_to_cloud: 'Save backup to the cloud',
-  save_code: 'Save code',
   save_swap_fees_with_referral:
     'Save <blue>10%</blue> on swaps - Add a Referral',
   saving_vault: 'Saving Vault...',
@@ -1077,6 +1086,7 @@ export const en = {
   secure_notifications_description:
     'Receive alerts when another device requests to join your vault or when your signature is required.',
   security: 'Security',
+  security_description: 'Manage your passcode',
   select: 'Select',
   select_asset: 'Select asset',
   select_backup_file: 'Import your vault share',
@@ -1154,6 +1164,8 @@ export const en = {
   session_init_failed: 'Failed to initialize session',
   set_expiration: 'Set Expiration (in years)',
   set_passcode: 'Set Passcode',
+  set_passcode_description:
+    'Choose a 6-digit passcode. Avoid repeating or sequential digits.',
   settings: 'Settings',
   share: 'Share',
   share_app: 'Share The App',
@@ -1423,15 +1435,12 @@ export const en = {
   token: 'Token',
   token_approval: 'Token Approval',
   granted_approvals: 'Granted Approvals',
-  token_approvals: 'Token Approvals',
   token_approvals_delegate: 'Delegate',
   token_approvals_partial:
     'Permit2 approvals could not be fully checked on: {{chains}}',
   token_approvals_not_checked: 'Not checked yet: {{chains}}',
   token_approvals_checking: 'Still checking: {{chains}}',
   token_approvals_count: 'Approvals: {{count}}',
-  token_approvals_description:
-    'Review and revoke contracts that can spend your tokens',
   token_approvals_disconnect_note:
     'Disconnecting a dApp doesn’t remove these approvals. Each revoke is a separate on-chain transaction with a network fee.',
   token_approvals_empty_description:
@@ -1481,7 +1490,7 @@ export const en = {
   try_again: 'Try Again',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
-  twitter: 'X (Twitter)',
+  twitter: 'X',
   tx_hash: 'Transaction hash',
   tx_hash_copied: 'Transaction hash copied',
   type: 'Type',
@@ -1516,7 +1525,6 @@ export const en = {
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_with_address: 'Upload QR code with address',
   use_external_recipient: 'Use External Recipient',
-  use_referral_code: 'Use referral Code',
   used_referral_error:
     'Used referral code can not be the same as your referral code',
   validator_address: 'Validator Address',
@@ -1641,7 +1649,7 @@ export const en = {
   vault: 'Vault',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Application is up to date.',
-    downloadButton: 'Update now',
+    downloadButton: 'Update App',
     errorFetchingLatestVersion: 'Error fetching latest version: {{error}}',
     fetchingLatestVersion: 'Fetching latest version...',
     title: 'Check Update',
@@ -1679,12 +1687,10 @@ export const en = {
   vault_details_description: 'View vault name, part and type',
   vault_details_edit_vault_description: 'Edit your vault name',
   vault_details_page_signer_word: 'Signer',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA key',
   vault_details_page_vault_type: 'Vault Type',
   vault_info: 'Vault Info',
-  vault_management: 'Vault',
+  vault_management: 'Vault Management',
   vault_name: 'Vault Name',
   vault_name_already_exists: 'Please choose a different Vault name.',
   vault_name_description:
@@ -1731,9 +1737,9 @@ export const en = {
   view_on_explorer: 'View on Explorer',
   volume_24h: '24h Volume',
   vote: 'Vote',
+  vult_tier_badge: '{{ticker}} TIER',
   vultisig_community: '{{productName}} Community',
   vultisig_education: '{{productName}} Education',
-  vultisig_website: '{{productName}} Website',
   waitingOnDevices: 'Waiting on devices...',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
   waiting_for_devices_to_join_description:
@@ -1741,6 +1747,7 @@ export const en = {
   waiting_for_keygen_start: 'Waiting for key generation to start...',
   waiting_for_keysign_start: 'Waiting for the signing process to begin...',
   wallet: 'Wallet',
+  website: 'Website',
   withdraw: 'Withdraw',
   withdraw_ruji_rewards: 'Withdraw RUJI Rewards',
   add_cacao_pool: 'Add to CACAO Pool',
@@ -1854,7 +1861,7 @@ export const en = {
   },
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
-  your_referrals: 'Your Referrals',
+  your_referrals: 'My Referral',
   your_seedphrase: 'Your seedphrase',
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",

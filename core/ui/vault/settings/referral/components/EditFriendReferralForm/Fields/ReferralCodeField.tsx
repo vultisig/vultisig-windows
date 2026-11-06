@@ -1,14 +1,15 @@
-import { TextInput } from '@lib/ui/inputs/TextInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { InputProps } from '@lib/ui/props'
-import { useTranslation } from 'react-i18next'
+import { Text } from '@lib/ui/text'
+import { Trans, useTranslation } from 'react-i18next'
 
 import {
   FormField,
   FormFieldErrorText,
-  FormFieldLabel,
+  ReferralTextInput,
 } from '../../Referrals.styled'
 
+/** The friend's code field with its validation error. */
 export const ReferralCodeField = ({
   value,
   onChange,
@@ -19,21 +20,30 @@ export const ReferralCodeField = ({
   const { t } = useTranslation()
 
   return (
-    <VStack gap={14}>
-      <FormField>
-        <FormFieldLabel htmlFor="referral-name">
-          {t('use_referral_code')}
-        </FormFieldLabel>
-        <HStack gap={8}>
-          <TextInput
-            id="referral-name"
-            value={value}
-            placeholder={t('enter_up_to_4_characters_placeholder')}
-            onValueChange={onChange}
-          />
-        </HStack>
-        {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
-      </FormField>
-    </VStack>
+    <FormField>
+      <SettingsBaselineText
+        as="label"
+        color="shyExtra"
+        height={20 / 15}
+        htmlFor="referral-name"
+        size={15}
+        weight={500}
+      >
+        <Trans
+          i18nKey="save_swap_fees_with_referral"
+          components={{
+            blue: <Text as="span" color="primaryAlt" size={15} weight={500} />,
+          }}
+        />
+      </SettingsBaselineText>
+      <ReferralTextInput
+        id="referral-name"
+        value={value}
+        placeholder={t('enter_up_to_4_characters_placeholder')}
+        validation={error ? 'invalid' : undefined}
+        onValueChange={onChange}
+      />
+      {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
+    </FormField>
   )
 }

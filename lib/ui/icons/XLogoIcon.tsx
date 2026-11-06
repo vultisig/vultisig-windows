@@ -1,0 +1,18 @@
+import { SvgProps } from '@lib/ui/props'
+
+/** The X (formerly Twitter) logo. */
+export const XLogoIcon = (props: SvgProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 20 20"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M11.427 8.85148L17.0111 2.5H15.6879L10.8392 8.0149L6.9666 2.5H2.5L8.35615 10.8395L2.5 17.5H3.82333L8.94364 11.6761L13.0334 17.5H17.5L11.4267 8.85148H11.427ZM9.61456 10.913L9.02121 10.0825L4.30014 3.47475H6.33269L10.1427 8.80746L10.736 9.63788L15.6885 16.5696H13.656L9.61456 10.9133V10.913Z"
+      fill="currentColor"
+    />
+  </svg>
+)

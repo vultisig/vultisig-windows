@@ -1,3 +1,5 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsBorderedCard } from '@core/ui/settings/SettingsCard'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
@@ -33,9 +35,10 @@ type NotificationSettingsContentProps = {
   isPending?: boolean
 }
 
+// 30, not the former 40, keeps the rows at the frame's 62 with the icon the frame omits.
 const VaultTypeIcon = styled.div<{ $isFast: boolean }>`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   ${borderRadius.pill};
   background: ${getColor('foregroundDark')};
   border: 1px solid ${getColor('foregroundExtra')};
@@ -60,7 +63,7 @@ const PushSection = styled.div`
 `
 
 const DescriptionMaxWidth = styled.div`
-  max-width: 233px;
+  max-width: 231px;
 `
 
 const VaultSection = styled.div`
@@ -71,23 +74,19 @@ const VaultSection = styled.div`
   width: 100%;
 `
 
-const VaultListCard = styled.div`
-  background: ${getColor('foreground')};
-  ${borderRadius.md};
-  overflow: hidden;
-  width: 100%;
+// This frame draws the card's stroke inside the rows' padding, unlike its siblings.
+const VaultListCard = styled(SettingsBorderedCard)`
+  border: none;
+  outline: 1px solid ${getColor('foregroundExtra')};
+  outline-offset: -1px;
 `
 
 const VaultRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 16px 12px;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid ${getColor('foregroundExtra')};
-  }
+  gap: 4px;
+  padding: 16px 14px;
 `
 
 const VaultRowLeft = styled.div`
@@ -98,7 +97,7 @@ const VaultRowLeft = styled.div`
   min-width: 0;
 `
 
-const VaultName = styled(Text)`
+const VaultName = styled(SettingsBaselineText)`
   flex: 1;
   min-width: 0;
 `
@@ -145,9 +144,14 @@ export const NotificationSettingsContent = ({
             />
             <LeftColumn>
               <VStack alignItems="start" gap={4}>
-                <Text size={16} weight={500} color="regular">
+                <SettingsBaselineText
+                  height={1.5}
+                  size={16}
+                  weight={500}
+                  color="regular"
+                >
                   {t('push_notifications')}
-                </Text>
+                </SettingsBaselineText>
                 <DescriptionMaxWidth>
                   <Text variant="caption" color="shyExtra">
                     {t('push_notifications_description')}
@@ -159,15 +163,16 @@ export const NotificationSettingsContent = ({
               checked={isEnabled}
               loading={isPending}
               onChange={onToggle}
+              size="large"
             />
           </HStack>
         </div>
       </PushSection>
       {isEnabled && showVaultList && (
         <VaultSection>
-          <Text variant="footnote" color="shy">
+          <SettingsBaselineText variant="footnote" color="shy">
             {t('vault_notifications')}
-          </Text>
+          </SettingsBaselineText>
           <VaultListCard>
             {vaults.map(vault => (
               <VaultRow key={vault.id}>
@@ -182,7 +187,7 @@ export const NotificationSettingsContent = ({
                       secure: () => <SecureVaultGlyph />,
                     })}
                   </VaultTypeIcon>
-                  <VaultName size={14} weight={500} color="regular" cropped>
+                  <VaultName color="regular" variant="stationBodyS" cropped>
                     {vault.name}
                   </VaultName>
                 </VaultRowLeft>
@@ -192,6 +197,7 @@ export const NotificationSettingsContent = ({
                   onChange={enabled => {
                     onVaultToggle({ vaultId: vault.id, enabled })
                   }}
+                  size="large"
                 />
               </VaultRow>
             ))}

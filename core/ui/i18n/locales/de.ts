@@ -12,7 +12,6 @@ export const de = {
   add_memo: 'Memo hinzufügen',
   add_new_vault: 'Neuen Tresor hinzufügen',
   add_referral: 'Empfehlung hinzufügen',
-  add_referral_code: 'Empfehlungscode speichern',
   add_to_address_book: 'Zum Adressbuch hinzufügen',
   add_suggested_token: 'Vorgeschlagenes Token hinzufügen',
   bech32_prefix: 'Adresspräfix',
@@ -46,8 +45,6 @@ export const de = {
   amount_required: 'Bitte geben Sie einen Betrag ein.',
   amount_to_unstake: 'Betrag zum Unstaken',
   app_lock_passcode: 'App-Sperrcode',
-  app_lock_passcode_description:
-    'Erhöhen Sie die Sicherheit, indem Sie zum Entsperren der App einen Passcode verlangen.',
   app_locked: 'App gesperrt',
   app_locked_description: 'Geben Sie Ihren Passcode ein, um fortzufahren.',
   app_permissions: 'App-Berechtigungen',
@@ -90,6 +87,7 @@ export const de = {
   backup_share_sent: 'Tresoranteil gesendet!',
   backup_share_sent_description:
     'Wir haben Ihren Tresoranteil soeben an Ihre E-Mail-Adresse gesendet. Falls Sie ihn nicht finden, prüfen Sie Ihren Spam-Ordner.',
+  backup_vault_share: 'Tresoranteil sichern',
   backup_with_password: 'Backup mit Passwort',
   backup_without_password: 'Backup ohne Passwort',
   balance: 'Guthaben',
@@ -97,6 +95,7 @@ export const de = {
   balance_changes: 'Guthabenänderungen',
   base_fee: 'Grundgebühr',
   blockaid_security_scan: 'Blockaid-Sicherheitsscan',
+  blockaid_security_scan_description: 'Transaktionen vor dem Signieren prüfen',
   blockaid_simulation_failed: 'Transaktionssimulation fehlgeschlagen',
   blockaid_simulation_failed_description:
     'Diese Transaktion konnte nicht simuliert werden. Sie können trotzdem fortfahren, wir empfehlen Ihnen jedoch, die Transaktionsdetails sorgfältig zu prüfen.',
@@ -222,7 +221,6 @@ export const de = {
   copy_address: 'Adresse kopieren',
   create_new_vault: 'Neuen Tresor erstellen',
   create_vault: 'Tresor erstellen',
-  create_referral_form: 'Empfehlung erstellen',
   create_referral_title: 'Empfehlung erstellen',
   create_referral: 'Empfehlung erstellen',
   create_referral_desc:
@@ -256,7 +254,7 @@ export const de = {
   },
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
-  delete_vault_description: 'Löschen Sie Ihren Tresor endgültig.',
+  delete_vault_description: 'Löschen Sie Ihren Tresoranteil endgültig.',
   deposit: 'Funktion',
   description: 'Beschreibung',
   destination_address: 'Zieladresse',
@@ -275,10 +273,13 @@ export const de = {
   discount_tiers: '{{ticker}}-Rabattstufen',
   discount_tiers_description:
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
+  discount_tiers_thorguard_boost:
+    'Der Besitz eines ThorGuard erhöht sofort Ihre Rabattstufe, bis maximal Platin.',
   discovering_mediator: 'Mediatordienst wird ermittelt, bitte warten...',
   done: 'Erledigt',
   earn: 'Verdienen',
   edit_address: 'Adresse bearbeiten',
+  edit_address_book: 'Adressbuch bearbeiten',
   edit_friends_referral: 'Freundesempfehlung bearbeiten',
   edit_referral: 'Empfehlung bearbeiten',
   remove_friends_referral: 'Empfehlung entfernen',
@@ -293,10 +294,9 @@ export const de = {
   enable_tss_batching: 'TSS-Batching aktivieren',
   post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
   post_quantum_keygen_description:
-    'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
+    'MLDSA-44-Schlüssel für Quantenresistenz generieren',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
-  enter: 'Eingeben',
   enter_address: 'Adresse eingeben',
   enter_address_here: 'Adresse hier eingeben',
   enter_amount: 'Betrag eingeben',
@@ -320,6 +320,8 @@ export const de = {
   est_network_fee: 'Geschätzte Netzwerkgebühr',
   expand_view: 'Ansicht erweitern',
   open_as_side_panel: 'Als Seitenleiste öffnen',
+  open_as_side_panel_description:
+    '{{productName}} neben Ihren Tabs geöffnet lassen',
   opened_in_new_tab: 'In einem neuen Tab geöffnet',
   push_notifications: 'Push-Benachrichtigungen',
   push_notifications_description:
@@ -465,6 +467,7 @@ export const de = {
   go_to_vault: 'Zum Tresor',
   go_to_wallet: 'Zur Wallet',
   home_display: 'Startansicht',
+  home_display_balance_caption: 'Saldoanzeige',
   home_display_separate_description:
     'Der Wallet-Tab zeigt nur Ihr Wallet-Guthaben, der DeFi-Tab Ihr DeFi-Guthaben.',
   home_display_separate_title: 'Wallet & DeFi getrennt',
@@ -577,6 +580,9 @@ export const de = {
   loading: 'Laden...',
   localMode: 'Sie befinden sich im lokalen Modus',
   lock_time: 'Sperrzeit',
+  lock_time_description:
+    'Legen Sie fest, wann die App automatisch gesperrt wird',
+  lock_time_setting: 'Sperrzeit',
   lock_vultisig_automatically_after:
     '{{productName}} wird nach... automatisch gesperrt',
   looking_for_server: 'Suche nach FastVaultServer...',
@@ -598,6 +604,8 @@ export const de = {
   message_to_sign: 'Zu signierende Nachricht',
   method: 'Verfahren',
   method_required: 'Die Signaturmethode ist erforderlich.',
+  migrate: 'Migrieren',
+  migrate_vault_description: 'GG20-Tresor zu DKLS migrieren',
   mint: 'Mint',
   minute_one: '{{count}} Minute',
   minute_other: '{{count}} Minuten',
@@ -702,12 +710,15 @@ export const de = {
   to_start_plugin_installation: 'Um die App-Installation zu starten',
   portfolio_balance: 'Portfoliowert',
   positions: 'Positionen',
+  post_quantum_key: 'Post-Quantum-Schlüssel',
   powered_by: 'Bereitgestellt von <provider></provider>',
   price: 'Preis',
   price_impact_average: 'Durchschnitt',
   price_impact_good: 'Gut',
   price_impact_high: 'Hoher Preiseinfluss',
   prioritize_vultisig: '{{productName}} priorisieren',
+  prioritize_vultisig_description:
+    '{{productName}} beim Tauschen zuerst anzeigen',
   priority: 'Priorität',
   priority_fee: 'Prioritätsgebühr',
   privacy_policy: 'Datenschutzrichtlinie',
@@ -811,7 +822,6 @@ export const de = {
   save_backup_n_of_n_to_cloud:
     'Backup {{current}} von {{total}} in der Cloud speichern',
   save_backup_to_cloud: 'Backup in der Cloud speichern',
-  save_code: 'Code speichern',
   save_swap_fees_with_referral:
     '<blue>10 %</blue> bei Swaps sparen – Empfehlungscode hinzufügen',
   saving_vault: 'Tresor wird gespeichert...',
@@ -850,6 +860,7 @@ export const de = {
   secure_notifications_description:
     'Sie werden benachrichtigt, wenn ein anderes Gerät Ihrem Tresor beitreten möchte oder Ihre Signatur erforderlich ist.',
   security: 'Sicherheit',
+  security_description: 'Passcode verwalten',
   select: 'Wählen',
   select_asset: 'Asset auswählen',
   select_backup_file: 'Tresoranteil importieren',
@@ -892,6 +903,8 @@ export const de = {
   session_init_failed: 'Sitzung konnte nicht initialisiert werden',
   set_expiration: 'Ablaufdatum festlegen (in Jahren)',
   set_passcode: 'Passcode festlegen',
+  set_passcode_description:
+    'Wählen Sie einen 6-stelligen Passcode. Vermeiden Sie sich wiederholende oder aufeinanderfolgende Ziffern.',
   settings: 'Einstellungen',
   share: 'Teilen',
   share_app: 'App teilen',
@@ -1010,7 +1023,7 @@ export const de = {
   try_again: 'Versuchen Sie es erneut',
   turn_your_vault_into_rewards_machine:
     'Machen Sie Ihren Tresor zur Belohnungsmaschine. Erstellen Sie jetzt Ihren Empfehlungscode und verdienen Sie mit.',
-  twitter: 'Twitter',
+  twitter: 'X',
   tx_hash: 'Transaktions-Hash',
   type: 'Typ',
   type_here: 'Hier tippen',
@@ -1045,7 +1058,6 @@ export const de = {
   upload_qr_code_to_join_keysign:
     'Laden Sie den QR-Code hoch, um Keysign beizutreten.',
   upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
-  use_referral_code: 'Empfehlungscode verwenden',
   used_referral_error:
     'Der verwendete Empfehlungscode darf nicht mit Ihrem Empfehlungscode übereinstimmen.',
   validator_address: 'Validatoradresse',
@@ -1053,7 +1065,7 @@ export const de = {
   vault: 'Tresor',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Die Anwendung ist auf dem neuesten Stand.',
-    downloadButton: 'Jetzt aktualisieren',
+    downloadButton: 'App aktualisieren',
     errorFetchingLatestVersion:
       'Fehler beim Abrufen der neuesten Version: {{error}}',
     fetchingLatestVersion: 'Die neueste Version wird abgerufen...',
@@ -1094,12 +1106,10 @@ export const de = {
   vault_details_description: 'Tresorname, Anteil und Typ anzeigen',
   vault_details_edit_vault_description: 'Bearbeiten Sie Ihren Tresornamen',
   vault_details_page_signer_word: 'Signierer',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
   vault_details_page_vault_type: 'Tresortyp',
   vault_info: 'Tresorinformationen',
-  vault_management: 'Tresor',
+  vault_management: 'Tresorverwaltung',
   vault_name: 'Tresorname',
   vault_name_already_exists: 'Bitte wählen Sie einen anderen Tresornamen.',
   vault_name_description:
@@ -1147,9 +1157,9 @@ export const de = {
   via: 'über',
   view_on_explorer: 'Im Explorer anzeigen',
   vote: 'Abstimmung',
+  vult_tier_badge: '{{ticker}}-STUFE',
   vultisig_community: '{{productName}}-Community',
   vultisig_education: '{{productName}} Education',
-  vultisig_website: '{{productName}}-Website',
   waitingOnDevices: 'Warten auf Geräte...',
   waiting_for_devices_to_join: 'Warten auf den Beitritt weiterer Geräte',
   waiting_for_devices_to_join_description:
@@ -1157,6 +1167,7 @@ export const de = {
   waiting_for_keygen_start: 'Warten auf den Start der Schlüsselgenerierung...',
   waiting_for_keysign_start: 'Warten auf den Start des Signiervorgangs …',
   wallet: 'Wallet',
+  website: 'Website',
   withdraw: 'Auszahlen',
   withdraw_ruji_rewards: 'RUJI-Belohnungen auszahlen',
   add_cacao_pool: 'Zum CACAO-Pool hinzufügen',
@@ -1238,7 +1249,7 @@ export const de = {
   },
   your_friends_referral_code: 'Empfehlungscode Ihres Freundes',
   your_referral_code: 'Ihr Empfehlungscode',
-  your_referrals: 'Ihre Empfehlungen',
+  your_referrals: 'Meine Empfehlung',
   your_seedphrase: 'Ihre Seedphrase',
   your_seedphrase_subtitle:
     'Geben Sie sie ein, erstellen Sie einen Tresor – fertig.',
@@ -1347,6 +1358,8 @@ export const de = {
   qbtc_claim_card_title: 'Claimbare QBTC',
   qbtc_claim_tab: 'Beanspruchen',
   qbtc_onboarding_title: 'Neue Quantensicherheit',
+  quick_settings: 'Schnelleinstellungen',
+  rate_app: 'App bewerten',
   qbtc_onboarding_subtitle:
     'Klassische Schlüssel können von Quantencomputern geknackt werden. Die Aktivierung von QBTC erfordert die Generierung eines neuen Schlüsselpaares.',
   qbtc_onboarding_feature_generate_title:
@@ -1482,7 +1495,6 @@ export const de = {
     'Willkommen im {{productName}} Plugin Marketplace',
   plugin_permissions_brand_safety_notice:
     '{{productName}} Apps können niemals Transaktionen signieren, die Sie nicht vorher genehmigen.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'Der Handel mit diesem Asset ist vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.',
   sui_arguments: 'Argumente',
@@ -2105,7 +2117,6 @@ export const de = {
   custom_message_unsupported_method:
     'Nicht unterstützte Signaturmethode. Verwenden Sie personal_sign oder eth_signTypedData_v4.',
   revoke: 'Zugriff entziehen',
-  token_approvals: 'Token-Genehmigungen',
   token_approvals_delegate: 'Delegierter',
   token_approvals_partial:
     'Permit2-Genehmigungen konnten nicht vollständig geprüft werden auf: {{chains}}',
@@ -2123,8 +2134,6 @@ export const de = {
   token_approvals_empty_title: 'Keine aktiven Genehmigungen',
   token_approvals_empty_description:
     'Verträge, denen Sie die Verwendung Ihrer Token auf den Chains dieses Tresors gestatten, werden hier angezeigt.',
-  token_approvals_description:
-    'Verträge prüfen und widerrufen, die Ihre Token ausgeben können.',
   token_approvals_disconnect_note:
     'Das Trennen eines dApp entfernt diese Genehmigungen nicht. Jeder Widerruf ist eine separate On-Chain-Transaktion mit einer Netzwerkgebühr.',
   token_approvals_unlimited_count: 'Unbegrenzt: {{count}}',
@@ -2132,5 +2141,6 @@ export const de = {
   revoke_approval_explanation:
     'Setzt das Kontingent dieses Vertrags auf 0, sodass dieser Token nicht mehr aus Ihrem Tresor transferiert werden kann. Es fällt eine Netzwerkgebühr an.',
   revoke_approval_new_allowance: 'Neue Ausgabenobergrenze',
+  revoke_approvals: 'Genehmigungen widerrufen',
   token_approvals_count: 'Genehmigungen: {{count}}',
 }
