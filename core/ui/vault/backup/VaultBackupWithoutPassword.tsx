@@ -1,6 +1,9 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { UnreadableVaultKeySharesError } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
-import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import {
+  settingsBaselineOffset,
+  SettingsBaselineText,
+} from '@core/ui/settings/SettingsBaselineText'
 import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
@@ -48,8 +51,7 @@ const SettingsInfoItem = styled(InfoItem)`
   p {
     letter-spacing: 0.06px;
     line-height: 18px;
-    position: relative;
-    top: 1px;
+    ${settingsBaselineOffset};
   }
 `
 
@@ -117,10 +119,7 @@ export const VaultBackupWithoutPassword = ({
                 <SettingsBaselineText
                   centerHorizontally
                   color="regular"
-                  height={24 / 22}
-                  letterSpacing={-0.36}
-                  size={22}
-                  weight={500}
+                  variant="title2"
                 >
                   {t('backup_password_confirmation_title')}
                 </SettingsBaselineText>

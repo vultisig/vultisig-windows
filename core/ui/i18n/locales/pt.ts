@@ -12,7 +12,6 @@ export const pt = {
   add_memo: 'Adicionar MEMO',
   add_new_vault: 'Adicionar novo cofre',
   add_referral: 'Adicionar indicação',
-  add_referral_code: 'Salvar código de indicação',
   add_to_address_book: 'Adicionar à agenda de endereços',
   add_suggested_token: 'Adicionar token sugerido',
   bech32_prefix: 'Prefixo de endereço',
@@ -221,7 +220,6 @@ export const pt = {
   copy_address: 'Copiar endereço',
   create_new_vault: 'Criar novo cofre',
   create_vault: 'Criar cofre',
-  create_referral_form: 'Criar indicação',
   create_referral_title: 'Criar indicação',
   create_referral: 'Criar indicação',
   create_referral_desc:
@@ -274,6 +272,8 @@ export const pt = {
   discount_tiers: 'Níveis de desconto {{ticker}}',
   discount_tiers_description:
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
+  discount_tiers_thorguard_boost:
+    'Ter um ThorGuard aumenta instantaneamente seu nível de desconto, até Platina.',
   discovering_mediator: 'Descobrindo o serviço de mediação, aguarde...',
   done: 'Feito',
   earn: 'Ganhar',
@@ -814,7 +814,6 @@ export const pt = {
   save_backup_n_of_n_to_cloud:
     'Salvar backup de {{current}} de {{total}} na nuvem',
   save_backup_to_cloud: 'Salvar backup na nuvem',
-  save_code: 'Salvar código',
   save_swap_fees_with_referral:
     'Economize <blue>10%</blue> em trocas - Adicione uma indicação',
   saving_vault: 'Salvando o cofre...',
@@ -1049,7 +1048,6 @@ export const pt = {
   upload_qr_code_to_join_keysign:
     'Faça o upload do código QR para se juntar ao Keysign.',
   upload_qr_code_with_address: 'Faça o upload do código QR com o endereço.',
-  use_referral_code: 'Use o código de indicação',
   used_referral_error:
     'O código de indicação usado não pode ser o mesmo que o seu código de indicação.',
   validator_address: 'Endereço do Validador',
@@ -1242,7 +1240,7 @@ export const pt = {
   },
   your_friends_referral_code: 'Código de indicação do seu amigo',
   your_referral_code: 'Seu código de indicação',
-  your_referrals: 'Suas indicações',
+  your_referrals: 'Minha indicação',
   your_seedphrase: 'Sua frase-semente',
   your_seedphrase_subtitle: 'Entre, crie um cofre e nunca mais olhe para trás.',
   youre_swapping: 'Você está trocando',

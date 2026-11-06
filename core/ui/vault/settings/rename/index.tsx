@@ -1,4 +1,3 @@
-import { currentProductBrand } from '@core/ui/product/brand'
 import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import {
   settingsInputHeight,
@@ -35,11 +34,8 @@ const NameInput = styled(TextInput)`
   padding-right: ${fieldPadding + clearIconSize + 8}px;
 `
 
-// The frame's clear icon fill; no theme token carries it.
 const ClearButton = styled(IconButton)`
-  color: ${currentProductBrand === 'vultisig'
-    ? '#97acbf'
-    : getColor('textShy')};
+  color: ${getColor('settingsClearIcon')};
   font-size: ${clearIconSize}px;
 `
 

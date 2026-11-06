@@ -51,6 +51,13 @@ export const stationTheme: DefaultTheme = {
     primaryAccentTwo: new HSLA(224, 82, 60),
     primaryAccentFour: new HSLA(224, 89, 66),
 
+    settingsFieldBackground: new HSLA(240, 5, 15), // foreground
+    settingsReadOnlyBackground: new HSLA(240, 5, 15), // foreground
+    settingsOptionSelected: new HSLA(240, 5, 15), // foreground
+    settingsRaisedSurface: new HSLA(240, 6, 17), // foregroundDark
+    settingsBadgeBackground: new HSLA(240, 5, 15), // foreground
+    settingsClearIcon: new HSLA(0, 0, 64), // textShy
+
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),
   },

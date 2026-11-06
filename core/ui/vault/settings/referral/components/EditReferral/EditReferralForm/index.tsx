@@ -1,8 +1,7 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { Button } from '@lib/ui/buttons/Button'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
@@ -18,7 +17,8 @@ import { ValidThorchainNameDetails } from '../../../services/getUserValidThorcha
 import {
   DecorationLine,
   FormFieldErrorText,
-  ReferralPageWrapper,
+  ReferralFormContent,
+  ReferralFormFooter,
 } from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
@@ -100,37 +100,34 @@ export const EditReferralForm = ({ onFinish, onBack, nameDetails }: Props) => {
   ])
 
   return (
-    <VStack flexGrow gap={40}>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={t('referrals_default_title')}
-      />
-      <ReferralPageWrapper
+    <VStack flexGrow>
+      <SettingsPageHeader onBack={onBack} title={t('edit_referral')} />
+      <VStack
         onSubmit={onFinish}
         as="form"
         data-testid="CreateReferralForm-Wrapper"
         flexGrow
-        justifyContent="space-between"
+        style={{ minHeight: 0 }}
       >
-        <VStack flexGrow justifyContent="space-between">
+        <ReferralFormContent flexGrow scrollable>
           <StackSeparatedBy
             direction="column"
             separator={<DecorationLine />}
             gap={14}
           >
             <ReferralCodeField />
-            <PayoutAssetField />
             <ExpirationField initialExpiration={initialExpiration} />
+            <PayoutAssetField />
             <Fees />
           </StackSeparatedBy>
-          <VStack gap={4}>
-            <Button disabled={isDisabled} type="submit">
-              {t('edit_referral')}
-            </Button>
-            {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
-          </VStack>
-        </VStack>
-      </ReferralPageWrapper>
+        </ReferralFormContent>
+        <ReferralFormFooter gap={4}>
+          <SettingsCtaButton disabled={isDisabled} type="submit">
+            {t('save_changes')}
+          </SettingsCtaButton>
+          {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
+        </ReferralFormFooter>
+      </VStack>
     </VStack>
   )
 }

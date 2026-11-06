@@ -13,7 +13,6 @@ export const en = {
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
   add_referral: 'Add Referral',
-  add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
   bech32_prefix: 'Address Prefix',
@@ -237,7 +236,6 @@ export const en = {
   copy_link: 'Copy Link',
   create_new_vault: 'Create new Vault',
   create_vault: 'Create vault',
-  create_referral_form: 'Create referral',
   create_referral_title: 'Create Referral',
   create_referral: 'Create Referral',
   create_referral_desc:
@@ -359,6 +357,8 @@ export const en = {
   complete_fee_waive: 'No Fee',
   discount_tiers: '{{ticker}} Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
+  discount_tiers_thorguard_boost:
+    'Holding a ThorGuard instantly boosts your discount tier, up to Platinum.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
   earn: 'Earn',
@@ -1050,7 +1050,6 @@ export const en = {
   save_backup_n_of_n_to_cloud:
     'Save backup {{current}} of {{total}} to the cloud',
   save_backup_to_cloud: 'Save backup to the cloud',
-  save_code: 'Save code',
   save_swap_fees_with_referral:
     'Save <blue>10%</blue> on swaps - Add a Referral',
   saving_vault: 'Saving Vault...',
@@ -1526,7 +1525,6 @@ export const en = {
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_with_address: 'Upload QR code with address',
   use_external_recipient: 'Use External Recipient',
-  use_referral_code: 'Use referral Code',
   used_referral_error:
     'Used referral code can not be the same as your referral code',
   validator_address: 'Validator Address',
@@ -1863,7 +1861,7 @@ export const en = {
   },
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
-  your_referrals: 'Your Referrals',
+  your_referrals: 'My Referral',
   your_seedphrase: 'Your seedphrase',
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",

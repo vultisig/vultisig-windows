@@ -3,10 +3,7 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { css } from 'styled-components'
 
-import { currentProductBrand } from '../product/brand'
-
-// Figma Input fields/background and Borders/extra-light; no theme token carries them.
-const fieldBackground = new HSLA(216, 83.3, 11.8)
+// Figma Borders/extra-light.
 const fieldBorder = new HSLA(0, 0, 100, 0.03)
 
 /** The settings input fields' faint resting border colour. */
@@ -15,9 +12,7 @@ export const settingsFieldHairline = fieldBorder.toCssValue()
 /** Fill, border and radius of the settings input fields. */
 export const settingsFieldSurface = css`
   ${borderRadius.lg};
-  background: ${currentProductBrand === 'vultisig'
-    ? fieldBackground.toCssValue()
-    : getColor('foreground')};
+  background: ${getColor('settingsFieldBackground')};
   border: 1px solid ${settingsFieldHairline};
 `
 
@@ -62,13 +57,8 @@ export const settingsFieldValidation = css<{
   ${({ validation }) => validation === 'invalid' && validationBorder('danger')}
 `
 
-// Figma Backgrounds/disabled; no theme token carries it.
-const readOnlyBackground = 'rgba(11, 26, 58, 0.5)'
-
 /** Fill and border of the read-only cards on the vault settings screens. */
 export const settingsReadOnlySurface = css`
-  background: ${currentProductBrand === 'vultisig'
-    ? readOnlyBackground
-    : getColor('foreground')};
+  background: ${getColor('settingsReadOnlyBackground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `

@@ -19,11 +19,9 @@ import { SquareQuestionFilledIcon } from '@lib/ui/icons/SquareQuestionFilledIcon
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { currentProductBrand } from '../product/brand'
 import {
@@ -35,6 +33,7 @@ import {
 } from './constants'
 import { SettingsCommunity } from './SettingsCommunity'
 import { SettingsItem } from './SettingsItem'
+import { SettingsPageContent } from './SettingsPageContent'
 import { SettingsPageHeader } from './SettingsPageHeader'
 import { ShareAppSettingsItem } from './ShareAppSettingsItem'
 
@@ -77,7 +76,7 @@ export const SettingsPage = ({
         }}
         title={t('settings')}
       />
-      <Content gap={13} flexGrow scrollable>
+      <SettingsPageContent gap={13} flexGrow scrollable>
         <VStack gap={14}>
           {client === 'extension' && (
             <SettingsSection title={t('quick_settings')}>
@@ -171,11 +170,7 @@ export const SettingsPage = ({
           </SettingsSection>
         </VStack>
         <VStack alignItems="center">{insiderOptions}</VStack>
-      </Content>
+      </SettingsPageContent>
     </VStack>
   )
 }
-
-const Content = styled(PageContent)`
-  padding-top: 24px;
-`
