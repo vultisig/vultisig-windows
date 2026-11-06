@@ -1,6 +1,5 @@
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { BlockaidTxScan } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScan'
+import { DecodedContractCallItem } from '@core/ui/chain/tx/DecodedContractCallItem'
 import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
 import {
   getTronStakingDisplay,
@@ -8,10 +7,9 @@ import {
 } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { TxOverviewEvmMemo } from '@core/ui/chain/tx/TxOverviewEvmMemo'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
-import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
-import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { getTronContractCall } from '@core/ui/chain/tx/utils/getTronContractCall'
-import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { toTronContractCallInfo } from '@core/ui/chain/tx/utils/toTronContractCallInfo'
+import { useDecodedContractCall } from '@core/ui/chain/tx/utils/useDecodedContractCall'
 import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
 import { VerifyTransactionOverview } from '@core/ui/mpc/keysign/verify/VerifyTransactionOverview'
 import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
@@ -19,21 +17,16 @@ import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddr
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
 import { getResolvedQuery } from '@lib/ui/query/Query'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
-import { Text } from '@lib/ui/text'
-import { useQuery } from '@tanstack/react-query'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { feeSettingsChains } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useTranslation } from 'react-i18next'
 
@@ -96,52 +89,17 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
 
   // Decode the EVM calldata so the joiner sees the same `[icon] Approve / amount TICKER`
   // (and the unlimited-approval warning) the initiator shows on its pre-sign popup.
-  // The query shares its memo-keyed react-query cache with the initiator's path,
-  // so we don't refetch the 4byte signature.
   // A Tron dApp contract call is signed from the contract's data, not the memo,
   // and targets the contract rather than the reviewed recipient (a TRC-20
   // transfer names its recipient in the data), so that call is decoded instead.
-  const getCoin = useGetCoin()
   const tronContractCall = getTronContractCall(value)
-  const contractCallQuery = useEvmContractCallInfoQuery({
-    memo: tronContractCall?.data ?? memo,
+  const decodedCall = useDecodedContractCall({
+    calldata: tronContractCall?.data ?? memo,
+    callTarget: tronContractCall?.contractAddress ?? toAddress,
+    chain: coin.chain,
     enabled: isChainOfKind(coin.chain, 'evm') || !!tronContractCall,
+    formatInfo: tronContractCall ? toTronContractCallInfo : undefined,
   })
-  const tokenPair = contractCallQuery.data
-    ? extractTokenAndAmount(
-        contractCallQuery.data.functionSignature,
-        contractCallQuery.data.functionArguments,
-        tronContractCall?.contractAddress ?? toAddress
-      )
-    : null
-  const tokenQuery = useQuery({
-    queryKey: ['resolveToken', tokenPair?.tokenAddress, coin.chain],
-    queryFn: () => getCoin({ id: tokenPair!.tokenAddress, chain: coin.chain }),
-    enabled: !!tokenPair,
-    staleTime: Infinity,
-  })
-  const rawFunctionName =
-    contractCallQuery.data?.functionSignature.split('(')[0]
-  const decodedCall =
-    tokenQuery.data && tokenPair && rawFunctionName
-      ? (() => {
-          const fmt = formatTokenAmount({
-            rawAmount: BigInt(tokenPair.rawAmount),
-            decimals: tokenQuery.data.decimals,
-            functionName: rawFunctionName,
-          })
-          // MAX_UINT256 in a non-approval (withdraw/repay) — exact amount
-          // depends on on-chain state, so skip the row entirely.
-          if (!fmt.display) return null
-          const amountLabel = fmt.isSentinel ? t('unlimited') : fmt.display
-          return {
-            coin: tokenQuery.data,
-            functionName: capitalizeFirstLetter(rawFunctionName),
-            display: `${amountLabel} ${tokenQuery.data.ticker}`,
-            isUnlimited: fmt.isSentinel,
-          }
-        })()
-      : null
 
   // A TRON freeze/unfreeze is signed as a staking contract, not a transfer, and
   // carries its operation as an internal memo marker. Name the operation and
@@ -209,35 +167,15 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             : undefined
         }
       >
-        {decodedCall && (
-          <ListItem
-            title={
-              <HStack alignItems="center" gap={8}>
-                <CoinIcon coin={decodedCall.coin} style={{ fontSize: 24 }} />
-                <Text size={14} weight={500}>
-                  {decodedCall.functionName}
-                </Text>
-              </HStack>
-            }
-            extra={
-              decodedCall.isUnlimited ? (
-                <HStack alignItems="center" gap={6}>
-                  <Text as={TriangleAlertIcon} color="warning" size={16} />
-                  <Text color="warning" weight={500}>
-                    {decodedCall.display}
-                  </Text>
-                </HStack>
-              ) : (
-                <Text size={14} weight={500}>
-                  {decodedCall.display}
-                </Text>
-              )
-            }
-          />
-        )}
+        {decodedCall && <DecodedContractCallItem value={decodedCall} />}
         {tronContractCall && (
           <ListItem
-            title={<TxOverviewEvmMemo value={tronContractCall.data} />}
+            title={
+              <TxOverviewEvmMemo
+                value={tronContractCall.data}
+                formatInfo={toTronContractCallInfo}
+              />
+            }
           />
         )}
         {memoValue && (
