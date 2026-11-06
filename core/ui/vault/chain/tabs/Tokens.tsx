@@ -5,7 +5,6 @@ import { CoinDetailModal } from '@core/ui/vault/chain/coin/CoinDetailModal'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultChainCoinItem } from '@core/ui/vault/chain/VaultChainCoinItem'
-import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -13,9 +12,10 @@ import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { parseRippleTokenId } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
-import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { CoinKey, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@vultisig/core-chain/coin/utils/sortCoinsByBalance'
 import { splitBy } from '@vultisig/lib-utils/array/splitBy'
@@ -25,6 +25,7 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useProgressiveVaultChainCoinsQuery } from '../../queries/useProgressiveVaultChainCoinsQuery'
 import { useSearchChainToken } from '../state/searchChainTokenProvider'
 import { VaultChainTokensEmptyState } from './VaultChainTokensEmptyState'
 
@@ -38,9 +39,10 @@ const StyledPanel = styled(Panel)`
   }
 `
 
+/** A chain's token list; rows appear as balances load, marked while others are loading or have failed. */
 export const Tokens = () => {
   const chain = useCurrentVaultChain()
-  const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
+  const vaultCoinsQuery = useProgressiveVaultChainCoinsQuery(chain)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const chainCoins = useCurrentVaultChainCoins(chain)
@@ -113,12 +115,12 @@ export const Tokens = () => {
 
           return (
             <List>
-              {orderedCoins.map((coin, idx) =>
+              {orderedCoins.map(coin =>
                 coin.id && tokensNeedingTrustLine.has(coin.id) ? (
                   // No trust line yet, so there is no balance to drill into —
                   // the row offers the activation instead of the coin detail.
                   <StyledPanel
-                    key={`${idx}-${coin.id}`}
+                    key={coinKeyToString(coin)}
                     onClick={() => activateTrustLine(coin)}
                   >
                     <VaultChainCoinItem
@@ -128,7 +130,7 @@ export const Tokens = () => {
                   </StyledPanel>
                 ) : (
                   <Opener
-                    key={`${idx}-${coin.id}`}
+                    key={coinKeyToString(coin)}
                     renderOpener={({ onOpen }) => (
                       <StyledPanel onClick={onOpen}>
                         <VaultChainCoinItem value={coin} />
@@ -144,6 +146,16 @@ export const Tokens = () => {
           )
         }}
       />
+      {vaultCoinsQuery.data && vaultCoinsQuery.isUpdating ? (
+        <VStack fullWidth>
+          <Spinner />
+        </VStack>
+      ) : null}
+      {vaultCoinsQuery.isIncomplete ? (
+        <Text color="danger" size={12} centerHorizontally>
+          {t('some_balances_failed_to_load')}
+        </Text>
+      ) : null}
     </VStack>
   )
 }

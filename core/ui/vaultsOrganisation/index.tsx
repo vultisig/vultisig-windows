@@ -40,6 +40,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../state/core'
+import { sumVaultTotals } from './utils/sumVaultTotals'
 
 type FolderEntry = {
   id: string
@@ -111,11 +112,10 @@ export const VaultsPage = ({
   // sums the same set. Per-row rendering below only uses the folderless
   // subset, but the shared cache means folder vaults' balances are ready when
   // the user drills into a folder.
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances({
-      vaults,
-      enabled: !skipBalanceFetch,
-    })
+  const { totals: vaultTotals } = useVaultsTotalBalances({
+    vaults,
+    enabled: !skipBalanceFetch,
+  })
   const formatFiatAmount = useFormatFiatAmount()
 
   const totalVaultsCount = vaults.length
@@ -128,28 +128,23 @@ export const VaultsPage = ({
 
     const parts = [vaultCountLabel]
 
+    const totalBalance = sumVaultTotals({ totals: vaultTotals, vaults })
     if (
       totalVaultsCount > 1 &&
       !skipBalanceFetch &&
-      !isTotalsPending &&
-      vaultTotals
+      totalBalance !== undefined
     ) {
-      const totalBalance = Object.values(vaultTotals).reduce(
-        (sum, value) => sum + value,
-        0
-      )
-
       parts.push(formatFiatAmount(totalBalance))
     }
 
     return parts.join(' • ')
   }, [
     formatFiatAmount,
-    isTotalsPending,
     skipBalanceFetch,
     t,
     totalVaultsCount,
     vaultCountLabel,
+    vaults,
     vaultTotals,
   ])
 
@@ -299,12 +294,7 @@ export const VaultsPage = ({
             <VaultRows $isSettingsLook={isSettingsLook}>
               {displayedVaults.map(vault => {
                 const vaultId = getVaultId(vault)
-                const value =
-                  !skipBalanceFetch &&
-                  !isTotalsPending &&
-                  vaultTotals?.[vaultId] !== undefined
-                    ? vaultTotals[vaultId]
-                    : undefined
+                const value = vaultTotals?.[vaultId]
                 const VaultRow = isSettingsLook ? VaultMenuRow : VaultListItem
 
                 return (

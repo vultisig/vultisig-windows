@@ -96,10 +96,9 @@ const EmptyStateCard = styled(VStack)`
 
 type AddVaultsProps = {
   totals: VaultTotals
-  isTotalsPending: boolean
 }
 
-const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
+const AddVaultsToFolder = ({ totals }: AddVaultsProps) => {
   const { t } = useTranslation()
   const { id } = useCurrentVaultFolder()
   const { mutate } = useAddVaultToFolderMutation()
@@ -151,9 +150,7 @@ const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
               leading={<LeadingIconBadge tone={tone}>{icon}</LeadingIconBadge>}
               title={vault.name}
               subtitle={
-                !isTotalsPending && value !== undefined
-                  ? formatFiatAmount(value)
-                  : undefined
+                value !== undefined ? formatFiatAmount(value) : undefined
               }
               trailing={
                 <SwitchWrapper onClick={event => event.stopPropagation()}>
@@ -171,13 +168,9 @@ const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
 
 type ManageFolderVaultsProps = {
   totals: VaultTotals
-  isTotalsPending: boolean
 }
 
-const ManageFolderVaults = ({
-  totals,
-  isTotalsPending,
-}: ManageFolderVaultsProps) => {
+const ManageFolderVaults = ({ totals }: ManageFolderVaultsProps) => {
   const { t } = useTranslation()
   const { id } = useCurrentVaultFolder()
   const vaults = useFolderVaults(id)
@@ -263,9 +256,7 @@ const ManageFolderVaults = ({
               }
               title={item.name}
               subtitle={
-                !isTotalsPending && value !== undefined
-                  ? formatFiatAmount(value)
-                  : undefined
+                value !== undefined ? formatFiatAmount(value) : undefined
               }
               trailing={
                 <SwitchWrapper onClick={event => event.stopPropagation()}>
@@ -294,7 +285,7 @@ export const UpdateVaultFolderPage = () => {
   // display on this screen.
   const folderlessVaults = useFolderlessVaults()
   const folderVaults = useFolderVaults(id)
-  const { totals, isPending: isTotalsPending } = useVaultsTotalBalances({
+  const { totals } = useVaultsTotalBalances({
     vaults: [...folderlessVaults, ...folderVaults],
   })
 
@@ -360,8 +351,8 @@ export const UpdateVaultFolderPage = () => {
             </Text>
           )}
         </VStack>
-        <ManageFolderVaults totals={totals} isTotalsPending={isTotalsPending} />
-        <AddVaultsToFolder totals={totals} isTotalsPending={isTotalsPending} />
+        <ManageFolderVaults totals={totals} />
+        <AddVaultsToFolder totals={totals} />
       </PageContent>
       <PageFooter>
         <Button

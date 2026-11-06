@@ -16,6 +16,23 @@ import { fetchStakePositions } from './services/thorchainStake'
 import { thorchainDefiCoins } from './tokens'
 import { RawDefiChainPositions } from './types'
 
+const fetchThorchainBondPositions = async (address: string) => {
+  const [churns, networkInfo, health, network] = await Promise.all([
+    fetchChurns(),
+    fetchNetworkInfo(),
+    fetchHealth(),
+    fetchNetwork(),
+  ])
+
+  return fetchBondPositions(
+    address,
+    churns ?? [],
+    networkInfo ?? {},
+    health ?? {},
+    !network?.vaults_migrating
+  )
+}
+
 type UseThorchainDefiPositionsQueryOptions = {
   enabled?: boolean
 }
@@ -37,22 +54,10 @@ export const useThorchainDefiPositionsQuery = (
     queryKey: ['defi', 'thorchain', 'positions', address],
     enabled: enabled && Boolean(address),
     queryFn: async () => {
-      const [churns, networkInfo, health, network] = await Promise.all([
-        fetchChurns(),
-        fetchNetworkInfo(),
-        fetchHealth(),
-        fetchNetwork(),
+      const [bond, stake] = await Promise.all([
+        fetchThorchainBondPositions(address),
+        fetchStakePositions(address),
       ])
-
-      const bond = await fetchBondPositions(
-        address,
-        churns ?? [],
-        networkInfo ?? {},
-        health ?? {},
-        !network?.vaults_migrating
-      )
-
-      const stake = await fetchStakePositions(address)
 
       return { bond, stake }
     },

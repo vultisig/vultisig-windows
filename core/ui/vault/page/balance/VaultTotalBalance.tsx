@@ -69,7 +69,13 @@ export const VaultTotalBalance = ({
               <Tooltip
                 content={t('some_balances_failed_to_load')}
                 renderOpener={props => (
-                  <IconWrapper {...props} color="danger" size={16}>
+                  <IconWrapper
+                    {...props}
+                    color="danger"
+                    size={16}
+                    tabIndex={0}
+                    aria-label={t('some_balances_failed_to_load')}
+                  >
                     <CircleAlertIcon />
                   </IconWrapper>
                 )}

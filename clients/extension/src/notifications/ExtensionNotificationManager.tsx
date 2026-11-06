@@ -1,4 +1,4 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
+import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { handleKeysignWsNotification } from '@core/ui/notifications/handleKeysignWsNotification'
 import {
   buildKeysignNotificationWebSocketUrl,
@@ -129,9 +129,7 @@ export const ExtensionNotificationManager = () => {
   const vaultsRef = useRef(vaults)
   vaultsRef.current = vaults
 
-  // Built the first time a notification needs it, and rebuilt when the vault
-  // list changes, so the SDK load it depends on is not started on mount ahead
-  // of the idle prefetch. A build that failed is dropped so the next one retries.
+  // Built the first time a notification needs it and rebuilt when the vault list changes.
   const vaultBannerMetaRef = useRef<{
     vaults: ReturnType<typeof useVaults>
     meta: Promise<Map<string, { isFastVault: boolean }>>
@@ -145,25 +143,19 @@ export const ExtensionNotificationManager = () => {
     }
 
     const meta = (async () => {
-      const { computeNotificationVaultId } = await loadMpcEngine()
       const next = new Map<string, { isFastVault: boolean }>()
       for (const vault of currentVaults) {
         if (!vault.hexChainCode) {
           continue
         }
-        const vaultId = await computeNotificationVaultId(
-          vault.publicKeys.ecdsa,
-          vault.hexChainCode
-        )
+        const vaultId = computeNotificationVaultId({
+          ecdsaPublicKey: vault.publicKeys.ecdsa,
+          hexChainCode: vault.hexChainCode,
+        })
         next.set(vaultId, { isFastVault: hasServer(vault.signers) })
       }
       return next
     })()
-    meta.catch(() => {
-      if (vaultBannerMetaRef.current?.meta === meta) {
-        vaultBannerMetaRef.current = null
-      }
-    })
     vaultBannerMetaRef.current = { vaults: currentVaults, meta }
 
     return meta

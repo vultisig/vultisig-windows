@@ -45,8 +45,7 @@ export const CreateVaultFolderPage = () => {
   const { goBack } = useCore()
   const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances({ vaults })
+  const { totals: vaultTotals } = useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
   const names = useMemo(() => folders.map(({ name }) => name), [folders])
@@ -146,9 +145,7 @@ export const CreateVaultFolderPage = () => {
                     }
                     title={vault.name}
                     subtitle={
-                      !isTotalsPending && value !== undefined
-                        ? formatFiatAmount(value)
-                        : undefined
+                      value !== undefined ? formatFiatAmount(value) : undefined
                     }
                     trailing={
                       <SwitchWrapper
