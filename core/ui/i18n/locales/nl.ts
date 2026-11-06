@@ -2090,6 +2090,7 @@ export const nl = {
     'Permit2-goedkeuringen konden niet volledig worden gecontroleerd op: {{chains}}',
   token_approvals_not_checked: 'Nog niet gecontroleerd: {{chains}}',
   granted_approvals: 'Verleende goedkeuringen',
+  token_approvals_all_chains: 'Alle chains',
   token_approvals_checking: 'Nog bezig met controleren: {{chains}}',
   token_approvals_failed: 'Kon niet controleren: {{chains}}',
   token_approvals_via: 'Goedgekeurd via',

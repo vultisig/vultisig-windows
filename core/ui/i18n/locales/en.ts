@@ -1439,6 +1439,7 @@ export const en = {
   token_approvals_partial:
     'Permit2 approvals could not be fully checked on: {{chains}}',
   token_approvals_not_checked: 'Not checked yet: {{chains}}',
+  token_approvals_all_chains: 'All chains',
   token_approvals_checking: 'Still checking: {{chains}}',
   token_approvals_count: 'Approvals: {{count}}',
   token_approvals_disconnect_note:

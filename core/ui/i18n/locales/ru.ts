@@ -2089,6 +2089,7 @@ export const ru = {
     'Не удалось полностью проверить разрешения Permit2 в: {{chains}}',
   token_approvals_not_checked: 'Ещё не проверено: {{chains}}',
   granted_approvals: 'Выданные разрешения',
+  token_approvals_all_chains: 'Все сети',
   token_approvals_checking: 'Ещё проверяется: {{chains}}',
   token_approvals_failed: 'Не удалось проверить: {{chains}}',
   token_approvals_via: 'Разрешено через',

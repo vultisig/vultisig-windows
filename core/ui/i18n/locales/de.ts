@@ -2122,6 +2122,7 @@ export const de = {
     'Permit2-Genehmigungen konnten nicht vollständig geprüft werden auf: {{chains}}',
   token_approvals_not_checked: 'Noch nicht geprüft: {{chains}}',
   granted_approvals: 'Erteilte Genehmigungen',
+  token_approvals_all_chains: 'Alle Chains',
   token_approvals_checking: 'Wird noch geprüft: {{chains}}',
   token_approvals_failed: 'Prüfung fehlgeschlagen: {{chains}}',
   token_approvals_via: 'Genehmigt über',

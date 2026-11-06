@@ -2106,6 +2106,7 @@ export const pt = {
     'Não foi possível verificar totalmente as aprovações do Permit2 em: {{chains}}',
   token_approvals_not_checked: 'Ainda não verificado: {{chains}}',
   granted_approvals: 'Aprovações concedidas',
+  token_approvals_all_chains: 'Todas as chains',
   token_approvals_checking: 'Ainda verificando: {{chains}}',
   token_approvals_failed: 'Não foi possível verificar: {{chains}}',
   token_approvals_via: 'Aprovado via',

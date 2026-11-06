@@ -1931,6 +1931,7 @@ export const zh = {
   token_approvals_partial: '无法完整检查以下网络上的 Permit2 授权：{{chains}}',
   token_approvals_not_checked: '尚未检查：{{chains}}',
   granted_approvals: '已授予的授权',
+  token_approvals_all_chains: '所有链',
   token_approvals_checking: '仍在检查：{{chains}}',
   token_approvals_failed: '无法检查：{{chains}}',
   token_approvals_via: '授权途径',
