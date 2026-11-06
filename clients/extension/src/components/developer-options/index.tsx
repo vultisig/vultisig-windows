@@ -3,10 +3,7 @@ import {
   getDeveloperOptions,
   setDeveloperOptions,
 } from '@core/extension/storage/developerOptions'
-import {
-  currentProductBrand,
-  currentProductBrandConfig,
-} from '@core/ui/product/brand'
+import { currentProductBrand } from '@core/ui/product/brand'
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
@@ -101,11 +98,8 @@ export const ExtensionDeveloperOptions = () => {
   return (
     <>
       <UnstyledButton onClick={handleClick}>
-        <Text size={12} color="shy">
-          {t('extension_version', {
-            brand: currentProductBrandConfig.extensionName.toUpperCase(),
-            version,
-          })}
+        <Text as="span" color="shy" variant="caption">
+          {`${t('version')} ${version}`}
         </Text>
       </UnstyledButton>
 

@@ -1,51 +1,52 @@
 import { SvgProps } from '@lib/ui/props'
 
+/** A Chinese character next to the letter A. */
 export const LanguagesIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 20"
     fill="none"
     {...props}
   >
     <path
-      d="M3.59961 6H13.1996"
+      d="M2.99967 5H10.9997"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7.00033 2.99967V4.99967"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M8.40039 3.59961V5.99961"
+      d="M9.49967 5C9.02067 11.354 2.99967 11.5 2.99967 11.5"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M11.3996 6C10.8248 13.6248 3.59961 13.8 3.59961 13.8"
+      d="M9.29933 11.191C7.48033 10.646 4.81233 9.142 4.50033 5"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M11.1592 13.4292C8.97639 12.7752 5.77479 10.9704 5.40039 6"
+      d="M11.0368 15H16.2218"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M13.2441 18H19.4661"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12.3105 20.3998L16.0437 10.7998H16.6665L20.3997 20.3998"
+      d="M10.2588 16.9998L13.3698 8.99984H13.8888L16.9998 16.9998"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"

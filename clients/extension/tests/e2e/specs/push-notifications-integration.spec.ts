@@ -50,7 +50,7 @@ test.describe('Push Notifications Integration', () => {
       await settingsBtn.click()
       await page.waitForTimeout(1000)
 
-      const versionText = page.getByText(/VULTISIG.*V\d+\.\d+/i).first()
+      const versionText = page.getByText(/Version \d+\.\d+/).first()
       if (await versionText.isVisible({ timeout: 3000 }).catch(() => false)) {
         await versionText.click({ clickCount: 3 })
         await page.waitForTimeout(500)
@@ -108,7 +108,7 @@ test.describe('Push Notifications Integration', () => {
       await settingsBtn.click()
       await page.waitForTimeout(1000)
 
-      const versionText = page.getByText(/VULTISIG.*V\d+\.\d+/i).first()
+      const versionText = page.getByText(/Version \d+\.\d+/).first()
       if (await versionText.isVisible({ timeout: 3000 }).catch(() => false)) {
         await versionText.click({ clickCount: 3 })
         await page.waitForTimeout(500)
@@ -229,7 +229,7 @@ test.describe('Push Notifications E2E Flow', () => {
       await settingsBtn.click()
       await page.waitForTimeout(1000)
 
-      const versionText = page.getByText(/VULTISIG.*V\d+\.\d+/i).first()
+      const versionText = page.getByText(/Version \d+\.\d+/).first()
       await versionText.click({ clickCount: 3 })
       await page.waitForTimeout(500)
 

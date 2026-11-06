@@ -1,10 +1,11 @@
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { ChevronRightSmallIcon } from '@lib/ui/icons/ChevronRightSmallIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { panel } from '@lib/ui/panel/Panel'
 import { InputProps } from '@lib/ui/props'
-import { Text, TextColor } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +13,7 @@ import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '../chain/metadata/getChainLogoSrc'
+import { SettingsBaselineText } from '../settings/SettingsBaselineText'
 import { AddressBookChainSelectionScreen } from './AddressBookChainSelectionScreen'
 import {
   AddressBookChainType,
@@ -21,25 +23,40 @@ import {
 } from './AddressBookChainType'
 
 const ChainSelector = styled(HStack)`
-  ${panel()};
-  cursor: pointer;
-  padding: 12px 16px;
-  ${borderRadius.sm};
+  ${borderRadius.lg};
   align-items: center;
-  gap: 12px;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  box-sizing: border-box;
+  cursor: pointer;
+  gap: 6px;
   height: 56px;
-  justify-content: space-between;
+  padding: 16px;
 `
 
-type Props = {
-  titleColor?: TextColor
-} & InputProps<Chain | undefined>
+const ChainLogoSlot = styled.div`
+  ${centerContent};
+  ${sameDimensions(32)};
+  flex-shrink: 0;
+`
 
-export const AddressBookChainInput = ({
-  value,
-  onChange,
-  titleColor = 'light',
-}: Props) => {
+const ChevronSlot = styled.div`
+  color: ${getColor('text')};
+  font-size: 20px;
+  line-height: 0;
+  margin-left: auto;
+`
+
+const SelectorText = styled(SettingsBaselineText).attrs({
+  as: 'span',
+  height: 1.5,
+  size: 16,
+  weight: 500,
+})``
+
+type Props = InputProps<Chain | undefined>
+
+export const AddressBookChainInput = ({ value, onChange }: Props) => {
   const { t } = useTranslation()
   const [showChainSelection, setShowChainSelection] = useState(false)
 
@@ -68,23 +85,23 @@ export const AddressBookChainInput = ({
 
   return (
     <VStack gap={8}>
-      <Text color={titleColor} size={12} weight="500">
+      <SettingsBaselineText color="regular" variant="stationBodyS">
         {t('chain')}
-      </Text>
+      </SettingsBaselineText>
       <ChainSelector onClick={() => setShowChainSelection(true)}>
         {selectedChainType && logoSrc ? (
           <>
-            <ChainEntityIcon value={logoSrc} style={{ fontSize: 24 }} />
-            <Text color="contrast" size={14} weight="500">
-              {displayName}
-            </Text>
+            <ChainLogoSlot>
+              <ChainEntityIcon value={logoSrc} style={{ fontSize: 24 }} />
+            </ChainLogoSlot>
+            <SelectorText color="regular">{displayName}</SelectorText>
           </>
         ) : (
-          <Text color="shy" size={14} weight="500">
-            {t('select_chains')}
-          </Text>
+          <SelectorText color="shy">{t('select')}</SelectorText>
         )}
-        <ChevronRightIcon style={{ marginLeft: 'auto', marginRight: 0 }} />
+        <ChevronSlot>
+          <ChevronRightSmallIcon />
+        </ChevronSlot>
       </ChainSelector>
       {showChainSelection && (
         <AddressBookChainSelectionScreen

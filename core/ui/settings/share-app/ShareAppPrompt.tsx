@@ -1,9 +1,7 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { CopiesFilledIcon } from '@lib/ui/icons/CopiesFilledIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { hStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { desktopDownloadUrl, extensionDownloadUrl } from '@vultisig/core-config'
@@ -11,6 +9,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../../state/core'
+import { SettingsBaselineText } from '../SettingsBaselineText'
+import { settingsFieldSurface } from '../settingsField'
 
 export const ShareAppPrompt = () => {
   const { addToast } = useToast()
@@ -31,27 +31,32 @@ export const ShareAppPrompt = () => {
 
   return (
     <Wrapper>
-      <Text cropped size={16} color="shy">
+      <SettingsBaselineText cropped color="shyExtra" variant="stationBodyS">
         {shareURL}
-      </Text>
-      <UnstyledButton onClick={handleCopy}>
-        <IconWrapper size={20} color="buttonPrimary">
-          <CopyIcon />
+      </SettingsBaselineText>
+      <CopyButton onClick={handleCopy}>
+        <IconWrapper size={20} color="text">
+          <CopiesFilledIcon />
         </IconWrapper>
-      </UnstyledButton>
+      </CopyButton>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  padding: 16px;
+  --icon-accent: ${getColor('textShyExtra')};
+  gap: 8px;
+  padding: 15px;
 
   ${hStack({
     justifyContent: 'space-between',
     alignItems: 'center',
   })};
 
-  ${borderRadius.md};
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: ${getColor('foreground')};
+  ${settingsFieldSurface};
+`
+
+const CopyButton = styled(UnstyledButton)`
+  flex-shrink: 0;
+  line-height: 0;
 `
