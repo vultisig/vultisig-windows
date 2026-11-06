@@ -13,14 +13,7 @@ export const ServerBackupFieldHeading = ({
   description,
 }: ServerBackupFieldHeadingProps) => (
   <VStack alignItems="center" gap={12}>
-    <SettingsBaselineText
-      centerHorizontally
-      color="regular"
-      height={24 / 22}
-      letterSpacing={-0.36}
-      size={22}
-      weight={500}
-    >
+    <SettingsBaselineText centerHorizontally color="regular" variant="title2">
       {title}
     </SettingsBaselineText>
     <SettingsBaselineText

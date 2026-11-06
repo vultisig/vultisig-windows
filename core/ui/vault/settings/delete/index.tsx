@@ -68,10 +68,7 @@ export const DeleteVaultPage = () => {
           <VStack alignItems="center" gap={8}>
             <SettingsBaselineText
               color="danger"
-              height={24 / 22}
-              letterSpacing={-0.36}
-              size={22}
-              weight={500}
+              variant="title2"
               centerHorizontally
             >
               {t('vault_delete_page_header_title')}

@@ -1,6 +1,6 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { Stepper } from '@lib/ui/inputs/Stepper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
 import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -11,6 +11,7 @@ import {
   FormFieldLabel,
 } from '../../../Referrals.styled'
 
+/** Create Referral's years stepper and the date they lead to. */
 export const ExpirationField = () => {
   const { t } = useTranslation()
   const {
@@ -58,10 +59,12 @@ export const ExpirationField = () => {
         )}
       </FormField>
       <HStack justifyContent="space-between" alignItems="center">
-        <Text size={14} color="supporting">
+        <SettingsBaselineText color="shy" variant="stationBodyS">
           {t('expiration_date')}
-        </Text>
-        <Text>{formattedExpirationDate}</Text>
+        </SettingsBaselineText>
+        <SettingsBaselineText variant="stationBodyS">
+          {formattedExpirationDate}
+        </SettingsBaselineText>
       </HStack>
     </VStack>
   )

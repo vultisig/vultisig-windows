@@ -43,13 +43,7 @@ export const CustomRpcPage = () => {
       <PageContent flexGrow scrollable>
         <ContentFrame>
           <VStack gap={16}>
-            <SettingsBaselineText
-              as="h2"
-              height={24 / 22}
-              letterSpacing={-0.36}
-              size={22}
-              weight="500"
-            >
+            <SettingsBaselineText as="h2" variant="title2">
               {t('select_chain')}
             </SettingsBaselineText>
             <SearchInput

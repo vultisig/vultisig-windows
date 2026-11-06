@@ -14,7 +14,6 @@ export const ru = {
   add_memo: 'Добавить MEMO',
   add_new_vault: 'Добавить новое хранилище',
   add_referral: 'Добавить реферал',
-  add_referral_code: 'Сохранить реферальный код',
   add_to_address_book: 'Добавить в адресную книгу',
   add_suggested_token: 'Добавить предложенный токен',
   bech32_prefix: 'Префикс адреса',
@@ -219,7 +218,6 @@ export const ru = {
   copy_address: 'Копировать адрес',
   create_new_vault: 'Создать новое хранилище',
   create_vault: 'Создать хранилище',
-  create_referral_form: 'Создать реферальный код',
   create_referral_title: 'Создать реферальный код',
   create_referral: 'Создать реферальный код',
   create_referral_desc:
@@ -272,6 +270,8 @@ export const ru = {
   discount_tiers: 'Уровни скидок {{ticker}}',
   discount_tiers_description:
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',
+  discount_tiers_thorguard_boost:
+    'Владение ThorGuard мгновенно повышает ваш уровень скидки, вплоть до уровня Платина.',
   discovering_mediator: 'Поиск mediator-сервиса, пожалуйста подождите...',
   done: 'Готово',
   earn: 'Доход',
@@ -807,7 +807,6 @@ export const ru = {
   save_backup_n_of_n_to_cloud:
     'Сохраните резервную копию {{current}} из {{total}} в облако.',
   save_backup_to_cloud: 'Сохраните резервную копию в облаке.',
-  save_code: 'Сохранить код',
   save_swap_fees_with_referral:
     'Сэкономьте <blue>10%</blue> при обмене — добавьте реферальный код',
   saving_vault: 'Сохранение хранилища...',
@@ -1043,7 +1042,6 @@ export const ru = {
   upload_qr_code_image: 'Загрузить QR-код',
   upload_qr_code_to_join_keysign: 'Загрузить QR-код для Keysign',
   upload_qr_code_with_address: 'Загрузить QR-код с адресом',
-  use_referral_code: 'Использовать реферальный код',
   used_referral_error: 'Чужой реферальный код не может совпадать с вашим',
   validator_address: 'Адрес валидатора',
   value: 'Значение',
@@ -1231,7 +1229,7 @@ export const ru = {
   },
   your_friends_referral_code: 'Реферальный код вашего друга',
   your_referral_code: 'Ваш реферальный код',
-  your_referrals: 'Ваши приглашения',
+  your_referrals: 'Моё приглашение',
   your_seedphrase: 'Ваша сид-фраза',
   your_seedphrase_subtitle:
     'Введите её, создайте хранилище и не оглядывайтесь назад',

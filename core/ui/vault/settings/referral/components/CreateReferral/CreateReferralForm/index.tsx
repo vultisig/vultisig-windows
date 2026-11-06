@@ -1,10 +1,9 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { Button } from '@lib/ui/buttons/Button'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { InfoIcon } from '@lib/ui/icons/InfoIcon'
+import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
@@ -17,7 +16,8 @@ import { useCreateReferralForm } from '../../../providers/CreateReferralFormProv
 import {
   DecorationLine,
   FormFieldErrorText,
-  ReferralPageWrapper,
+  ReferralFormContent,
+  ReferralFormFooter,
 } from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
@@ -43,22 +43,24 @@ export const CreateReferralForm = ({
   const error = canAfford ? undefined : t('insufficient_balance')
 
   return (
-    <VStack flexGrow gap={40}>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
+    <VStack flexGrow>
+      <SettingsPageHeader
+        onBack={onBack}
         secondaryControls={
           <Tooltip
             renderOpener={({ ref }) => (
               <div ref={ref}>
-                <IconButton size="sm">
-                  <InfoIcon />
-                </IconButton>
+                <InfoButton size="sm">
+                  <InfoCircleIcon />
+                </InfoButton>
               </div>
             )}
             content={
               <TooltipContent>
-                <Text size={16}>{t('header_tooltip_title')}</Text>
-                <Text color="supporting" size={13}>
+                <Text height={24 / 16} size={16} weight={500}>
+                  {t('header_tooltip_title')}
+                </Text>
+                <Text color="shy" variant="footnote">
                   {t('header_tooltip_content')}
                 </Text>
               </TooltipContent>
@@ -67,14 +69,14 @@ export const CreateReferralForm = ({
         }
         title={t('create_referral_title')}
       />
-      <ReferralPageWrapper
+      <VStack
         onSubmit={onFinish}
         as="form"
         data-testid="CreateReferralForm-Wrapper"
         flexGrow
-        justifyContent="space-between"
+        style={{ minHeight: 0 }}
       >
-        <VStack flexGrow justifyContent="space-between">
+        <ReferralFormContent flexGrow scrollable>
           <StackSeparatedBy
             direction="column"
             separator={<DecorationLine />}
@@ -84,21 +86,26 @@ export const CreateReferralForm = ({
             <ExpirationField />
             <Fees />
           </StackSeparatedBy>
-          <VStack gap={4}>
-            <Button
-              disabled={!isValid || isSubmitting || Boolean(error)}
-              type="submit"
-            >
-              {t('create_referral_form')}
-            </Button>
-            {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
-          </VStack>
-        </VStack>
-      </ReferralPageWrapper>
+        </ReferralFormContent>
+        <ReferralFormFooter gap={4}>
+          <SettingsCtaButton
+            disabled={!isValid || isSubmitting || Boolean(error)}
+            type="submit"
+          >
+            {t('create_referral')}
+          </SettingsCtaButton>
+          {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
+        </ReferralFormFooter>
+      </VStack>
     </VStack>
   )
 }
 
+const InfoButton = styled(IconButton)`
+  font-size: 20px;
+  margin-right: -4px;
+`
+
 const TooltipContent = styled.div`
-  min-width: 200px;
+  min-width: 272px;
 `

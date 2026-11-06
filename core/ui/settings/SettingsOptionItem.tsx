@@ -1,4 +1,3 @@
-import { HSLA } from '@lib/ui/colors/HSLA'
 import { CircleCheckFilledIcon } from '@lib/ui/icons/CircleCheckFilledIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { ListItem } from '@lib/ui/list/item'
@@ -6,11 +5,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { currentProductBrand } from '../product/brand'
 import { SettingsBaselineText } from './SettingsBaselineText'
-
-// Figma Backgrounds/surface-1-2; no theme token carries it.
-const selectedFill = new HSLA(215.3, 66.2, 15.1)
 
 type SettingsOptionItemProps = {
   title: string
@@ -57,10 +52,8 @@ export const SettingsOptionItem = ({
 
 const Row = styled(ListItem)<{ $isSelected: boolean }>`
   --icon-accent: ${getColor('text')};
-  background-color: ${({ $isSelected, theme }) =>
-    $isSelected && currentProductBrand === 'vultisig'
-      ? selectedFill.toCssValue()
-      : theme.colors.foreground.toCssValue()};
+  background-color: ${({ $isSelected }) =>
+    getColor($isSelected ? 'settingsOptionSelected' : 'foreground')};
   gap: 12px;
   min-height: 65px;
   padding: 14px 20px;

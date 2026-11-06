@@ -25,6 +25,8 @@ type ResponsiveModalProps = {
   mobilePresentation?: 'drawer' | 'fullscreen'
   /** Overrides on the mobile drawer's frame. */
   drawerStyles?: React.CSSProperties
+  /** Overrides on the mobile drawer's grabber row. */
+  drawerHeaderStyles?: React.CSSProperties
   /** Overrides on the mobile drawer's backdrop. */
   backdropStyles?: React.CSSProperties
 }
@@ -117,6 +119,7 @@ export const ResponsiveModal = ({
   mobileFullWidth = true,
   mobilePresentation = 'drawer',
   drawerStyles,
+  drawerHeaderStyles,
   backdropStyles,
 }: ResponsiveModalProps) => {
   const isTabletAndUp = useIsTabletDeviceAndUp()
@@ -211,6 +214,7 @@ export const ResponsiveModal = ({
         >
           {grabbable && (
             <MobileDrawerHeader
+              style={drawerHeaderStyles}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerEnd}

@@ -1,4 +1,3 @@
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
@@ -6,19 +5,12 @@ import {
   useDeleteCoinMutation,
 } from '@core/ui/storage/coins'
 import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { StationCheckmarkSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
-import { vStack } from '@lib/ui/layout/Stack'
-import { IsActiveProp, ValueProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { ValueProp } from '@lib/ui/props'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
-import styled, { css, useTheme } from 'styled-components'
+
+import { ChainTile } from './shared/ChainTile'
 
 type ChainItemProps = ValueProp<Coin> & {
   isSelected?: boolean
@@ -33,7 +25,6 @@ export const ChainItem = ({
   const currentCoins = useCurrentVaultNativeCoins()
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
-  const { iconStyle } = useTheme()
 
   const currentCoin = useMemo(() => {
     return currentCoins.find(c => areEqualCoins(c, coin))
@@ -59,114 +50,12 @@ export const ChainItem = ({
   }
 
   return (
-    <ChainCard
+    <ChainTile
       data-testid={`chain-item-${coin.chain}`}
-      data-selected={isSelected ? 'true' : 'false'}
-      onClick={handleClick}
+      iconSrc={getChainLogoSrc(coin.chain)}
+      name={getChainDisplayName(coin.chain)}
       isSelected={isSelected}
-      isLoading={isLoading}
-    >
-      <ChainIconWrapper isActive={isSelected}>
-        <ChainEntityIcon
-          value={getChainLogoSrc(coin.chain)}
-          style={{ fontSize: 27.5 }}
-        />
-        {isSelected && (
-          <CheckBadge color="primary" size={12}>
-            {iconStyle === 'station' ? (
-              <StationCheckmarkSmallIcon />
-            ) : (
-              <CheckmarkIcon />
-            )}
-          </CheckBadge>
-        )}
-      </ChainIconWrapper>
-      <ChainNameWrapper>
-        <ChainName color="contrast" size={12} weight={500}>
-          {getChainDisplayName(coin.chain)}
-        </ChainName>
-      </ChainNameWrapper>
-    </ChainCard>
+      onClick={handleClick}
+    />
   )
 }
-
-const ChainNameWrapper = styled.div`
-  min-width: 0;
-  width: 100%;
-  text-align: center;
-`
-
-const ChainName = styled(Text)`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-`
-
-const ChainCard = styled(UnstyledButton)<{
-  isSelected: boolean
-  isLoading: boolean
-}>`
-  ${vStack({
-    gap: 11,
-    alignItems: 'center',
-  })};
-
-  width: 74px;
-`
-
-const ChainIconWrapper = styled.div<IsActiveProp>`
-  ${vStack({
-    alignItems: 'center',
-    justifyContent: 'center',
-  })};
-  position: relative;
-  align-self: stretch;
-  ${borderRadius.xl};
-  background: rgba(11, 26, 58, 0.5);
-  height: 74px;
-  padding: 17px;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
-
-  ${({ isActive }) =>
-    isActive &&
-    css`
-      border: 1.5px solid ${getColor('foregroundSuper')};
-      background: ${getColor('foreground')};
-    `}
-
-  ${({ theme, isActive }) =>
-    theme.iconStyle === 'station' &&
-    css`
-      background: ${theme.colors.foreground.withAlpha(0.5).toCssValue()};
-      opacity: ${isActive ? 1 : 0.5};
-
-      ${isActive &&
-      css`
-        border: 1.5px solid ${theme.colors.foregroundExtra.toCssValue()};
-        background: ${theme.colors.foreground.toCssValue()};
-      `}
-    `}
-`
-
-// eslint-disable-next-line local/no-hardcoded-border-radius -- a notched badge outline, not a surface radius
-const CheckBadge = styled(IconWrapper)`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 24px;
-  padding: 8px;
-  /* A notched badge shape, not a surface radius: both values exceed half
-     the element and clamp, fully rounding two opposite corners. */
-  border-radius: 40px 0 25px 0;
-  background: ${getColor('foregroundSuper')};
-  font-weight: 600;
-
-  ${({ theme }) =>
-    theme.iconStyle === 'station' &&
-    css`
-      background: ${theme.colors.foregroundExtra.toCssValue()};
-      color: ${theme.colors.primary.toCssValue()};
-    `}
-`
