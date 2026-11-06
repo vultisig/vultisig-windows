@@ -1,8 +1,8 @@
 import { useOpenInExpandedViewMutation } from '@clients/extension/src/expanded-view/mutations/openInExpandedView'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
+import { SettingsItem } from '@core/ui/settings/SettingsItem'
 import { useIsScreenWidthLessThan } from '@lib/ui/hooks/useIsScreenWidthLessThan'
-import { ExpandIcon } from '@lib/ui/icons/ExpandIcon'
-import { ListItem } from '@lib/ui/list/item'
+import { Expand2Icon } from '@lib/ui/icons/Expand2Icon'
 import { useTranslation } from 'react-i18next'
 
 export const ExpandView = () => {
@@ -12,12 +12,10 @@ export const ExpandView = () => {
 
   return (
     visible && (
-      <ListItem
-        icon={<ExpandIcon fontSize={20} />}
+      <SettingsItem
+        icon={<Expand2Icon />}
         onClick={() => openInExpandedView(initialCoreView)}
         title={t('expand_view')}
-        hoverable
-        showArrow
       />
     )
   )

@@ -12,6 +12,7 @@ type TextVariant =
   | 'stationCaption2'
   | 'title3'
   | 'footnote'
+  | 'subtitle'
   | 'caption'
   | 'bodyM'
 
@@ -60,6 +61,13 @@ const textVariantsRecord: Record<
     weight: 500,
     height: 1.385,
     letterSpacing: 0.06,
+  },
+  /** Headings/Subtitle: 15px, 500, 17px line-height */
+  subtitle: {
+    size: 15,
+    weight: 500,
+    height: 17 / 15,
+    letterSpacing: -0.18,
   },
   caption: {
     size: 12,

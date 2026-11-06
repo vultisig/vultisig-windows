@@ -44,8 +44,6 @@ export const ko = {
   amount_required: '금액을 입력하세요',
   amount_to_unstake: '언스테이킹 금액',
   app_lock_passcode: '앱 잠금 패스코드',
-  app_lock_passcode_description:
-    '앱 잠금 해제 시 패스코드를 요구해 보안을 한층 강화하세요.',
   app_locked: '앱 잠김',
   app_locked_description: '계속하려면 패스코드를 입력하세요.',
   app_permissions: '앱 권한',
@@ -85,6 +83,7 @@ export const ko = {
   backup_share_sent: '백업 셰어를 보냈습니다!',
   backup_share_sent_description:
     '방금 백업 셰어를 이메일로 보냈습니다. 보이지 않으면 스팸 폴더를 확인하세요.',
+  backup_vault_share: '볼트 셰어 백업',
   backup_with_password: '비밀번호로 백업',
   backup_without_password: '비밀번호 없이 백업',
   balance: '잔액',
@@ -92,6 +91,7 @@ export const ko = {
   balance_changes: '잔액 변동',
   base_fee: '기본 수수료',
   blockaid_security_scan: 'Blockaid 보안 스캔',
+  blockaid_security_scan_description: '서명 전에 거래를 확인합니다',
   blockaid_simulation_failed: '거래 시뮬레이션 실패',
   blockaid_simulation_failed_description:
     '이 거래을 시뮬레이션할 수 없습니다. 계속 진행할 수는 있지만, 거래 세부 정보를 꼼꼼히 검토하시기 바랍니다.',
@@ -248,7 +248,7 @@ export const ko = {
   },
   delete: '삭제',
   delete_folder: '폴더 삭제',
-  delete_vault_description: '볼트를 영구적으로 삭제합니다',
+  delete_vault_description: '볼트 셰어를 영구적으로 삭제합니다',
   deposit: '기능',
   description: '설명',
   destination_address: '받는 주소',
@@ -271,6 +271,7 @@ export const ko = {
   done: '완료',
   earn: '수익',
   edit_address: '주소 수정',
+  edit_address_book: '주소록 편집',
   edit_friends_referral: '친구 추천 코드 수정',
   edit_referral: '추천 코드 수정',
   remove_friends_referral: '추천 코드 제거',
@@ -284,10 +285,9 @@ export const ko = {
   enable_dkls: 'DKLS 활성화',
   enable_tss_batching: 'TSS 배치 활성화',
   post_quantum_keygen: '양자내성 키 생성',
-  post_quantum_keygen_description: '이 볼트의 양자내성(MLDSA) 키를 생성합니다',
+  post_quantum_keygen_description: '양자 내성을 위한 MLDSA-44 키를 생성합니다',
   enable_token_instruction:
     '잔액을 확인하고 포지션을 관리하려면 토큰을 하나 이상 활성화하세요.',
-  enter: '입력',
   enter_address: '주소 입력',
   enter_address_here: '여기에 주소를 입력하세요',
   enter_amount: '금액 입력',
@@ -311,6 +311,7 @@ export const ko = {
   est_network_fee: '예상 네트워크 수수료',
   expand_view: '확대 보기',
   open_as_side_panel: '측면 패널로 열기',
+  open_as_side_panel_description: '탭 옆에 {{productName}}을(를) 열어 둡니다',
   opened_in_new_tab: '새 탭에서 열림',
   push_notifications: '푸시 알림',
   push_notifications_description:
@@ -449,6 +450,7 @@ export const ko = {
   go_to_vault: '볼트로 이동',
   go_to_wallet: '지갑으로 이동',
   home_display: '홈 화면 표시',
+  home_display_balance_caption: '잔액 표시',
   home_display_separate_description:
     '지갑 탭에는 지갑 잔액만, DeFi 탭에는 DeFi 잔액만 표시됩니다.',
   home_display_separate_title: '지갑과 DeFi 분리',
@@ -557,6 +559,8 @@ export const ko = {
   loading: '로딩 중...',
   localMode: '로컬 모드입니다',
   lock_time: '잠금 시간',
+  lock_time_description: '앱이 자동으로 잠기기까지의 시간을 설정합니다',
+  lock_time_setting: '잠금 시간',
   lock_vultisig_automatically_after: '{{productName}} 자동 잠금 시간',
   looking_for_server: 'FastVaultServer를 찾는 중...',
   looks_good: '좋습니다',
@@ -576,6 +580,8 @@ export const ko = {
   message_to_sign: '서명할 메시지',
   method: '메서드',
   method_required: '서명 방식을 선택해야 합니다',
+  migrate: '마이그레이션',
+  migrate_vault_description: 'GG20 볼트를 DKLS로 마이그레이션',
   mint: '민팅',
   minute_one: '{{count}}분',
   minute_other: '{{count}}분',
@@ -677,12 +683,14 @@ export const ko = {
   to_start_plugin_installation: '플러그인 설치를 시작하려면',
   portfolio_balance: '포트폴리오 잔액',
   positions: '포지션',
+  post_quantum_key: '양자내성 키',
   powered_by: '<provider></provider> 제공',
   price: '가격',
   price_impact_average: '평균',
   price_impact_good: '양호',
   price_impact_high: '높은 가격 영향',
   prioritize_vultisig: '{{productName}} 우선 사용',
+  prioritize_vultisig_description: '스왑할 때 {{productName}}을(를) 먼저 표시',
   priority: '우선순위',
   priority_fee: '우선 수수료',
   privacy_policy: '개인정보 보호정책',
@@ -816,6 +824,7 @@ export const ko = {
   secure_notifications_description:
     '다른 기기가 볼트 참여를 요청하거나 서명이 필요할 때 알림을 받으세요.',
   security: '보안',
+  security_description: '패스코드 관리',
   select: '선택',
   select_asset: '자산 선택',
   select_backup_file: '볼트 셰어 가져오기',
@@ -858,6 +867,8 @@ export const ko = {
   session_init_failed: '세션 초기화에 실패했습니다.',
   set_expiration: '만료 기간 설정(년)',
   set_passcode: '패스코드 설정',
+  set_passcode_description:
+    '6자리 패스코드를 선택하세요. 반복되거나 연속된 숫자는 피하세요.',
   settings: '설정',
   share: '공유',
   share_app: '앱 공유',
@@ -973,7 +984,7 @@ export const ko = {
   try_again: '다시 시도',
   turn_your_vault_into_rewards_machine:
     '볼트를 보상 머신으로 바꿔 보세요. 지금 추천 코드를 만들고 수익을 올리세요.',
-  twitter: 'X (Twitter)',
+  twitter: 'X',
   tx_hash: '거래 해시',
   type: '유형',
   type_here: '여기에 입력하세요',
@@ -1043,7 +1054,7 @@ export const ko = {
   vault: '볼트',
   vaultCheckUpdatePage: {
     applicationUpToDate: '애플리케이션이 최신 버전입니다.',
-    downloadButton: '지금 업데이트',
+    downloadButton: '앱 업데이트',
     errorFetchingLatestVersion: '최신 버전을 가져오는 중 오류 발생: {{error}}',
     fetchingLatestVersion: '최신 버전을 가져오는 중...',
     title: '업데이트 확인',
@@ -1079,12 +1090,10 @@ export const ko = {
   vault_details_description: '볼트 이름, 셰어, 유형 확인',
   vault_details_edit_vault_description: '볼트 이름 수정',
   vault_details_page_signer_word: '서명자',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA 키',
   vault_details_page_vault_type: '볼트 유형',
   vault_info: '볼트 정보',
-  vault_management: '볼트',
+  vault_management: '볼트 관리',
   vault_name: '볼트 이름',
   vault_name_already_exists: '다른 볼트 이름을 선택하세요.',
   vault_name_description: '설정에서 언제든지 볼트 이름을 변경할 수 있습니다',
@@ -1129,9 +1138,9 @@ export const ko = {
   via: '경유',
   view_on_explorer: '익스플로러에서 보기',
   vote: '투표',
+  vult_tier_badge: '{{ticker}} 등급',
   vultisig_community: '{{productName}} 커뮤니티',
   vultisig_education: '{{productName}} 교육',
-  vultisig_website: '{{productName}} 웹사이트',
   waitingOnDevices: '기기들을 기다리는 중...',
   waiting_for_devices_to_join: '다른 기기들이 연결될 때까지 기다리는 중입니다.',
   waiting_for_devices_to_join_description:
@@ -1139,6 +1148,7 @@ export const ko = {
   waiting_for_keygen_start: '키 생성 시작을 기다리는 중...',
   waiting_for_keysign_start: '서명 절차가 시작되기를 기다리는 중...',
   wallet: '지갑',
+  website: '웹사이트',
   withdraw: '출금',
   withdraw_ruji_rewards: 'RUJI 보상 출금',
   add_cacao_pool: 'CACAO 풀에 추가',
@@ -1296,6 +1306,8 @@ export const ko = {
   qbtc_claim_card_title: '청구 가능 QBTC',
   qbtc_claim_tab: '청구',
   qbtc_onboarding_title: '새로운 양자 보안',
+  quick_settings: '빠른 설정',
+  rate_app: '앱 평가하기',
   qbtc_onboarding_subtitle:
     '기존 방식의 키는 양자 컴퓨터로 해독될 수 있습니다. QBTC를 활성화하려면 새 키 쌍을 생성해야 합니다.',
   qbtc_onboarding_feature_generate_title: '양자 키 쌍 생성',
@@ -1427,7 +1439,6 @@ export const ko = {
     '{{productName}} 플러그인 마켓플레이스에 오신 것을 환영합니다',
   plugin_permissions_brand_safety_notice:
     '{{productName}} 앱은 사용자가 먼저 승인하지 않은 거래에는 절대 서명할 수 없습니다.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     '해당 자산의 거래가 일시적으로 중단되었습니다. 잠시 후 다시 시도하세요.',
   sui_arguments: '인수',
@@ -2023,7 +2034,6 @@ export const ko = {
   custom_message_unsupported_method:
     '지원되지 않는 서명 방식입니다. personal_sign 또는 eth_signTypedData_v4를 사용하세요.',
   revoke: '접근 권한 취소',
-  token_approvals: '토큰 승인',
   token_approvals_delegate: '위임자',
   token_approvals_partial:
     '다음에서 Permit2 승인을 모두 확인하지 못했습니다: {{chains}}',
@@ -2041,8 +2051,6 @@ export const ko = {
   token_approvals_empty_title: '활성 승인이 없습니다',
   token_approvals_empty_description:
     '이 볼트의 체인에서 토큰 사용을 허용한 컨트랙트가 여기에 표시됩니다.',
-  token_approvals_description:
-    '토큰을 사용할 수 있는 컨트랙트를 검토하고 승인을 취소하세요.',
   token_approvals_disconnect_note:
     'dApp 연결을 해제해도 이 승인은 삭제되지 않습니다. 승인 취소는 각각 네트워크 수수료가 드는 별도의 온체인 거래입니다.',
   token_approvals_unlimited_count: '무제한: {{count}}',
@@ -2050,5 +2058,6 @@ export const ko = {
   revoke_approval_explanation:
     '이 컨트랙트의 허용 한도를 0으로 설정해 더 이상 볼트에서 이 토큰을 옮길 수 없게 합니다. 네트워크 수수료가 부과됩니다.',
   revoke_approval_new_allowance: '새 지출 한도',
+  revoke_approvals: '승인 취소',
   token_approvals_count: '승인: {{count}}',
 }

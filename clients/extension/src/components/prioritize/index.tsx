@@ -2,9 +2,10 @@ import {
   useIsWalletPrioritizedQuery,
   useSetIsWalletPrioritizedMutation,
 } from '@core/extension/storage/isWalletPrioritized'
-import { ZapIcon } from '@lib/ui/icons/ZapIcon'
+import { quickSettingsIconWidth } from '@core/ui/settings/constants'
+import { SettingsItem } from '@core/ui/settings/SettingsItem'
+import { BoltFilledIcon } from '@lib/ui/icons/BoltFilledIcon'
 import { Switch } from '@lib/ui/inputs/switch'
-import { ListItem } from '@lib/ui/list/item'
 import { useTranslation } from 'react-i18next'
 
 export const Prioritize = () => {
@@ -13,12 +14,13 @@ export const Prioritize = () => {
   const { mutate: setPrioritize } = useSetIsWalletPrioritizedMutation()
 
   return (
-    <ListItem
-      icon={<ZapIcon fontSize={20} />}
-      extra={<Switch checked={isPrioritized} />}
+    <SettingsItem
+      icon={<BoltFilledIcon />}
+      iconWidth={quickSettingsIconWidth}
+      control={<Switch checked={isPrioritized} size="large" />}
       onClick={() => setPrioritize(!isPrioritized)}
       title={t('prioritize_vultisig')}
-      hoverable
+      description={t('prioritize_vultisig_description')}
     />
   )
 }

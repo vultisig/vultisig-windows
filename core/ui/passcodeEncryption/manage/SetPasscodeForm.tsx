@@ -1,11 +1,16 @@
-import { Button } from '@lib/ui/buttons/Button'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { LockPasswordIcon } from '@lib/ui/icons/LockPasswordIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { passcodeEncryptionConfig } from '../core/config'
 import { isWeakPasscode } from '../core/passcodePolicy'
@@ -16,6 +21,43 @@ type SetPasscodeFormProps = {
   isPending: boolean
   onSubmit: (passcode: string) => void
 }
+
+const GlowClip = styled.div`
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+`
+
+const Glow = styled.div`
+  ${borderRadius.pill};
+  background: ${getColor('primaryAccentFour')};
+  filter: blur(127px);
+  height: 338px;
+  left: 50%;
+  opacity: 0.2;
+  position: absolute;
+  top: 125px;
+  transform: translateX(-50%);
+  width: 304px;
+`
+
+const Fields = styled(VStack)`
+  position: relative;
+`
+
+const LockIcon = styled(IconWrapper)`
+  margin-bottom: 9px;
+`
+
+const Description = styled(Text)`
+  max-width: 283px;
+`
+
+const SubmitButton = styled(SettingsCtaButton)`
+  margin-top: auto;
+  position: relative;
+`
 
 /**
  * Passcode entry and confirmation shown under the App Lock switch while a new
@@ -54,9 +96,17 @@ export const SetPasscodeForm = ({
     }
   }, [confirmPasscode, passcode, t])
 
+  const confirmPasscodeValidation =
+    confirmPasscode?.length === passcodeEncryptionConfig.passcodeLength
+      ? confirmPasscode === passcode
+        ? 'valid'
+        : 'invalid'
+      : undefined
+
   return (
     <VStack
-      gap={14}
+      flexGrow
+      gap={24}
       as="form"
       {...getFormProps({
         isDisabled,
@@ -66,28 +116,66 @@ export const SetPasscodeForm = ({
         },
       })}
     >
-      <PasscodeInput
-        label={t('enter_passcode')}
-        onChange={setPasscode}
-        value={passcode}
-        validation={
-          passcode?.length === passcodeEncryptionConfig.passcodeLength &&
-          isWeakPasscode(passcode)
-            ? 'invalid'
-            : undefined
-        }
-        validationMessages={{ invalid: t('invalid_passcode') }}
-        autoFocus
-      />
-      <PasscodeInput
-        label={t('confirm_passcode')}
-        onChange={setConfirmPasscode}
-        value={confirmPasscode}
-      />
-      {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
-      <Button disabled={isDisabled} loading={isPending} type="submit">
+      <GlowClip aria-hidden>
+        <Glow />
+      </GlowClip>
+      <Fields alignItems="center" gap={15}>
+        <LockIcon color="primaryAccentFour" size={46}>
+          <LockPasswordIcon />
+        </LockIcon>
+        <VStack alignItems="center" gap={14}>
+          <Text centerHorizontally color="regular" variant="title3">
+            {t('enter_passcode')}
+          </Text>
+          <Description
+            centerHorizontally
+            color="shyExtra"
+            height={20 / 14}
+            size={14}
+            weight={400}
+          >
+            {t('set_passcode_description')}
+          </Description>
+        </VStack>
+        <PasscodeInput
+          appearance="dots"
+          onChange={setPasscode}
+          value={passcode}
+          validation={
+            passcode?.length === passcodeEncryptionConfig.passcodeLength &&
+            isWeakPasscode(passcode)
+              ? 'invalid'
+              : undefined
+          }
+          validationMessages={{ invalid: t('invalid_passcode') }}
+          autoFocus
+        />
+        <VStack alignItems="center" gap={7}>
+          <Text
+            centerHorizontally
+            color="shyExtra"
+            height={20 / 14}
+            size={14}
+            weight={400}
+          >
+            {t('confirm_passcode')}
+          </Text>
+          <PasscodeInput
+            appearance="dots"
+            onChange={setConfirmPasscode}
+            value={confirmPasscode}
+            validation={confirmPasscodeValidation}
+            validationMessages={{
+              invalid: t('passcodes_do_not_match'),
+              valid: '',
+            }}
+          />
+        </VStack>
+        {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
+      </Fields>
+      <SubmitButton disabled={isDisabled} loading={isPending} type="submit">
         {t('set_passcode')}
-      </Button>
+      </SubmitButton>
     </VStack>
   )
 }
