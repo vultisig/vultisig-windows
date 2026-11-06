@@ -13,6 +13,7 @@ type SettingsPageHeaderProps = {
   title: ReactNode
   onBack?: () => void
   secondaryControls?: ReactNode
+  hasBorder?: boolean
 }
 
 /** The compact 56px header of the settings list screens. */
@@ -20,13 +21,14 @@ export const SettingsPageHeader = ({
   title,
   onBack,
   secondaryControls,
+  hasBorder = true,
 }: SettingsPageHeaderProps) => {
   const { goBack } = useCore()
   const { iconStyle } = useTheme()
 
   return (
     <Header
-      hasBorder
+      hasBorder={hasBorder}
       primaryControls={
         <BackButton
           data-testid="page-header-back"

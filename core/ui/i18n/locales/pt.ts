@@ -46,8 +46,6 @@ export const pt = {
   amount_required: 'É necessário informar o valor.',
   amount_to_unstake: 'Valor a retirar do staking',
   app_lock_passcode: 'Código de acesso do app',
-  app_lock_passcode_description:
-    'Adicione uma camada extra de segurança exigindo um código de acesso para desbloquear o aplicativo.',
   app_locked: 'Aplicativo bloqueado',
   app_locked_description: 'Digite seu código de acesso para continuar.',
   app_permissions: 'Permissões do aplicativo',
@@ -298,7 +296,6 @@ export const pt = {
     'Gere uma chave MLDSA-44 para resistência quântica',
   enable_token_instruction:
     'Habilite pelo menos um token para visualizar saldos e gerenciar posições.',
-  enter: 'Digitar',
   enter_address: 'Insira o endereço',
   enter_address_here: 'Insira o endereço aqui',
   enter_amount: 'Insira o valor',
@@ -898,6 +895,8 @@ export const pt = {
   session_init_failed: 'Falha ao inicializar a sessão',
   set_expiration: 'Data de expiração (em anos)',
   set_passcode: 'Definir código de acesso',
+  set_passcode_description:
+    'Escolha um código de acesso de 6 dígitos. Evite dígitos repetidos ou sequenciais.',
   settings: 'Configurações',
   share: 'Compartilhar',
   share_app: 'Compartilhe o aplicativo',
@@ -1099,8 +1098,6 @@ export const pt = {
   vault_details_description: 'Veja o nome, a parte e o tipo do cofre.',
   vault_details_edit_vault_description: 'Edite o nome do seu cofre',
   vault_details_page_signer_word: 'Signatário',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Chave MLDSA',
   vault_details_page_vault_type: 'Tipo de cofre',
   vault_info: 'Informações do cofre',

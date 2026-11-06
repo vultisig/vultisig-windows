@@ -46,8 +46,6 @@ export const ru = {
   amount_required: 'Сумма обязательна',
   amount_to_unstake: 'Сумма для вывода из стейкинга',
   app_lock_passcode: 'Пин-код блокировки приложения',
-  app_lock_passcode_description:
-    'Добавьте дополнительный уровень безопасности, требуя пин-код для разблокировки приложения.',
   app_locked: 'Приложение заблокировано',
   app_locked_description: 'Введите пин-код, чтобы продолжить.',
   app_permissions: 'Разрешения приложения',
@@ -296,7 +294,6 @@ export const ru = {
     'Сгенерируйте ключ MLDSA-44 для квантовой устойчивости',
   enable_token_instruction:
     'Включите минимум один токен, чтобы видеть балансы и управлять позициями.',
-  enter: 'Войти',
   enter_address: 'Введите адрес',
   enter_address_here: 'Введите адрес здесь',
   enter_amount: 'Введите сумму',
@@ -896,6 +893,8 @@ export const ru = {
   session_init_failed: 'Не удалось инициализировать сессию',
   set_expiration: 'Установить срок (в годах)',
   set_passcode: 'Установить пин-код',
+  set_passcode_description:
+    'Выберите пин-код из 6 цифр. Избегайте повторяющихся и идущих подряд цифр.',
   settings: 'Настройки',
   share: 'Поделиться',
   share_app: 'Поделиться приложением',
@@ -1092,8 +1091,6 @@ export const ru = {
   vault_details_description: 'Посмотреть имя хранилища, часть и тип',
   vault_details_edit_vault_description: 'Редактировать имя хранилища',
   vault_details_page_signer_word: 'Подписант',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Ключ MLDSA',
   vault_details_page_vault_type: 'Тип хранилища',
   vault_info: 'Информация о хранилище',

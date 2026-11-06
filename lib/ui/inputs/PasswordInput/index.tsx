@@ -14,11 +14,14 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import { ActionInsideInteractiveElement } from '../../base/ActionInsideInteractiveElement'
 
+/** A text input masked by default, with an eye button to reveal its value. */
 export const PasswordInput: React.FC<
   ComponentPropsWithoutRef<typeof TextInput> & {
     error?: string
+    /** The field's height when a caller restyles it, to keep the eye centered. */
+    inputHeight?: number
   }
-> = ({ error, ...rest }) => {
+> = ({ error, inputHeight = textInputHeight, ...rest }) => {
   const [shouldHideValue, { toggle }] = useBoolean(true)
 
   return (
@@ -41,7 +44,7 @@ export const PasswordInput: React.FC<
         }
         actionPlacerStyles={{
           right: textInputHorizontalPadding,
-          bottom: (textInputHeight - iconButtonSize.md) / 2,
+          bottom: (inputHeight - iconButtonSize.md) / 2,
         }}
       />
       {error && (

@@ -1,6 +1,8 @@
+import { SettingsCard } from '@core/ui/settings/SettingsCard'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { VStack } from '@lib/ui/layout/Stack'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
+import styled from 'styled-components'
 
 import { useDisablePasscodeMutation } from '../mutations/useDisablePasscodeMutation'
 import { useSetPasscodeMutation } from '../mutations/useSetPasscodeMutation'
@@ -8,6 +10,10 @@ import { useIsPasscodeRequired } from '../state/useIsPasscodeRequired'
 import { ChangePasscode } from './change/ChangePasscode'
 import { EnablePasscodeInput } from './EnablePasscodeInput'
 import { SetPasscodeForm } from './SetPasscodeForm'
+
+const Card = styled(SettingsCard)`
+  flex-shrink: 0;
+`
 
 /**
  * The App Lock row: one switch that owns both directions of the passcode
@@ -40,8 +46,8 @@ export const AppLockSwitch = () => {
   const isOn = hasPasscodeEnabled || isSettingPasscode
 
   return (
-    <VStack gap={22}>
-      <VStack gap={14}>
+    <VStack flexGrow gap={24}>
+      <Card>
         <EnablePasscodeInput
           value={isOn}
           onChange={() => {
@@ -72,17 +78,17 @@ export const AppLockSwitch = () => {
             disableError ? extractErrorMsg(disableError) : undefined
           }
         />
-        {!hasPasscodeEnabled && isSettingPasscode && (
-          <SetPasscodeForm
-            error={enableError}
-            isPending={isEnabling}
-            onSubmit={passcode =>
-              setPasscode(passcode, { onSuccess: closeSetPasscode })
-            }
-          />
-        )}
-      </VStack>
-      {hasPasscodeEnabled && !isDisabling && <ChangePasscode />}
+        {hasPasscodeEnabled && !isDisabling && <ChangePasscode />}
+      </Card>
+      {!hasPasscodeEnabled && isSettingPasscode && (
+        <SetPasscodeForm
+          error={enableError}
+          isPending={isEnabling}
+          onSubmit={passcode =>
+            setPasscode(passcode, { onSuccess: closeSetPasscode })
+          }
+        />
+      )}
     </VStack>
   )
 }

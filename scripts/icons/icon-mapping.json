@@ -448,12 +448,6 @@
       "source": "ios"
     },
     {
-      "desktop": "CloudIcon",
-      "v3": "cloud",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
       "desktop": "DiscordIcon",
       "v3": "IconDiscord",
       "status": "migrated",
@@ -743,12 +737,6 @@
     {
       "desktop": "CircleDashedIcon",
       "v3": "circle-dashed",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
-      "desktop": "MobileSignalIcon",
-      "v3": "mobile-signal",
       "status": "migrated",
       "source": "ios"
     },

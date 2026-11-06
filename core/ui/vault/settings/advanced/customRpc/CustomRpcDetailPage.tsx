@@ -1,19 +1,21 @@
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { InputPasteAction } from '@core/ui/components/InputPasteAction'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useCore } from '@core/ui/state/core'
 import {
   useClearCustomRpcOverrideMutation,
   useCustomRpcOverrides,
   useSetCustomRpcOverrideMutation,
 } from '@core/ui/storage/customRpcOverrides'
-import { Button } from '@lib/ui/buttons/Button'
+import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { CopiesFilledIcon } from '@lib/ui/icons/CopiesFilledIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent as BasePageContent } from '@lib/ui/page/PageContent'
-import { PageFooter as BasePageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
@@ -50,6 +52,7 @@ const getDefaultRpcUrl = (chain: Chain) => {
   return undefined
 }
 
+/** Sets, tests or clears one chain's custom RPC endpoint. */
 export const CustomRpcDetailPage = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()
@@ -114,20 +117,11 @@ export const CustomRpcDetailPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={`${getChainDisplayName(chain)} RPC`}
-      />
+      <SettingsPageHeader title={`${getChainDisplayName(chain)} RPC`} />
       <PageContent flexGrow scrollable>
         <ContentFrame>
           <RpcInputField>
-            <RpcFieldLabel
-              as="label"
-              color="shy"
-              size={14}
-              weight="500"
-              height={20 / 14}
-            >
+            <RpcFieldLabel as="label" color="shy" variant="stationBodyS">
               {t('rpc_endpoint')}
             </RpcFieldLabel>
             <RpcTextAreaWrapper $invalid={showInvalid}>
@@ -136,9 +130,14 @@ export const CustomRpcDetailPage = () => {
                 value={value}
                 onChange={event => onValueChange(event.currentTarget.value)}
               />
-              <PasteAction onPaste={onValueChange} />
+              <PasteAction
+                icon={<CopiesFilledIcon />}
+                onPaste={onValueChange}
+              />
             </RpcTextAreaWrapper>
-            <Text variant="footnote">{t('custom_rpc_editor_hint')}</Text>
+            <SettingsBaselineText variant="footnote">
+              {t('custom_rpc_editor_hint')}
+            </SettingsBaselineText>
           </RpcInputField>
           {showInvalid && (
             <Text color="danger" size={12}>
@@ -152,10 +151,10 @@ export const CustomRpcDetailPage = () => {
           />
           {existingOverride && defaultRpcUrl && (
             <DefaultEndpointCard>
-              <Text size={14} color="shy" weight="500" height={20 / 14}>
+              <SettingsBaselineText color="shy" variant="stationBodyS">
                 {t('custom_rpc_default_endpoint')}
-              </Text>
-              <DefaultEndpointText size={14} color="shy" height={20 / 14}>
+              </SettingsBaselineText>
+              <DefaultEndpointText color="shy" variant="stationBodyS">
                 {defaultRpcUrl}
               </DefaultEndpointText>
             </DefaultEndpointCard>
@@ -164,15 +163,15 @@ export const CustomRpcDetailPage = () => {
       </PageContent>
       <PageFooter>
         <FooterFrame>
-          <Button
+          <SettingsCtaButton
             disabled={!canSave || isSaving || probe.isPending}
             loading={isSaving || probe.isPending}
             onClick={onSave}
           >
             {t('custom_rpc_save_button')}
-          </Button>
+          </SettingsCtaButton>
           {existingOverride && (
-            <Button
+            <SettingsCtaButton
               kind="secondary"
               loading={clearOverride.isPending}
               onClick={() =>
@@ -185,7 +184,7 @@ export const CustomRpcDetailPage = () => {
               }
             >
               {t('custom_rpc_reset_button')}
-            </Button>
+            </SettingsCtaButton>
           )}
         </FooterFrame>
       </PageFooter>
@@ -193,11 +192,11 @@ export const CustomRpcDetailPage = () => {
   )
 }
 
-const PageContent = styled(BasePageContent)`
+const PageContent = styled(SettingsPageContent)`
   align-items: center;
 `
 
-const PageFooter = styled(BasePageFooter)`
+const PageFooter = styled(SettingsPageFooter)`
   align-items: center;
 `
 
@@ -215,7 +214,7 @@ const RpcInputField = styled(VStack)`
   gap: 8px;
 `
 
-const RpcFieldLabel = styled(Text)`
+const RpcFieldLabel = styled(SettingsBaselineText)`
   text-transform: uppercase;
 `
 
@@ -223,12 +222,12 @@ const RpcTextAreaWrapper = styled.div<{ $invalid: boolean }>`
   background: ${getColor('foreground')};
   border: 1px solid
     ${({ $invalid }) =>
-      $invalid ? getColor('danger') : getColor('foregroundSuper')};
-  ${borderRadius.md};
+      $invalid ? getColor('danger') : getColor('foregroundExtra')};
+  ${borderRadius.lg};
   display: flex;
   gap: 4px;
   min-height: 120px;
-  padding: 16px;
+  padding: 15px;
 `
 
 const RpcTextArea = styled.textarea`
@@ -242,6 +241,7 @@ const RpcTextArea = styled.textarea`
   line-height: 20px;
   min-width: 0;
   outline: 0;
+  padding: 1px 0 0;
   resize: none;
 
   &::placeholder {
@@ -249,20 +249,24 @@ const RpcTextArea = styled.textarea`
   }
 `
 
+const pasteIconInset = (iconButtonSize.sm - 20) / 2
+
 const PasteAction = styled(InputPasteAction)`
+  --icon-accent: currentColor;
+  color: ${getColor('text')};
   flex: none;
-  margin: -8px -8px 0 0;
+  margin: -${pasteIconInset}px -${pasteIconInset}px 0 0;
 `
 
 const DefaultEndpointCard = styled(VStack)`
   background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   ${borderRadius.md};
   gap: 20px;
-  padding: 16px;
+  padding: 15px 15px 14px;
 `
 
-const DefaultEndpointText = styled(Text)`
+const DefaultEndpointText = styled(SettingsBaselineText)`
   overflow-wrap: anywhere;
 `
 
