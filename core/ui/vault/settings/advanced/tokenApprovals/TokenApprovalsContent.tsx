@@ -1,131 +1,139 @@
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
+import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { InputProps } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
 import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { EvmChain } from '@vultisig/core-chain/Chain'
-import { useState } from 'react'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ChainApprovals } from './core/ChainApprovals'
 import { isUnlimitedAllowance } from './core/isUnlimitedAllowance'
-import { shortenEvmAddress } from './core/shortenEvmAddress'
 import { TokenApproval } from './core/TokenApproval'
-import { isTokenApprovalsSupportedChain } from './core/tokenApprovalsChains'
-import { EvmAddressText } from './EvmAddressText'
+import { TokenApprovalsChain } from './core/tokenApprovalsChains'
 import { TokenApprovalRow } from './TokenApprovalRow'
-import { TokenApprovalsNetworkSelector } from './TokenApprovalsNetworkSelector'
 import { TokenApprovalsStatePanel } from './TokenApprovalsStatePanel'
 
-type TokenApprovalsContentProps = InputProps<EvmChain> & {
-  address: string
-  approvals: Query<readonly TokenApproval[]>
+type ChainQuery = {
+  chain: TokenApprovalsChain
+  query: Query<ChainApprovals>
+  /** True while a lookup runs, including a refresh of a list restored from storage. */
+  isFetching: boolean
+}
+
+type TokenApprovalsContentProps = {
+  chains: ChainQuery[]
+  /** The vault's chains whose approvals cannot be listed yet. */
+  uncheckedChains: Chain[]
   onRevoke: (approval: TokenApproval) => void
 }
 
+const approvalKey = (approval: TokenApproval) =>
+  approval.kind === 'splDelegate'
+    ? approval.tokenAccount
+    : `${approval.kind}:${approval.token.chain}:${approval.token.id}:${approval.spender}`
+
+const chainNames = (chains: Chain[]) =>
+  chains.map(getChainDisplayName).join(', ')
+
 /**
- * Body of the Token Approvals page for one EVM network: the vault address
- * and network picker, then the allowances (or an empty / unsupported message).
- * Takes all data as props so every state can be shown in Storybook.
+ * Body of the approvals page: every approval found so far across the vault's
+ * chains, unlimited ones first, with the chains still loading, failed, only
+ * partly checked or not checked at all named below. Takes all data as props
+ * so every state can be shown in Storybook.
  */
 export const TokenApprovalsContent = ({
-  value: chain,
-  onChange,
-  address,
-  approvals,
+  chains,
+  uncheckedChains,
   onRevoke,
 }: TokenApprovalsContentProps) => {
   const { t } = useTranslation()
-  const [isNetworkPickerOpen, setIsNetworkPickerOpen] = useState(false)
-  const openNetworkPicker = () => setIsNetworkPickerOpen(true)
 
-  const isSupported = isTokenApprovalsSupportedChain(chain)
+  const approvals = chains
+    .flatMap(({ query }) => query.data?.approvals ?? [])
+    .sort(
+      (a, b) =>
+        Number(isUnlimitedAllowance(b)) - Number(isUnlimitedAllowance(a)) ||
+        a.token.ticker.localeCompare(b.token.ticker)
+    )
+  const chainsWhere = (test: (query: ChainQuery['query']) => boolean) =>
+    chains.filter(({ query }) => test(query)).map(({ chain }) => chain)
+  const pending = chains
+    .filter(({ query, isFetching }) => query.isPending || isFetching)
+    .map(({ chain }) => chain)
+  const failed = chainsWhere(query => query.error !== null)
+  const partial = chainsWhere(query => query.data?.isComplete === false)
+  const unlimitedCount = approvals.filter(isUnlimitedAllowance).length
 
   return (
     <VStack gap={12}>
-      <HStack alignItems="center" justifyContent="space-between" gap={8}>
-        <EvmAddressText size={13} weight="500" color="supporting" cropped>
-          {shortenEvmAddress(address)}
-        </EvmAddressText>
-        <TokenApprovalsNetworkSelector
-          value={chain}
-          onChange={onChange}
-          isOpen={isNetworkPickerOpen}
-          onOpenChange={setIsNetworkPickerOpen}
-        />
-      </HStack>
-      {!isSupported ? (
+      {approvals.length === 0 && pending.length === 0 && failed.length === 0 ? (
         <TokenApprovalsStatePanel
-          icon={<CircleInfoIcon />}
-          title={t('token_approvals_unsupported_title', {
-            chain: getChainDisplayName(chain),
-          })}
-          description={t('token_approvals_unsupported_description')}
-          onSwitchNetwork={openNetworkPicker}
+          icon={<ShieldCheckIcon />}
+          title={t('token_approvals_empty_title')}
+          description={t('token_approvals_empty_description')}
         />
-      ) : (
-        <MatchQuery
-          value={approvals}
-          pending={() => (
-            <HStack justifyContent="center">
-              <Spinner />
-            </HStack>
-          )}
-          error={() => <Text color="danger">{t('failed_to_load')}</Text>}
-          success={approvals => {
-            if (approvals.length === 0) {
-              return (
-                <TokenApprovalsStatePanel
-                  icon={<ShieldCheckIcon />}
-                  title={t('token_approvals_empty_title', {
-                    chain: getChainDisplayName(chain),
-                  })}
-                  description={t('token_approvals_empty_description')}
-                  onSwitchNetwork={openNetworkPicker}
+      ) : null}
+      {approvals.length > 0 ? (
+        <>
+          <Text size={12} color="shy">
+            {t('token_approvals_count', { count: approvals.length })}
+            {unlimitedCount > 0
+              ? ` · ${t('token_approvals_unlimited_count', { count: unlimitedCount })}`
+              : null}
+          </Text>
+          <Card gap={12}>
+            {approvals.map((approval, index) => (
+              <Fragment key={approvalKey(approval)}>
+                {index > 0 ? <LineSeparator kind="regular" /> : null}
+                <TokenApprovalRow
+                  value={approval}
+                  onRevoke={() => onRevoke(approval)}
                 />
-              )
-            }
-
-            const unlimitedCount = approvals.filter(({ allowance }) =>
-              isUnlimitedAllowance(allowance)
-            ).length
-
-            return (
-              <>
-                <Text size={12} color="shy">
-                  {t('token_approvals_count', { count: approvals.length })}
-                  {unlimitedCount > 0
-                    ? ` · ${t('token_approvals_unlimited_count', { count: unlimitedCount })}`
-                    : null}
-                </Text>
-                <List>
-                  {approvals.map(approval => (
-                    <TokenApprovalRow
-                      key={`${approval.token.id}:${approval.spender}`}
-                      value={approval}
-                      onRevoke={() => onRevoke(approval)}
-                    />
-                  ))}
-                </List>
-                <InfoBlock>{t('token_approvals_disconnect_note')}</InfoBlock>
-              </>
-            )
-          }}
-        />
-      )}
+              </Fragment>
+            ))}
+          </Card>
+        </>
+      ) : null}
+      {pending.length > 0 ? (
+        <HStack alignItems="center" gap={8}>
+          <Spinner />
+          <Text size={12} color="shy">
+            {t('token_approvals_checking', { chains: chainNames(pending) })}
+          </Text>
+        </HStack>
+      ) : null}
+      {failed.length > 0 ? (
+        <Text size={12} color="danger">
+          {t('token_approvals_failed', { chains: chainNames(failed) })}
+        </Text>
+      ) : null}
+      {partial.length > 0 ? (
+        <Text size={12} color="danger">
+          {t('token_approvals_partial', { chains: chainNames(partial) })}
+        </Text>
+      ) : null}
+      {uncheckedChains.length > 0 ? (
+        <Text size={12} color="shy">
+          {t('token_approvals_not_checked', {
+            chains: chainNames(uncheckedChains),
+          })}
+        </Text>
+      ) : null}
+      <InfoBlock>{t('token_approvals_disconnect_note')}</InfoBlock>
     </VStack>
   )
 }
 
-const List = styled(VStack)`
-  ${borderRadius.md};
+const Card = styled(VStack)`
+  background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  overflow: hidden;
+  ${borderRadius.lg};
+  padding: 16px 14px;
 `

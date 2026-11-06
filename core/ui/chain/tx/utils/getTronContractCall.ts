@@ -12,7 +12,7 @@ export const getTronContractCall = ({ contractPayload }: KeysignPayload) => {
   }
 
   const { data, contractAddress } = contractPayload.value
-  if (!data) {
+  if (!data || data === '0x') {
     return undefined
   }
 

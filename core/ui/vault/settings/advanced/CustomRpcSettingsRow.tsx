@@ -1,15 +1,13 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { MobileSignalIcon } from '@lib/ui/icons/MobileSignalIcon'
-import { ListItem } from '@lib/ui/list/item'
+import { SettingsItem } from '@core/ui/settings/SettingsItem'
+import { SignatureIcon } from '@lib/ui/icons/SignatureIcon'
+import { vult } from '@vultisig/core-chain/coin/knownTokens'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FeatureTierGate } from '../../../vult/discount/featureGate/FeatureTierGate'
 import { useTierEligibility } from '../../../vult/discount/featureGate/useTierEligibility'
-import {
-  DescriptionText,
-  ListItemIconWrapper,
-} from '../vaultSettingsListStyles'
+import { VultTierBadge } from './VultTierBadge'
 
 const requiredTier = 'silver'
 
@@ -27,15 +25,9 @@ export const CustomRpcSettingsRow = () => {
 
   return (
     <>
-      <ListItem
-        icon={
-          <ListItemIconWrapper>
-            <MobileSignalIcon />
-          </ListItemIconWrapper>
-        }
-        description={
-          <DescriptionText>{t('custom_rpc_description')}</DescriptionText>
-        }
+      <SettingsItem
+        icon={<SignatureIcon />}
+        description={t('custom_rpc_description')}
         onClick={() => {
           if (isPending) return
           if (isEligible) {
@@ -45,17 +37,21 @@ export const CustomRpcSettingsRow = () => {
           }
         }}
         title={t('custom_rpc')}
-        hoverable
-        showArrow
+        titleAccessory={
+          <VultTierBadge>
+            {t('vult_tier_badge', { ticker: vult.ticker })}
+          </VultTierBadge>
+        }
       />
       {isGateOpen ? (
         <FeatureTierGate
           isOpen={isGateOpen}
           onClose={() => setIsGateOpen(false)}
-          icon={<MobileSignalIcon />}
+          icon={<SignatureIcon />}
           title={t('custom_rpc')}
           description={t('custom_rpc_gate_description')}
           requiredTier={requiredTier}
+          isSettingsLook
         />
       ) : null}
     </>

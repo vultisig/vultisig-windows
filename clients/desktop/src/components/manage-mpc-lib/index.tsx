@@ -28,11 +28,9 @@ export const ManageMpcLib = () => {
     <Opener
       renderOpener={({ onOpen }) => (
         <UnstyledButton onClick={() => gate(onOpen)}>
-          <Text
-            as="span"
-            color="shy"
-            size={12}
-          >{`${t('version')} ${version}`}</Text>
+          <Text as="span" color="shy" variant="caption">
+            {`${t('version')} ${version}`}
+          </Text>
         </UnstyledButton>
       )}
       renderContent={({ onClose }) => (

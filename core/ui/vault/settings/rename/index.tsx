@@ -1,30 +1,43 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import {
+  settingsInputHeight,
+  settingsOutlinedTextInput,
+} from '@core/ui/settings/settingsField'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useCore } from '@core/ui/state/core'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { Button } from '@lib/ui/buttons/Button'
 import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '@lib/ui/css/textInput'
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { CircleXmarkFilledIcon } from '@lib/ui/icons/CircleXmarkFilledIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { TFunction } from 'i18next'
 import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import { z } from 'zod'
+
+const fieldPadding = 16
+const clearIconSize = 18
+
+const NameInput = styled(TextInput)`
+  ${settingsOutlinedTextInput};
+  padding-right: ${fieldPadding + clearIconSize + 8}px;
+`
+
+const ClearButton = styled(IconButton)`
+  color: ${getColor('settingsClearIcon')};
+  font-size: ${clearIconSize}px;
+`
 
 type CreateSchemaInput = {
   t: TFunction
@@ -53,10 +66,10 @@ const createSchema = ({ t, existingNames, currentName }: CreateSchemaInput) => {
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
+/** Renames the current vault, rejecting names another vault already uses. */
 export const VaultRenamePage = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()
-  const { colors } = useTheme()
   const currentVault = useCurrentVault()
   const vaults = useVaults()
   const updateVaultMutation = useUpdateVaultMutation()
@@ -93,31 +106,24 @@ export const VaultRenamePage = () => {
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('rename_vault')}
-        hasBorder
-      />
-      <PageContent gap={12} flexGrow scrollable>
+      <SettingsPageHeader title={t('rename_vault')} />
+      <SettingsPageContent gap={12} flexGrow scrollable>
         <ActionInsideInteractiveElement
           render={() => (
-            <TextInput {...register('name')} data-testid="rename-vault-input" />
+            <NameInput {...register('name')} data-testid="rename-vault-input" />
           )}
           action={
-            <IconButton
+            <ClearButton
               type="button"
               aria-label={t('clear')}
-              style={{
-                color: colors.textShy.toCssValue(),
-              }}
               onClick={() => setValue('name', '')}
             >
-              <CloseIcon />
-            </IconButton>
+              <CircleXmarkFilledIcon />
+            </ClearButton>
           }
           actionPlacerStyles={{
-            bottom: (textInputHeight - iconButtonSize.md) / 2,
-            right: textInputHorizontalPadding,
+            bottom: (settingsInputHeight - iconButtonSize.md) / 2,
+            right: fieldPadding - (iconButtonSize.md - clearIconSize) / 2,
           }}
         />
         {typeof errors.name?.message === 'string' && (
@@ -130,17 +136,17 @@ export const VaultRenamePage = () => {
             {updateVaultMutation.error.message}
           </Text>
         )}
-      </PageContent>
-      <PageFooter>
-        <Button
+      </SettingsPageContent>
+      <SettingsPageFooter>
+        <SettingsCtaButton
           disabled={!isValid || !isDirty}
           loading={updateVaultMutation.isPending}
           type="submit"
           data-testid="rename-vault-save"
         >
           {t('save')}
-        </Button>
-      </PageFooter>
+        </SettingsCtaButton>
+      </SettingsPageFooter>
     </VStack>
   )
 }

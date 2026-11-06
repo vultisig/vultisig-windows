@@ -1,40 +1,43 @@
 import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
-import { borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { CloudIcon } from '@lib/ui/icons/CloudIcon'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
-import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
+import { LaptopMobileIcon } from '@lib/ui/icons/LaptopMobileIcon'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Backdrop } from '@lib/ui/modal/Backdrop'
 import { OnCloseProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useResponsiveness } from '../../../providers/ResponsivenessProvider'
+import { settingsBackdropStyles } from '../../../settings/constants'
+import { SettingsBaselineText } from '../../../settings/SettingsBaselineText'
 import { BackupOption } from './BackupOption'
 import { BackupOptionType, backupOptionTypes } from './options'
 import { backupOptionView } from './routes'
 
 const backupOptionIcon: Record<BackupOptionType, React.FC> = {
-  device: TabletSmartphoneIcon,
-  server: CloudIcon,
+  device: LaptopMobileIcon,
+  server: CloudDownloadIcon,
 }
 
+const closeIconSize = 16
+
+/** The chooser between a device and a server backup: a sheet when small, a modal otherwise. */
 export const BackupModal = ({ onClose }: OnCloseProp) => {
   const navigate = useCoreNavigate()
   const { isSmall } = useResponsiveness()
   const { t } = useTranslation()
 
   const modalContent = () => (
-    <VStack gap={16}>
+    <VStack gap={14}>
       {backupOptionTypes.map(option => {
         const Icon = backupOptionIcon[option]
         return (
           <BackupOption
-            isSmall={isSmall}
             title={t(`${option}_backup`)}
             key={option}
             icon={<Icon />}
@@ -50,27 +53,16 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
 
   if (isSmall) {
     return (
-      <Backdrop onClose={onClose}>
+      <Backdrop onClose={onClose} style={settingsBackdropStyles}>
         <Wrapper>
-          <HStack alignItems="center" justifyContent="space-between" gap={12}>
-            <IconButton
-              aria-label={t('close')}
-              kind="secondary"
-              size="lg"
-              onClick={onClose}
-            >
-              <CrossIcon />
-            </IconButton>
-            <Text
-              size={16}
-              weight={500}
-              color="contrast"
-              style={{ flex: 1, textAlign: 'center' }}
-            >
+          <Header alignItems="center" justifyContent="space-between" gap={12}>
+            <SettingsBaselineText color="shyExtra" variant="subtitle">
               {t('choose_backup_method')}
-            </Text>
-            <TitleBalance />
-          </HStack>
+            </SettingsBaselineText>
+            <CloseButton aria-label={t('close')} onClick={onClose} size="sm">
+              <CrossIcon />
+            </CloseButton>
+          </Header>
           {modalContent()}
         </Wrapper>
       </Backdrop>
@@ -86,24 +78,39 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
 
 const Wrapper = styled.div`
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
 
   ${vStack({
-    gap: 20,
+    gap: 24,
   })};
 
-  padding: 20px;
-  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
-  background: ${getColor('background')};
+  ${borderRadius.lg};
+  padding: 24px 20px;
+  background: ${getColor('foreground')};
+`
+
+const Header = styled(HStack)`
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
+  padding-bottom: 23px;
+`
+
+const CloseButton = styled(IconButton)`
+  color: ${getColor('textShy')};
+  flex-shrink: 0;
+  font-size: ${closeIconSize}px;
+  margin-block: -6px;
+  margin-right: ${(closeIconSize - iconButtonSize.sm) / 2}px;
+  position: relative;
+
+  &::after {
+    content: '';
+    inset: ${(iconButtonSize.sm - iconButtonSize.lg) / 2}px;
+    position: absolute;
+  }
 `
 
 const DesktopModalWrapper = styled.div`
   margin-top: -8px;
-`
-
-// Mirrors the close button's width so the title stays centred.
-const TitleBalance = styled.div`
-  width: ${iconButtonSize.lg}px;
 `

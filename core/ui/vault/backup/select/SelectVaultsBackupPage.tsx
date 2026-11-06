@@ -1,19 +1,26 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useVaults } from '@core/ui/storage/vaults'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { PageHeaderBackButton } from '../../../flow/PageHeaderBackButton'
 import { useCurrentVault } from '../../state/currentVault'
 import { OptionContainer } from './OptionContainer'
 import { VaultList } from './VaultList'
 
 const maxPreview = 4
 
+// The frame's title sits 8 under the borderless header.
+const Content = styled(FitPageContent)`
+  padding-top: 8px;
+`
+
+/** Chooses between backing up this vault or all of them; skipped with a single vault. */
 export const SelectVaultsBackupPage = () => {
   const navigate = useCoreNavigate()
   const vaults = useVaults()
@@ -34,20 +41,22 @@ export const SelectVaultsBackupPage = () => {
   }
 
   return (
-    <VStack fullHeight gap={40}>
-      <PageHeader
-        title={t('backup')}
-        primaryControls={<PageHeaderBackButton />}
-      />
-      <FitPageContent contentMaxWidth={520}>
+    <VStack fullHeight>
+      <SettingsPageHeader hasBorder={false} title={null} />
+      <Content contentMaxWidth={520}>
         <VStack gap={36}>
           <VStack gap={12}>
-            <Text size={28} weight="600">
+            <Text color="regular" variant="stationTitle1">
               {t('select_vaults_to_backup')}
             </Text>
-            <Text color="shy" size={14}>
+            <SettingsBaselineText
+              color="shy"
+              height={20 / 14}
+              size={14}
+              weight={500}
+            >
               {t('select_vaults_to_backup_description')}
-            </Text>
+            </SettingsBaselineText>
           </VStack>
           <VStack gap={16}>
             <OptionContainer
@@ -64,19 +73,19 @@ export const SelectVaultsBackupPage = () => {
               <VStack fullWidth gap={12}>
                 <VaultList vaults={vaults.slice(0, maxPreview)} />
                 {vaults.length > maxPreview && (
-                  <Text
+                  <SettingsBaselineText
                     style={{ alignSelf: 'center' }}
                     color="shyExtra"
-                    size={13}
+                    variant="footnote"
                   >
                     +{vaults.length - maxPreview} {t('more')}
-                  </Text>
+                  </SettingsBaselineText>
                 )}
               </VStack>
             </OptionContainer>
           </VStack>
         </VStack>
-      </FitPageContent>
+      </Content>
     </VStack>
   )
 }

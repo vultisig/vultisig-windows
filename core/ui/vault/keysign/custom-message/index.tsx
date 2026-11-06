@@ -1,14 +1,14 @@
-import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { CustomMessageVerifyContent } from '@core/ui/mpc/keysign/custom/CustomMessageVerifyContent'
 import { isSignableCustomMessage } from '@core/ui/mpc/keysign/customMessage/isSignableCustomMessage'
-import { Button } from '@lib/ui/buttons/Button'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { settingsOutlinedTextInput } from '@core/ui/settings/settingsField'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
@@ -79,13 +79,13 @@ export const SignCustomMessagePage = () => {
 
   return (
     <VStack fullHeight>
-      <FlowPageHeader
+      <SettingsPageHeader
         onBack={!isFillingForm ? toPreviousStep : undefined}
         title={isFillingForm ? t('sign_message') : t('verify')}
       />
-      <PageContent gap={24} flexGrow scrollable>
+      <SettingsPageContent gap={24} flexGrow scrollable>
         {isFillingForm ? (
-          <VStack gap={16}>
+          <VStack gap={14}>
             <VStack gap={8}>
               <StyledTextInput
                 value={method}
@@ -106,29 +106,34 @@ export const SignCustomMessagePage = () => {
             />
           </VStack>
         ) : (
-          <CustomMessageVerifyContent method={method} message={message} />
+          <CustomMessageVerifyContent
+            method={method}
+            message={message}
+            isSettingsLook
+          />
         )}
-      </PageContent>
-      <PageFooter>
-        {isFillingForm ? (
-          <Button disabled={disabledMessage} onClick={toNextStep}>
+      </SettingsPageContent>
+      {isFillingForm ? (
+        <SettingsPageFooter>
+          <SettingsCtaButton disabled={disabledMessage} onClick={toNextStep}>
             {t('continue')}
-          </Button>
-        ) : (
+          </SettingsCtaButton>
+        </SettingsPageFooter>
+      ) : (
+        <VerifyFooter>
           <StartKeysignPrompt {...startKeysignPromptProps} />
-        )}
-      </PageFooter>
+        </VerifyFooter>
+      )}
     </VStack>
   )
 }
 
 const StyledTextInput = styled(TextInput)`
-  font-weight: 500;
-  padding-left: 16px;
-  border: 1px solid ${getColor('foregroundExtra')};
+  ${settingsOutlinedTextInput};
+`
 
-  &::placeholder {
-    font-weight: 500;
-    font-size: 16px;
+const VerifyFooter = styled(SettingsPageFooter)`
+  button {
+    padding-top: 2px;
   }
 `

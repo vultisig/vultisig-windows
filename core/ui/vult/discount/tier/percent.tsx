@@ -1,5 +1,6 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ValueProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import {
   VultDiscountTier,
   vultDiscountTierBps,
@@ -11,18 +12,19 @@ import { formatDiscountPercentOfBaseFee } from '../../../vault/swap/affiliate/af
 
 const Container = styled.div`
   display: inline-flex;
-  padding: 8px 16px;
+  padding: 7px 9px;
   justify-content: center;
   align-items: center;
-  ${borderRadius.pill};
-  border: 1px solid rgba(72, 121, 253, 0.32);
+  ${borderRadius.lg};
+  border: 1px solid ${getColor('foregroundExtra')};
 
   color: #f0f4fc;
   font-family: Brockmann;
-  font-size: 14px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 500;
-  line-height: 20px;
+  letter-spacing: 0.06px;
+  line-height: 18px;
 `
 
 /** Pill stating the share of the base swap fee a tier waives. */

@@ -1,17 +1,12 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { SettingsItem } from '@core/ui/settings/SettingsItem'
 import { useCore } from '@core/ui/state/core'
-import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
-import { ListItem } from '@lib/ui/list/item'
+import { LinkSlashIcon } from '@lib/ui/icons/LinkSlashIcon'
 import { useTranslation } from 'react-i18next'
 
-import {
-  DescriptionText,
-  ListItemIconWrapper,
-} from '../../vaultSettingsListStyles'
-
 /**
- * Token Approvals entry on the Advanced screen. Extension only for now; the
- * desktop app keeps its current Advanced list.
+ * Revoke Approvals entry in the General settings section. Extension only for
+ * now; the desktop app has no token approvals page in its settings.
  */
 export const TokenApprovalsSettingsRow = () => {
   const { t } = useTranslation()
@@ -21,19 +16,10 @@ export const TokenApprovalsSettingsRow = () => {
   if (client !== 'extension') return null
 
   return (
-    <ListItem
-      icon={
-        <ListItemIconWrapper>
-          <ShieldCheckIcon />
-        </ListItemIconWrapper>
-      }
-      description={
-        <DescriptionText>{t('token_approvals_description')}</DescriptionText>
-      }
+    <SettingsItem
+      icon={<LinkSlashIcon />}
       onClick={() => navigate({ id: 'tokenApprovals' })}
-      title={t('token_approvals')}
-      hoverable
-      showArrow
+      title={t('revoke_approvals')}
     />
   )
 }
