@@ -1,7 +1,6 @@
-import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { SettingsItem } from '@core/ui/settings/SettingsItem'
+import { ScanIcon } from '@lib/ui/icons/ScanIcon'
 import { Switch } from '@lib/ui/inputs/switch'
-import { ListItem } from '@lib/ui/list/item'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -9,20 +8,19 @@ import {
   useSetIsBlockaidEnabledMutation,
 } from '../../../storage/blockaid'
 
-export const ManageBlockaid = () => {
+/** Settings row toggling the Blockaid transaction scan. */
+export const ManageBlockaid = ({ iconWidth }: { iconWidth?: number }) => {
   const value = useIsBlockaidEnabled()
   const { mutate: setValue } = useSetIsBlockaidEnabledMutation()
   const { t } = useTranslation()
 
   return (
-    <ListItem
-      icon={
-        <IconWrapper size={20} color="primaryAlt">
-          <FolderLockIcon />
-        </IconWrapper>
-      }
+    <SettingsItem
+      icon={<ScanIcon />}
+      iconWidth={iconWidth}
       title={t('blockaid_security_scan')}
-      extra={<Switch checked={value} onChange={setValue} />}
+      description={t('blockaid_security_scan_description')}
+      control={<Switch checked={value} onChange={setValue} size="large" />}
     />
   )
 }

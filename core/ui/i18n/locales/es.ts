@@ -89,6 +89,7 @@ export const es = {
   backup_share_sent: '¡Copia de seguridad enviada!',
   backup_share_sent_description:
     'Acabamos de enviarte tu copia de seguridad a tu correo electrónico. Si no la encuentras, revisa tu carpeta de correo no deseado.',
+  backup_vault_share: 'Copia de seguridad del fragmento',
   backup_with_password: 'Copia de seguridad con contraseña',
   backup_without_password: 'Copia de seguridad sin contraseña',
   balance: 'Saldo',
@@ -96,6 +97,8 @@ export const es = {
   balance_changes: 'Cambios de saldo',
   base_fee: 'Comisión base',
   blockaid_security_scan: 'Análisis de seguridad de Blockaid',
+  blockaid_security_scan_description:
+    'Revisa las transacciones antes de firmar',
   blockaid_simulation_failed: 'Simulación de transacción fallida',
   blockaid_simulation_failed_description:
     'No se pudo simular esta transacción. Puedes continuar, pero te recomendamos revisar los detalles con atención.',
@@ -254,7 +257,8 @@ export const es = {
   },
   delete: 'Borrar',
   delete_folder: 'Eliminar carpeta',
-  delete_vault_description: 'Eliminar tu bóveda de forma permanente',
+  delete_vault_description:
+    'Eliminar tu fragmento de la bóveda de forma permanente',
   deposit: 'Función',
   description: 'Descripción',
   destination_address: 'Dirección de destino',
@@ -278,6 +282,7 @@ export const es = {
   done: 'Hecho',
   earn: 'Ganar',
   edit_address: 'Editar dirección',
+  edit_address_book: 'Editar libreta de direcciones',
   edit_friends_referral: 'Editar código de referido de un amigo',
   edit_referral: 'Editar código de referido',
   remove_friends_referral: 'Eliminar referido',
@@ -292,7 +297,7 @@ export const es = {
   enable_tss_batching: 'Activar el procesamiento por lotes de TSS',
   post_quantum_keygen: 'Generación de claves post-cuántica',
   post_quantum_keygen_description:
-    'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
+    'Genera una clave MLDSA-44 para resistencia cuántica',
   enable_token_instruction:
     'Activa al menos un token para ver saldos y administrar posiciones.',
   enter: 'Ingresar',
@@ -318,6 +323,8 @@ export const es = {
   est_network_fee: 'Comisión de red estimada',
   expand_view: 'Ampliar vista',
   open_as_side_panel: 'Abrir como panel lateral',
+  open_as_side_panel_description:
+    'Mantén {{productName}} abierto junto a tus pestañas',
   opened_in_new_tab: 'Abierto en una pestaña nueva',
   push_notifications: 'Notificaciones push',
   push_notifications_description:
@@ -452,11 +459,12 @@ export const es = {
     'La cantidad máxima de gas que pagarás. Puedes aumentarla si el límite de gas no basta para enviar transacciones.',
   general: 'General',
   get_started: 'Empezar',
-  github: 'Github',
+  github: 'GitHub',
   go_back: 'Volver',
   go_to_vault: 'Ir a la bóveda',
   go_to_wallet: 'Ir a la billetera',
   home_display: 'Pantalla de inicio',
+  home_display_balance_caption: 'Visualización del saldo',
   home_display_separate_description:
     'Tu pestaña Billetera muestra solo el saldo de tu billetera y tu pestaña DeFi muestra tu saldo DeFi.',
   home_display_separate_title: 'Billetera y DeFi por separado',
@@ -568,6 +576,9 @@ export const es = {
   loading: 'Cargando...',
   localMode: 'Estás en modo local',
   lock_time: 'Tiempo de bloqueo',
+  lock_time_description:
+    'Establece el tiempo hasta que la aplicación se bloquee automáticamente',
+  lock_time_setting: 'Tiempo de bloqueo',
   lock_vultisig_automatically_after:
     'Bloquear {{productName}} automáticamente después de...',
   looking_for_server: 'Buscando FastVaultServer...',
@@ -589,6 +600,8 @@ export const es = {
   message_to_sign: 'Mensaje para firmar',
   method: 'Método',
   method_required: 'Se requiere método de firma',
+  migrate: 'Migrar',
+  migrate_vault_description: 'Migrar la bóveda GG20 a DKLS',
   mint: 'Acuñar',
   minute_one: '{{count}} minuto',
   minute_other: '{{count}} minutos',
@@ -692,12 +705,15 @@ export const es = {
   to_start_plugin_installation: 'Para iniciar la instalación de la aplicación',
   portfolio_balance: 'Saldo de la cartera',
   positions: 'Posiciones',
+  post_quantum_key: 'Clave post-cuántica',
   powered_by: 'Desarrollado por <provider></provider>',
   price: 'Precio',
   price_impact_average: 'Promedio',
   price_impact_good: 'Bien',
   price_impact_high: 'Alto impacto',
   prioritize_vultisig: 'Priorizar {{productName}}',
+  prioritize_vultisig_description:
+    'Mostrar {{productName}} primero al hacer un intercambio',
   priority: 'Prioridad',
   priority_fee: 'Comisión prioritaria',
   privacy_policy: 'Política de privacidad',
@@ -836,6 +852,7 @@ export const es = {
   secure_notifications_description:
     'Recibe alertas cuando otro dispositivo solicite unirse a tu bóveda o cuando se necesite tu firma.',
   security: 'Seguridad',
+  security_description: 'Gestiona tu código de acceso',
   select: 'Seleccionar',
   select_asset: 'Seleccionar activo',
   select_backup_file: 'Importa tu fragmento de la bóveda',
@@ -998,7 +1015,7 @@ export const es = {
   try_again: 'Intentar otra vez',
   turn_your_vault_into_rewards_machine:
     'Convierte tu bóveda en una máquina de recompensas. Crea tu referido ahora y empieza a ganar.',
-  twitter: 'X (Twitter)',
+  twitter: 'X',
   tx_hash: 'Hash de transacción',
   type: 'Tipo',
   type_here: 'Escribe aquí',
@@ -1007,7 +1024,7 @@ export const es = {
   ultimate: 'Supremo',
   unlock_discount_tier: 'Desbloquear nivel <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un <b>descuento de {{bps}} bps en la comisión de trading</b> en todos los swaps.',
+    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un <b>descuento de {{percent}} en la comisión de swap de Vultisig</b> en todos los swaps.',
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la comisión de Vultisig</b> en todos los swaps.',
   unlock_tier: 'Desbloquear nivel',
@@ -1040,7 +1057,7 @@ export const es = {
   vault: 'Bóveda',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'La aplicación está actualizada.',
-    downloadButton: 'Actualizar ahora',
+    downloadButton: 'Actualizar app',
     errorFetchingLatestVersion: 'Error al obtener la última versión: {{error}}',
     fetchingLatestVersion: 'Obteniendo la última versión...',
     title: 'Comprobar actualización',
@@ -1084,7 +1101,7 @@ export const es = {
   vault_details_page_vault_MLDSA: 'Clave MLDSA',
   vault_details_page_vault_type: 'Tipo de bóveda',
   vault_info: 'Información de la bóveda',
-  vault_management: 'Bóveda',
+  vault_management: 'Gestión de la bóveda',
   vault_name: 'Nombre de la bóveda',
   vault_name_already_exists: 'Elige un nombre de bóveda diferente.',
   vault_name_description:
@@ -1132,9 +1149,9 @@ export const es = {
   via: 'a través de',
   view_on_explorer: 'Ver en Explorer',
   vote: 'Votar',
+  vult_tier_badge: 'NIVEL {{ticker}}',
   vultisig_community: 'Comunidad {{productName}}',
   vultisig_education: 'Educación {{productName}}',
-  vultisig_website: 'Sitio web de {{productName}}',
   waitingOnDevices: 'Esperando dispositivos...',
   waiting_for_devices_to_join: 'Esperando a que se unan otros dispositivos',
   waiting_for_devices_to_join_description:
@@ -1142,6 +1159,7 @@ export const es = {
   waiting_for_keygen_start: 'Esperando que comience la generación de claves...',
   waiting_for_keysign_start: 'Esperando que comience el proceso de firma...',
   wallet: 'Billetera',
+  website: 'Sitio web',
   withdraw: 'Retirar',
   withdraw_ruji_rewards: 'Retirar recompensas RUJI',
   add_cacao_pool: 'Agregar al pool de CACAO',
@@ -1331,6 +1349,8 @@ export const es = {
   qbtc_claim_card_title: 'QBTC reclamable',
   qbtc_claim_tab: 'Reclamar',
   qbtc_onboarding_title: 'Nueva seguridad cuántica',
+  quick_settings: 'Ajustes rápidos',
+  rate_app: 'Califica la aplicación',
   qbtc_onboarding_subtitle:
     'Las claves clásicas pueden ser descifradas por computadoras cuánticas. Para activar QBTC es necesario generar un nuevo par de claves.',
   qbtc_onboarding_feature_generate_title: 'Genera tu par de claves cuánticas',
@@ -1465,7 +1485,6 @@ export const es = {
     'Bienvenido al mercado de plugins {{productName}}',
   plugin_permissions_brand_safety_notice:
     'Las apps de {{productName}} nunca pueden firmar transacciones que no hayas aprobado antes.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'La negociación de este activo está temporalmente suspendida. Inténtalo de nuevo más tarde.',
   sui_arguments: 'Argumentos',
@@ -2082,7 +2101,6 @@ export const es = {
   custom_message_unsupported_method:
     'Método de firma no compatible. Usa personal_sign o eth_signTypedData_v4.',
   revoke: 'Revocar el acceso',
-  token_approvals: 'Aprobaciones de tokens',
   token_approvals_delegate: 'Delegado',
   token_approvals_partial:
     'No se pudieron comprobar del todo las aprobaciones de Permit2 en: {{chains}}',
@@ -2101,8 +2119,6 @@ export const es = {
   token_approvals_empty_title: 'No hay aprobaciones activas',
   token_approvals_empty_description:
     'Los contratos a los que autorices a gastar tus tokens en las cadenas de esta bóveda aparecerán aquí.',
-  token_approvals_description:
-    'Revisa y revoca los contratos que pueden gastar tus tokens.',
   token_approvals_disconnect_note:
     'Desconectar un dApp no elimina estas aprobaciones. Cada revocación es una transacción independiente en la cadena de bloques con una comisión de red.',
   token_approvals_unlimited_count: 'Ilimitado: {{count}}',
@@ -2110,5 +2126,6 @@ export const es = {
   revoke_approval_explanation:
     'Establece el límite de este contrato en 0, por lo que ya no podrá mover este token de tu bóveda. Se aplica una comisión de red.',
   revoke_approval_new_allowance: 'Nuevo límite de gasto',
+  revoke_approvals: 'Revocar aprobaciones',
   token_approvals_count: 'Aprobaciones: {{count}}',
 }

@@ -1,18 +1,21 @@
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { callNotFoundPopupResult } from '@core/inpage-provider/popup/error'
-import { PopupMethod } from '@core/inpage-provider/popup/interface'
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { PrefetchViews } from '@lib/ui/navigation/PrefetchViews'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 
+import { popupMethods } from './interface'
 import { dismissSidePanelPopup, isPopupInSidePanel } from './sidePanel/dismiss'
 import { usePopupCallId, useResolvePopupCallMutation } from './view/core/call'
 import { VaultsOnly } from './view/flow/VaultsOnly'
-import { PopupResolvers } from './view/resolvers'
+import { popupMethodsUsingMpc, popupResolvers } from './view/resolvers'
 import { getPopupViewCall, removePopupViewCall } from './view/state/calls'
 import { PopupContextProvider } from './view/state/context'
 import { PopupInputProvider } from './view/state/input'
@@ -21,6 +24,32 @@ import { PopupInputProvider } from './view/state/input'
 const leavePopup = isPopupInSidePanel()
   ? dismissSidePanelPopup
   : () => window.close()
+
+// Warmed after paint so approving a request doesn't wait on the SDK load.
+const prefetchLoaders = { mpcEngine: loadMpcEngine }
+
+/** Takes this window's pending call out of storage and checks its method. */
+const takePopupCall = async (callId: string) => {
+  const entry = await getPopupViewCall(callId)
+  if (!entry) {
+    throw new Error(`No call found in the storage for ${callId}`)
+  }
+
+  await removePopupViewCall(callId)
+
+  const method = getRecordUnionKey(entry.call)
+  if (!isOneOf(method, popupMethods)) {
+    throw new Error(`Unknown popup method: ${method}`)
+  }
+
+  return { ...entry, method }
+}
+
+const pendingView = (
+  <Center>
+    <Spinner />
+  </Center>
+)
 
 /**
  * The popup page for a single dApp request, shown in a popup window or in the
@@ -32,15 +61,10 @@ export const PopupApp = () => {
   const callId = usePopupCallId()
 
   const { mutate, ...mutationState } = useMutation({
-    mutationFn: async () => {
-      const entry = await getPopupViewCall(callId)
-      if (!entry) {
-        throw new Error(`No call found in the storage for ${callId}`)
-      }
-
-      await removePopupViewCall(callId)
-
-      return entry
+    mutationFn: () => takePopupCall(callId),
+    // Fetch the method's screen while the shell boots from storage.
+    onSuccess: ({ method }) => {
+      void popupResolvers[method].load().catch(() => undefined)
     },
     onError: () => {
       resolvePopupCall({
@@ -57,11 +81,10 @@ export const PopupApp = () => {
   return (
     <MatchQuery
       value={mutationState}
-      success={({ call, context }) => {
-        const method = getRecordUnionKey(call) as PopupMethod
+      success={({ call, context, method }) => {
         const input = getRecordUnionValue(call)
 
-        const Resolver = PopupResolvers[method]
+        const Resolver = popupResolvers[method].Component
 
         return (
           <ExtensionCoreApp
@@ -73,26 +96,28 @@ export const PopupApp = () => {
             }}
             targetVaultId={context?.appSession?.vaultId}
             isLimited={true}
+            startupMode="instant"
           >
             <VaultsOnly>
+              {popupMethodsUsingMpc[method] && (
+                <PrefetchViews loaders={prefetchLoaders} />
+              )}
               <PopupContextProvider value={context}>
                 <PopupInputProvider value={input}>
-                  <Resolver
-                    input={input}
-                    context={context as any}
-                    onFinish={resolvePopupCall}
-                  />
+                  <Suspense fallback={pendingView}>
+                    <Resolver
+                      input={input}
+                      context={context as any}
+                      onFinish={resolvePopupCall}
+                    />
+                  </Suspense>
                 </PopupInputProvider>
               </PopupContextProvider>
             </VaultsOnly>
           </ExtensionCoreApp>
         )
       }}
-      pending={() => (
-        <Center>
-          <Spinner />
-        </Center>
-      )}
+      pending={() => pendingView}
     />
   )
 }

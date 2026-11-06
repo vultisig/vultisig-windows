@@ -1,3 +1,5 @@
+import { extensionDownloadUrl } from '@vultisig/core-config'
+
 import {
   currentProductBrand,
   currentProductBrandConfig,
@@ -17,3 +19,5 @@ export const currentProductEducationUrl =
     ? currentProductWebsiteUrl
     : vultisigEducationUrl
 export const shouldShowVultisigCommunity = currentProductBrand === 'vultisig'
+export const extensionStoreReviewsUrl = `${extensionDownloadUrl}/reviews`
+export const quickSettingsIconWidth = 18

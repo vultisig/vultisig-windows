@@ -14,10 +14,10 @@ import styled from 'styled-components'
 
 import { BondChurn } from '../../../queries/bondRewards/churns'
 import { BondChain } from '../../../queries/bondRewards/config'
+import { noRewardValue } from '../../rewards/config'
 import { BondInfoLabel } from '../BondInfoLabel'
 import { BondLastRewardAmount } from './BondLastRewardAmount'
 import { BondRewardHistorySheet } from './BondRewardHistorySheet'
-import { noBondRewardValue } from './config'
 
 type BondRewardsRowProps = {
   chain: BondChain
@@ -82,7 +82,7 @@ export const BondRewardsRow = ({
                   />
                 ) : (
                   <Text size={14} weight="600" color="shyExtra">
-                    {noBondRewardValue}
+                    {noRewardValue}
                   </Text>
                 )}
                 <Chevron strokeWidth={3} />

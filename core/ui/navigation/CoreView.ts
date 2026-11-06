@@ -152,7 +152,7 @@ export type CoreView =
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
   | { id: 'transactionDetail'; state: { id: string } }
-  | { id: 'transactionHistory' }
+  | { id: 'transactionHistory'; state?: { chain: Chain } }
   | { id: 'limitOrders' }
   | { id: 'cancelLimitOrder'; state: { id: string } }
   | { id: 'vaultBackup' }

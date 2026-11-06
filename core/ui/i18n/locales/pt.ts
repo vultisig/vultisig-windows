@@ -90,6 +90,7 @@ export const pt = {
   backup_share_sent: 'Parte do backup enviada!',
   backup_share_sent_description:
     'Acabamos de enviar o seu backup para o seu e-mail. Caso não o encontre, verifique a sua caixa de spam.',
+  backup_vault_share: 'Backup da parte do cofre',
   backup_with_password: 'Backup com senha',
   backup_without_password: 'Backup sem senha',
   balance: 'Saldo',
@@ -97,6 +98,8 @@ export const pt = {
   balance_changes: 'Alterações de saldo',
   base_fee: 'Taxa base',
   blockaid_security_scan: 'Verificação de segurança Blockaid',
+  blockaid_security_scan_description:
+    'Verifique as transações antes de assinar',
   blockaid_simulation_failed: 'A simulação da transação falhou.',
   blockaid_simulation_failed_description:
     'Não foi possível simular esta transação. Você ainda pode prosseguir, mas recomendamos que revise os detalhes da transação cuidadosamente.',
@@ -254,7 +257,7 @@ export const pt = {
   },
   delete: 'Excluir',
   delete_folder: 'Excluir pasta',
-  delete_vault_description: 'Exclua seu cofre permanentemente.',
+  delete_vault_description: 'Exclua a parte do seu cofre permanentemente.',
   deposit: 'Função',
   description: 'Descrição',
   destination_address: 'Endereço de destino',
@@ -277,6 +280,7 @@ export const pt = {
   done: 'Feito',
   earn: 'Ganhar',
   edit_address: 'Editar endereço',
+  edit_address_book: 'Editar agenda de endereços',
   edit_friends_referral: 'Editar Indicação de Amigo',
   edit_referral: 'Editar indicação',
   remove_friends_referral: 'Remover indicação',
@@ -291,7 +295,7 @@ export const pt = {
   enable_tss_batching: 'Habilitar o processamento em lote TSS',
   post_quantum_keygen: 'Geração de chaves pós-quânticas',
   post_quantum_keygen_description:
-    'Gere uma chave pós-quântica (MLDSA) para este cofre.',
+    'Gere uma chave MLDSA-44 para resistência quântica',
   enable_token_instruction:
     'Habilite pelo menos um token para visualizar saldos e gerenciar posições.',
   enter: 'Digitar',
@@ -317,6 +321,8 @@ export const pt = {
   est_network_fee: 'Taxa de rede estimada',
   expand_view: 'Ampliar visualização',
   open_as_side_panel: 'Abrir como painel lateral',
+  open_as_side_panel_description:
+    'Mantenha {{productName}} aberto ao lado das suas abas',
   opened_in_new_tab: 'Aberto em uma nova aba',
   push_notifications: 'Notificações Push',
   push_notifications_description:
@@ -453,11 +459,12 @@ export const pt = {
     'O valor máximo de gás que você pagará. Pode ser aumentado se o limite de gás não for suficiente para enviar transações.',
   general: 'Em geral',
   get_started: 'Comece agora',
-  github: 'Github',
+  github: 'GitHub',
   go_back: 'Volte',
   go_to_vault: 'Vá para o cofre',
   go_to_wallet: 'Acesse a carteira',
   home_display: 'Exibição inicial',
+  home_display_balance_caption: 'Exibição do saldo',
   home_display_separate_description:
     'A aba Carteira mostra apenas o saldo da carteira, e a aba DeFi mostra seu saldo em DeFi.',
   home_display_separate_title: 'Carteira e DeFi separados',
@@ -570,6 +577,9 @@ export const pt = {
   loading: 'Carregando...',
   localMode: 'Você está no modo local.',
   lock_time: 'Horário de bloqueio',
+  lock_time_description:
+    'Defina o tempo até o aplicativo bloquear automaticamente',
+  lock_time_setting: 'Tempo de bloqueio',
   lock_vultisig_automatically_after:
     'Bloquear {{productName}} automaticamente após...',
   looking_for_server: 'Procurando por FastVaultServer...',
@@ -591,6 +601,8 @@ export const pt = {
   message_to_sign: 'Mensagem para assinar',
   method: 'Método',
   method_required: 'É necessário um método de assinatura.',
+  migrate: 'Migrar',
+  migrate_vault_description: 'Migrar o cofre GG20 para DKLS',
   mint: 'Cunhar',
   minute_one: '{{count}} minuto',
   minute_other: '{{count}} minutos',
@@ -694,12 +706,15 @@ export const pt = {
   to_start_plugin_installation: 'Para iniciar a instalação do aplicativo',
   portfolio_balance: 'Saldo do portfólio',
   positions: 'Posições',
+  post_quantum_key: 'Chave pós-quântica',
   powered_by: 'Alimentado por <provider> </provider>',
   price: 'Preço',
   price_impact_average: 'Média',
   price_impact_good: 'Bom',
   price_impact_high: 'Alto impacto',
   prioritize_vultisig: 'Priorize {{productName}}',
+  prioritize_vultisig_description:
+    'Mostrar {{productName}} primeiro ao fazer swap',
   priority: 'Prioridade',
   priority_fee: 'Taxa prioritária',
   privacy_policy: 'Política de privacidade',
@@ -840,6 +855,7 @@ export const pt = {
   secure_notifications_description:
     'Receba alertas quando outro dispositivo solicitar acesso ao seu cofre ou quando sua assinatura for necessária.',
   security: 'Segurança',
+  security_description: 'Gerencie seu código de acesso',
   select: 'Selecione',
   select_asset: 'Selecione o ativo',
   select_backup_file: 'Importe a parte do seu cofre',
@@ -999,7 +1015,7 @@ export const pt = {
   try_again: 'Tente novamente',
   turn_your_vault_into_rewards_machine:
     'Transforme seu cofre em uma máquina de recompensas. Crie seu cadastro de indicação agora e comece a ganhar.',
-  twitter: 'X (Twitter)',
+  twitter: 'X',
   tx_hash: 'Hash da transação',
   type: 'Tipo',
   type_here: 'Digite aqui',
@@ -1008,7 +1024,7 @@ export const pt = {
   ultimate: 'Supremo',
   unlock_discount_tier: 'Desbloquear nível <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{percent}} na taxa de swap do Vultisig</b> em todos os swaps.',
   unlock_discount_tier_description_ultimate:
     'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa do Vultisig</b> em todos os swaps.',
   unlock_tier: 'Desbloquear nível',
@@ -1042,7 +1058,7 @@ export const pt = {
   vault: 'Cofre',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'O aplicativo está atualizado.',
-    downloadButton: 'Atualize agora',
+    downloadButton: 'Atualizar app',
     errorFetchingLatestVersion:
       'Erro ao obter a versão mais recente: {{error}}',
     fetchingLatestVersion: 'Buscando a versão mais recente...',
@@ -1088,7 +1104,7 @@ export const pt = {
   vault_details_page_vault_MLDSA: 'Chave MLDSA',
   vault_details_page_vault_type: 'Tipo de cofre',
   vault_info: 'Informações do cofre',
-  vault_management: 'Cofre',
+  vault_management: 'Gerenciamento do cofre',
   vault_name: 'Nome do cofre',
   vault_name_already_exists:
     'Por favor, escolha um nome diferente para o cofre.',
@@ -1137,9 +1153,9 @@ export const pt = {
   via: 'via',
   view_on_explorer: 'Visualizar no Explorador',
   vote: 'Voto',
+  vult_tier_badge: 'NÍVEL {{ticker}}',
   vultisig_community: 'Comunidade {{productName}}',
   vultisig_education: 'Educação {{productName}}',
-  vultisig_website: 'Site {{productName}}',
   waitingOnDevices: 'Aguardando dispositivos...',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem.',
   waiting_for_devices_to_join_description:
@@ -1147,6 +1163,7 @@ export const pt = {
   waiting_for_keygen_start: 'Aguardando o início da geração de chaves...',
   waiting_for_keysign_start: 'Aguardando o início do processo de assinatura...',
   wallet: 'Carteira',
+  website: 'Site',
   withdraw: 'Retirar',
   withdraw_ruji_rewards: 'Retirar recompensas RUJI',
   add_cacao_pool: 'Adicionar ao pool CACAO',
@@ -1336,6 +1353,8 @@ export const pt = {
   qbtc_claim_card_title: 'QBTC reivindicável',
   qbtc_claim_tab: 'Coletar',
   qbtc_onboarding_title: 'Nova segurança quântica',
+  quick_settings: 'Configurações rápidas',
+  rate_app: 'Avalie o aplicativo',
   qbtc_onboarding_subtitle:
     'As chaves clássicas podem ser quebradas por computadores quânticos. Habilitar QBTC requer a geração de um novo par de chaves.',
   qbtc_onboarding_feature_generate_title: 'Gere seu par de chaves quânticas.',
@@ -1469,7 +1488,6 @@ export const pt = {
     'Bem-vindo ao Marketplace de Plugins {{productName}}',
   plugin_permissions_brand_safety_notice:
     'O aplicativo {{productName}} nunca poderá assinar transações que você não aprove previamente.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'A negociação deste ativo está temporariamente suspensa. Tente novamente mais tarde.',
   sui_arguments: 'Argumentos',
@@ -2088,7 +2106,6 @@ export const pt = {
   custom_message_unsupported_method:
     'Método de assinatura não suportado. Use personal_sign ou eth_signTypedData_v4.',
   revoke: 'Revogar acesso',
-  token_approvals: 'Aprovações de tokens',
   token_approvals_delegate: 'Delegado',
   token_approvals_partial:
     'Não foi possível verificar totalmente as aprovações do Permit2 em: {{chains}}',
@@ -2107,8 +2124,6 @@ export const pt = {
   token_approvals_empty_title: 'Não há aprovações ativas',
   token_approvals_empty_description:
     'Os contratos que você autorizar a gastar seus tokens nas redes deste cofre aparecerão aqui.',
-  token_approvals_description:
-    'Analise e revogue contratos que possam gastar seus tokens.',
   token_approvals_disconnect_note:
     'Desconectar um dApp não remove essas aprovações. Cada revogação é uma transação on-chain separada com uma taxa de rede.',
   token_approvals_unlimited_count: 'Ilimitado: {{count}}',
@@ -2116,5 +2131,6 @@ export const pt = {
   revoke_approval_explanation:
     'Define a permissão deste contrato como 0, impedindo que ele mova este token do seu cofre. Você paga uma taxa de rede.',
   revoke_approval_new_allowance: 'Novo limite de gastos',
+  revoke_approvals: 'Revogar aprovações',
   token_approvals_count: 'Aprovações: {{count}}',
 }
