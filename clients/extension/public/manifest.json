@@ -8,8 +8,8 @@
     "email": "info@vultisig.com",
     "url": "https://vultisig.com"
   },
-  "version": "0.2.1",
-  "version_name": "0.2.1",
+  "version": "0.2.32",
+  "version_name": "0.2.32",
   "action": {
     "default_icon": {
       "16": "icon16.png",
