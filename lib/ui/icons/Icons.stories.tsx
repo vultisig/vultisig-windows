@@ -43,7 +43,6 @@ import { CircleMinusIcon } from './CircleMinusIcon'
 import { CirclePlusIcon } from './CirclePlusIcon'
 import { ClipboardCopyIcon } from './ClipboardCopyIcon'
 import { CloseIcon } from './CloseIcon'
-import { CloudIcon } from './CloudIcon'
 import { CloudOffIcon } from './CloudOffIcon'
 import { CloudUploadIcon } from './CloudUploadIcon'
 import { CoinsAddIcon } from './CoinsAddIcon'
@@ -211,7 +210,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   CirclePlusIcon,
   ClipboardCopyIcon,
   CloseIcon,
-  CloudIcon,
   CloudOffIcon,
   CloudUploadIcon,
   CoSignIcon,

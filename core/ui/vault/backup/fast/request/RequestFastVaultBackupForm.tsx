@@ -1,7 +1,8 @@
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { ErrorBlock } from '@lib/ui/status/ErrorBlock'
@@ -13,11 +14,33 @@ import { TFunction } from 'i18next'
 import { useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 import { z } from 'zod'
 
 import { ManageEmailField } from './components/ManageEmailField'
 import { ManagePasswordField } from './components/ManagePasswordField'
 import { BackupFormFieldsStateProvider } from './state/focusedField'
+
+const Form = styled(ActionForm)`
+  padding-bottom: 24px;
+  padding-top: 24px;
+`
+
+const ErrorBanner = styled(ErrorBlock)`
+  ${borderRadius.xl};
+  background: ${({ theme }) =>
+    theme.colors.danger.getVariant({ a: () => 0.05 }).toCssValue()};
+
+  svg {
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  > :last-child {
+    letter-spacing: 0.06px;
+    line-height: 18px;
+  }
+`
 
 const getSchema = (t: TFunction) =>
   z.object({
@@ -87,7 +110,7 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
   }, [error, t])
 
   return (
-    <ActionForm
+    <Form
       as="form"
       justifyContent="space-between"
       scrollable
@@ -95,7 +118,6 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
       onSubmit={handleSubmit(requestBackup)}
     >
       <VStack gap={16}>
-        {errorMessage && <ErrorBlock>{errorMessage}</ErrorBlock>}
         <ManageEmailField
           registration={register('email')}
           onValueChange={value => setValue('email', value)}
@@ -108,18 +130,20 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
           registration={register('password')}
           error={errors.password?.message}
         />
+        {errorMessage && <ErrorBanner>{errorMessage}</ErrorBanner>}
       </VStack>
-      <Button
+      <SettingsCtaButton
         disabled={!isValid || isPending}
         loading={isPending}
         type="submit"
       >
         {t('get_started')}
-      </Button>
-    </ActionForm>
+      </SettingsCtaButton>
+    </Form>
   )
 }
 
+/** Asks the server to email this vault's share, given the email and vault password. */
 export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => (
   <BackupFormFieldsStateProvider initialValue={{ field: 'email' }}>
     <RequestFastVaultBackupFormContent onFinish={onFinish} />

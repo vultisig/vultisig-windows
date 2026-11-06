@@ -44,8 +44,6 @@ export const ko = {
   amount_required: '금액을 입력하세요',
   amount_to_unstake: '언스테이킹 금액',
   app_lock_passcode: '앱 잠금 패스코드',
-  app_lock_passcode_description:
-    '앱 잠금 해제 시 패스코드를 요구해 보안을 한층 강화하세요.',
   app_locked: '앱 잠김',
   app_locked_description: '계속하려면 패스코드를 입력하세요.',
   app_permissions: '앱 권한',
@@ -290,7 +288,6 @@ export const ko = {
   post_quantum_keygen_description: '양자 내성을 위한 MLDSA-44 키를 생성합니다',
   enable_token_instruction:
     '잔액을 확인하고 포지션을 관리하려면 토큰을 하나 이상 활성화하세요.',
-  enter: '입력',
   enter_address: '주소 입력',
   enter_address_here: '여기에 주소를 입력하세요',
   enter_amount: '금액 입력',
@@ -870,6 +867,8 @@ export const ko = {
   session_init_failed: '세션 초기화에 실패했습니다.',
   set_expiration: '만료 기간 설정(년)',
   set_passcode: '패스코드 설정',
+  set_passcode_description:
+    '6자리 패스코드를 선택하세요. 반복되거나 연속된 숫자는 피하세요.',
   settings: '설정',
   share: '공유',
   share_app: '앱 공유',

@@ -9,13 +9,16 @@ import { currentProductBrand } from '../product/brand'
 const fieldBackground = new HSLA(216, 83.3, 11.8)
 const fieldBorder = new HSLA(0, 0, 100, 0.03)
 
+/** The settings input fields' faint resting border colour. */
+export const settingsFieldHairline = fieldBorder.toCssValue()
+
 /** Fill, border and radius of the settings input fields. */
 export const settingsFieldSurface = css`
   ${borderRadius.lg};
   background: ${currentProductBrand === 'vultisig'
     ? fieldBackground.toCssValue()
     : getColor('foreground')};
-  border: 1px solid ${fieldBorder.toCssValue()};
+  border: 1px solid ${settingsFieldHairline};
 `
 
 export const settingsInputHeight = 52
@@ -41,6 +44,22 @@ export const settingsOutlinedTextInput = css`
     font-weight: 500;
     line-height: 20px;
   }
+`
+
+const validationBorder = (color: 'primary' | 'danger') => css`
+  &,
+  &:focus,
+  &:active {
+    border-color: ${getColor(color)};
+  }
+`
+
+/** Keeps a settings field's validation border over its resting one. */
+export const settingsFieldValidation = css<{
+  validation?: 'valid' | 'invalid' | 'warning'
+}>`
+  ${({ validation }) => validation === 'valid' && validationBorder('primary')}
+  ${({ validation }) => validation === 'invalid' && validationBorder('danger')}
 `
 
 // Figma Backgrounds/disabled; no theme token carries it.

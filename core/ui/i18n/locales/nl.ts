@@ -45,8 +45,6 @@ export const nl = {
   amount_required: 'Bedrag is verplicht',
   amount_to_unstake: 'Bedrag om te unstaken',
   app_lock_passcode: 'App-vergrendelingspincode',
-  app_lock_passcode_description:
-    'Voeg een extra beveiligingslaag toe door een pincode te vereisen om de app te ontgrendelen.',
   app_locked: 'App vergrendeld',
   app_locked_description: 'Voer je pincode in om door te gaan.',
   app_permissions: 'App-machtigingen',
@@ -296,7 +294,6 @@ export const nl = {
     'Genereer een MLDSA-44-sleutel voor quantumbestendigheid',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
-  enter: 'Binnenkomen',
   enter_address: 'Adres invoeren',
   enter_address_here: 'Voer hier een adres in',
   enter_amount: 'Bedrag invoeren',
@@ -890,6 +887,8 @@ export const nl = {
   session_init_failed: 'Sessie initialiseren mislukt',
   set_expiration: 'Vervaldatum instellen (in jaren)',
   set_passcode: 'Pincode instellen',
+  set_passcode_description:
+    'Kies een pincode van 6 cijfers. Vermijd herhaalde of opeenvolgende cijfers.',
   settings: 'Instellingen',
   share: 'Delen',
   share_app: 'De app delen',

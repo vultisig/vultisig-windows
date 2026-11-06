@@ -46,8 +46,6 @@ export const de = {
   amount_required: 'Bitte geben Sie einen Betrag ein.',
   amount_to_unstake: 'Betrag zum Unstaken',
   app_lock_passcode: 'App-Sperrcode',
-  app_lock_passcode_description:
-    'Erhöhen Sie die Sicherheit, indem Sie zum Entsperren der App einen Passcode verlangen.',
   app_locked: 'App gesperrt',
   app_locked_description: 'Geben Sie Ihren Passcode ein, um fortzufahren.',
   app_permissions: 'App-Berechtigungen',
@@ -299,7 +297,6 @@ export const de = {
     'MLDSA-44-Schlüssel für Quantenresistenz generieren',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
-  enter: 'Eingeben',
   enter_address: 'Adresse eingeben',
   enter_address_here: 'Adresse hier eingeben',
   enter_amount: 'Betrag eingeben',
@@ -907,6 +904,8 @@ export const de = {
   session_init_failed: 'Sitzung konnte nicht initialisiert werden',
   set_expiration: 'Ablaufdatum festlegen (in Jahren)',
   set_passcode: 'Passcode festlegen',
+  set_passcode_description:
+    'Wählen Sie einen 6-stelligen Passcode. Vermeiden Sie sich wiederholende oder aufeinanderfolgende Ziffern.',
   settings: 'Einstellungen',
   share: 'Teilen',
   share_app: 'App teilen',
