@@ -22,7 +22,7 @@ export const ExtensionNotificationSettingsPage = () => {
   const vaultsWithChain = storedVaults.filter(v => v.hexChainCode)
   const {
     data: enabledById = {},
-    isPending: isLoadingStates,
+    isFetching: isLoadingStates,
     isError: hasStatesError,
     refetch: refetchStates,
   } = useExtensionAllVaultsNotificationStates()
