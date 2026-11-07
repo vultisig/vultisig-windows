@@ -1,0 +1,35 @@
+import { SvgProps } from '@lib/ui/props'
+
+/** A laptop with a phone in front of it. */
+export const LaptopMobileIcon = (props: SvgProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 23 23"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M8.62537 14.9496H2.30037"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M17.1694 5.17463C16.913 4.18436 16.0213 3.44963 14.9507 3.44963H6.90075C5.63046 3.44963 4.60075 4.47934 4.60075 5.74963V12.6496C4.60075 13.9199 5.63046 14.9496 6.90075 14.9496H7.47575"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.9493 9.19963H17.2493C18.5195 9.19963 19.5493 10.2294 19.5493 11.4996V17.2496C19.5493 18.5199 18.5195 19.5496 17.2493 19.5496H14.9493C13.679 19.5496 12.6493 18.5199 12.6493 17.2496V11.4996C12.6493 10.2294 13.679 9.19963 14.9493 9.19963Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)

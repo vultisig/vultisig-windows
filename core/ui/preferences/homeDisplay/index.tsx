@@ -1,17 +1,18 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsBorderedCard } from '@core/ui/settings/SettingsCard'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import {
   HomeDisplay,
   homeDisplays,
   useHomeDisplay,
   useSetHomeDisplayMutation,
 } from '@core/ui/storage/homeDisplay'
+import { VaultSettingsContent } from '@core/ui/vault/settings/VaultSettingsContent'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { centerContent } from '@lib/ui/css/centerContent'
 import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -35,39 +36,82 @@ export const HomeDisplayPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('home_display')}
-        hasBorder
-      />
-      <PageContent flexGrow scrollable>
-        <List>
+      <SettingsPageHeader title={t('home_display')} />
+      <VaultSettingsContent flexGrow gap={6} scrollable>
+        <SettingsBaselineText
+          as="div"
+          color="shyExtra"
+          height={1.5}
+          size={16}
+          weight={500}
+        >
+          {t('home_display_balance_caption')}
+        </SettingsBaselineText>
+        <SettingsBorderedCard>
           {homeDisplays.map(option => (
-            <ListItem
+            <OptionRow
               key={option}
-              title={t(optionCopy[option].title)}
-              description={t(optionCopy[option].description)}
-              extra={
-                <CircleCheckIcon
-                  style={{
-                    visibility: option === value ? 'visible' : 'hidden',
-                  }}
-                />
+              title={
+                <SettingsBaselineText
+                  as="span"
+                  color="regular"
+                  height={1.5}
+                  size={16}
+                  weight={500}
+                >
+                  {t(optionCopy[option].title)}
+                </SettingsBaselineText>
               }
+              description={
+                <Text as="span" color="shyExtra" variant="caption">
+                  {t(optionCopy[option].description)}
+                </Text>
+              }
+              extra={<Radio $isSelected={option === value} />}
               onClick={() => mutate(option)}
-              hoverable
             />
           ))}
-        </List>
-      </PageContent>
+        </SettingsBorderedCard>
+      </VaultSettingsContent>
     </VStack>
   )
 }
 
-const CircleCheckIcon = styled(CheckIcon)`
-  flex-shrink: 0;
-  background-color: ${getColor('buttonPrimary')};
+const OptionRow = styled(ListItem)`
+  gap: 14px;
+  padding: 14px;
+
+  &:not(:last-child) {
+    padding-bottom: 15px;
+  }
+
+  > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  > :nth-child(2) {
+    flex-shrink: 0;
+  }
+`
+
+const Radio = styled.span<{ $isSelected: boolean }>`
   ${borderRadius.pill};
-  font-size: 16px;
-  padding: 2px;
+  ${centerContent};
+  border: ${({ $isSelected }) => ($isSelected ? 1.5 : 1)}px solid
+    ${({ $isSelected }) =>
+      getColor($isSelected ? 'primaryAccentFour' : 'foregroundSuper')};
+  box-sizing: border-box;
+  flex-shrink: 0;
+  height: 20px;
+  width: 20px;
+
+  &::after {
+    ${borderRadius.pill};
+    background: ${getColor('primaryAccentFour')};
+    content: '';
+    display: ${({ $isSelected }) => ($isSelected ? 'block' : 'none')};
+    height: 12px;
+    width: 12px;
+  }
 `

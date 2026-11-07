@@ -31,6 +31,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getVaultSecurityTone } from '../utils/getVaultSecurityTone'
+import { sumVaultTotals } from '../utils/sumVaultTotals'
 
 export const VaultFolderPage = () => {
   const { t } = useTranslation()
@@ -44,28 +45,20 @@ export const VaultFolderPage = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances({ vaults })
+  const { totals: vaultTotals } = useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
-  const folderTotal = useMemo(() => {
-    if (!vaultTotals) return undefined
-
-    return vaults.reduce((sum, vault) => {
-      const value = vaultTotals[getVaultId(vault)] ?? 0
-      return sum + value
-    }, 0)
-  }, [vaultTotals, vaults])
+  const folderTotal = sumVaultTotals({ totals: vaultTotals, vaults })
 
   const summarySubtitle = useMemo(() => {
     const parts = [t('vault_count', { count: vaults.length })]
 
-    if (!isTotalsPending && folderTotal !== undefined) {
+    if (folderTotal !== undefined) {
       parts.push(formatFiatAmount(folderTotal))
     }
 
     return parts.join(' • ')
-  }, [folderTotal, formatFiatAmount, isTotalsPending, t, vaults.length])
+  }, [folderTotal, formatFiatAmount, t, vaults.length])
 
   const handleSelectVault = (vaultId: string) =>
     mutate(vaultId, {
@@ -150,9 +143,7 @@ export const VaultFolderPage = () => {
                     }
                     title={vault.name}
                     subtitle={
-                      !isTotalsPending && value !== undefined
-                        ? formatFiatAmount(value)
-                        : undefined
+                      value !== undefined ? formatFiatAmount(value) : undefined
                     }
                     meta={<VaultSigners vault={vault} />}
                     trailing={

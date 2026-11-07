@@ -1,3 +1,5 @@
+import { extensionDownloadUrl } from '@vultisig/core-config'
+
 import {
   currentProductBrand,
   currentProductBrandConfig,
@@ -17,3 +19,11 @@ export const currentProductEducationUrl =
     ? currentProductWebsiteUrl
     : vultisigEducationUrl
 export const shouldShowVultisigCommunity = currentProductBrand === 'vultisig'
+export const extensionStoreReviewsUrl = `${extensionDownloadUrl}/reviews`
+export const quickSettingsIconWidth = 18
+
+/** The darker, less blurred backdrop of the settings sheets. */
+export const settingsBackdropStyles = {
+  backdropFilter: 'blur(6px)',
+  background: 'rgba(0, 0, 0, 0.7)',
+}

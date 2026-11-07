@@ -13,7 +13,6 @@ export const hr = {
   add_memo: 'Dodaj MEMO',
   add_new_vault: 'Dodaj novi trezor',
   add_referral: 'Dodaj preporuku',
-  add_referral_code: 'Spremi referalni kod',
   add_to_address_book: 'Dodaj u adresar',
   add_suggested_token: 'Dodaj predloženi token',
   bech32_prefix: 'Prefiks adrese',
@@ -45,8 +44,6 @@ export const hr = {
   amount_required: 'Potreban je iznos',
   amount_to_unstake: 'Iznos za povlačenje uloga',
   app_lock_passcode: 'Pristupni kod za zaključavanje aplikacije',
-  app_lock_passcode_description:
-    'Dodajte dodatni sloj sigurnosti tako da za otključavanje aplikacije zahtijevate pristupni kod.',
   app_locked: 'Aplikacija zaključana',
   app_locked_description: 'Unesite pristupni kod za nastavak.',
   app_permissions: 'Dozvole aplikacije',
@@ -90,6 +87,7 @@ export const hr = {
   backup_share_sent: 'Sigurnosna kopija udjela poslana!',
   backup_share_sent_description:
     'Upravo smo vam poslali sigurnosnu kopiju na vašu e-poštu. Ako je ne vidite, provjerite mapu neželjene pošte.',
+  backup_vault_share: 'Sigurnosna kopija udjela trezora',
   backup_with_password: 'Sigurnosna kopija s lozinkom',
   backup_without_password: 'Sigurnosna kopija bez lozinke',
   balance: 'Stanje',
@@ -97,6 +95,7 @@ export const hr = {
   balance_changes: 'Promjene stanja',
   base_fee: 'Osnovna naknada',
   blockaid_security_scan: 'Blockaid sigurnosno skeniranje',
+  blockaid_security_scan_description: 'Provjeri transakcije prije potpisivanja',
   blockaid_simulation_failed: 'Simulacija transakcije nije uspjela',
   blockaid_simulation_failed_description:
     'Nije moguće simulirati ovu transakciju. I dalje možete nastaviti, ali preporučujemo da pažljivo pregledate detalje transakcije.',
@@ -221,7 +220,6 @@ export const hr = {
   copy_address: 'Kopiraj adresu',
   create_new_vault: 'Izradi novi trezor',
   create_vault: 'Izradi trezor',
-  create_referral_form: 'Izradi preporuku',
   create_referral_title: 'Izradi preporuku',
   create_referral: 'Izradi preporuku',
   create_referral_desc:
@@ -255,7 +253,7 @@ export const hr = {
   },
   delete: 'Izbrisati',
   delete_folder: 'Izbriši mapu',
-  delete_vault_description: 'Trajno izbrišite svoj trezor',
+  delete_vault_description: 'Trajno izbrišite svoj udio trezora',
   deposit: 'Funkcija',
   description: 'Opis',
   destination_address: 'Adresa odredišta',
@@ -274,10 +272,13 @@ export const hr = {
   discount_tiers: 'Razine popusta {{ticker}}',
   discount_tiers_description:
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
+  discount_tiers_thorguard_boost:
+    'Posjedovanje ThorGuarda odmah povećava vašu razinu popusta, najviše do Platine.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
   done: 'Gotovo',
   earn: 'Zarada',
   edit_address: 'Uredi adresu',
+  edit_address_book: 'Uredi adresar',
   edit_friends_referral: 'Uredi preporuku prijatelja',
   edit_referral: 'Uredi preporuku',
   remove_friends_referral: 'Ukloni preporuku',
@@ -292,10 +293,9 @@ export const hr = {
   enable_tss_batching: 'Omogući grupiranje TSS-a',
   post_quantum_keygen: 'Postkvantno generiranje ključeva',
   post_quantum_keygen_description:
-    'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
+    'Generiraj MLDSA-44 ključ za kvantnu otpornost',
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
-  enter: 'Unesi',
   enter_address: 'Unesite adresu',
   enter_address_here: 'Unesite adresu ovdje',
   enter_amount: 'Unesite iznos',
@@ -319,6 +319,8 @@ export const hr = {
   est_network_fee: 'Procijenjena mrežna naknada',
   expand_view: 'Proširi prikaz',
   open_as_side_panel: 'Otvori kao bočnu ploču',
+  open_as_side_panel_description:
+    'Neka {{productName}} ostane otvoren uz vaše kartice',
   opened_in_new_tab: 'Otvoreno u novoj kartici',
   push_notifications: 'Push obavijesti',
   push_notifications_description:
@@ -452,11 +454,12 @@ export const hr = {
     'Maksimalna količina gasa koju ćete platiti. Može se povećati ako gas limit nije dovoljan za slanje transakcija.',
   general: 'Općenito',
   get_started: 'Započnite',
-  github: 'Github',
+  github: 'GitHub',
   go_back: 'Natrag',
   go_to_vault: 'Idi u trezor',
   go_to_wallet: 'Idi na novčanik',
   home_display: 'Početni prikaz',
+  home_display_balance_caption: 'Prikaz stanja',
   home_display_separate_description:
     'Kartica Novčanik prikazuje samo stanje novčanika, a kartica DeFi prikazuje vaše DeFi stanje.',
   home_display_separate_title: 'Novčanik i DeFi odvojeno',
@@ -567,6 +570,9 @@ export const hr = {
   loading: 'Učitavanje...',
   localMode: 'U lokalnom ste načinu rada',
   lock_time: 'Vrijeme zaključavanja',
+  lock_time_description:
+    'Postavite vrijeme do automatskog zaključavanja aplikacije',
+  lock_time_setting: 'Vrijeme zaključavanja',
   lock_vultisig_automatically_after:
     'Automatski zaključaj {{productName}} nakon...',
   looking_for_server: 'Tražim FastVaultServer...',
@@ -587,6 +593,8 @@ export const hr = {
   message_to_sign: 'Poruka za potpis',
   method: 'Metoda',
   method_required: 'Potrebna je metoda potpisivanja',
+  migrate: 'Migriraj',
+  migrate_vault_description: 'Migriraj GG20 trezor na DKLS',
   mint: 'Kovati',
   minute_one: '{{count}} minuta',
   minute_few: '{{count}} minute',
@@ -690,12 +698,14 @@ export const hr = {
   to_start_plugin_installation: 'Za početak instalacije aplikacije',
   portfolio_balance: 'Stanje portfelja',
   positions: 'Pozicije',
+  post_quantum_key: 'Postkvantni ključ',
   powered_by: 'Pokreće <provider></provider>',
   price: 'Cijena',
   price_impact_average: 'Prosječno',
   price_impact_good: 'Dobro',
   price_impact_high: 'Visok utjecaj',
   prioritize_vultisig: 'Dajte prioritet {{productName}}u',
+  prioritize_vultisig_description: 'Prikaži {{productName}} prvi pri zamjeni',
   priority: 'Prioritet',
   priority_fee: 'Prioritetna naknada',
   privacy_policy: 'Pravila o privatnosti',
@@ -806,7 +816,6 @@ export const hr = {
   save_backup_n_of_n_to_cloud:
     'Spremi sigurnosnu kopiju {{current}} od {{total}} u oblak',
   save_backup_to_cloud: 'Spremi sigurnosnu kopiju u oblak',
-  save_code: 'Spremi kod',
   save_swap_fees_with_referral:
     'Uštedite <blue>10%</blue> na zamjenama - Dodajte preporuku',
   saving_vault: 'Spremanje trezora...',
@@ -844,6 +853,7 @@ export const hr = {
   secure_notifications_description:
     'Primajte upozorenja kada drugi uređaj zatraži pridruživanje vašem trezoru ili kada je potreban vaš potpis.',
   security: 'Sigurnost',
+  security_description: 'Upravljajte svojim pristupnim kodom',
   select: 'Odaberite',
   select_asset: 'Odaberite imovinu',
   select_backup_file: 'Uvezite svoj trezorski udio',
@@ -887,6 +897,8 @@ export const hr = {
   session_init_failed: 'Nije uspjelo inicijaliziranje sesije',
   set_expiration: 'Postavi istek (u godinama)',
   set_passcode: 'Postavi pristupni kod',
+  set_passcode_description:
+    'Odaberite pristupni kod od 6 znamenki. Izbjegavajte ponavljajuće ili uzastopne znamenke.',
   settings: 'Postavke',
   share: 'Udio',
   share_app: 'Podijelite aplikaciju',
@@ -1002,7 +1014,7 @@ export const hr = {
   try_again: 'Pokušaj ponovno',
   turn_your_vault_into_rewards_machine:
     'Pretvorite svoj trezor u stroj za nagrade. Izradite svoju preporuku odmah i počnite zarađivati.',
-  twitter: 'X (Twitter)',
+  twitter: 'X',
   tx_hash: 'Hash transakcije',
   type: 'Tip',
   type_here: 'Upišite ovdje',
@@ -1036,7 +1048,6 @@ export const hr = {
   upload_qr_code_image: 'Prenesi QR kod',
   upload_qr_code_to_join_keysign: 'Prenesite QR kod za pridruživanje Keysignu',
   upload_qr_code_with_address: 'Prenesite QR kod s adresom',
-  use_referral_code: 'Koristite referalni kod',
   used_referral_error:
     'Korišteni referalni kod ne može biti isti kao vaš referalni kod',
   validator_address: 'Adresa validatora',
@@ -1044,7 +1055,7 @@ export const hr = {
   vault: 'Trezor',
   vaultCheckUpdatePage: {
     applicationUpToDate: 'Aplikacija je ažurna.',
-    downloadButton: 'Ažuriraj sada',
+    downloadButton: 'Ažuriraj aplikaciju',
     errorFetchingLatestVersion:
       'Greška pri dohvaćanju najnovije verzije: {{error}}',
     fetchingLatestVersion: 'Dohvaćanje najnovije verzije...',
@@ -1086,12 +1097,10 @@ export const hr = {
   vault_details_description: 'Prikaži naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Uredite naziv svog trezora',
   vault_details_page_signer_word: 'Potpisnik',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Ključ MLDSA-e',
   vault_details_page_vault_type: 'Vrsta trezora',
   vault_info: 'Informacije o trezoru',
-  vault_management: 'Trezor',
+  vault_management: 'Upravljanje trezorom',
   vault_name: 'Naziv trezora',
   vault_name_already_exists: 'Molimo odaberite drugo ime trezora.',
   vault_name_description:
@@ -1136,9 +1145,9 @@ export const hr = {
   via: 'preko',
   view_on_explorer: 'Prikaži u Exploreru',
   vote: 'Glasanje',
+  vult_tier_badge: '{{ticker}} RAZINA',
   vultisig_community: '{{productName}} zajednica',
   vultisig_education: '{{productName}} obrazovanje',
-  vultisig_website: '{{productName}} web stranica',
   waitingOnDevices: 'Čekanje na uređaje...',
   waiting_for_devices_to_join: 'Čekanje pridruživanja drugih uređaja',
   waiting_for_devices_to_join_description:
@@ -1146,6 +1155,7 @@ export const hr = {
   waiting_for_keygen_start: 'Čekanje početka generiranja ključa...',
   waiting_for_keysign_start: 'Čeka se početak procesa potpisivanja...',
   wallet: 'Novčanik',
+  website: 'Web',
   withdraw: 'Povući',
   withdraw_ruji_rewards: 'Isplata RUJI nagrada',
   add_cacao_pool: 'Dodaj u CACAO pool',
@@ -1227,7 +1237,7 @@ export const hr = {
   },
   your_friends_referral_code: 'Kod preporuke vašeg prijatelja',
   your_referral_code: 'Vaš referalni kod',
-  your_referrals: 'Vaše preporuke',
+  your_referrals: 'Moja preporuka',
   your_seedphrase: 'Vaša početna fraza',
   your_seedphrase_subtitle: 'Unesite je, izradite trezor i ne osvrćite se',
   youre_swapping: 'Zamjenjujete',
@@ -1334,6 +1344,8 @@ export const hr = {
   qbtc_claim_card_title: 'QBTC za preuzimanje',
   qbtc_claim_tab: 'Zahtjev',
   qbtc_onboarding_title: 'Nova kvantna sigurnost',
+  quick_settings: 'Brze postavke',
+  rate_app: 'Ocijenite aplikaciju',
   qbtc_onboarding_subtitle:
     'Klasični ključevi mogu se probiti kvantnim računalima. Omogućavanje QBTC zahtijeva generiranje novog para ključeva.',
   qbtc_onboarding_feature_generate_title:
@@ -1467,7 +1479,6 @@ export const hr = {
   plugin_marketplace_welcome: 'Dobrodošli na tržište dodataka {{productName}}',
   plugin_permissions_brand_safety_notice:
     '{{productName}} Aplikacije nikada ne mogu potpisivati ​​transakcije koje prethodno niste odobrili.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'Trgovanje ovom imovinom je privremeno zaustavljeno. Pokušajte ponovno kasnije.',
   sui_arguments: 'Argumenti',
@@ -2075,23 +2086,31 @@ export const hr = {
   custom_message_unsupported_method:
     'Nepodržana metoda potpisivanja. Koristite personal_sign ili eth_signTypedData_v4.',
   revoke: 'Opoziv pristupa',
-  token_approvals: 'Odobrenja tokena',
-  token_approvals_description:
-    'Pregledajte i opozovite ugovore koji mogu trošiti vaše tokene',
+  token_approvals_delegate: 'Delegat',
+  token_approvals_partial:
+    'Permit2 odobrenja nisu u potpunosti provjerena na: {{chains}}',
+  token_approvals_not_checked: 'Još nije provjereno: {{chains}}',
+  granted_approvals: 'Dodijeljena odobrenja',
+  token_approvals_all_chains: 'Svi lanci',
+  token_approvals_checking: 'Još se provjerava: {{chains}}',
+  token_approvals_failed: 'Provjera nije uspjela: {{chains}}',
+  token_approvals_via: 'Odobreno putem',
+  revoke_approval_permit2_explanation:
+    'Postavlja Permit2 ograničenje ovog ugovora na 0. Dozvola koju ste potpisali, a još nije iskorištena, može ga vratiti, pa da biste potpuno isključili Permit2, opozovite i odobrenje ovog tokena za Permit2. Plaćate mrežnu naknadu.',
+  revoke_approval_spl_explanation:
+    'Uklanja delegata s ovog računa tokena, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
+  revoke_approval_unreadable:
+    'Ova transakcija ne odgovara odabranom odobrenju, pa se ne može potpisati.',
+  token_approvals_empty_title: 'Nema aktivnih odobrenja',
+  token_approvals_empty_description:
+    'Ugovori kojima dopustite trošenje vaših tokena na lancima ovog trezora prikazat će se ovdje.',
   token_approvals_disconnect_note:
     'Prekidanje veze s dApp ne uklanja ova odobrenja. Svako opoziv je zasebna transakcija na lancu s mrežnom naknadom.',
-  token_approvals_empty_description:
-    'Ugovori kojima dopustite trošenje vaših tokena na ovoj mreži prikazat će se ovdje.',
-  token_approvals_empty_title: 'Nema aktivnih odobrenja na {{chain}}',
-  token_approvals_not_supported: 'Nije podržano',
-  token_approvals_switch_network: 'Odaberite drugu mrežu',
   token_approvals_unlimited_count: 'Neograničeno: {{count}}',
-  token_approvals_unsupported_description:
-    'Odobrenja tokena na ovoj mreži još se ne mogu prikazati. Odaberite drugu mrežu da biste ih pregledali.',
-  token_approvals_unsupported_title: 'Nije dostupno na {{chain}}',
   revoke_approval: 'Opozovi pristup',
   revoke_approval_explanation:
     'Postavlja dopuštenu količinu za ovaj ugovor na 0, tako da više ne može premjestiti ovaj token iz vašeg trezora. Plaćate mrežnu naknadu.',
   revoke_approval_new_allowance: 'Novo ograničenje potrošnje',
+  revoke_approvals: 'Opoziv odobrenja',
   token_approvals_count: 'Odobrenja: {{count}}',
 }

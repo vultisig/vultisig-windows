@@ -12,7 +12,6 @@ export const it = {
   add_memo: 'Aggiungi MEMO',
   add_new_vault: 'Aggiungi nuovo vault',
   add_referral: 'Aggiungi referral',
-  add_referral_code: 'Salva il codice referral',
   add_to_address_book: 'Aggiungi alla rubrica',
   add_suggested_token: 'Aggiungi token suggerito',
   bech32_prefix: 'Prefisso di indirizzo',
@@ -46,8 +45,6 @@ export const it = {
   amount_required: "L'importo è richiesto",
   amount_to_unstake: 'Importo da rimuovere dallo staking',
   app_lock_passcode: 'Codice di accesso al blocco app',
-  app_lock_passcode_description:
-    "Aggiungi un ulteriore livello di sicurezza richiedendo un codice di accesso per sbloccare l'app.",
   app_locked: 'App bloccata',
   app_locked_description: 'Inserisci il tuo codice di accesso per continuare.',
   app_permissions: "Autorizzazioni dell'app",
@@ -90,6 +87,7 @@ export const it = {
   backup_share_sent: 'Quota di backup inviata!',
   backup_share_sent_description:
     'Abbiamo appena inviato la quota di backup alla tua email. Se non la vedi, controlla la cartella spam.',
+  backup_vault_share: 'Backup della quota del vault',
   backup_with_password: 'Backup con password',
   backup_without_password: 'Backup senza password',
   balance: 'Saldo',
@@ -97,6 +95,8 @@ export const it = {
   balance_changes: 'Variazioni del saldo',
   base_fee: 'Tariffa base',
   blockaid_security_scan: 'Scansione di sicurezza Blockaid',
+  blockaid_security_scan_description:
+    'Controlla le transazioni prima di firmare',
   blockaid_simulation_failed: 'Simulazione della transazione non riuscita',
   blockaid_simulation_failed_description:
     'Impossibile simulare questa transazione. Puoi comunque procedere, ma ti consigliamo di controllare attentamente i dettagli della transazione.',
@@ -221,7 +221,6 @@ export const it = {
   copy_address: 'Copia indirizzo',
   create_new_vault: 'Crea nuovo vault',
   create_vault: 'Crea vault',
-  create_referral_form: 'Crea referral',
   create_referral_title: 'Crea referral',
   create_referral: 'Crea referral',
   create_referral_desc:
@@ -255,7 +254,7 @@ export const it = {
   },
   delete: 'Elimina',
   delete_folder: 'Elimina cartella',
-  delete_vault_description: 'Elimina definitivamente il tuo vault',
+  delete_vault_description: 'Elimina definitivamente la tua quota del vault',
   deposit: 'Funzione',
   description: 'Descrizione',
   destination_address: 'Indirizzo di destinazione',
@@ -275,10 +274,13 @@ export const it = {
   discount_tiers: 'Livelli di sconto {{ticker}}',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
+  discount_tiers_thorguard_boost:
+    'Possedere un ThorGuard aumenta subito il tuo livello di sconto, fino a Platino.',
   discovering_mediator: 'Ricerca del servizio di mediazione, attendi...',
   done: 'Fatto',
   earn: 'Guadagna',
   edit_address: 'Modifica indirizzo',
+  edit_address_book: 'Modifica rubrica',
   edit_friends_referral: 'Modifica referral amico',
   edit_referral: 'Modifica referral',
   remove_friends_referral: 'Rimuovi referral',
@@ -293,10 +295,9 @@ export const it = {
   enable_tss_batching: 'Abilita il batching TSS',
   post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
   post_quantum_keygen_description:
-    'Genera una chiave post-quantistica (MLDSA) per questo vault',
+    'Genera una chiave MLDSA-44 per la resistenza quantistica',
   enable_token_instruction:
     'Abilita almeno un token per visualizzare i saldi e gestire le posizioni.',
-  enter: 'Entra',
   enter_address: "Inserisci l'indirizzo",
   enter_address_here: "Inserisci qui l'indirizzo",
   enter_amount: "Inserisci l'importo",
@@ -319,6 +320,8 @@ export const it = {
   est_network_fee: 'Costo stimato della rete',
   expand_view: 'Espandi vista',
   open_as_side_panel: 'Apri come pannello laterale',
+  open_as_side_panel_description:
+    'Tieni {{productName}} aperto accanto alle tue schede',
   opened_in_new_tab: 'Aperto in una nuova scheda',
   push_notifications: 'Notifiche push',
   push_notifications_description:
@@ -458,11 +461,12 @@ export const it = {
     'La quantità massima di gas che pagherai. Puoi aumentarla se il limite di gas non basta per inviare transazioni.',
   general: 'Generale',
   get_started: 'Inizia',
-  github: 'Github',
+  github: 'GitHub',
   go_back: 'Torna indietro',
   go_to_vault: 'Vai al vault',
   go_to_wallet: 'Vai al portafoglio',
   home_display: 'Schermata iniziale',
+  home_display_balance_caption: 'Visualizzazione del saldo',
   home_display_separate_description:
     'La scheda Portafoglio mostra solo il saldo del portafoglio e la scheda DeFi mostra il tuo saldo DeFi.',
   home_display_separate_title: 'Portafoglio e DeFi separati',
@@ -574,6 +578,9 @@ export const it = {
   loading: 'Caricamento...',
   localMode: 'Sei in modalità locale',
   lock_time: 'Tempo di blocco',
+  lock_time_description:
+    "Imposta il tempo dopo cui l'app si blocca automaticamente",
+  lock_time_setting: 'Tempo di blocco',
   lock_vultisig_automatically_after:
     'Blocca {{productName}} automaticamente dopo...',
   looking_for_server: 'Cerco FastVaultServer...',
@@ -594,6 +601,8 @@ export const it = {
   message_to_sign: 'Messaggio da firmare',
   method: 'Metodo',
   method_required: 'È richiesto il metodo di firma',
+  migrate: 'Migra',
+  migrate_vault_description: 'Migra il vault GG20 a DKLS',
   mint: 'Mint',
   minute_one: '{{count}} minuto',
   minute_other: '{{count}} minuti',
@@ -697,12 +706,15 @@ export const it = {
   to_start_plugin_installation: "Per avviare l'installazione dell'app",
   portfolio_balance: 'Saldo del portfolio',
   positions: 'Posizioni',
+  post_quantum_key: 'Chiave post-quantistica',
   powered_by: 'Fornito da <provider></provider>',
   price: 'Prezzo',
   price_impact_average: 'Media',
   price_impact_good: 'Bene',
   price_impact_high: 'Alto impatto',
   prioritize_vultisig: 'Dare priorità a {{productName}}',
+  prioritize_vultisig_description:
+    'Mostra {{productName}} per primo quando effettui uno swap',
   priority: 'Priorità',
   priority_fee: 'Tariffa prioritaria',
   privacy_policy: 'Informativa sulla privacy',
@@ -806,7 +818,6 @@ export const it = {
   save_backup_n_of_n_to_cloud:
     'Salva il backup {{current}} di {{total}} sul cloud',
   save_backup_to_cloud: 'Salva il backup sul cloud',
-  save_code: 'Salva il codice',
   save_swap_fees_with_referral:
     'Risparmia il <blue>10%</blue> sugli scambi - Aggiungi un referral',
   saving_vault: 'Salvataggio Vault...',
@@ -843,6 +854,7 @@ export const it = {
   secure_notifications_description:
     'Ricevi notifiche quando un altro dispositivo richiede di accedere al tuo vault o quando è richiesta la tua firma.',
   security: 'Sicurezza',
+  security_description: 'Gestisci il tuo codice di accesso',
   select: 'Seleziona',
   select_asset: 'Seleziona risorsa',
   select_backup_file: 'Importa la tua quota del vault',
@@ -885,6 +897,8 @@ export const it = {
   session_init_failed: 'Impossibile inizializzare la sessione',
   set_expiration: 'Imposta scadenza (in anni)',
   set_passcode: 'Imposta codice di accesso',
+  set_passcode_description:
+    'Scegli un codice di accesso di 6 cifre. Evita cifre ripetute o consecutive.',
   settings: 'Impostazioni',
   share: 'Condividi',
   share_app: "Condividi l'app",
@@ -1002,7 +1016,7 @@ export const it = {
   try_again: 'Riprova',
   turn_your_vault_into_rewards_machine:
     'Trasforma il tuo vault in una macchina da ricompense. Crea subito il tuo referral e inizia a guadagnare.',
-  twitter: 'X (Twitter)',
+  twitter: 'X',
   tx_hash: 'Hash della transazione',
   type: 'Tipo',
   type_here: 'Scrivi qui',
@@ -1035,14 +1049,13 @@ export const it = {
   upload_qr_code_image: 'Carica codice QR',
   upload_qr_code_to_join_keysign: 'Carica il codice QR per unirti a Keysign',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
-  use_referral_code: 'Usa il codice referral',
   used_referral_error: 'Il codice referral usato non può essere uguale al tuo',
   validator_address: 'Indirizzo del validatore',
   value: 'Valore',
   vault: 'Vault',
   vaultCheckUpdatePage: {
     applicationUpToDate: "L'applicazione è aggiornata.",
-    downloadButton: 'Aggiorna ora',
+    downloadButton: 'Aggiorna app',
     errorFetchingLatestVersion:
       "Errore durante il recupero dell'ultima versione: {{error}}",
     fetchingLatestVersion: "Recupero dell'ultima versione...",
@@ -1083,12 +1096,10 @@ export const it = {
   vault_details_description: 'Visualizza nome, quota e tipo del vault',
   vault_details_edit_vault_description: 'Modifica il nome del tuo vault',
   vault_details_page_signer_word: 'Firmatario',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'Chiave MLDSA',
   vault_details_page_vault_type: 'Tipo di vault',
   vault_info: 'Informazioni sul vault',
-  vault_management: 'Vault',
+  vault_management: 'Gestione del vault',
   vault_name: 'Nome del vault',
   vault_name_already_exists: 'Scegli un nome diverso per il vault.',
   vault_name_description:
@@ -1135,9 +1146,9 @@ export const it = {
   via: 'via',
   view_on_explorer: "Visualizza sull'explorer",
   vote: 'Vota',
+  vult_tier_badge: 'LIVELLO {{ticker}}',
   vultisig_community: 'Comunità di {{productName}}',
   vultisig_education: '{{productName}} Education',
-  vultisig_website: 'Sito web {{productName}}',
   waitingOnDevices: 'In attesa dei dispositivi...',
   waiting_for_devices_to_join: 'In attesa che altri dispositivi si uniscano',
   waiting_for_devices_to_join_description:
@@ -1146,6 +1157,7 @@ export const it = {
     "In attesa dell'avvio della generazione delle chiavi...",
   waiting_for_keysign_start: "In attesa dell'inizio del processo di firma...",
   wallet: 'Portafoglio',
+  website: 'Sito web',
   withdraw: 'Preleva',
   withdraw_ruji_rewards: 'Ritira i premi RUJI',
   add_cacao_pool: 'Aggiungi al pool CACAO',
@@ -1227,7 +1239,7 @@ export const it = {
   },
   your_friends_referral_code: 'Codice referral del tuo amico',
   your_referral_code: 'Il tuo codice referral',
-  your_referrals: 'I tuoi referral',
+  your_referrals: 'Il mio referral',
   your_seedphrase: 'La tua frase seed',
   your_seedphrase_subtitle:
     'Inseriscila, crea un vault e non guardarti più indietro',
@@ -1338,6 +1350,8 @@ export const it = {
   qbtc_claim_card_title: 'QBTC da riscuotere',
   qbtc_claim_tab: 'Richiesta',
   qbtc_onboarding_title: 'Nuova sicurezza quantistica',
+  quick_settings: 'Impostazioni rapide',
+  rate_app: "Valuta l'app",
   qbtc_onboarding_subtitle:
     "Le chiavi classiche possono essere violate dai computer quantistici. L'attivazione di QBTC richiede la generazione di una nuova coppia di chiavi.",
   qbtc_onboarding_feature_generate_title:
@@ -1473,7 +1487,6 @@ export const it = {
     'Benvenuto nel Marketplace dei plugin di {{productName}}',
   plugin_permissions_brand_safety_notice:
     'Le app di {{productName}} non possono mai firmare transazioni senza la tua approvazione.',
-  extension_version: '{{brand}} V{{version}}',
   swap_trading_halted:
     'Il trading di questo asset è temporaneamente sospeso. Riprova più tardi.',
   sui_arguments: 'Argomenti',
@@ -2097,23 +2110,31 @@ export const it = {
   custom_message_unsupported_method:
     'Metodo di firma non supportato. Utilizzare personal_sign o eth_signTypedData_v4.',
   revoke: "Revoca l'accesso",
-  token_approvals: 'Approvazioni dei token',
-  token_approvals_description:
-    'Esamina e revoca i contratti che possono spendere i tuoi token',
+  token_approvals_delegate: 'Delegato',
+  token_approvals_partial:
+    'Non è stato possibile verificare del tutto le approvazioni Permit2 su: {{chains}}',
+  token_approvals_not_checked: 'Non ancora verificato: {{chains}}',
+  granted_approvals: 'Approvazioni concesse',
+  token_approvals_all_chains: 'Tutte le chain',
+  token_approvals_checking: 'Verifica ancora in corso: {{chains}}',
+  token_approvals_failed: 'Impossibile verificare: {{chains}}',
+  token_approvals_via: 'Approvato tramite',
+  revoke_approval_permit2_explanation:
+    "Imposta a 0 il limite Permit2 di questo contratto. Un permesso che hai firmato e che nessuno ha ancora usato può ripristinarlo: per bloccare del tutto Permit2, revoca anche l'approvazione di questo token a Permit2. Dovrai pagare una commissione di rete.",
+  revoke_approval_spl_explanation:
+    'Rimuove il delegato da questo account token, impedendogli di spostare il token dal tuo vault. Dovrai pagare una commissione di rete.',
+  revoke_approval_unreadable:
+    "Questa transazione non corrisponde all'approvazione scelta, quindi non può essere firmata.",
+  token_approvals_empty_title: 'Nessuna approvazione attiva',
+  token_approvals_empty_description:
+    "I contratti a cui autorizzi l'utilizzo dei tuoi token sulle chain di questo vault verranno visualizzati qui.",
   token_approvals_disconnect_note:
     'La disconnessione di un dApp non rimuove queste approvazioni. Ogni revoca è una transazione on-chain separata con una commissione di rete.',
-  token_approvals_empty_description:
-    "I contratti a cui autorizzi l'utilizzo dei tuoi token su questa rete verranno visualizzati qui.",
-  token_approvals_empty_title: 'Nessuna approvazione attiva su {{chain}}',
-  token_approvals_not_supported: 'Non supportato',
-  token_approvals_switch_network: "Scegli un'altra rete",
   token_approvals_unlimited_count: 'Illimitato: {{count}}',
-  token_approvals_unsupported_description:
-    "Le approvazioni dei token su questa rete non sono ancora visibili. Scegli un'altra rete per visualizzarle.",
-  token_approvals_unsupported_title: 'Non disponibile su {{chain}}',
   revoke_approval: "Revoca l'accesso",
   revoke_approval_explanation:
     'Imposta a 0 la quota consentita per questo contratto, impedendogli di spostare il token dal tuo vault. Dovrai pagare una commissione di rete.',
   revoke_approval_new_allowance: 'Nuovo limite di spesa',
+  revoke_approvals: 'Revoca approvazioni',
   token_approvals_count: 'Approvazioni: {{count}}',
 }

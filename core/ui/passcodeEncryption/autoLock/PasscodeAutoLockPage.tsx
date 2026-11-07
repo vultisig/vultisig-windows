@@ -1,5 +1,7 @@
-import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useSetPasscodeAutoLockMutation } from '@core/ui/passcodeEncryption/autoLock/mutations/setPasscodeAutoLock'
+import { settingsFieldSurface } from '@core/ui/settings/settingsField'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import {
   passcodeAutoLockOptions,
   PasscodeAutoLockValue,
@@ -7,10 +9,25 @@ import {
 } from '@core/ui/storage/passcodeAutoLock'
 import { RadioOptionsList } from '@lib/ui/inputs/RadioOptionsList'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
+const Content = styled(SettingsPageContent)`
+  padding-top: 12px;
+`
+
+const Options = styled.div`
+  label {
+    ${settingsFieldSurface};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    min-height: 52px;
+  }
+`
+
+/** The Lock Time page: how long the app stays unlocked while idle. */
 export const PasscodeAutoLockPage = () => {
   const { t } = useTranslation()
   const { mutate: setAutoLock } = useSetPasscodeAutoLockMutation()
@@ -22,12 +39,12 @@ export const PasscodeAutoLockPage = () => {
 
   return (
     <VStack fullHeight>
-      <FlowPageHeader title={t('lock_time')} />
-      <PageContent alignItems="center" flexGrow scrollable>
-        <VStack gap={8}>
-          <Text size={14} color="contrast">
-            {t('lock_vultisig_automatically_after')}
-          </Text>
+      <SettingsPageHeader title={t('lock_time')} />
+      <Content flexGrow gap={8} scrollable>
+        <Text color="shyExtra" variant="footnote">
+          {t('lock_vultisig_automatically_after')}
+        </Text>
+        <Options>
           <RadioOptionsList<PasscodeAutoLockValue>
             value={currentValue}
             onChange={handleOptionSelect}
@@ -36,8 +53,8 @@ export const PasscodeAutoLockPage = () => {
               value === null ? t('never') : t('minute', { count: value })
             }
           />
-        </VStack>
-      </PageContent>
+        </Options>
+      </Content>
     </VStack>
   )
 }

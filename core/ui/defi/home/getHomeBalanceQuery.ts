@@ -34,11 +34,11 @@ export const getHomeBalanceQuery = ({
       isPending: defi.isPending,
       error: defi.error ?? null,
       isUpdating: defi.isUpdating,
-      isIncomplete: false,
+      isIncomplete: defi.error !== null && defi.error !== undefined,
     }
   }
 
-  const isDefiMissing = defi.data === undefined && defi.error !== null
+  const isDefiFailed = defi.error !== null && defi.error !== undefined
   const defiNotInWallet =
     defi.data === undefined ? 0 : defi.data - walletHeldDefiFiat
 
@@ -47,6 +47,6 @@ export const getHomeBalanceQuery = ({
     isPending: wallet.isPending,
     error: wallet.error,
     isUpdating: wallet.isUpdating || defi.isUpdating,
-    isIncomplete: wallet.isIncomplete || isDefiMissing,
+    isIncomplete: wallet.isIncomplete || isDefiFailed,
   }
 }

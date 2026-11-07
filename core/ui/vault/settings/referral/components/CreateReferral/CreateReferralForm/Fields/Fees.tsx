@@ -1,11 +1,11 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
-import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useEffect, useMemo } from 'react'
@@ -20,6 +20,7 @@ import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 
 const debounceDelayMs = 300
 
+/** Create Referral's registration fee and total cost, in RUNE and fiat. */
 export const Fees = () => {
   const { t } = useTranslation()
   const { control, setValue, trigger } = useCreateReferralForm()
@@ -86,31 +87,31 @@ export const Fees = () => {
             <>
               {/* Registration fee row */}
               <RowWrapper>
-                <Text size={13} color="supporting">
+                <SettingsBaselineText color="shy" variant="footnote">
                   {t('referral_reg_fee')}
-                </Text>
+                </SettingsBaselineText>
                 <VStack alignItems="flex-end">
-                  <Text size={14}>
+                  <SettingsBaselineText variant="stationBodyS">
                     {formatAmount(costs.registerFee, { ticker: 'RUNE' })}
-                  </Text>
-                  <Text size={14} color="supporting">
+                  </SettingsBaselineText>
+                  <SettingsBaselineText color="shy" variant="stationBodyS">
                     {registerFeeFiat}
-                  </Text>
+                  </SettingsBaselineText>
                 </VStack>
               </RowWrapper>
 
               {/* Costs row – total to send */}
               <RowWrapper>
-                <Text size={13} color="supporting">
+                <SettingsBaselineText color="shy" variant="footnote">
                   {t('referral_costs')}
-                </Text>
+                </SettingsBaselineText>
                 <VStack alignItems="flex-end">
-                  <Text size={14}>
+                  <SettingsBaselineText variant="stationBodyS">
                     {formatAmount(costs.totalFee, { ticker: 'RUNE' })}
-                  </Text>
-                  <Text size={14} color="supporting">
+                  </SettingsBaselineText>
+                  <SettingsBaselineText color="shy" variant="stationBodyS">
                     {totalFeeFiat}
-                  </Text>
+                  </SettingsBaselineText>
                 </VStack>
               </RowWrapper>
             </>
