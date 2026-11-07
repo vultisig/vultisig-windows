@@ -1,7 +1,6 @@
 import {
   getVaultsAppSessions,
   VaultAppSessionKey,
-  VaultsAppSessions,
 } from '@core/extension/storage/appSessions'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
@@ -18,12 +17,22 @@ export type AppSessionWatch = {
 }
 
 type HasAppSessionInput = VaultAppSessionKey & {
-  sessions: VaultsAppSessions
+  sessions: unknown
 }
 
-const hasAppSession = ({ sessions, vaultId, host }: HasAppSessionInput) =>
-  Object.prototype.hasOwnProperty.call(sessions, vaultId) &&
-  Object.prototype.hasOwnProperty.call(sessions[vaultId], host)
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const hasOwnKey = (record: Record<string, unknown>, key: string) =>
+  Object.prototype.hasOwnProperty.call(record, key)
+
+const hasAppSession = ({ sessions, vaultId, host }: HasAppSessionInput) => {
+  if (!isRecord(sessions) || !hasOwnKey(sessions, vaultId)) return false
+
+  const vaultSessions = sessions[vaultId]
+
+  return isRecord(vaultSessions) && hasOwnKey(vaultSessions, host)
+}
 
 /**
  * Watches the session of one vault for one site. Resolves only after reading
@@ -35,31 +44,31 @@ export const watchAppSession = async ({
 }: VaultAppSessionKey): Promise<AppSessionWatch> => {
   const controller = new AbortController()
 
+  // Each change carries the sessions it wrote, so a removal is seen even when
+  // a later write restores the session before storage could be read again.
   const handleChange: Parameters<
     typeof chrome.storage.onChanged.addListener
   >[0] = (changes, areaName) => {
-    if (areaName === 'local' && StorageKey.appSessions in changes) {
-      void check()
-    }
+    if (areaName !== 'local' || !(StorageKey.appSessions in changes)) return
+
+    const sessions = changes[StorageKey.appSessions].newValue
+    if (!hasAppSession({ sessions, vaultId, host })) end()
   }
 
   const stop = () => chrome.storage.onChanged.removeListener(handleChange)
 
-  const check = async () => {
-    if (controller.signal.aborted) return
-
-    const sessions = await getVaultsAppSessions()
-    if (hasAppSession({ sessions, vaultId, host })) return
-
+  const end = () => {
     stop()
     controller.abort(BackgroundError.Unauthorized)
   }
 
   chrome.storage.onChanged.addListener(handleChange)
-  await check().catch(error => {
+
+  const sessions = await getVaultsAppSessions().catch(error => {
     stop()
     throw error
   })
+  if (!hasAppSession({ sessions, vaultId, host })) end()
 
   return { signal: controller.signal, stop }
 }

@@ -12,13 +12,18 @@ type StorageListener = Parameters<
 const appSession = { host: 'example.com', url: 'https://example.com' }
 
 const stubStorage = (initialSessions: VaultsAppSessions) => {
-  let sessions = initialSessions
+  let sessions: VaultsAppSessions | undefined = initialSessions
   const listeners = new Set<StorageListener>()
 
   vi.stubGlobal('chrome', {
     storage: {
       local: {
-        get: async (key: string) => ({ [key]: sessions }),
+        // Like Chrome, the read settles later, so writes made meanwhile land
+        // before it.
+        get: async (key: string) => {
+          await Promise.resolve()
+          return { [key]: sessions }
+        },
       },
       onChanged: {
         addListener: (listener: StorageListener) => listeners.add(listener),
@@ -38,7 +43,14 @@ const stubStorage = (initialSessions: VaultsAppSessions) => {
     )
   }
 
-  return { listeners, setSessions }
+  const clearSessions = () => {
+    sessions = undefined
+    listeners.forEach(listener =>
+      listener({ [StorageKey.appSessions]: {} }, 'local')
+    )
+  }
+
+  return { listeners, setSessions, clearSessions }
 }
 
 describe('watchAppSession', () => {
@@ -72,6 +84,32 @@ describe('watchAppSession', () => {
     await vi.waitFor(() => expect(signal.aborted).toBe(true))
     expect(signal.reason).toBe(BackgroundError.Unauthorized)
     expect(storage.listeners.size).toBe(0)
+  })
+
+  it('aborts on a removal that a later write restores before storage is read', async () => {
+    const storage = stubStorage({ 'vault-1': { 'example.com': appSession } })
+
+    const { signal } = await watchAppSession({
+      vaultId: 'vault-1',
+      host: 'example.com',
+    })
+    storage.setSessions({ 'vault-1': {} })
+    storage.setSessions({ 'vault-1': { 'example.com': appSession } })
+    await new Promise(resolve => setTimeout(resolve, 0))
+
+    expect(signal.aborted).toBe(true)
+  })
+
+  it('aborts when the sessions are cleared from storage', async () => {
+    const storage = stubStorage({ 'vault-1': { 'example.com': appSession } })
+
+    const { signal } = await watchAppSession({
+      vaultId: 'vault-1',
+      host: 'example.com',
+    })
+    storage.clearSessions()
+
+    await vi.waitFor(() => expect(signal.aborted).toBe(true))
   })
 
   it('aborts when the site stays connected only to another vault', async () => {
