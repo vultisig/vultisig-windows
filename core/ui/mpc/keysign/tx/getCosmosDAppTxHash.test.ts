@@ -27,14 +27,9 @@ const onChainAminoSend = {
   },
 }
 
-const osmosisSwap = {
-  type: 'osmosis/poolmanager/swap-exact-amount-in',
-  value: {
-    sender: 'osmo1sav9eq38eyhj89f3xyxmn3fstrs8gnvqk0nt6e',
-    routes: [{ pool_id: '1', token_out_denom: 'uosmo' }],
-    token_in: { denom: 'uatom', amount: '1000' },
-    token_out_min_amount: '1',
-  },
+const unregisteredMessage = {
+  type: 'some-module/some-message',
+  value: { sender: 'osmo1sav9eq38eyhj89f3xyxmn3fstrs8gnvqk0nt6e' },
 }
 
 type AminoMsg = { type: string; value: Record<string, unknown> }
@@ -88,14 +83,14 @@ describe('getCosmosDAppTxHash', () => {
   )
 
   it('records an unknown hash when the dApp broadcasts a message it cannot rebuild', () => {
-    expect(hashOf(true, [onChainAminoSend.msgSend, osmosisSwap])).toBe(
+    expect(hashOf(true, [onChainAminoSend.msgSend, unregisteredMessage])).toBe(
       unknownTxHash
     )
   })
 
   it('still throws when this client broadcasts a message it cannot rebuild', () => {
-    expect(() => hashOf(false, [osmosisSwap])).toThrow(
-      "Amino type identifier 'osmosis/poolmanager/swap-exact-amount-in'"
+    expect(() => hashOf(false, [unregisteredMessage])).toThrow(
+      "Amino type identifier 'some-module/some-message'"
     )
   })
 })
