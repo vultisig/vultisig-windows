@@ -6,7 +6,7 @@ import {
 import { useCallback } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { useSendReceiver } from './receiver'
+import { useSendReceiverAddress } from './receiverResolution'
 import { useCurrentSendCoin } from './sendCoin'
 
 const maxRippleDestinationTag = 0xffffffff
@@ -100,9 +100,13 @@ export const useSendDestinationTagInput = () => {
   return [state.destinationTag ?? '', setDestinationTag] as const
 }
 
+/**
+ * The destination tag the send carries, read against the receiver address: an
+ * XRP X-address supplies its own tag.
+ */
 export const useSendDestinationTag = (): SendDestinationTag => {
   const { chain } = useCurrentSendCoin()
-  const [receiver] = useSendReceiver()
+  const receiver = useSendReceiverAddress()
   const [value] = useSendDestinationTagInput()
 
   return getSendDestinationTag({ chain, receiver, value })

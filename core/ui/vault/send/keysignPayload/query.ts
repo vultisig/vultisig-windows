@@ -22,7 +22,7 @@ import { getSendPayloadMemo } from '../memo/sendMemoSupport'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
-import { useSendReceiver } from '../state/receiver'
+import { useSendReceiverAddress } from '../state/receiverResolution'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { reconcileUtxoPlanAmount } from './reconcileUtxoPlanAmount'
 import { useSendMaxAmount } from './useSendMaxAmount'
@@ -40,7 +40,7 @@ export const useSendKeysignPayloadQuery = ({
   feeSettings,
 }: UseSendKeysignPayloadQueryProps = {}) => {
   const coin = useCurrentSendCoin()
-  const [receiver] = useSendReceiver()
+  const receiver = useSendReceiverAddress()
   const [memo] = useSendMemo()
   const [amount] = useSendAmount()
   const { destinationTag } = useSendDestinationTag()

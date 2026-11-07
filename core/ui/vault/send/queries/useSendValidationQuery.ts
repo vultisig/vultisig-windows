@@ -10,15 +10,23 @@ import { useTranslation } from 'react-i18next'
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useSpendableSendAmount } from '../amount/useSpendableSendAmount'
 import { useIsSendFeePaidInCoin } from '../fee/useIsSendFeePaidInCoin'
+import { getSendReceiverNameError } from '../form/getSendReceiverNameError'
 import { validateSendForm } from '../form/validateSendForm'
 import { useSendDestinationTagInput } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
-import { useSendReceiver } from '../state/receiver'
+import {
+  getSendReceiverAddress,
+  useSendReceiverResolution,
+} from '../state/receiverResolution'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useNearSendLimitsQuery } from './useNearSendLimitsQuery'
 import { useSendBalanceQuery } from './useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from './useSendFeeEstimateQuery'
 
+/**
+ * The send form's errors per field, pending until every input they depend on
+ * is known — including the address a typed receiver name resolves to.
+ */
 export const useSendValidationQuery = () => {
   const { t } = useTranslation()
 
@@ -36,7 +44,7 @@ export const useSendValidationQuery = () => {
   const amount = useSpendableSendAmount()
   const [destinationTag] = useSendDestinationTagInput()
   const [memo] = useSendMemo()
-  const [address] = useSendReceiver()
+  const receiver = useSendReceiverResolution()
   const walletCore = useAssertWalletCore()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const feeEstimateQuery = useSendFeeEstimateQuery()
@@ -52,14 +60,14 @@ export const useSendValidationQuery = () => {
   const validationQuery = useTransformQueryData(
     balanceQuery,
     useCallback(
-      balance =>
-        validateSendForm(
+      balance => {
+        const errors = validateSendForm(
           {
             coin,
             amount,
             destinationTag,
             memo,
-            receiverAddress: address,
+            receiverAddress: getSendReceiverAddress(receiver),
             senderAddress: coin.address,
           },
           {
@@ -72,9 +80,20 @@ export const useSendValidationQuery = () => {
               : nativeBalanceQuery.data,
             isFeePaidInCoin,
           }
-        ),
+        )
+        // A name without an address would otherwise read as an empty
+        // receiver; name the reason instead.
+        const receiverNameError = getSendReceiverNameError({
+          receiver,
+          chain: coin.chain,
+          t,
+        })
+
+        return receiverNameError
+          ? { ...errors, receiverAddress: receiverNameError }
+          : errors
+      },
       [
-        address,
         amount,
         coin,
         destinationTag,
@@ -82,12 +101,18 @@ export const useSendValidationQuery = () => {
         isFeePaidInCoin,
         memo,
         nativeBalanceQuery.data,
+        receiver,
         requiresNativeFee,
         t,
         walletCore,
       ]
     )
   )
+
+  // A name still to be looked up has no address to judge yet.
+  if (receiver.kind === 'pending' || receiver.kind === 'resolving') {
+    return { ...validationQuery, data: undefined, isPending: true }
+  }
 
   // XRP tokens need XRP for fees too. An unavailable balance/fee must not
   // briefly enable Continue or hide a failed funding check.
