@@ -4,6 +4,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const mockAddPopupViewCall = vi.hoisted(() => vi.fn())
 const mockRemovePopupViewCall = vi.hoisted(() => vi.fn())
 const mockInNewWindow = vi.hoisted(() => vi.fn())
+const mockWatchAppSession = vi.hoisted(() => vi.fn())
+
+vi.mock('./watchAppSession', () => ({
+  watchAppSession: (...args: unknown[]) => mockWatchAppSession(...args),
+}))
 
 vi.mock('../../view/state/calls', () => ({
   addPopupViewCall: (...args: unknown[]) => mockAddPopupViewCall(...args),
@@ -14,6 +19,7 @@ vi.mock('./inNewWindow', () => ({
   inNewWindow: (...args: unknown[]) => mockInNewWindow(...args),
 }))
 
+import { BackgroundError } from '../../../background/error'
 import {
   PopupError,
   signingFailedPopupResult,
@@ -21,6 +27,44 @@ import {
 } from '../../error'
 import { getPopupMessageSourceId } from '../../resolver'
 import { callPopupFromBackground } from '.'
+
+const appSession = {
+  vaultId: 'vault-1',
+  host: 'example.com',
+  url: 'https://example.com',
+}
+
+const pluginReshareCall = {
+  pluginReshare: {
+    pluginId: 'plugin-1',
+    dAppSessionId: 'session-1',
+    encryptionKeyHex: '00',
+  },
+}
+
+type ExecuteWindow = {
+  execute: (input: {
+    abortSignal: AbortSignal
+    close: () => void
+  }) => Promise<unknown>
+}
+
+const stubPopupMessages = () => {
+  const listeners = new Set<(message: unknown) => void>()
+  vi.stubGlobal('chrome', {
+    runtime: {
+      getURL: (path: string) => `chrome-extension://id/${path}`,
+      onMessage: {
+        addListener: (listener: (message: unknown) => void) =>
+          listeners.add(listener),
+        removeListener: (listener: (message: unknown) => void) =>
+          listeners.delete(listener),
+      },
+    },
+  })
+
+  return listeners
+}
 
 describe('callPopupFromBackground', () => {
   beforeEach(() => {
@@ -251,6 +295,73 @@ describe('callPopupFromBackground', () => {
     ).rejects.toThrow('Failed to create new window')
 
     expect(mockRemovePopupViewCall).toHaveBeenCalledWith('call-1')
+  })
+
+  it('watches the session of a request it authorized and cancels it through the queue', async () => {
+    const sessionController = new AbortController()
+    const stop = vi.fn()
+    mockWatchAppSession.mockResolvedValue({
+      signal: sessionController.signal,
+      stop,
+    })
+    mockInNewWindow.mockResolvedValue({ success: true })
+
+    await callPopupFromBackground({
+      call: pluginReshareCall,
+      options: {},
+      context: { requestOrigin: 'https://example.com', appSession },
+    })
+
+    expect(mockWatchAppSession).toHaveBeenCalledWith(appSession)
+    expect(mockInNewWindow).toHaveBeenCalledWith(
+      expect.objectContaining({ cancelSignal: sessionController.signal })
+    )
+    expect(stop).toHaveBeenCalled()
+  })
+
+  it('takes an open request off screen with Unauthorized once its session ends', async () => {
+    const listeners = stubPopupMessages()
+    const sessionController = new AbortController()
+    mockWatchAppSession.mockResolvedValue({
+      signal: sessionController.signal,
+      stop: () => undefined,
+    })
+    const close = vi.fn()
+    mockInNewWindow.mockImplementation(({ execute }: ExecuteWindow) =>
+      execute({ abortSignal: new AbortController().signal, close })
+    )
+
+    const call = callPopupFromBackground({
+      call: pluginReshareCall,
+      options: {},
+      context: { requestOrigin: 'https://example.com', appSession },
+    })
+
+    await vi.waitFor(() => {
+      expect(listeners.size).toBe(1)
+    })
+
+    sessionController.abort(BackgroundError.Unauthorized)
+
+    await expect(call).rejects.toBe(BackgroundError.Unauthorized)
+    expect(close).toHaveBeenCalled()
+    expect(listeners.size).toBe(0)
+    expect(mockRemovePopupViewCall).toHaveBeenCalledWith('call-1')
+  })
+
+  it('does not watch a request that needs no session', async () => {
+    mockInNewWindow.mockResolvedValue({ appSession })
+
+    await callPopupFromBackground({
+      call: { grantVaultAccess: { chain: Chain.Ethereum } },
+      options: {},
+      context: { requestOrigin: 'https://unwatched.example.com' },
+    })
+
+    expect(mockWatchAppSession).not.toHaveBeenCalled()
+    expect(mockInNewWindow).toHaveBeenCalledWith(
+      expect.objectContaining({ cancelSignal: undefined })
+    )
   })
 
   it('keeps the popup answer when dropping the stored call fails', async () => {
