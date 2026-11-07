@@ -217,7 +217,7 @@ const Dot = styled.div<{
   ${({ validation }) => {
     const color = match(validation, {
       idle: () => getColor('contrast'),
-      valid: () => getColor('primary'),
+      valid: () => getColor('success'),
       invalid: () => getColor('danger'),
       loading: () => getColor('buttonTextDisabled'),
     })

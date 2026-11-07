@@ -1,3 +1,4 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Image } from '@lib/ui/image/Image'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -11,6 +12,7 @@ type Props = {
   onUpdateFriendReferral: () => void
 }
 
+/** Banner inviting the vault to add a friend's referral code. */
 export const AddFriendsReferralPrompt = ({ onUpdateFriendReferral }: Props) => {
   const {
     colors: { primaryAlt },
@@ -28,7 +30,7 @@ export const AddFriendsReferralPrompt = ({ onUpdateFriendReferral }: Props) => {
         <Image src="/core/images/referral-friend-decoration.png" alt="" />
       </FriendReferralPromptImageWrapper>
       <FriendsReferralPromptOverlay />
-      <Text size={12} color="shy">
+      <Text color="shy" variant="caption">
         <Trans
           i18nKey="save_10_percent_on_swaps"
           components={{
@@ -36,21 +38,24 @@ export const AddFriendsReferralPrompt = ({ onUpdateFriendReferral }: Props) => {
           }}
         />
       </Text>
-      <Text size={14}>{t('add_friends_referral')}</Text>
+      <SettingsBaselineText variant="stationBodyS">
+        {t('add_friends_referral')}
+      </SettingsBaselineText>
     </FriendsReferralPromptWrapper>
   )
 }
 
 const FriendsReferralPromptWrapper = styled(VStack)`
-  padding: 24px;
-  gap: 4px;
+  padding: 23px;
+  gap: 2px;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 
   cursor: pointer;
 
-  ${borderRadius.md};
+  ${borderRadius.xl};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `

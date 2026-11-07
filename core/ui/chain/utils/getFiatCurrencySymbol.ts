@@ -17,8 +17,7 @@ const getFiatCurrencyParts = (currency: FiatCurrency) =>
 
 /**
  * The symbol `formatFiatAmount` prints with an amount in this currency
- * (`$` for usd, `€` for eur, `CA$` for cad). `fiatCurrencySymbolRecord` is
- * the form meant for settings, not for amounts.
+ * (`$` for usd, `€` for eur, `CA$` for cad).
  */
 export const getFiatCurrencySymbol = (currency: FiatCurrency) =>
   shouldBePresent(

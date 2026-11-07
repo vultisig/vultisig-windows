@@ -1,24 +1,24 @@
 import { AddressBookChainInput } from '@core/ui/address-book/AddressBookChainInput'
 import { AddressBookItem } from '@core/ui/address-book/model'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsCtaButton } from '@core/ui/settings/SettingsCtaButton'
+import { settingsFieldSurface } from '@core/ui/settings/settingsField'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageFooter } from '@core/ui/settings/SettingsPageFooter'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
-import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSize } from '@lib/ui/buttons/IconButton'
+import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { takeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
-import { textInputHeight } from '@lib/ui/css/textInput'
-import { ImageSparkle2Icon } from '@lib/ui/icons/ImageSparkle2Icon'
+import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
+import { CopiesFilledIcon } from '@lib/ui/icons/CopiesFilledIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { UseMutationResult } from '@tanstack/react-query'
@@ -28,7 +28,7 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { z } from 'zod'
 
 import { InputPasteAction } from '../../components/InputPasteAction'
@@ -40,6 +40,43 @@ const PositionQrCodeOverlay = styled.div`
   background: ${getColor('background')};
   isolation: isolate;
   ${vStack()}
+`
+
+const fieldHeight = 52
+
+const AddressBookTextInput = styled(TextInput)`
+  ${settingsFieldSurface};
+  color: ${getColor('text')};
+  font-weight: 500;
+  height: ${fieldHeight}px;
+  line-height: 20px;
+  padding: 15px;
+
+  &::placeholder {
+    color: ${getColor('textShy')};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+`
+
+const FieldLabel = styled(SettingsBaselineText).attrs({
+  as: 'span',
+  color: 'shy',
+  variant: 'stationBodyS',
+})``
+
+const fieldActionTones = css`
+  --icon-accent: ${getColor('textShyExtra')};
+  color: ${getColor('text')};
+`
+
+const FieldAction = styled(IconButton)`
+  ${fieldActionTones};
+`
+
+const FieldPasteAction = styled(InputPasteAction)`
+  ${fieldActionTones};
 `
 
 export type AddressBookFormValues = Pick<
@@ -134,18 +171,13 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={qrView ? () => setQrView(null) : onBack}
-          />
-        }
+      <SettingsPageHeader
+        onBack={qrView ? () => setQrView(null) : onBack}
         title={title}
       />
       <VStack fullHeight style={{ position: 'relative' }}>
-        <PageContent gap={16} flexGrow scrollable>
+        <SettingsPageContent gap={12} flexGrow scrollable>
           <AddressBookChainInput
-            titleColor="contrast"
             value={watch('chain')}
             onChange={newChain => {
               if (newChain) {
@@ -154,8 +186,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             }}
           />
           <VStack gap={8}>
-            <TextInput
-              label={t('label')}
+            <AddressBookTextInput
+              label={<FieldLabel>{t('label')}</FieldLabel>}
               placeholder={t('type_here')}
               {...register('title')}
             />
@@ -168,8 +200,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
           <VStack gap={8}>
             <ActionInsideInteractiveElement
               render={({ actionSize }) => (
-                <TextInput
-                  label={t('address')}
+                <AddressBookTextInput
+                  label={<FieldLabel>{t('address')}</FieldLabel>}
                   placeholder={t('type_here')}
                   {...register('address')}
                   style={{
@@ -179,10 +211,11 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
               )}
               action={
                 <HStack>
-                  <IconButton size="sm" onClick={() => setQrView('scan')}>
-                    <ImageSparkle2Icon />
-                  </IconButton>
-                  <InputPasteAction
+                  <FieldAction size="sm" onClick={() => setQrView('scan')}>
+                    <CameraFilledIcon />
+                  </FieldAction>
+                  <FieldPasteAction
+                    icon={<CopiesFilledIcon />}
                     onPaste={value =>
                       setValue('address', value, { shouldValidate: true })
                     }
@@ -190,7 +223,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
                 </HStack>
               }
               actionPlacerStyles={{
-                bottom: (textInputHeight - iconButtonSize.md) / 2,
+                bottom: (fieldHeight - iconButtonSize.sm) / 2,
                 right: textInputHorizontalPadding,
               }}
             />
@@ -205,16 +238,16 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
               {extractErrorMsg(error)}
             </Text>
           )}
-        </PageContent>
-        <PageFooter>
-          <Button
+        </SettingsPageContent>
+        <SettingsPageFooter>
+          <SettingsCtaButton
             disabled={!isValid || !isDirty}
             loading={isLoading || isPending}
             type="submit"
           >
             {t('save')}
-          </Button>
-        </PageFooter>
+          </SettingsCtaButton>
+        </SettingsPageFooter>
         {qrView && (
           <PositionQrCodeOverlay>
             <Match

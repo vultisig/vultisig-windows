@@ -9,9 +9,6 @@ import {
 } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
-import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
-import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
-import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
@@ -304,11 +301,12 @@ const stationNetworkChangeEvent = 'station_network_change'
  *   Station's response shape, returned to the dApp (which broadcasts).
  * - `post` extends the same flow into a broadcast: after signing, the amino
  *   payload is assembled into a protobuf `TxRaw` with
- *   `SIGN_MODE_LEGACY_AMINO_JSON` (see {@link stationTxAssembly}) and pushed
- *   through Vultisig's standard Cosmos broadcast resolver. Per-message-type
- *   encoding is delegated to cosmjs's `AminoTypes` and `Registry`, so any
- *   bank / staking / distribution / gov / ibc / wasm message and any
- *   number of messages per tx are supported with no per-type code here.
+ *   `SIGN_MODE_LEGACY_AMINO_JSON` (see {@link stationTxAssembly}) and
+ *   broadcast by the background service worker, the same path as Keplr
+ *   `sendTx`. Per-message-type encoding is delegated to cosmjs's
+ *   `AminoTypes` and `Registry`, so any bank / staking / distribution / gov /
+ *   ibc / wasm message and any number of messages per tx are supported with
+ *   no per-type code here.
  *
  * `switchNetwork` toggles between `mainnet` (Terra v2 + sister Cosmos chains)
  * and `classic` (Terra Classic) and emits `station_network_change` so dApps
@@ -608,18 +606,15 @@ export class Station {
       signature: aminoSignature.signature,
     })
 
-    const signingOutput = deserializeSigningOutput(chain, {
-      serialized: JSON.stringify({
-        tx_bytes: Buffer.from(txRawBytes).toString('base64'),
-        mode: 'BROADCAST_MODE_SYNC',
-      }),
+    const { txHash } = await callBackground({
+      broadcastTx: {
+        chain,
+        txBytes: Buffer.from(txRawBytes).toString('base64'),
+      },
     })
 
-    await broadcastTx({ chain, tx: signingOutput })
-    const hash = await getTxHash({ chain, tx: signingOutput })
-
     return {
-      txhash: hash,
+      txhash: txHash,
       height: '0',
       raw_log: '',
       code: 0,

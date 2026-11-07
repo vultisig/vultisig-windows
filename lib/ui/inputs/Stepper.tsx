@@ -10,11 +10,14 @@ import { InputProps } from '../props'
 import { getColor } from '../theme/getters'
 import { TextInput } from './TextInput'
 
+const stepperHeight = 52
+
 type StepperProps = InputProps<number | null> & {
   min: number
   max: number
 } & Partial<ComponentProps<typeof TextInput>>
 
+/** Number field between minus and plus buttons; the buttons stop at `min` and `max`, typed values pass through. */
 export const Stepper = ({
   value,
   onChange,
@@ -37,7 +40,7 @@ export const Stepper = ({
       >
         <CircleMinusIcon />
       </StepControl>
-      <VStack flexGrow>
+      <VStack style={{ flex: '1 1 0', minWidth: 0 }}>
         <Input
           type="number"
           onValueChange={value => {
@@ -68,7 +71,7 @@ export const Stepper = ({
 }
 
 const Wrapper = styled(HStack)`
-  max-height: 56px;
+  height: ${stepperHeight}px;
 `
 
 const StepControl = styled(UnstyledButton)`
@@ -77,15 +80,22 @@ const StepControl = styled(UnstyledButton)`
     alignItems: 'center',
   })};
 
-  padding: 16px;
   ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
-  width: 97px;
+  color: ${getColor('text')};
+  flex: 1 1 0;
+  font-size: 20px;
 `
 
 const Input = styled(TextInput)`
   ${borderRadius.md};
-  border: 1px solid ${getColor('foregroundExtra')};
+  background: transparent;
+  border: 1px solid ${getColor('foregroundSuper')};
+  color: ${getColor('text')};
+  font-size: 16px;
+  font-weight: 500;
+  height: ${stepperHeight}px;
+  line-height: 24px;
   text-align: center;
 `

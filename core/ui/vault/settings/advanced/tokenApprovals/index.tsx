@@ -1,53 +1,77 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { EvmChain } from '@vultisig/core-chain/Chain'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useTokenApprovalsQuery } from './queries/useTokenApprovalsQuery'
+import { TokenApprovalsChain } from './core/tokenApprovalsChains'
+import { useTokenApprovalsQueries } from './queries/useTokenApprovalsQueries'
+import { TokenApprovalsChainField } from './TokenApprovalsChainField'
+import { TokenApprovalsChainSelect } from './TokenApprovalsChainSelect'
 import { TokenApprovalsContent } from './TokenApprovalsContent'
+import { TokenApprovalsPageContent } from './TokenApprovalsPageContent'
+
+type TokenApprovalsViewState = { chain: TokenApprovalsChain } | undefined
 
 /**
- * Token Approvals page: ERC-20 allowances the vault has granted, one EVM
- * network at a time, read from 1inch's approval history. Revoke opens the
- * verify screen for an `approve(spender, 0)` transaction.
+ * Granted Approvals page: ERC-20 and Permit2 allowances on the vault's EVM
+ * chains and SPL token delegates on Solana, in one list that can be narrowed
+ * to one chain. Each row's revoke opens the verify screen for a transaction
+ * that clears it.
  */
 export const TokenApprovalsPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  // Kept in the view state so coming back from a revoke reopens the same
-  // network.
-  const [viewState, setViewState] = useViewState<
-    { chain: EvmChain } | undefined
-  >()
-  const chain = viewState?.chain ?? EvmChain.Ethereum
-  const address = useCurrentVaultAddress(chain)
-  const approvalsQuery = useTokenApprovalsQuery({ chain, owner: address })
+  const { chains, uncheckedChains } = useTokenApprovalsQueries()
+  // Kept in the view state so coming back from a revoke shows the same chain.
+  const [viewState, setViewState] = useViewState<TokenApprovalsViewState>()
+  const [isSelectingChain, setIsSelectingChain] = useState(false)
+  const options = chains.map(({ chain }) => chain)
+  // A chain the vault no longer has would match nothing and read as "No active approvals".
+  const selectedChain =
+    viewState && options.includes(viewState.chain) ? viewState.chain : null
+  const shownChains = selectedChain
+    ? chains.filter(({ chain }) => chain === selectedChain)
+    : chains
+
+  if (isSelectingChain) {
+    return (
+      <TokenApprovalsChainSelect
+        value={selectedChain}
+        onChange={chain => {
+          setViewState(chain ? { chain } : undefined)
+          setIsSelectingChain(false)
+        }}
+        options={options}
+        onBack={() => setIsSelectingChain(false)}
+      />
+    )
+  }
 
   return (
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('token_approvals')}
+        title={t('granted_approvals')}
+        hasBorder
       />
-      <PageContent flexGrow scrollable>
+      <TokenApprovalsPageContent gap={14} scrollable>
+        {options.length > 0 ? (
+          <TokenApprovalsChainField
+            value={selectedChain}
+            onClick={() => setIsSelectingChain(true)}
+          />
+        ) : null}
         <TokenApprovalsContent
-          value={chain}
-          onChange={chain => setViewState({ chain })}
-          address={address}
-          approvals={approvalsQuery}
-          onRevoke={({ token, spender }) =>
-            navigate({
-              id: 'revokeTokenApproval',
-              state: { token, spender },
-            })
+          chains={shownChains}
+          uncheckedChains={selectedChain ? [] : uncheckedChains}
+          onRevoke={approval =>
+            navigate({ id: 'revokeTokenApproval', state: { approval } })
           }
         />
-      </PageContent>
+      </TokenApprovalsPageContent>
     </VStack>
   )
 }

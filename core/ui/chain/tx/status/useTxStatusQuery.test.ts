@@ -1,6 +1,7 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { unknownTxHash } from '../unknownTxHash'
 import { useTxStatusQuery } from './useTxStatusQuery'
 
 const { query } = vi.hoisted(() => ({ query: vi.fn() }))
@@ -22,5 +23,13 @@ describe('useTxStatusQuery polling', () => {
     expect(options.refetchInterval({ state: { data: { status } } })).toBe(
       expected
     )
+  })
+
+  it.each([
+    [unknownTxHash, false],
+    ['hash', true],
+  ])('runs the query for hash %j: %s', (hash, expected) => {
+    useTxStatusQuery({ chain: Chain.Osmosis, hash, senderAccountId: 'osmo' })
+    expect(query.mock.calls[0][0].enabled).toBe(expected)
   })
 })

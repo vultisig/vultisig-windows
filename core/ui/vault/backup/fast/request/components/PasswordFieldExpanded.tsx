@@ -1,17 +1,27 @@
-import { ActionFieldDivider } from '@core/ui/vault/components/action-form/ActionFieldDivider'
-import { ActionInputContainer } from '@core/ui/vault/components/action-form/ActionInputContainer'
-import { InputLabel } from '@lib/ui/inputs/InputLabel'
+import {
+  settingsFieldValidation,
+  settingsInputHeight,
+} from '@core/ui/settings/settingsField'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { serverBackupTextInput } from './serverBackupField'
+import { ServerBackupFieldHeading } from './ServerBackupFieldHeading'
+
+const Field = styled(PasswordInput)`
+  ${serverBackupTextInput};
+  ${settingsFieldValidation};
+`
 
 type PasswordFieldExpandedProps = {
   registration: UseFormRegisterReturn<'password'>
   error?: string
 }
 
+/** The open password field of the Server Backup form; masked until the eye is pressed. */
 export const PasswordFieldExpanded = ({
   registration,
   error,
@@ -19,20 +29,18 @@ export const PasswordFieldExpanded = ({
   const { t } = useTranslation()
 
   return (
-    <ActionInputContainer>
-      <InputLabel>{t('password')}</InputLabel>
-      <ActionFieldDivider />
-      <VStack gap={12}>
-        <Text size={14} color="shy">
-          {t('backup_password_description')}
-        </Text>
-        <PasswordInput
-          {...registration}
-          placeholder={t('enter_password')}
-          error={error}
-          validation={error ? 'invalid' : undefined}
-        />
-      </VStack>
-    </ActionInputContainer>
+    <VStack gap={24}>
+      <ServerBackupFieldHeading
+        title={t('enter_password')}
+        description={t('backup_password_description')}
+      />
+      <Field
+        {...registration}
+        inputHeight={settingsInputHeight}
+        placeholder={t('enter_password')}
+        error={error}
+        validation={error ? 'invalid' : undefined}
+      />
+    </VStack>
   )
 }

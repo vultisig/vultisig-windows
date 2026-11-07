@@ -56,7 +56,7 @@ import {
 } from '../../cowswap/cowSwapKeysign'
 import { encodeBitcoinMessageSignature } from '../../customMessage/bitcoin'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
-import { getCosmosKeplrBridgeTxHash } from '../../tx/getCosmosKeplrBridgeTxHash'
+import { getCosmosDAppTxHash } from '../../tx/getCosmosDAppTxHash'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
@@ -315,7 +315,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                   const signature = cosmosOutput.signature
                   return {
                     data,
-                    hash: getCosmosKeplrBridgeTxHash({
+                    hash: getCosmosDAppTxHash({
                       keysignPayload: payload,
                       signedAminoJson: cosmosOutput.json ?? undefined,
                       signatureBytes: signature

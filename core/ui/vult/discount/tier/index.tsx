@@ -28,11 +28,15 @@ type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
 // finished expanding (~300ms) plus a short pause.
 const footerRevealDelayMs = 600
 
+const expandedContentBottomPadding = 15
+const collapsedContentBottomPadding = 22
+
 const collapsedFooterMargin = -(
   discountTierFooterHeight - discountTierFooterPeek
 )
 const revealedFooterMargin = -discountTierFooterOverlap
 
+/** One tier's card: collapsed to its threshold, or expanded with its discount and footer. */
 export const VultDiscountTier = ({
   value,
   activeDiscountTier,
@@ -71,16 +75,27 @@ export const VultDiscountTier = ({
         }
       }}
     >
-      <DiscountTierDarkSection>
-        <DiscountTierContent>
-          <HStack alignItems="center" justifyContent="space-between" fullWidth>
+      <DiscountTierDarkSection $isExpanded={showDetails}>
+        <DiscountTierContent
+          style={{
+            paddingBottom: showDetails
+              ? expandedContentBottomPadding
+              : collapsedContentBottomPadding,
+          }}
+        >
+          <HStack
+            alignItems="center"
+            justifyContent="space-between"
+            fullWidth
+            style={{ marginBottom: showDetails ? 12 : undefined }}
+          >
             <VultDiscountTierHeader value={value} />
             <DiscountTierMinBalance value={value} />
           </HStack>
           <AnimatedVisibility isOpen={showDetails} animationConfig="exitToTop">
             <VStack alignItems="center" gap={12}>
               <DiscountTierPercent value={value} />
-              <Text size={13} color="shy">
+              <Text color="shy" height={16 / 12} size={12} weight={500}>
                 {t('more_coming_soon')}
               </Text>
             </VStack>

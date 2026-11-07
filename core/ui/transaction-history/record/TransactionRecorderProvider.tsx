@@ -1,4 +1,5 @@
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
+import { unknownTxHash } from '@core/ui/chain/tx/unknownTxHash'
 import {
   KeysignMutationListenerProvider,
   useKeysignMutationListener,
@@ -53,6 +54,9 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
     keysignPayload: KeysignPayload,
     txHash: string
   ) => {
+    // No rebuildable hash: nothing to file this dApp transaction under or track.
+    if (txHash === unknownTxHash) return
+
     const records = recordsQuery.data ?? (await recordsQuery.refetch()).data
 
     if (records) {

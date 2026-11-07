@@ -10,8 +10,10 @@ type TextVariant =
   | 'stationTitle1'
   | 'stationBodyS'
   | 'stationCaption2'
+  | 'title2'
   | 'title3'
   | 'footnote'
+  | 'subtitle'
   | 'caption'
   | 'bodyM'
 
@@ -49,6 +51,13 @@ const textVariantsRecord: Record<
     height: 14 / 10,
     letterSpacing: 0.12,
   },
+  /** Headings/Title 2: 22px, 500, 24px line-height */
+  title2: {
+    size: 22,
+    weight: 500,
+    height: 24 / 22,
+    letterSpacing: -0.36,
+  },
   title3: {
     size: 17,
     weight: 500,
@@ -60,6 +69,13 @@ const textVariantsRecord: Record<
     weight: 500,
     height: 1.385,
     letterSpacing: 0.06,
+  },
+  /** Headings/Subtitle: 15px, 500, 17px line-height */
+  subtitle: {
+    size: 15,
+    weight: 500,
+    height: 17 / 15,
+    letterSpacing: -0.18,
   },
   caption: {
     size: 12,

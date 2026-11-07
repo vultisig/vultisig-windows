@@ -1,4 +1,4 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
 import {
   useHasFinishedReferralsOnboardingQuery,
   useSetHasFinishedReferralsOnboardingMutation,
@@ -7,7 +7,6 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +18,7 @@ import { useUserValidThorchainNameQuery } from './queries/useUserValidThorchainN
 
 const steps = ['landing', 'summary', 'manage'] as const
 
+/** Routes a vault to the onboarding steps or to its referral hub. */
 export const ReferralPage = () => {
   const { t } = useTranslation()
 
@@ -53,8 +53,8 @@ export const ReferralPage = () => {
         if (step === 'landing' || step === 'summary') {
           return (
             <>
-              <PageHeader
-                primaryControls={<PageHeaderBackButton />}
+              <SettingsPageHeader
+                hasBorder={false}
                 title={t('referrals_default_title')}
               />
               <Match

@@ -1,45 +1,50 @@
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import {
+  settingsFieldSurface,
+  settingsInputHeight,
+} from '@core/ui/settings/settingsField'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { CopiesFilledIcon } from '@lib/ui/icons/CopiesFilledIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
+import { FormField } from '../../../Referrals.styled'
 
+/** Edit Referral's read-only code, with a copy action. */
 export const ReferralCodeField = () => {
   const { data: nameDetails } = useUserValidThorchainNameQuery()
   const [, copyToClipboard] = useCopyToClipboard()
+  const { t } = useTranslation()
 
   return (
-    <FieldWrapper
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <Text>{nameDetails?.name}</Text>
-      <FieldIconWrapper>
+    <FormField>
+      <SettingsBaselineText color="shy" variant="stationBodyS">
+        {t('your_referral_code')}
+      </SettingsBaselineText>
+      <FieldWrapper>
+        <SettingsBaselineText variant="stationBodyS">
+          {nameDetails?.name}
+        </SettingsBaselineText>
         <UnstyledButton
           onClick={() => copyToClipboard(nameDetails?.name || '')}
         >
-          <CopyIcon />
+          <IconWrapper size={20}>
+            <CopiesFilledIcon />
+          </IconWrapper>
         </UnstyledButton>
-      </FieldIconWrapper>
-    </FieldWrapper>
+      </FieldWrapper>
+    </FormField>
   )
 }
 
-const FieldWrapper = styled(VStack)`
-  ${borderRadius.md};
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: ${getColor('foreground')};
-  padding: 14px;
-`
-const FieldIconWrapper = styled(IconWrapper)`
-  font-size: 20px;
+const FieldWrapper = styled.div`
+  ${settingsFieldSurface};
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: ${settingsInputHeight}px;
+  padding: 0 15px;
 `

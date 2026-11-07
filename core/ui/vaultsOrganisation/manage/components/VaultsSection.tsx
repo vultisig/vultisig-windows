@@ -28,8 +28,7 @@ export const VaultsSection = () => {
   const { mutate } = useUpdateVaultMutation()
   const vaults = useFolderlessVaults()
   const [items, setItems] = useState<Vault[]>(vaults)
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances({ vaults })
+  const { totals: vaultTotals } = useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
   useEffect(() => setItems(vaults), [vaults])
@@ -85,9 +84,7 @@ export const VaultsSection = () => {
               }
               title={item.name}
               subtitle={
-                !isTotalsPending && value !== undefined
-                  ? formatFiatAmount(value)
-                  : undefined
+                value !== undefined ? formatFiatAmount(value) : undefined
               }
             />
             {status === 'overlay' && <DnDItemHighlight />}
