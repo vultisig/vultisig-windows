@@ -68,11 +68,17 @@ type VerifyTransactionOverviewProps = {
    * so the caller supplies a reader that derives it from the signed payload.
    */
   getPayloadAmount?: (payload: KeysignPayload) => bigint | number | string
+  /** Hides the amount when the signed data states none in this coin. */
+  hideAmount?: boolean
   decoderContext?: SignedTransactionDecoderContext
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
   children?: ReactNode
 }
 
+/**
+ * Card-based transaction summary shared by the verify screens: amount, sender,
+ * receiver, network and fee, titled by the operation the payload decodes to.
+ */
 export const VerifyTransactionOverview = ({
   coin,
   amount,
@@ -86,6 +92,7 @@ export const VerifyTransactionOverview = ({
   amountLabel,
   keysignPayloadQuery,
   getPayloadAmount,
+  hideAmount = false,
   decoderContext,
   renderFeeExtra,
   children,
@@ -119,6 +126,7 @@ export const VerifyTransactionOverview = ({
         keysignPayloadQuery={keysignPayloadQuery}
         getPayloadAmount={getPayloadAmount}
         hidePayloadAmount={payload => {
+          if (hideAmount) return true
           const result = decodeSignedTransaction(payload, decoderContext)
           return (
             getVerifyTransactionTitleKey(result.operation) !== undefined &&

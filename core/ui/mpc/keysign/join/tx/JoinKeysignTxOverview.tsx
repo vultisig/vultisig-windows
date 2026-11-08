@@ -33,11 +33,11 @@ import { useTranslation } from 'react-i18next'
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
 import { getCosmosSignDataReview } from '../../tx/cosmos/getCosmosSignDataReview'
-import { getSingleCosmosTransfer } from '../../tx/cosmos/getSingleCosmosTransfer'
 import { getWasmExecuteTxDisplay } from '../../tx/getWasmExecuteTxDisplay'
 import { SignRippleDisplay } from '../../tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '../../tx/sui/parser'
 import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
+import { getJoinCosmosSignDataView } from './getJoinCosmosSignDataView'
 import { JoinKeysignCosmosSignDataOverview } from './JoinKeysignCosmosSignDataOverview'
 
 /**
@@ -69,26 +69,31 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   // `contractPayload`, so derive the amount / asset / destination the co-signer
   // verifies from it rather than the (empty, spoofable) toAmount/toAddress.
   const wasmDisplay = getWasmExecuteTxDisplay(value)
-  // Cosmos sign data is signed as given, so its single transfer is read from
-  // the signed data; anything a single amount can't describe gets the
-  // per-transfer overview instead.
+  // Cosmos sign data is signed as given, so the card's receiver and amount
+  // are read from the signed data; anything a single amount can't describe
+  // gets the per-transfer overview instead.
   const cosmosSignDataReview = getCosmosSignDataReview(value)
-  const cosmosTransfer = cosmosSignDataReview
-    ? getSingleCosmosTransfer({ review: cosmosSignDataReview, coin })
+  const cosmosSignDataView = cosmosSignDataReview
+    ? getJoinCosmosSignDataView({
+        keysignPayload: value,
+        review: cosmosSignDataReview,
+        coin,
+      })
     : undefined
-  const needsCosmosSignDataOverview =
-    !!cosmosSignDataReview &&
-    !cosmosTransfer &&
-    (cosmosSignDataReview.hasUnsummarizedMessages ||
-      cosmosSignDataReview.transfers.length > 0)
+  const cosmosCard =
+    cosmosSignDataView && 'card' in cosmosSignDataView
+      ? cosmosSignDataView.card
+      : undefined
+  const cosmosCardAmount = cosmosCard?.amount
   const displayCoin = wasmDisplay?.coin ?? coin
-  const displayAmount = cosmosTransfer
-    ? cosmosTransfer.amount
+  const displayAmount = cosmosCard
+    ? (cosmosCardAmount ?? 0n)
     : wasmDisplay
       ? BigInt(wasmDisplay.fundAmount)
       : BigInt(value.toAmount)
-  const displayReceiver =
-    cosmosTransfer?.recipient ?? wasmDisplay?.receiver ?? toAddress
+  const displayReceiver = cosmosCard
+    ? cosmosCard.receiver
+    : (wasmDisplay?.receiver ?? toAddress)
 
   const receiverVaultName = useVaultNameForAddress({
     address: displayReceiver,
@@ -149,7 +154,7 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     )
   }
 
-  if (needsCosmosSignDataOverview) {
+  if (cosmosSignDataView && 'overview' in cosmosSignDataView) {
     return <JoinKeysignCosmosSignDataOverview value={value} />
   }
 
@@ -181,12 +186,13 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         keysignPayloadQuery={keysignPayloadQuery}
         decoderContext={{ thorchainInboundAddresses }}
         getPayloadAmount={
-          cosmosTransfer
-            ? () => cosmosTransfer.amount
+          cosmosCardAmount !== undefined
+            ? () => cosmosCardAmount
             : wasmDisplay
               ? () => wasmDisplay.fundAmount
               : undefined
         }
+        hideAmount={!!cosmosCard && cosmosCardAmount === undefined}
         renderFeeExtra={
           showFeeIcon
             ? () => (
