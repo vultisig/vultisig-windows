@@ -179,7 +179,9 @@ const directReaders: Record<string, MessageReader<Uint8Array>> = {
           memo,
         }
       }),
-      isSummarized: true,
+      // A deposit's memo only shows on its transfers, so a memo without
+      // coins isn't summarized.
+      isSummarized: message.coins.length > 0 || !memo,
     }
   },
   [CosmosMsgType.MSG_TRANSFER_URL]: ({ value }) => {
@@ -249,7 +251,7 @@ const aminoReaders: Record<string, MessageReader<Record<string, unknown>>> = {
           memo,
         }
       }),
-      isSummarized: true,
+      isSummarized: value.coins.length > 0 || !memo,
     }
   },
   'cosmos-sdk/MsgTransfer': ({ value }) => ({

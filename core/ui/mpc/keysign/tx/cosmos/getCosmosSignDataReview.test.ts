@@ -302,6 +302,44 @@ describe('getCosmosSignDataReview', () => {
     })
   })
 
+  it('flags a deposit that carries a memo but no coins', () => {
+    expect(
+      getCosmosSignDataReview(
+        directPayload({
+          chain: Chain.THORChain,
+          messages: [
+            {
+              typeUrl: '/types.MsgDeposit',
+              value: TW.Cosmos.Proto.Message.THORChainDeposit.encode({
+                coins: [],
+                memo: '-:BTC.BTC:10000',
+                signer: new Uint8Array(20),
+              }).finish(),
+            },
+          ],
+        })
+      )
+    ).toMatchObject({ transfers: [], hasUnsummarizedMessages: true })
+
+    const amino = aminoPayload({
+      msgs: [
+        {
+          type: 'thorchain/MsgDeposit',
+          value: JSON.stringify({ coins: [], memo: '-:BTC.BTC:10000' }),
+        },
+      ],
+    })
+    amino.coin = create(CoinSchema, {
+      chain: Chain.THORChain,
+      isNativeToken: true,
+    })
+
+    expect(getCosmosSignDataReview(amino)).toMatchObject({
+      transfers: [],
+      hasUnsummarizedMessages: true,
+    })
+  })
+
   it('reads amino messages and takes the memo from the payload', () => {
     const review = getCosmosSignDataReview(
       aminoPayload({
