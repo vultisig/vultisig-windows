@@ -207,6 +207,64 @@ describe('inNewWindow', () => {
     )
   })
 
+  it('drops a cancelled request waiting its turn without showing it', async () => {
+    const stub = stubChrome()
+    let releaseFirst: () => void = () => undefined
+    const firstExecute = vi.fn(
+      () =>
+        new Promise<string>(resolve => {
+          releaseFirst = () => resolve('first')
+        })
+    )
+    const first = inNewWindow({ url: 'popup.html', execute: firstExecute })
+    const controller = new AbortController()
+    const cancelledExecute = vi.fn(async () => 'cancelled')
+    const cancelled = inNewWindow({
+      url: 'popup.html',
+      cancelSignal: controller.signal,
+      execute: cancelledExecute,
+    })
+    const third = inNewWindow({
+      url: 'popup.html',
+      execute: async () => 'third',
+    })
+
+    controller.abort('session ended')
+    await expect(cancelled).rejects.toBe('session ended')
+
+    await vi.waitFor(() => expect(firstExecute).toHaveBeenCalled())
+    releaseFirst()
+    await expect(first).resolves.toBe('first')
+    await expect(third).resolves.toBe('third')
+
+    expect(cancelledExecute).not.toHaveBeenCalled()
+    expect(stub.created).toHaveLength(2)
+    await vi.waitFor(() =>
+      expect(stub.badgeTexts[stub.badgeTexts.length - 1]).toBe('')
+    )
+  })
+
+  it('never shows a request cancelled before it was queued', async () => {
+    const stub = stubChrome()
+    const controller = new AbortController()
+    controller.abort('session ended')
+    const execute = vi.fn(async () => 'done')
+
+    await expect(
+      inNewWindow({
+        url: 'popup.html',
+        cancelSignal: controller.signal,
+        execute,
+      })
+    ).rejects.toBe('session ended')
+
+    await vi.waitFor(() =>
+      expect(stub.badgeTexts[stub.badgeTexts.length - 1]).toBe('')
+    )
+    expect(execute).not.toHaveBeenCalled()
+    expect(stub.created).toEqual([])
+  })
+
   it('clears the badge when the request fails', async () => {
     const stub = stubChrome()
 
