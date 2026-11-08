@@ -66,6 +66,7 @@ import { ParsedTx } from '../core/parsedTx'
 import { autofillRippleTxFields } from '../core/ripple/autofillRippleTxFields'
 import { TronMsgType } from '../interfaces'
 import { applyCosmosFeeFromSignData } from './applyCosmosFeeFromSignData'
+import { applyCosmosSignDataReview } from './applyCosmosSignDataReview'
 import { enforceMinNetworkFee } from './minNetworkFee'
 
 export type BuildSendTxKeysignPayloadInput = {
@@ -98,6 +99,10 @@ const getTransactionTypeForMsgCase = (
   }
 }
 
+/**
+ * Builds the keysign payload for a dApp transaction request. For Cosmos sign
+ * data, the recipient, amount and memo come from the signed data.
+ */
 export const buildSendTxKeysignPayload = async ({
   parsedTx,
   feeSettings,
@@ -624,6 +629,7 @@ export const buildSendTxKeysignPayload = async ({
 
   if (isChainOfKind(chain, 'cosmos')) {
     applyCosmosFeeFromSignData({ keysignPayload, chain })
+    applyCosmosSignDataReview(keysignPayload)
   }
 
   // A dApp-supplied XRPL transaction becomes signable only once the wallet's

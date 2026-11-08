@@ -2112,4 +2112,6 @@ export const nl = {
   revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
   revoke_approvals: 'Goedkeuringen intrekken',
   token_approvals_count: 'Goedkeuringen: {{count}}',
+  transaction_not_fully_summarized:
+    'Een deel van deze transactie wordt hier niet samengevat. Lees de volledige details hieronder door voordat u tekent.',
 }
