@@ -10,7 +10,31 @@ type ExecuteInput = Pick<PopupSurface, 'abortSignal' | 'close'>
 type Input<T> = PopupOptions & {
   url: string
   windowId?: number
+  cancelSignal?: AbortSignal
   execute: (input: ExecuteInput) => Promise<T>
+}
+
+type RejectOnAbortInput<T> = {
+  promise: Promise<T>
+  signal?: AbortSignal
+}
+
+const rejectOnAbort = <T>({ promise, signal }: RejectOnAbortInput<T>) => {
+  if (!signal) return promise
+
+  return new Promise<T>((resolve, reject) => {
+    const handleAbort = () => reject(signal.reason)
+
+    if (signal.aborted) {
+      handleAbort()
+      return
+    }
+
+    signal.addEventListener('abort', handleAbort, { once: true })
+    void promise
+      .then(resolve, reject)
+      .finally(() => signal.removeEventListener('abort', handleAbort))
+  })
 }
 
 const windowWidth = 480
@@ -115,16 +139,20 @@ let popupQueue: Promise<unknown> = Promise.resolve()
  * otherwise it opens in a popup window of its own. Requests are served one at
  * a time; every one of them badges the toolbar icon for as long as it waits,
  * since the operating system is free to ignore the raise-to-front and leave
- * the window behind the browser.
+ * the window behind the browser. Aborting `cancelSignal` rejects the request
+ * with the signal's reason at once; one still waiting its turn is never shown.
  */
 export const inNewWindow = async <T>({
   url,
   windowId,
+  cancelSignal,
   execute,
 }: Input<T>): Promise<T> => {
   const retirePendingRequest = trackPendingRequest()
 
   const run = async (): Promise<T> => {
+    cancelSignal?.throwIfAborted()
+
     const sidePanel =
       windowId === undefined
         ? undefined
@@ -139,7 +167,9 @@ export const inNewWindow = async <T>({
     }
   }
 
-  const next = popupQueue.then(run, run).finally(retirePendingRequest)
+  const next = popupQueue.then(run, run)
   popupQueue = next.catch(() => {})
-  return next
+  return rejectOnAbort({ promise: next, signal: cancelSignal }).finally(
+    retirePendingRequest
+  )
 }

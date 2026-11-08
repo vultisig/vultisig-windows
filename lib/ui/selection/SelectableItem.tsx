@@ -10,7 +10,11 @@ import styled, { css } from 'styled-components'
 
 import { borderRadius } from '../css/borderRadius'
 
-const IconWrapper = styled.div<IsActiveProp>`
+type IconWrapperProps = IsActiveProp & {
+  dimsInactive: boolean
+}
+
+const IconWrapper = styled.div<IconWrapperProps>`
   ${vStack({
     alignItems: 'center',
     justifyContent: 'center',
@@ -18,18 +22,27 @@ const IconWrapper = styled.div<IsActiveProp>`
   position: relative;
   align-self: stretch;
   ${borderRadius.xl};
-  background: rgba(11, 26, 58, 0.5);
   height: 74px;
   padding: 17px;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
   font-size: 27.5px;
 
-  ${({ isActive }) =>
-    isActive &&
-    css`
-      border: 1.5px solid ${getColor('foregroundSuper')};
-      background: ${getColor('foreground')};
-    `}
+  ${({ isActive, dimsInactive }) => {
+    if (isActive) {
+      return css`
+        border: 1.5px solid ${getColor('foregroundSuper')};
+        background: ${getColor('foreground')};
+      `
+    }
+
+    return dimsInactive
+      ? css`
+          background: rgba(11, 26, 58, 0.5);
+          opacity: 0.5;
+        `
+      : css`
+          background: ${getColor('foreground')};
+        `
+  }}
 `
 
 // eslint-disable-next-line local/no-hardcoded-border-radius -- a notched badge outline, not a surface radius
@@ -55,22 +68,30 @@ const Container = styled(UnstyledButton)`
   width: 74px;
 `
 
-type SelectableItemProps = InputProps<boolean> & {
+/** Props of a selectable tile: its state, icon and labels. */
+export type SelectableItemProps = InputProps<boolean> & {
   icon: ReactNode
   name: string
   description?: string
+  /**
+   * Fades the tile while it is off, which suits picking several items. Turn
+   * it off for picking one item, where every option reads at full strength.
+   */
+  dimsInactive?: boolean
 }
 
+/** Grid tile that toggles on tap, with a check badge while selected. */
 export const SelectableItem = ({
   value: isSelected,
   onChange,
   icon,
   name,
   description,
+  dimsInactive = true,
 }: SelectableItemProps) => {
   return (
     <Container onClick={() => onChange(!isSelected)}>
-      <IconWrapper isActive={isSelected}>
+      <IconWrapper isActive={isSelected} dimsInactive={dimsInactive}>
         {icon}
         {isSelected && (
           <CheckBadge color="primary" size={12}>

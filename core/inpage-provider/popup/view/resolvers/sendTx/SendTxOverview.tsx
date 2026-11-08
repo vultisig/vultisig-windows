@@ -10,6 +10,7 @@ import {
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import { NetworkFeeSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { SwapAmountDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/SwapAmountDisplay'
+import { TronContractCallSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/TronContractCallSection'
 import { ParsedTx } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/parsedTx'
 import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/gasEstimation/getGasEstimationQuery'
 import { getNonNativeDappCosmosFeeDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/dappCosmosFee'
@@ -22,6 +23,7 @@ import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { useIsTronContractCallDecoding } from '@core/ui/chain/tx/utils/useIsTronContractCallDecoding'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { getKeysignFeeAmount } from '@core/ui/mpc/keysign/fee/tronMemoFee'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
@@ -88,6 +90,10 @@ type SendTxOverviewProps = {
   onSendTxOverviewErrorChange?: (isActive: boolean) => void
 }
 
+/**
+ * Review screen for a dApp transaction on the initiating device. The sign action
+ * stays disabled until the payload, the funds check and the decoded call settle.
+ */
 export const SendTxOverview = ({
   parsedTx,
   onSendTxOverviewErrorChange,
@@ -279,6 +285,10 @@ export const SendTxOverview = ({
   const isContractDecodingFailed =
     isContractMemo && !universalRouterSwap.data && !!contractCallQuery.error
 
+  const isTronContractCallDecoding = useIsTronContractCallDecoding(
+    keysignPayloadQuery.data
+  )
+
   const isSendTxOverviewError = isSendTxOverviewErrorQuery(
     gasEstimationDataQuery
   )
@@ -301,6 +311,7 @@ export const SendTxOverview = ({
     if (
       gasEstimationDataQuery.isPending ||
       isContractDecodingPending ||
+      isTronContractCallDecoding ||
       // Keep the start button disabled until the balance and fee are known, or
       // the insufficient-funds gate below would be bypassed during their load.
       (canCheckFunds &&
@@ -620,6 +631,7 @@ export const SendTxOverview = ({
                           title={t('network')}
                         />
                       </List>
+                      <TronContractCallSection value={keysignPayload} />
                       <MemoSection memo={keysignPayload.memo} chain={chain} />
                       <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection

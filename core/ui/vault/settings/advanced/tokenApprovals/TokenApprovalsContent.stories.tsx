@@ -1,18 +1,25 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { getResolvedQuery, pendingQuery } from '@lib/ui/query/Query'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { ComponentProps } from 'react'
+import { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CoreProvider, CoreState } from '../../../../state/core'
 import { TokenApproval } from './core/TokenApproval'
+import {
+  TokenApprovalsChain,
+  tokenApprovalsEvmChains,
+} from './core/tokenApprovalsChains'
+import { TokenApprovalsChainField } from './TokenApprovalsChainField'
+import { TokenApprovalsChainSelect } from './TokenApprovalsChainSelect'
 import { TokenApprovalsContent } from './TokenApprovalsContent'
+import { TokenApprovalsPageContent } from './TokenApprovalsPageContent'
 
 const meta = {
   title: 'Settings/TokenApprovals',
@@ -94,11 +101,12 @@ const resolved = (approvals: TokenApproval[], isComplete = true) =>
 
 type ContentProps = ComponentProps<typeof TokenApprovalsContent>
 
-function Page({
-  chains,
-  uncheckedChains = [],
-}: Pick<ContentProps, 'chains'> &
-  Partial<Pick<ContentProps, 'uncheckedChains'>>) {
+type PageProps = Pick<ContentProps, 'chains'> &
+  Partial<Pick<ContentProps, 'uncheckedChains'>> & {
+    selectedChain?: TokenApprovalsChain
+  }
+
+function Page({ chains, uncheckedChains = [], selectedChain }: PageProps) {
   const { t } = useTranslation()
 
   return (
@@ -111,14 +119,19 @@ function Page({
           </IconButton>
         }
         title={t('granted_approvals')}
+        hasBorder
       />
-      <PageContent flexGrow scrollable>
+      <TokenApprovalsPageContent gap={14} scrollable>
+        <TokenApprovalsChainField
+          value={selectedChain ?? null}
+          onClick={() => {}}
+        />
         <TokenApprovalsContent
           chains={chains}
           uncheckedChains={uncheckedChains}
           onRevoke={() => {}}
         />
-      </PageContent>
+      </TokenApprovalsPageContent>
     </VStack>
   )
 }
@@ -214,4 +227,47 @@ export const PartlyChecked: Story = {
       uncheckedChains={[EvmChain.Blast, EvmChain.Mantle, EvmChain.Sei]}
     />
   ),
+}
+
+export const OneChain: Story = {
+  render: () => (
+    <Page
+      selectedChain={EvmChain.Ethereum}
+      chains={[
+        {
+          chain: EvmChain.Ethereum,
+          isFetching: false,
+          query: resolved(ethereumApprovals),
+        },
+      ]}
+    />
+  ),
+}
+
+const coreState = {
+  getClipboardText: async () => '',
+} as CoreState
+
+function ChainSelect() {
+  const [value, setValue] = useState<TokenApprovalsChain | null>(
+    EvmChain.Ethereum
+  )
+
+  return (
+    // The search field's paste action reads the clipboard through Core.
+    <CoreProvider value={coreState}>
+      <VStack style={{ width: 360, height: 650 }}>
+        <TokenApprovalsChainSelect
+          value={value}
+          onChange={setValue}
+          options={[...tokenApprovalsEvmChains, OtherChain.Solana]}
+          onBack={() => {}}
+        />
+      </VStack>
+    </CoreProvider>
+  )
+}
+
+export const SelectChain: Story = {
+  render: () => <ChainSelect />,
 }

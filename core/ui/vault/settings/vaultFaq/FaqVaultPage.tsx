@@ -1,11 +1,10 @@
-import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
+import { SettingsBaselineText } from '@core/ui/settings/SettingsBaselineText'
+import { SettingsFlushCard } from '@core/ui/settings/SettingsCard'
+import { SettingsPageContent } from '@core/ui/settings/SettingsPageContent'
+import { SettingsPageHeader } from '@core/ui/settings/SettingsPageHeader'
+import { ChevronDownSmallIcon } from '@lib/ui/icons/ChevronDownSmallIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { vStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { Text } from '@lib/ui/text'
+import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion, Transition } from 'framer-motion'
 import { useState } from 'react'
@@ -43,34 +42,29 @@ export const FaqVaultPage = () => {
   }
 
   return (
-    <VStack flexGrow>
-      <FlowPageHeader title={t('faq')} />
-      <PageContent>
-        <RowsWrapper>
-          {faqData.map(({ id, title, content }, idx) => {
+    <VStack fullHeight>
+      <SettingsPageHeader title={t('faq')} />
+      <SettingsPageContent flexGrow scrollable>
+        <SettingsFlushCard>
+          {faqData.map(({ id, title, content }) => {
             const isCurrentRowExpanded = rowsExpanded[id]
 
             return (
-              <>
-                <RowWrapper
-                  tabIndex={0}
-                  role="button"
-                  key={id}
-                  onClick={() => toggleRow(id)}
-                >
-                  <HStack justifyContent="space-between" alignItems="center">
-                    <FAQQuestion size={14} color="shyExtra" weight="600">
-                      {title}
-                    </FAQQuestion>
-                    <motion.div
-                      animate={{ rotate: isCurrentRowExpanded ? 180 : 0 }}
-                      transition={faqContentTransition}
-                    >
-                      <IconWrapper size={16} color="textSupporting">
-                        <CaretDownIcon />
-                      </IconWrapper>
-                    </motion.div>
-                  </HStack>
+              <RowWrapper
+                $isExpanded={isCurrentRowExpanded}
+                tabIndex={0}
+                role="button"
+                key={id}
+                onClick={() => toggleRow(id)}
+              >
+                <QuestionColumn>
+                  <SettingsBaselineText
+                    as="div"
+                    color="shyExtra"
+                    variant="stationBodyS"
+                  >
+                    {title}
+                  </SettingsBaselineText>
                   <motion.div
                     initial="collapsed"
                     animate={isCurrentRowExpanded ? 'expanded' : 'collapsed'}
@@ -83,28 +77,45 @@ export const FaqVaultPage = () => {
                       },
                     }}
                     transition={faqContentTransition}
+                    style={{ overflow: 'hidden' }}
                   >
-                    <FaqContent>
-                      <Text size={13}>{content}</Text>
-                    </FaqContent>
+                    <SettingsBaselineText
+                      as="div"
+                      color="contrast"
+                      variant="footnote"
+                    >
+                      {content}
+                    </SettingsBaselineText>
                   </motion.div>
-                </RowWrapper>
-                {idx < faqData.length - 1 && <Divider />}
-              </>
+                </QuestionColumn>
+                <motion.div
+                  animate={{ rotate: isCurrentRowExpanded ? 180 : 0 }}
+                  transition={faqContentTransition}
+                  style={{ flexShrink: 0, lineHeight: 0 }}
+                >
+                  <IconWrapper size={16} color="textShy">
+                    <ChevronDownSmallIcon />
+                  </IconWrapper>
+                </motion.div>
+              </RowWrapper>
             )
           })}
-        </RowsWrapper>
-      </PageContent>
+        </SettingsFlushCard>
+      </SettingsPageContent>
     </VStack>
   )
 }
 
-const RowWrapper = styled.div`
-  padding: 16px;
-  ${vStack({
-    gap: 4,
+// A two-line question fills the 70 tall closed row only at 15, while the opened frame pads 16.
+const RowWrapper = styled.div<{ $isExpanded: boolean }>`
+  ${hStack({
+    alignItems: 'center',
+    gap: 12,
   })};
+  background-color: ${getColor('foreground')};
   cursor: pointer;
+  min-height: 70px;
+  padding: ${({ $isExpanded }) => ($isExpanded ? 16 : 15)}px 20px;
   transition: all 0.3s;
 
   &:hover {
@@ -112,35 +123,7 @@ const RowWrapper = styled.div`
   }
 `
 
-const FAQQuestion = styled(Text)`
-  flex-grow: 1;
-  line-height: 18px;
-`
-
-const FaqContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-`
-
-const RowsWrapper = styled.div`
-  ${borderRadius.md};
-  background-color: ${getColor('foreground')};
-
-  & > ${RowWrapper}:first-of-type {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-
-  & > ${RowWrapper}:last-of-type {
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-`
-
-const Divider = styled.div`
-  height: 1px;
-  width: 100%;
-  background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
+const QuestionColumn = styled.div`
+  flex: 1;
+  min-width: 0;
 `

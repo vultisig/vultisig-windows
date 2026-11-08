@@ -9,6 +9,7 @@ import { balanceQueryStaleTime } from '@lib/ui/query/utils/options'
 import { useQueries } from '@tanstack/react-query'
 import {
   AccountCoin,
+  accountCoinKeyToString,
   extractAccountCoinKey,
 } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
@@ -33,6 +34,11 @@ type UseVaultsTotalBalancesInput = {
   enabled?: boolean
 }
 
+/**
+ * Fiat total per vault. A vault appears in `totals` once every one of its
+ * coins has a balance, so rows fill in one by one and a failed read leaves out
+ * only its own vault. Use `sumVaultTotals` for totals spanning several vaults.
+ */
 export const useVaultsTotalBalances = ({
   vaults: scopedVaults,
   enabled = true,
@@ -92,33 +98,18 @@ export const useVaultsTotalBalances = ({
     })),
   })
 
-  const isBalancesPending = balanceQueries.some(query => query.isPending)
-  const balancesError = balanceQueries.find(query => query.error)?.error ?? null
-
   const priceError =
     'error' in priceQuery ? priceQuery.error : (priceQuery.errors[0] ?? null)
-
-  const isPending = enabled && (priceQuery.isPending || isBalancesPending)
-  const error = priceError ?? balancesError
 
   const totals = useMemo(() => {
     if (!enabled) return {}
 
-    if (
-      isPending ||
-      error ||
-      !priceQuery.data ||
-      balanceQueries.some(query => !query.data)
-    ) {
+    const prices = priceQuery.data
+    if (priceError || priceQuery.isPending || !prices) {
       return undefined
     }
 
-    // Merge every per-coin balance record into a single lookup matching the
-    // shape `computeVaultTotalValue` expects. Each query produces
-    // `{ [accountCoinKeyToString(coin)]: amount }`, so the merged record
-    // is already keyed consistently for the helper. The `balanceQueries.some`
-    // guard above ensures every query has data by the time we reach here, so
-    // `mergeRecords` gets a homogeneous `Record<string, bigint>[]`.
+    // Queries still loading contribute nothing to the merged record.
     const mergedBalances = mergeRecords(
       ...balanceQueries.map(query => query.data ?? {})
     )
@@ -126,26 +117,29 @@ export const useVaultsTotalBalances = ({
     const result: Record<string, number> = {}
 
     vaultCoinEntries.forEach(({ vaultId, coins }) => {
-      result[vaultId] = computeVaultTotalValue({
-        coins,
-        balances: mergedBalances,
-        prices: priceQuery.data ?? {},
-      })
+      const hasEveryBalance = coins.every(
+        coin =>
+          accountCoinKeyToString(extractAccountCoinKey(coin)) in mergedBalances
+      )
+
+      if (hasEveryBalance) {
+        result[vaultId] = computeVaultTotalValue({
+          coins,
+          balances: mergedBalances,
+          prices,
+        })
+      }
     })
 
     return result
   }, [
     balanceQueries,
     enabled,
-    error,
-    isPending,
+    priceError,
     priceQuery.data,
+    priceQuery.isPending,
     vaultCoinEntries,
   ])
 
-  return {
-    totals,
-    isPending,
-    error,
-  }
+  return { totals }
 }

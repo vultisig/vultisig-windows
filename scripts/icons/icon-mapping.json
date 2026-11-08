@@ -276,12 +276,6 @@
       "source": "ios"
     },
     {
-      "desktop": "ShareAndroidIcon",
-      "v3": "connected-dots-3",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
       "desktop": "DeviceIcon",
       "v3": "mobile",
       "status": "migrated",
@@ -448,12 +442,6 @@
       "source": "ios"
     },
     {
-      "desktop": "CloudIcon",
-      "v3": "cloud",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
       "desktop": "DiscordIcon",
       "v3": "IconDiscord",
       "status": "migrated",
@@ -553,25 +541,11 @@
       "note": "verify geometry in corrections batch"
     },
     {
-      "desktop": "FileQuestionIcon",
-      "v3": null,
-      "status": "legacy",
-      "source": "manual",
-      "note": "V3 has file-search, no file-question"
-    },
-    {
       "desktop": "FolderUploadIcon",
       "v3": null,
       "status": "legacy",
       "source": "manual",
       "note": "V3 has folder-download, no folder-upload"
-    },
-    {
-      "desktop": "GroupOneIcon",
-      "v3": "users",
-      "status": "migrated",
-      "source": "manual",
-      "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "TransactionApproveIcon",
@@ -743,12 +717,6 @@
     {
       "desktop": "CircleDashedIcon",
       "v3": "circle-dashed",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
-      "desktop": "MobileSignalIcon",
-      "v3": "mobile-signal",
       "status": "migrated",
       "source": "ios"
     },

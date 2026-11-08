@@ -68,7 +68,11 @@ const splitTopLevel = (params: string): string[] => {
   return parts
 }
 
-const parseSignature = (
+/**
+ * Splits a text signature such as `approve(address,uint256)` into its
+ * function name and top-level parameter types; a tuple stays one type.
+ */
+export const parseSignature = (
   signature: string
 ): { funcName: string; paramTypes: string[] } => {
   const funcName = signature.split('(')[0].trim()

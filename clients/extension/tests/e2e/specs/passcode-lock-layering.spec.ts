@@ -114,12 +114,7 @@ const goBack = async (page: Page, until: Locator) => {
  * flipping it reveals the two passcode fields and the submit button.
  */
 const enablePasscode = async (page: Page) => {
-  const securityText = page.getByText('Security', { exact: true })
-
-  // One is the section heading, the other the row that navigates. Asserting the
-  // count keeps the nth() below from silently pointing at the wrong thing.
-  await expect(securityText).toHaveCount(2)
-  await securityText.nth(1).click()
+  await page.getByText('Security', { exact: true }).click()
 
   await page.getByText('OFF', { exact: true }).first().click()
 
@@ -231,11 +226,11 @@ const interruptPasscodeChange = async ({
 }
 
 /**
- * Picks the shortest auto-lock interval. The Lock Time row only appears in
- * settings once the passcode is on.
+ * Picks the shortest auto-lock interval. The Lock time row lives in Vault
+ * Settings and only appears once the passcode is on.
  */
 const setAutoLock = async (page: Page) => {
-  await page.getByText('Lock Time', { exact: true }).first().click()
+  await page.getByText('Lock time', { exact: true }).click()
 
   const option = page.getByText(`${autoLockMinutes} minute`, { exact: true })
   await expect(option).toBeVisible()
@@ -301,7 +296,11 @@ test.describe('Passcode lock layering', () => {
       await vaultPage.waitForView()
       await vaultPage.dismissPromptSheets()
 
-      const settingsMarker = page.getByText('Security', { exact: true }).first()
+      const settingsMarker = page.getByText('Quick settings', { exact: true })
+      const vaultSettingsRow = page.getByText('Vault Settings', { exact: true })
+      const vaultSettingsMarker = page.getByText('Vault Management', {
+        exact: true,
+      })
 
       // The page object's settingsButton falls back to "last button with an
       // svg", which lands on the wrong control. The header carries a testid.
@@ -311,7 +310,10 @@ test.describe('Passcode lock layering', () => {
       await enablePasscode(page)
       await goBack(page, settingsMarker)
 
+      await vaultSettingsRow.click()
+      await expect(vaultSettingsMarker).toBeVisible()
       await setAutoLock(page)
+      await goBack(page, vaultSettingsMarker)
       await goBack(page, settingsMarker)
       await goBack(page, vaultPage.receiveButton)
 

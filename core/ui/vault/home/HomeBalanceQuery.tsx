@@ -10,7 +10,10 @@ type HomeBalanceQueryProps = {
   children: RenderHomeBalance
 }
 
-/** The wallet-only case never loads DeFi code or data. */
+/**
+ * The wallet-only case never loads DeFi code or data. While the DeFi-aware
+ * total loads, the combined total shows its wallet part as updating.
+ */
 export const HomeBalanceQuery = ({ children }: HomeBalanceQueryProps) => {
   const display = useHomeDisplay()
   const tab = useHomeTab()
@@ -19,8 +22,17 @@ export const HomeBalanceQuery = ({ children }: HomeBalanceQueryProps) => {
     return <WalletBalanceQuery>{children}</WalletBalanceQuery>
   }
 
+  const fallback =
+    display === 'combined' ? (
+      <WalletBalanceQuery>
+        {wallet => children({ ...wallet, isUpdating: true })}
+      </WalletBalanceQuery>
+    ) : (
+      children(pendingHomeBalanceQuery)
+    )
+
   return (
-    <Suspense fallback={children(pendingHomeBalanceQuery)}>
+    <Suspense fallback={fallback}>
       <LazyDefiAwareBalanceQuery display={display} tab={tab}>
         {children}
       </LazyDefiAwareBalanceQuery>
