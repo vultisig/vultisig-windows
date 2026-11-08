@@ -130,6 +130,22 @@ describe('getCosmosSignDataReview', () => {
     expect(review?.hasUnsummarizedMessages).toBe(true)
   })
 
+  it('treats inherited object keys as unknown message types', () => {
+    expect(
+      getCosmosSignDataReview(
+        directPayload({
+          messages: [{ typeUrl: 'constructor', value: new Uint8Array() }],
+        })
+      )
+    ).toMatchObject({ transfers: [], hasUnsummarizedMessages: true })
+
+    expect(
+      getCosmosSignDataReview(
+        aminoPayload({ msgs: [{ type: 'toString', value: '{}' }] })
+      )
+    ).toMatchObject({ transfers: [], hasUnsummarizedMessages: true })
+  })
+
   it('flags a body that does not decode', () => {
     const payload = directPayload({ messages: [] })
     if (payload.signData.case !== 'signDirect') throw new Error('signDirect')

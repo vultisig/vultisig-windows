@@ -284,16 +284,22 @@ const aminoReaders: Record<string, MessageReader<Record<string, unknown>>> = {
 }
 
 type ReadMessageWithInput<T> = ReadMessageInput<T> & {
-  reader: MessageReader<T> | undefined
+  readers: Record<string, MessageReader<T>>
+  type: string
 }
 
+// Message types come from the request, so only the table's own keys count:
+// an inherited key such as `constructor` is an unknown type.
 const readMessageWith = <T>({
-  reader,
+  readers,
+  type,
   value,
   chain,
 }: ReadMessageWithInput<T>): MessageReading => {
-  if (!reader) return unsummarized
-  const read = reader
+  if (!Object.prototype.hasOwnProperty.call(readers, type)) {
+    return unsummarized
+  }
+  const read = readers[type]
   return withFallback(
     attempt(() => read({ value, chain })),
     unsummarized
@@ -321,7 +327,12 @@ const readSignDirect = ({
 
   return {
     messages: body.data.messages.map(({ typeUrl, value }) =>
-      readMessageWith({ reader: directReaders[typeUrl], value, chain })
+      readMessageWith({
+        readers: directReaders,
+        type: typeUrl,
+        value,
+        chain,
+      })
     ),
     memo: body.data.memo,
   }
@@ -357,7 +368,8 @@ export const getCosmosSignDataReview = (
           const record = parseAminoValue(value)
           return record
             ? readMessageWith({
-                reader: aminoReaders[type],
+                readers: aminoReaders,
+                type,
                 value: record,
                 chain,
               })
