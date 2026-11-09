@@ -26,7 +26,7 @@ Vultisig desktop (Wails + React) and browser extension for multi-chain cryptocur
 - **State**: Zustand + React hooks
 - **Testing**: Vitest
 - **Linting**: ESLint
-- **Type checking**: tsgo --noEmit
+- **Type checking**: TypeScript 7 native `tsc --noEmit` via the `@typescript/native` alias (workspaces stay on TypeScript 5 for ESLint, Vite and builds)
 
 ## Directory Structure
 
