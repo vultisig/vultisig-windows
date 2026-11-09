@@ -20,10 +20,20 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { sha256 } from 'viem'
 import { z } from 'zod'
 
-const registry = new Registry([...defaultRegistryTypes, ...wasmTypes])
+import {
+  osmosisAminoConverters,
+  osmosisRegistryTypes,
+} from './osmosis/osmosisAminoMessages'
+
+const registry = new Registry([
+  ...defaultRegistryTypes,
+  ...wasmTypes,
+  ...osmosisRegistryTypes,
+])
 const aminoTypes = new AminoTypes({
   ...createDefaultAminoConverters(),
   ...createWasmAminoConverters(),
+  ...osmosisAminoConverters,
 })
 
 const aminoCoinSchema = z.object({
@@ -107,8 +117,8 @@ type GetCosmosKeplrBridgeTxHashInput = {
  * WalletCore's amino output is the StdTx JSON, not the protobuf TxRaw the
  * dApp encodes via cosmjs. Hashing the amino JSON yields a hash that never
  * lands on-chain and `useTxStatusQuery` sits in `pending` forever. Rebuilding
- * the TxRaw via cosmjs's default registry + amino converters reproduces the
- * exact bytes a cosmos-kit / cosmjs dApp broadcasts.
+ * the TxRaw via cosmjs's default registry + amino converters, plus the Osmosis
+ * ones, reproduces the exact bytes a cosmos-kit / cosmjs dApp broadcasts.
  */
 export const getCosmosKeplrBridgeTxHash = ({
   keysignPayload,
