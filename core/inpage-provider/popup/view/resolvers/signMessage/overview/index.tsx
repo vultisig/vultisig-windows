@@ -101,6 +101,10 @@ export const Overview = () => {
       if (chain === Chain.Tron) {
         return isV2 ? rawMessage : message
       }
+      // Bitcoin signs the message as UTF-8 text, even when it starts with `0x`.
+      if (chain === Chain.Bitcoin) {
+        return toDisplayMessageString(new TextEncoder().encode(rawMessage))
+      }
       return toDisplayMessageString(getCustomMessageBytes(rawMessage))
     },
     personal_sign: ({ message }) =>

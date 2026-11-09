@@ -5,7 +5,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
-import { EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
+import { EvmChain, OtherChain, UtxoChain } from '@vultisig/core-chain/Chain'
 import { hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
@@ -144,6 +144,38 @@ describe('getSignMessageIssue', () => {
     it('accepts plain text as a v2 message', () => {
       expect(check(tronMessage(signInText, true))).toBeUndefined()
     })
+  })
+
+  describe('Bitcoin', () => {
+    it.each(['', signInText, '0xdeadbeef'])(
+      'accepts the text message %j',
+      message => {
+        expect(
+          check({ sign_message: { chain: UtxoChain.Bitcoin, message } })
+        ).toBeUndefined()
+      }
+    )
+
+    it('rejects a message that is not a string', () => {
+      const input: SignMessageInput = JSON.parse(
+        JSON.stringify({
+          sign_message: { chain: UtxoChain.Bitcoin, message: 42 },
+        })
+      )
+
+      expect(check(input)).toMatch(/must be a string/)
+    })
+
+    it.each([UtxoChain.Litecoin, UtxoChain.Dogecoin])(
+      'rejects message signing on %s',
+      chain => {
+        const input: SignMessageInput = JSON.parse(
+          JSON.stringify({ sign_message: { chain, message: 'hello' } })
+        )
+
+        expect(check(input)).toMatch(/not supported/)
+      }
+    )
   })
 
   describe('raw TON', () => {
