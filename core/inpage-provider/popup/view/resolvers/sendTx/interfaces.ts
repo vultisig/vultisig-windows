@@ -174,6 +174,8 @@ export type TransactionDetails = {
   aminoPayload?: {
     msgs: CosmosMsg[]
     fee: CosmosFee
+    /** The sign doc's tx-level `timeout_height`, a validated decimal uint64. */
+    timeoutHeight?: string
   }
   directPayload?: {
     bodyBytes: string // base64 encoded

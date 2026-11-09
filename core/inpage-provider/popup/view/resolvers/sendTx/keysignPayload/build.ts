@@ -403,6 +403,10 @@ export const buildSendTxKeysignPayload = async ({
                   value: JSON.stringify(msg.value),
                 }
               }),
+              timeoutHeight:
+                aminoPayload.timeoutHeight === undefined
+                  ? undefined
+                  : BigInt(aminoPayload.timeoutHeight),
             })
           }
         }
