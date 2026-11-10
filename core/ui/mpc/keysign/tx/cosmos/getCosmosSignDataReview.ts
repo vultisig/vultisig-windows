@@ -336,6 +336,9 @@ const readSignDirect = ({
         chain,
       })
     ),
+    // Only the body's memo is signed: the signer passes `bodyBytes` through
+    // unchanged, so its `txBody.memo || memo` fallback never reaches the
+    // signature, and a payload memo here would show what is not signed.
     memo: body.data.memo,
   }
 }

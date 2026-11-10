@@ -113,6 +113,17 @@ describe('getCosmosSignDataReview', () => {
     expect(review?.memo).toBe('signed memo')
   })
 
+  it('ignores a payload memo when the signed body has none', () => {
+    const review = getCosmosSignDataReview(
+      directPayload({
+        messages: [send('cosmos1first', '1')],
+        payloadMemo: 'payload memo',
+      })
+    )
+
+    expect(review?.memo).toBe('')
+  })
+
   it('flags a message it cannot read and keeps the others', () => {
     const review = getCosmosSignDataReview(
       directPayload({
