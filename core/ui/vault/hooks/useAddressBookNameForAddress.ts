@@ -3,13 +3,13 @@ import { useAddressBookItemsQuery } from '@core/ui/storage/addressBook'
 import { Chain } from '@vultisig/core-chain/Chain'
 
 type UseAddressBookNameForAddressInput = {
-  address: string
+  address?: string
   chain: Chain
 }
 
 /**
  * Returns the address book contact title if the given address is saved for the given chain,
- * otherwise null. Returns null while address book data is loading.
+ * otherwise null. Returns null while address book data is loading, and when no address is given.
  *
  * EVM chains share address space — an entry saved under any EVM chain matches any EVM chain.
  * EVM addresses are normalized to lowercase before comparison to handle checksum differences.
@@ -22,7 +22,7 @@ export const useAddressBookNameForAddress = ({
 }: UseAddressBookNameForAddressInput): string | null => {
   const { data: items } = useAddressBookItemsQuery()
 
-  if (!items) return null
+  if (!items || !address) return null
 
   const index = new Map(
     items.map(item => [

@@ -2111,4 +2111,6 @@ export const ru = {
   revoke_approval_new_allowance: 'Новый лимит расходов',
   revoke_approvals: 'Отозвать разрешения',
   token_approvals_count: 'Подтверждения: {{count}}',
+  transaction_not_fully_summarized:
+    'Часть условий данной сделки здесь не описана. Перед подписанием ознакомьтесь с полными подробностями ниже.',
 }

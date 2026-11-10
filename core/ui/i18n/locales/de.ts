@@ -2144,4 +2144,6 @@ export const de = {
   revoke_approval_new_allowance: 'Neue Ausgabenobergrenze',
   revoke_approvals: 'Genehmigungen widerrufen',
   token_approvals_count: 'Genehmigungen: {{count}}',
+  transaction_not_fully_summarized:
+    'Ein Teil dieser Transaktion ist hier nicht zusammengefasst. Bitte lesen Sie die vollständigen Details unten durch, bevor Sie unterschreiben.',
 }

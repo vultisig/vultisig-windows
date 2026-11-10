@@ -2105,4 +2105,6 @@ export const hr = {
   revoke_approval_new_allowance: 'Novo ograničenje potrošnje',
   revoke_approvals: 'Opoziv odobrenja',
   token_approvals_count: 'Odobrenja: {{count}}',
+  transaction_not_fully_summarized:
+    'Dio ove transakcije nije ovdje sažet. Prije potpisivanja pregledajte sve detalje u nastavku.',
 }
