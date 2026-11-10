@@ -34,7 +34,11 @@ type VerifyTransactionOverviewProps = {
   amount: bigint
   senderName: string
   senderAddress: string
-  receiver: string | ReactNode
+  /**
+   * Omitted when the transaction names no counterparty (e.g. a governance
+   * vote), in which case the "To" row is not shown.
+   */
+  receiver?: string | ReactNode
   /**
    * Optional vault name for the receiver. When provided and receiver is a string address,
    * displays "VaultName (addr...addr)" format instead of plain truncated address.
@@ -140,7 +144,7 @@ export const VerifyTransactionOverview = ({
         address={senderAddress}
         name={senderName}
       />
-      {typeof receiver === 'string' ? (
+      {receiver === undefined ? null : typeof receiver === 'string' ? (
         <TransactionOverviewAddress
           label={t('to')}
           address={receiver}

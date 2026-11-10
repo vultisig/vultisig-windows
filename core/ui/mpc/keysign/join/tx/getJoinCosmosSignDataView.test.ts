@@ -58,6 +58,15 @@ const undelegate: EncodedMessage = {
   }).finish(),
 }
 
+const vote: EncodedMessage = {
+  typeUrl: '/cosmos.gov.v1beta1.MsgVote',
+  value: MsgVote.encode({
+    proposalId: 1n,
+    voter: 'cosmos1vault',
+    option: 1,
+  }).finish(),
+}
+
 describe('getJoinCosmosSignDataView', () => {
   it('keeps the card for a single transfer', () => {
     expect(viewOf([send('cosmos1signed', '5')])).toEqual({
@@ -93,19 +102,13 @@ describe('getJoinCosmosSignDataView', () => {
     })
   })
 
+  it('drops the receiver and amount for a vote, which names neither', () => {
+    expect(viewOf([vote])).toEqual({
+      card: { receiver: undefined, amount: undefined },
+    })
+  })
+
   it('uses the overview for mixed actions the signed data cannot prove', () => {
-    expect(
-      viewOf([
-        undelegate,
-        {
-          typeUrl: '/cosmos.gov.v1beta1.MsgVote',
-          value: MsgVote.encode({
-            proposalId: 1n,
-            voter: 'cosmos1vault',
-            option: 1,
-          }).finish(),
-        },
-      ])
-    ).toEqual({ overview: true })
+    expect(viewOf([undelegate, vote])).toEqual({ overview: true })
   })
 })

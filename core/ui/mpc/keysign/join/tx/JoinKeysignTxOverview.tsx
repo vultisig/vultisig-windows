@@ -70,8 +70,9 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   // verifies from it rather than the (empty, spoofable) toAmount/toAddress.
   const wasmDisplay = getWasmExecuteTxDisplay(value)
   // Cosmos sign data is signed as given, so the card's receiver and amount
-  // are read from the signed data; anything a single amount can't describe
-  // gets the per-transfer overview instead.
+  // are read from the signed data (a vote has neither, so its card has no
+  // "To" row); anything a single amount can't describe gets the per-transfer
+  // overview instead.
   const cosmosSignDataReview = getCosmosSignDataReview(value)
   const cosmosSignDataView = cosmosSignDataReview
     ? getJoinCosmosSignDataView({

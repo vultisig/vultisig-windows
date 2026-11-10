@@ -8,12 +8,13 @@ import { getSingleCosmosTransfer } from '../../tx/cosmos/getSingleCosmosTransfer
 
 /**
  * How the joiner shows Cosmos sign data: a single-amount card whose receiver
- * and amount come from the signed data (`amount` is absent when the signed
- * data states none in the payload's coin), or the per-transfer overview.
+ * and amount come from the signed data, or the per-transfer overview. Each of
+ * `receiver` and `amount` is absent when the signed data names none (a
+ * governance vote names neither).
  */
 type JoinCosmosSignDataView =
   | { overview: true }
-  | { card: { receiver: string; amount?: bigint } }
+  | { card: { receiver?: string; amount?: bigint } }
 
 type GetJoinCosmosSignDataViewInput = {
   keysignPayload: KeysignPayload
@@ -54,7 +55,7 @@ export const getJoinCosmosSignDataView = ({
 
   return {
     card: {
-      receiver: counterparty ?? '',
+      receiver: counterparty,
       amount: isCoinAmount ? amount.raw : undefined,
     },
   }
