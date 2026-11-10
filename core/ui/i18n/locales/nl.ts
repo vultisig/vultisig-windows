@@ -2114,4 +2114,9 @@ export const nl = {
   token_approvals_count: 'Goedkeuringen: {{count}}',
   transaction_not_fully_summarized:
     'Een deel van deze transactie wordt hier niet samengevat. Lees de volledige details hieronder door voordat u tekent.',
+  move_site_to_vault_title: '{{site}} overzetten naar {{vault}}?',
+  move_site_to_vault_description:
+    '{{site}} is verbonden met {{vault}}. Andere sites blijven zoals ze zijn.',
+  keep: 'Behouden',
+  switch: 'Overzetten',
 }

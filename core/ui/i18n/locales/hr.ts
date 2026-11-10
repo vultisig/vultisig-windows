@@ -2107,4 +2107,9 @@ export const hr = {
   token_approvals_count: 'Odobrenja: {{count}}',
   transaction_not_fully_summarized:
     'Dio ove transakcije nije ovdje sažet. Prije potpisivanja pregledajte sve detalje u nastavku.',
+  move_site_to_vault_title: 'Prebaciti {{site}} na {{vault}}?',
+  move_site_to_vault_description:
+    '{{site}} je povezan s {{vault}}. Ostale stranice ostaju nepromijenjene.',
+  keep: 'Zadrži',
+  switch: 'Prebaci',
 }
