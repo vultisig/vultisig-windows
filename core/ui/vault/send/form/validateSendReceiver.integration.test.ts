@@ -57,4 +57,30 @@ describe('validateSendReceiver WalletCore integration', () => {
       })
     ).toBeUndefined()
   })
+
+  it('says a name cannot be used on a chain its service does not cover', () => {
+    const error = validateSendReceiver({
+      receiverAddress: 'Vi.thor',
+      senderAddress: 'sender',
+      chain: Chain.Polygon,
+      walletCore,
+      t,
+    })
+
+    expect(error).toBe(
+      'send_receiver_name_unsupported_chain:{"name":"vi.thor","chain":"Polygon"}'
+    )
+  })
+
+  it('accepts a NEAR account that happens to end like a THORName', () => {
+    expect(
+      validateSendReceiver({
+        receiverAddress: 'vi.thor',
+        senderAddress: 'sender',
+        chain: Chain.Near,
+        walletCore,
+        t,
+      })
+    ).toBeUndefined()
+  })
 })

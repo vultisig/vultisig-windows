@@ -13,6 +13,7 @@ const mocks = vi.hoisted(() => ({
   fee: vi.fn(),
   feePaidInCoin: vi.fn(),
   nearLimits: vi.fn(),
+  receiver: vi.fn(),
 }))
 
 vi.mock('../state/sendCoin', () => ({ useCurrentSendCoin: mocks.coin }))
@@ -29,7 +30,10 @@ vi.mock('./useNearSendLimitsQuery', () => ({
 vi.mock('./useSendFeeEstimateQuery', () => ({
   useSendFeeEstimateQuery: mocks.fee,
 }))
-vi.mock('../state/receiver', () => ({ useSendReceiver: () => ['rRecipient'] }))
+vi.mock('../state/receiverResolution', async importOriginal => ({
+  ...(await importOriginal<typeof import('../state/receiverResolution')>()),
+  useSendReceiverResolution: mocks.receiver,
+}))
 vi.mock('../state/memo', () => ({ useSendMemo: () => [''] }))
 vi.mock('../state/destinationTag', () => ({
   useSendDestinationTagInput: () => [''],
@@ -102,6 +106,7 @@ describe('useSendValidationQuery token funding', () => {
       isPending: false,
     })
     mocks.feePaidInCoin.mockImplementation(() => isFeeCoin(mocks.coin()))
+    mocks.receiver.mockReturnValue({ kind: 'address', address: 'rRecipient' })
   })
 
   it('allows a token send only when its balance and native fee funding are known', () => {
@@ -284,6 +289,57 @@ describe('useSendValidationQuery token funding', () => {
     })
 
     it('validates once the send limits are known', () => {
+      expect(readValidation()).toMatchObject({
+        data: {},
+        error: null,
+        isPending: false,
+      })
+    })
+  })
+
+  describe('receiver typed as a name', () => {
+    it.each(['pending', 'resolving'])('waits while the name is %s', kind => {
+      mocks.receiver.mockReturnValue({ kind, name: 'vi.thor' })
+
+      expect(readValidation()).toMatchObject({
+        data: undefined,
+        isPending: true,
+      })
+    })
+
+    it.each([
+      ['notFound', 'send_receiver_name_not_found'],
+      ['noAddressForChain', 'send_receiver_name_no_address_for_chain'],
+      ['lookupFailed', 'send_receiver_name_lookup_failed'],
+    ])('names why a %s name cannot be sent to', (kind, error) => {
+      mocks.receiver.mockReturnValue({ kind, name: 'vi.thor' })
+
+      expect(readValidation()).toMatchObject({
+        data: { receiverAddress: error },
+        isPending: false,
+      })
+    })
+
+    it('validates the address the name resolved to, not the name', () => {
+      mocks.coin.mockReturnValue({ chain: Chain.Tron, address: 'TSender' })
+      mocks.receiver.mockReturnValue({
+        kind: 'resolved',
+        name: 'self.thor',
+        address: 'TSender',
+      })
+
+      expect(readValidation().data).toMatchObject({
+        receiverAddress: 'send_receiver_address_same_as_sender',
+      })
+    })
+
+    it('accepts a resolved name like a typed address', () => {
+      mocks.receiver.mockReturnValue({
+        kind: 'resolved',
+        name: 'vi.thor',
+        address: 'rRecipient',
+      })
+
       expect(readValidation()).toMatchObject({
         data: {},
         error: null,

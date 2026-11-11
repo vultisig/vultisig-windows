@@ -18,7 +18,7 @@ import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { getSendPayloadMemo } from '../memo/sendMemoSupport'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
-import { useSendReceiver } from '../state/receiver'
+import { useSendReceiverAddress } from '../state/receiverResolution'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendBalanceQuery } from './useSendBalanceQuery'
 
@@ -35,7 +35,7 @@ export const useSendFeeEstimateQuery = ({
   feeSettings,
 }: UseSendFeeEstimateQueryProps = {}) => {
   const coin = useCurrentSendCoin()
-  const [receiver] = useSendReceiver()
+  const receiver = useSendReceiverAddress()
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
