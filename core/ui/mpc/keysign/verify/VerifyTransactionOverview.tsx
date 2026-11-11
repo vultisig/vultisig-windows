@@ -34,7 +34,11 @@ type VerifyTransactionOverviewProps = {
   amount: bigint
   senderName: string
   senderAddress: string
-  receiver: string | ReactNode
+  /**
+   * Omitted when the transaction names no counterparty (e.g. a governance
+   * vote), in which case the "To" row is not shown.
+   */
+  receiver?: string | ReactNode
   /**
    * Optional vault name for the receiver. When provided and receiver is a string address,
    * displays "VaultName (addr...addr)" format instead of plain truncated address.
@@ -68,11 +72,17 @@ type VerifyTransactionOverviewProps = {
    * so the caller supplies a reader that derives it from the signed payload.
    */
   getPayloadAmount?: (payload: KeysignPayload) => bigint | number | string
+  /** Hides the amount when the signed data states none in this coin. */
+  hideAmount?: boolean
   decoderContext?: SignedTransactionDecoderContext
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
   children?: ReactNode
 }
 
+/**
+ * Card-based transaction summary shared by the verify screens: amount, sender,
+ * receiver, network and fee, titled by the operation the payload decodes to.
+ */
 export const VerifyTransactionOverview = ({
   coin,
   amount,
@@ -86,6 +96,7 @@ export const VerifyTransactionOverview = ({
   amountLabel,
   keysignPayloadQuery,
   getPayloadAmount,
+  hideAmount = false,
   decoderContext,
   renderFeeExtra,
   children,
@@ -119,6 +130,7 @@ export const VerifyTransactionOverview = ({
         keysignPayloadQuery={keysignPayloadQuery}
         getPayloadAmount={getPayloadAmount}
         hidePayloadAmount={payload => {
+          if (hideAmount) return true
           const result = decodeSignedTransaction(payload, decoderContext)
           return (
             getVerifyTransactionTitleKey(result.operation) !== undefined &&
@@ -132,7 +144,7 @@ export const VerifyTransactionOverview = ({
         address={senderAddress}
         name={senderName}
       />
-      {typeof receiver === 'string' ? (
+      {receiver === undefined ? null : typeof receiver === 'string' ? (
         <TransactionOverviewAddress
           label={t('to')}
           address={receiver}

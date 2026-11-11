@@ -2067,4 +2067,6 @@ export const ko = {
   revoke_approval_new_allowance: '새 지출 한도',
   revoke_approvals: '승인 취소',
   token_approvals_count: '승인: {{count}}',
+  transaction_not_fully_summarized:
+    '이 거래 내역 중 일부는 여기에 요약되어 있지 않습니다. 서명하기 전에 아래의 전체 세부 정보를 검토하십시오.',
 }

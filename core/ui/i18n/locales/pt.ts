@@ -2136,4 +2136,6 @@ export const pt = {
   revoke_approval_new_allowance: 'Novo limite de gastos',
   revoke_approvals: 'Revogar aprovações',
   token_approvals_count: 'Aprovações: {{count}}',
+  transaction_not_fully_summarized:
+    'Parte desta transação não está resumida aqui. Consulte os detalhes completos abaixo antes de assinar.',
 }

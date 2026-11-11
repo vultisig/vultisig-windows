@@ -1466,6 +1466,8 @@ export const en = {
   track: 'Track',
   transaction: 'Transaction',
   transaction_details: 'Transaction Details',
+  transaction_not_fully_summarized:
+    "Part of this transaction isn't summarized here. Review the full details below before you sign.",
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_failed: 'Transaction <error>failed</error>',

@@ -1958,4 +1958,6 @@ export const zh = {
   revoke_approval_new_allowance: '新的授权额度',
   revoke_approvals: '撤销授权',
   token_approvals_count: '授权：{{count}}',
+  transaction_not_fully_summarized:
+    '部分交易内容未在此处概述。请在签字前仔细阅读以下完整详情。',
 }

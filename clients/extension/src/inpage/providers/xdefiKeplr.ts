@@ -60,6 +60,8 @@ import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { parseAminoTimeoutHeight } from './cosmos/aminoTimeoutHeight'
+import { getAminoSentCoin } from './cosmos/getAminoSentCoin'
 import { injectKeplrFeeIfMissing } from './cosmos/injectKeplrFeeIfMissing'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
 import { normalizeKeplrBytes } from './cosmos/normalizeKeplrBytes'
@@ -76,13 +78,9 @@ const aminoHandler = (
   const { msgs, fee, memo } = signDoc
   const [message] = msgs
 
-  // The moved coin lives in a different field per amino message type:
-  // IBC `MsgTransfer` → `token` (a single coin), `MsgSend` → `amount[0]`,
-  // wasm `MsgExecuteContract` → `funds[0]`. Reading only `funds` reported a
-  // `0` amount for sends and IBC transfers, so the popup displayed `0` and any
-  // downstream native-value check (insufficient-funds gate) misread the amount.
-  const sentCoin =
-    message.value.token ?? message.value.amount?.[0] ?? message.value.funds?.[0]
+  // A missing coin would display `0` and make any downstream native-value
+  // check (insufficient-funds gate) misread the amount.
+  const sentCoin = getAminoSentCoin(message.value)
 
   return {
     asset: {
@@ -103,6 +101,7 @@ const aminoHandler = (
     aminoPayload: {
       msgs: signDoc.msgs as CosmosMsg[],
       fee: fee as CosmosFee,
+      timeoutHeight: parseAminoTimeoutHeight(signDoc.timeout_height),
     },
     skipBroadcast: true,
   } as TransactionDetails
@@ -832,6 +831,9 @@ export class XDEFIKeplrProvider extends Keplr {
         msgs: stdTx.msg,
         fee: stdTx.fee,
         memo: stdTx.memo,
+        ...(signDoc.timeout_height === undefined
+          ? {}
+          : { timeout_height: signDoc.timeout_height }),
       }
 
       return {
