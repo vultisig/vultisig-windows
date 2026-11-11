@@ -29,7 +29,7 @@
     "globals": "^17.6.0",
     "prettier": "^3.8.4",
     "typescript": "^5.9.3",
-    "vite": "7.3.1",
+    "vite": "8.3.6",
     "vite-plugin-circular-dependency": "^0.6.0",
     "vite-plugin-static-copy": "3.3.0",
     "vitest": "4.1.0"

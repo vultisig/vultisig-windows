@@ -30,7 +30,7 @@ describe('topLevelAwaitPlugins', () => {
     })
   })
 
-  it.each([false, true, 'esbuild', 'terser'] as const)(
+  it.each([false, true, 'esbuild', 'oxc', 'terser'] as const)(
     'preserves explicit minify value %j',
     minify => {
       expect(runConfigHook({ build: { minify } })).toBeUndefined()
