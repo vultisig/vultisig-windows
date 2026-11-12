@@ -31,8 +31,7 @@ export const ChainOption = ({
   return (
     <Container
       type="button"
-      role="option"
-      aria-selected={isSelected}
+      aria-current={isSelected ? 'true' : undefined}
       $isSelected={isSelected}
       {...rest}
     >
@@ -81,9 +80,14 @@ const Container = styled.button<{ $isSelected: boolean }>`
     outline: none;
   }
 
-  &:not([aria-selected='true']):hover,
-  &:not([aria-selected='true']):focus-visible {
+  &:not([aria-current='true']):hover,
+  &:not([aria-current='true']):focus-visible {
     background: ${getColor('foregroundDark')};
+  }
+
+  &[aria-current='true']:focus-visible {
+    outline: 1px solid ${getColor('primaryAccentFour')};
+    outline-offset: -1px;
   }
 
   &::after {

@@ -32,7 +32,6 @@ export const SendChainFilterButton = () => {
     <Pill
       ref={ref}
       aria-label={`${t('chains')}: ${label}`}
-      aria-haspopup="listbox"
       data-testid="send-chain-filter"
       onClick={() => setFilter(prev => ({ ...prev, isPickingChain: true }))}
     >

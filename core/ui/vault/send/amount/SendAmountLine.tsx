@@ -6,6 +6,7 @@ import { useIsomorphicLayoutEffect } from '@lib/ui/hooks/useIsomorphicLayoutEffe
 import { getColor } from '@lib/ui/theme/getters'
 import { useReducedMotion } from 'framer-motion'
 import { ClipboardEventHandler, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { RollingDigits } from './RollingDigits'
@@ -50,6 +51,7 @@ export const SendAmountLine = ({
   isWarning,
   testId,
 }: SendAmountLineProps) => {
+  const { t } = useTranslation()
   const shownText = text || placeholder
   const { setContainer, fontSize } = useFitFontSize({
     size: baseFontSizePx,
@@ -118,6 +120,7 @@ export const SendAmountLine = ({
               value={text}
               placeholder={placeholder}
               disabled={disabled}
+              aria-label={`${t('amount')} ${unit}`}
               aria-invalid={isWarning || undefined}
               $hidesGlyphs={showsRollingDigits}
               style={layout ? { width: layout.inputWidth } : undefined}

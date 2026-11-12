@@ -4,7 +4,13 @@ import { describe, expect, it } from 'vitest'
 
 import { filterChainsByQuery, getSendAssetListing } from './getSendAssetListing'
 
-const coin = (chain: Chain, ticker: string, id?: string): AccountCoin => ({
+type CoinInput = {
+  chain: Chain
+  ticker: string
+  id?: string
+}
+
+const coin = ({ chain, ticker, id }: CoinInput): AccountCoin => ({
   chain,
   id,
   ticker,
@@ -12,11 +18,11 @@ const coin = (chain: Chain, ticker: string, id?: string): AccountCoin => ({
   address: `${chain}-address`,
 })
 
-const eth = coin(Chain.Ethereum, 'ETH')
-const usdc = coin(Chain.Ethereum, 'USDC', '0xusdc')
-const btc = coin(Chain.Bitcoin, 'BTC')
-const sol = coin(Chain.Solana, 'SOL')
-const solUsdc = coin(Chain.Solana, 'USDC', 'usdc-mint')
+const eth = coin({ chain: Chain.Ethereum, ticker: 'ETH' })
+const usdc = coin({ chain: Chain.Ethereum, ticker: 'USDC', id: '0xusdc' })
+const btc = coin({ chain: Chain.Bitcoin, ticker: 'BTC' })
+const sol = coin({ chain: Chain.Solana, ticker: 'SOL' })
+const solUsdc = coin({ chain: Chain.Solana, ticker: 'USDC', id: 'usdc-mint' })
 
 const fiat = new Map<AccountCoin, number>([
   [eth, 300],
@@ -118,9 +124,17 @@ describe('getSendAssetListing selected coin visibility', () => {
 })
 
 describe('getSendAssetListing DeFi-only selected coin', () => {
-  const sruji = coin(Chain.THORChain, 'sRUJI', 'x/staking-ruji')
-  const ybrune = coin(Chain.THORChain, 'ybRUNE', 'x/ybrune')
-  const rune = coin(Chain.THORChain, 'RUNE')
+  const sruji = coin({
+    chain: Chain.THORChain,
+    ticker: 'sRUJI',
+    id: 'x/staking-ruji',
+  })
+  const ybrune = coin({
+    chain: Chain.THORChain,
+    ticker: 'ybRUNE',
+    id: 'x/ybrune',
+  })
+  const rune = coin({ chain: Chain.THORChain, ticker: 'RUNE' })
   const input = {
     ...baseInput,
     coins: [...baseInput.coins, rune],

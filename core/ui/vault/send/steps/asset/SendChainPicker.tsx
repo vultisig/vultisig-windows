@@ -92,7 +92,7 @@ export const SendChainPicker = () => {
           </Text>
         </ColumnHeaders>
         <ScrollArea>
-          <List role="listbox" data-testid="send-chain-list">
+          <List data-testid="send-chain-list">
             {!isSearching && (
               <ChainOption
                 icon={<CoinsIcon />}

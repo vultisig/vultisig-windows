@@ -52,7 +52,6 @@ export const SendAmountFeeRowLayout = ({
     <RowButton
       disabled={!onOpenSettings}
       onClick={onOpenSettings}
-      aria-label={t('est_network_fee')}
       data-testid="send-network-fee"
     >
       {content}

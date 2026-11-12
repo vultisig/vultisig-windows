@@ -89,6 +89,11 @@ const ListCard = styled(VStack)`
   > [role='button']:not([aria-current='true']):focus-visible {
     background-color: ${getColor('foregroundDark')};
   }
+
+  > [role='button'][aria-current='true']:focus-visible {
+    outline: 1px solid ${getColor('primaryAccentFour')};
+    outline-offset: -1px;
+  }
 `
 
 const EmptyState = styled(Text)`
