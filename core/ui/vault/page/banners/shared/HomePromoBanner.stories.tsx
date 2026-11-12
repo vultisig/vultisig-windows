@@ -52,8 +52,8 @@ const banners: {
   },
   {
     id: 'kamino',
-    caption: 'New on Solana',
-    title: 'Start earning with Kamino',
+    caption: 'With Kamino',
+    title: 'Put idle USDC to work',
   },
 ]
 
