@@ -118,10 +118,10 @@ test.describe('send coin selection', () => {
     })
 
     await sendFlow.selectCoin('XRP')
-    await expect(sendFlow.chainSelectorButton).toHaveText('Ripple')
-    await expect(sendFlow.coinSelectorTrigger).toContainText('XRP')
-    await expect(page.getByText('Select asset', { exact: true })).toHaveCount(0)
-    await expect(page.getByText('Select chain', { exact: true })).toHaveCount(0)
+    expect(await sendFlow.getSelectedCoin()).toEqual({
+      chain: 'Ripple',
+      ticker: 'XRP',
+    })
     await expect(
       page.locator('#send-coin-selection-background-decoy')
     ).toHaveAttribute('data-clicked', 'false')
@@ -136,26 +136,33 @@ test.describe('send coin selection', () => {
     await expect(sendFlow.addressInput).toHaveValue(rippleAddress)
 
     // A valid recipient auto-advances the form to Amount. Repeating the same
-    // request must verify the current selection and restore that active field.
+    // request must verify the current selection and restore that step.
+    await expect(sendFlow.step('amount')).toHaveAttribute(
+      'aria-current',
+      'step'
+    )
     await sendFlow.selectCoin('XRP')
-    await expect
-      .poll(() =>
-        sendFlow.amountInput.locator('xpath=ancestor::*[@inert]').count()
-      )
-      .toBe(0)
+    await expect(sendFlow.step('amount')).toHaveAttribute(
+      'aria-current',
+      'step'
+    )
+    await sendFlow.openAddressField()
     await expect(sendFlow.addressInput).toHaveValue(rippleAddress)
 
+    // The Ripple recipient is not an Ethereum address, so after switching
+    // chains the form stays on Address and Amount cannot be opened.
     await sendFlow.selectCoin('ETH')
     await sendFlow.selectCoin('USDC')
-    await expect
-      .poll(() =>
-        sendFlow.amountInput.locator('xpath=ancestor::*[@inert]').count()
-      )
-      .toBe(0)
-    await page.getByTestId('send-coin-field').click()
-    await expect(sendFlow.chainSelectorButton).toHaveText('Ethereum')
-    await expect(sendFlow.coinSelectorTrigger).toContainText('USDC')
-    await sendFlow.openAmountField()
+    await expect(sendFlow.step('address')).toHaveAttribute(
+      'aria-current',
+      'step'
+    )
+    await expect(sendFlow.step('amount')).toBeDisabled()
+    expect(await sendFlow.getSelectedCoin()).toEqual({
+      chain: 'Ethereum',
+      ticker: 'USDC',
+    })
+    await sendFlow.openAddressField()
 
     await captureProof({
       name: 'send-coin-selection-success',
@@ -175,13 +182,11 @@ test.describe('send coin selection', () => {
     await expect(
       sendFlow.prepareSend('XRP', rippleAddress, '1')
     ).rejects.toThrow(/Unable to select XRP.*chain:Ripple.*missing/)
-    await expect(page.getByText('Select asset', { exact: true })).toHaveCount(0)
-    await expect(page.getByText('Select chain', { exact: true })).toHaveCount(0)
 
     await sendFlow.openAddressField()
     await expect(sendFlow.addressInput).toHaveValue('')
-    await sendFlow.openAmountField()
-    await expect(sendFlow.amountInput).toHaveValue('')
+    // Without a valid recipient the amount step stays closed.
+    await expect(sendFlow.step('amount')).toBeDisabled()
 
     await captureProof({
       name: 'send-coin-selection-missing-chain',
@@ -217,12 +222,10 @@ test.describe('send coin selection', () => {
       observer.observe(document.body, { childList: true, subtree: true })
     })
 
-    await expect(sendFlow.coinSelectorTrigger).not.toContainText('XRP')
+    expect((await sendFlow.getSelectedCoin()).ticker).not.toBe('XRP')
     await expect(sendFlow.selectCoin('XRP')).rejects.toThrow(
       /asset:XRP ambiguous \(2 matches\)/
     )
-    await expect(page.getByText('Select asset', { exact: true })).toHaveCount(0)
-    await expect(page.getByText('Select chain', { exact: true })).toHaveCount(0)
     await page.close()
   })
 })

@@ -2,15 +2,14 @@
 /**
  * Verify decides the UTXO max-spend flag from the committed send state, so a
  * send that skips the form (agent or staking navigation with `skipToVerify`)
- * is flagged the same way as one submitted from it, and against the fee at the
- * settings chosen on Verify. The form is never rendered here: only the state
- * Verify reads is mocked.
+ * is flagged the same way as one submitted from it, and against the fee
+ * estimate, which is priced at the fee settings the user chose. The form is
+ * never rendered here: only the state Verify reads is mocked.
  */
 import { renderHook } from '@testing-library/react'
 import { Chain } from '@vultisig/core-chain/Chain'
 import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import type { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 type QueryState = {
@@ -23,11 +22,8 @@ type SendState = {
   coin: AccountCoin | undefined
   amount: bigint | null
   balance: QueryState
-  /** The estimate without fee settings, as the form shows it. */
+  /** The estimate at the fee settings the user chose. */
   fee: QueryState
-  /** The estimate at the fee settings chosen on Verify. */
-  selectedFee: QueryState
-  requestedFeeSettings: FeeSettings | undefined
 }
 
 const send = vi.hoisted(() => {
@@ -36,8 +32,6 @@ const send = vi.hoisted(() => {
     amount: null,
     balance: { data: undefined, error: null, isPlaceholderData: false },
     fee: { data: undefined, error: null, isPlaceholderData: false },
-    selectedFee: { data: undefined, error: null, isPlaceholderData: false },
-    requestedFeeSettings: undefined,
   }
   return state
 })
@@ -50,12 +44,7 @@ vi.mock('../queries/useSendBalanceQuery', () => ({
   useSendBalanceQuery: () => send.balance,
 }))
 vi.mock('../queries/useSendFeeEstimateQuery', () => ({
-  useSendFeeEstimateQuery: ({
-    feeSettings,
-  }: { feeSettings?: FeeSettings } = {}) => {
-    send.requestedFeeSettings = feeSettings
-    return feeSettings ? send.selectedFee : send.fee
-  },
+  useSendFeeEstimateQuery: () => send.fee,
 }))
 
 import { useSendMaxAmount } from './useSendMaxAmount'
@@ -68,8 +57,8 @@ const loaded = (data: bigint): QueryState => ({
   isPlaceholderData: false,
 })
 
-const getSendMaxAmount = (feeSettings?: FeeSettings) =>
-  renderHook(() => useSendMaxAmount({ feeSettings })).result.current
+const getSendMaxAmount = () =>
+  renderHook(() => useSendMaxAmount()).result.current
 
 describe('useSendMaxAmount', () => {
   beforeEach(() => {
@@ -77,8 +66,6 @@ describe('useSendMaxAmount', () => {
     send.amount = 999_450n
     send.balance = loaded(1_000_000n)
     send.fee = loaded(550n)
-    send.selectedFee = loaded(550n)
-    send.requestedFeeSettings = undefined
   })
 
   it('flags a UTXO send of the balance less the current fee without a form submit', () => {
@@ -113,32 +100,22 @@ describe('useSendMaxAmount', () => {
     expect(getSendMaxAmount()).toBe(false)
   })
 
-  it('sweeps what is left when a higher fee chosen on Verify no longer leaves room for the amount', () => {
-    send.selectedFee = loaded(660n)
+  it('sweeps what is left when a higher chosen fee no longer leaves room for the amount', () => {
+    send.fee = loaded(660n)
 
-    expect(getSendMaxAmount({ byteFee: 6n })).toBe(true)
-    expect(send.requestedFeeSettings).toEqual({ byteFee: 6n })
+    expect(getSendMaxAmount()).toBe(true)
   })
 
-  it('signs the amount as given when a lower fee chosen on Verify leaves room for change', () => {
-    send.selectedFee = loaded(440n)
+  it('signs the amount as given when a lower chosen fee leaves room for change', () => {
+    send.fee = loaded(440n)
 
-    expect(getSendMaxAmount({ byteFee: 4n })).toBe(false)
-  })
-
-  it('waits while the fee at newly chosen settings is loading', () => {
-    send.selectedFee = { data: 550n, error: null, isPlaceholderData: true }
-
-    expect(getSendMaxAmount({ byteFee: 6n })).toBeNull()
+    expect(getSendMaxAmount()).toBe(false)
   })
 
   it('never waits for a fee on a chain that is not UTXO', () => {
     send.coin = { ...chainFeeCoin[Chain.Ethereum], address }
     send.fee = { data: undefined, error: null, isPlaceholderData: false }
 
-    expect(
-      getSendMaxAmount({ maxPriorityFeePerGas: 1n, gasLimit: 21_000n })
-    ).toBe(false)
-    expect(send.requestedFeeSettings).toBeUndefined()
+    expect(getSendMaxAmount()).toBe(false)
   })
 })

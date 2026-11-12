@@ -155,4 +155,31 @@ describe('UTXO Max send WalletCore integration', () => {
 
     expect(reconciled.toAmount).toBe('999340')
   })
+
+  it('signs Max priced at a higher chosen fee as offered', async () => {
+    const byteFee = 6n
+    const { fee, amount } = await getMaxAmount(byteFee)
+    const sendMaxAmount = isUtxoMaxSend({
+      chain: Chain.Bitcoin,
+      amount,
+      balance,
+      fee,
+    })
+
+    expect(amount).toBe(999_340n)
+    expect(sendMaxAmount).toBe(true)
+
+    const refined = await refineKeysignUtxo({
+      keysignPayload: getPayload({ amount, sendMaxAmount, byteFee }),
+      walletCore,
+      publicKey,
+    })
+    const reconciled = await reconcileUtxoPlanAmount({
+      keysignPayload: refined,
+      publicKey,
+      walletCore,
+    })
+
+    expect(reconciled.toAmount).toBe(amount.toString())
+  })
 })

@@ -2130,4 +2130,8 @@ export const pt = {
   token_approvals_count: 'Aprovações: {{count}}',
   transaction_not_fully_summarized:
     'Parte desta transação não está resumida aqui. Consulte os detalhes completos abaixo antes de assinar.',
+  all_chains: 'Todas as chains',
+  send_step_choose_asset: 'Escolha um ativo',
+  send_step_enter_address: 'Insira o endereço',
+  send_step_enter_amount: 'Insira o valor',
 }

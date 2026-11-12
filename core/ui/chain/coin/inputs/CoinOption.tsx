@@ -19,7 +19,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { CoinOptionFiatAmount } from './CoinOptionFiatAmount'
 import { CoinOptionFiatValue } from './CoinOptionFiatValue'
@@ -31,8 +31,39 @@ type CoinOptionProps = ValueProp<Coin> &
     showChain?: boolean
   }
 
-/** A coin to choose, with the vault's balance of it. */
-export const CoinOption = ({ value, onClick, showChain }: CoinOptionProps) => {
+const coinIconSizePx = 32
+const coinDetailsGapPx = 12
+const chainLabelGapPx = 8
+const nameToBalanceGapPx = 8
+/** Tickers up to about eight characters stay whole beside the chain pill. */
+const chainRowTickerMaxWidthPx = 80
+/** Tickers this short are never cropped. */
+const tickerMinChars = 6
+/** About six characters of a longer ticker stay visible. */
+const tickerMinWidthPx = 60
+/** About three characters, an ellipsis and the pill's padding. */
+const chainPillMinWidthPx = 58
+/** The pill gives up its width long before the ticker does. */
+const chainPillShrinkWeight = 1000
+/** Icon, cropped ticker and cropped pill: the balance crops before the name goes below this. */
+const chainRowNameMinWidthPx =
+  coinIconSizePx +
+  coinDetailsGapPx +
+  tickerMinWidthPx +
+  chainLabelGapPx +
+  chainPillMinWidthPx
+
+/**
+ * A coin to choose, with the vault's balance of it. `isActive` marks the coin
+ * already chosen. With `showChain`, a short row crops the chain pill to a few
+ * characters before it crops a long ticker, and never drops either.
+ */
+export const CoinOption = ({
+  value,
+  onClick,
+  showChain,
+  isActive,
+}: CoinOptionProps) => {
   const { ticker } = value
   const coins = useCurrentVaultCoins()
   const vaultCoin = coins.find(c => areEqualCoins(c, value))
@@ -45,20 +76,45 @@ export const CoinOption = ({ value, onClick, showChain }: CoinOptionProps) => {
       onClick={onClick}
       justifyContent="space-between"
       alignItems="center"
+      gap={showChain ? nameToBalanceGapPx : undefined}
+      aria-current={isActive ? 'true' : undefined}
+      $isActive={isActive === true}
       data-testid={`coin-option-${ticker}`}
     >
-      <CoinDetails alignItems="center" gap={12}>
-        <CoinIcon coin={value} style={{ fontSize: 32 }} />
+      <CoinDetails
+        alignItems="center"
+        gap={coinDetailsGapPx}
+        $isChainRow={showChain === true}
+      >
+        <CoinIcon coin={value} style={{ fontSize: coinIconSizePx }} />
         <CoinName gap={2}>
-          <CoinLabel gap={8} alignItems="center">
-            <CoinTicker ticker={ticker} size={13} weight="500" />
-            <TokenVerificationBadge value={value} />
-            {showChain && (
-              <ChainPill color="shyExtra" nowrap variant="caption">
+          {showChain ? (
+            <ChainCoinLabel gap={chainLabelGapPx} alignItems="center">
+              <TickerSlot $isShrinkable={ticker.length > tickerMinChars}>
+                <CoinTicker
+                  ticker={ticker}
+                  size={13}
+                  weight="500"
+                  maxWidth={chainRowTickerMaxWidthPx}
+                />
+              </TickerSlot>
+              <TokenVerificationBadge value={value} />
+              <ChainPill
+                color="shyExtra"
+                nowrap
+                cropped
+                variant="caption"
+                title={value.chain}
+              >
                 {value.chain}
               </ChainPill>
-            )}
-          </CoinLabel>
+            </ChainCoinLabel>
+          ) : (
+            <CoinLabel gap={8} alignItems="center">
+              <CoinTicker ticker={ticker} size={13} weight="500" />
+              <TokenVerificationBadge value={value} />
+            </CoinLabel>
+          )}
           <SecuredAssetSourceChainLabel value={value} size={12} />
         </CoinName>
       </CoinDetails>
@@ -67,6 +123,7 @@ export const CoinOption = ({ value, onClick, showChain }: CoinOptionProps) => {
         gap={4}
         justifyContent="center"
         style={showChain ? { height: 'auto' } : undefined}
+        $isChainRow={showChain === true}
       >
         {vaultCoin ? (
           <VaultCoinBalance value={vaultCoin} />
@@ -129,12 +186,13 @@ const VaultCoinBalance = ({ value }: ValueProp<Coin>) => {
   )
 }
 
-const Container = styled(HStack)`
+const Container = styled(HStack)<{ $isActive: boolean }>`
   ${panel()};
   padding: 12px 20px;
   border-radius: 0;
   position: relative;
-  background-color: ${getColor('foreground')};
+  background-color: ${({ $isActive }) =>
+    getColor($isActive ? 'foregroundExtra' : 'foreground')};
   cursor: pointer;
 
   &::after {
@@ -158,10 +216,12 @@ const Container = styled(HStack)`
  * Icon and ticker. It has to shrink, or a ticker that is a raw
  * contract address makes the row wider than the modal — and because the list
  * around it scrolls vertically, that overflow becomes a horizontal scrollbar
- * rather than being clipped.
+ * rather than being clipped. Beside a chain pill it keeps room for the
+ * cropped ticker and pill, so the chain always stays readable.
  */
-const CoinDetails = styled(HStack)`
-  min-width: 0;
+const CoinDetails = styled(HStack)<{ $isChainRow: boolean }>`
+  min-width: ${({ $isChainRow }) =>
+    $isChainRow ? `${chainRowNameMinWidthPx}px` : 0};
 
   > svg,
   > img {
@@ -184,14 +244,39 @@ const ChainPill = styled(Text)`
   padding: 5.5px 10.5px;
 `
 
+const ChainCoinLabel = styled(HStack)`
+  min-width: 0;
+
+  > ${ChainPill} {
+    flex: 0 ${chainPillShrinkWeight} auto;
+    min-width: ${chainPillMinWidthPx}px;
+  }
+`
+
+const TickerSlot = styled.div<{ $isShrinkable: boolean }>`
+  display: flex;
+  flex-shrink: ${({ $isShrinkable }) => ($isShrinkable ? 1 : 0)};
+  min-width: ${({ $isShrinkable }) =>
+    $isShrinkable ? `${tickerMinWidthPx}px` : 'auto'};
+`
+
 /**
  * Balance for the row. At the popup width it still yields to the ticker, which
  * is what tells two rows apart, but with the chain pill gone there is more to
  * share and the cap can be looser.
  */
-const BalanceColumn = styled(VStack)`
+const BalanceColumn = styled(VStack)<{ $isChainRow: boolean }>`
   min-width: 100px;
   height: 50px;
+
+  /* Beside a chain pill a long balance crops inside the column instead of spilling over the name. */
+  ${({ $isChainRow }) =>
+    $isChainRow &&
+    css`
+      * {
+        max-width: 100%;
+      }
+    `}
 
   @media (max-width: 400px) {
     min-width: 0;

@@ -123,7 +123,11 @@ export const VaultChainOverview = () => {
       </VStack>
       <Opener
         renderOpener={({ onOpen }) => (
-          <VaultPrimaryActions coin={{ chain }} onReceive={onOpen} />
+          <VaultPrimaryActions
+            coin={{ chain }}
+            onReceive={onOpen}
+            startSendOnAsset
+          />
         )}
         renderContent={({ onClose }) => (
           <AddressQRModal chain={chain} onClose={onClose} />

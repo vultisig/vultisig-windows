@@ -18,29 +18,36 @@ import {
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { ReactNode } from 'react'
 
 type ManageFeeProps = {
   keysignPayload: KeysignPayload
   feeSettings?: FeeSettings
   onChange: (value: FeeSettings) => void
   chain: FeeSettingsChain
+  /** What opens the settings; a fuel icon button unless given. */
+  renderOpener?: (props: { onOpen: () => void }) => ReactNode
 }
 
+const renderFuelOpener = ({ onOpen }: { onOpen: () => void }) => (
+  <IconButton onClick={onOpen}>
+    <IconWrapper style={{ fontSize: 16 }}>
+      <FuelIcon />
+    </IconWrapper>
+  </IconButton>
+)
+
+/** Opens the advanced fee settings of an EVM or UTXO send. */
 export const ManageFee = ({
   keysignPayload,
   feeSettings,
   onChange,
   chain,
+  renderOpener = renderFuelOpener,
 }: ManageFeeProps) => {
   return (
     <Opener
-      renderOpener={({ onOpen }) => (
-        <IconButton onClick={onOpen}>
-          <IconWrapper style={{ fontSize: 16 }}>
-            <FuelIcon />
-          </IconWrapper>
-        </IconButton>
-      )}
+      renderOpener={renderOpener}
       renderContent={({ onClose }) => (
         <MatchRecordUnion
           value={toChainKindRecordUnion(chain)}

@@ -4,7 +4,7 @@ import {
   useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import {
@@ -29,15 +29,23 @@ import { useSendMaxAmount } from './useSendMaxAmount'
 
 type UseSendKeysignPayloadQueryProps = {
   feeSettings?: FeeSettings
+  /**
+   * Builds a display-only copy for the amount step's fee row: it never shares
+   * the payload Verify signs, keeps the last one while a new one builds, and
+   * waits while `isPaused`.
+   */
+  preview?: { isPaused: boolean }
 }
 
 /**
  * Builds the keysign payload Verify signs from the committed send state and
- * the fee settings chosen on Verify. A UTXO send waits for the fee at those
- * settings, which decides whether it is signed as a max spend.
+ * the fee settings chosen on the amount step or on Verify. A UTXO send waits
+ * for the fee at those settings, which decides whether it is signed as a max
+ * spend.
  */
 export const useSendKeysignPayloadQuery = ({
   feeSettings,
+  preview,
 }: UseSendKeysignPayloadQueryProps = {}) => {
   const coin = useCurrentSendCoin()
   const [receiver] = useSendReceiver()
@@ -46,7 +54,7 @@ export const useSendKeysignPayloadQuery = ({
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
   const { isEnabled: allowDeath } = useSendAllowDeath()
-  const sendMaxAmount = useSendMaxAmount({ feeSettings })
+  const sendMaxAmount = useSendMaxAmount()
 
   const vault = useCurrentVault()
 
@@ -72,7 +80,10 @@ export const useSendKeysignPayloadQuery = ({
   }
 
   return useQuery({
-    queryKey: ['sendTxKeysignPayload', omit(input, 'walletCore', 'publicKey')],
+    queryKey: [
+      preview ? 'sendTxKeysignPayloadPreview' : 'sendTxKeysignPayload',
+      omit(input, 'walletCore', 'publicKey'),
+    ],
     queryFn: async () => {
       const keysignPayload = await buildSendKeysignPayload(input)
 
@@ -82,7 +93,8 @@ export const useSendKeysignPayloadQuery = ({
         walletCore: input.walletCore,
       })
     },
-    enabled: sendMaxAmount !== null,
+    enabled: sendMaxAmount !== null && !preview?.isPaused,
+    placeholderData: preview ? keepPreviousData : undefined,
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {
       if (error instanceof BuildKeysignPayloadError) {

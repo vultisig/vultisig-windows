@@ -2114,4 +2114,8 @@ export const nl = {
   token_approvals_count: 'Goedkeuringen: {{count}}',
   transaction_not_fully_summarized:
     'Een deel van deze transactie wordt hier niet samengevat. Lees de volledige details hieronder door voordat u tekent.',
+  all_chains: 'Alle chains',
+  send_step_choose_asset: 'Kies een asset',
+  send_step_enter_address: 'Voer het adres in',
+  send_step_enter_amount: 'Voer het bedrag in',
 }

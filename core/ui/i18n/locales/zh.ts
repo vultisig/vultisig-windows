@@ -1954,4 +1954,8 @@ export const zh = {
   token_approvals_count: '授权：{{count}}',
   transaction_not_fully_summarized:
     '部分交易内容未在此处概述。请在签字前仔细阅读以下完整详情。',
+  all_chains: '所有链',
+  send_step_choose_asset: '选择资产',
+  send_step_enter_address: '输入地址',
+  send_step_enter_amount: '输入金额',
 }

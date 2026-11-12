@@ -1,56 +1,98 @@
-import {
-  AmountTextInput,
-  AmountTextInputProps,
-} from '@lib/ui/inputs/AmountTextInput'
 import { InputProps } from '@lib/ui/props'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
-import { useMemo, useState } from 'react'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { useState } from 'react'
 
-type FiatSendAmountInputProps = Omit<
-  AmountTextInputProps,
-  'value' | 'onChange' | 'onValueChange'
-> &
-  InputProps<bigint | null> & {
-    decimals: number
-    price: number
-  }
+import { getNumberFormat } from '../../../chain/utils/getNumberFormat'
+import {
+  chainAmountToFiatText,
+  fiatTextToChainAmount,
+} from './fiatTextToChainAmount'
+import {
+  getDeviceDecimalSeparator,
+  localizeDecimalSeparator,
+  normalizeAmountText,
+} from './normalizeDecimalSeparator'
+import { SendAmountLine } from './SendAmountLine'
 
+type FiatSendAmountInputProps = InputProps<bigint | null> & {
+  decimals: number
+  price: number
+  currency: string
+  placeholder: string
+  disabled?: boolean
+  isWarning?: boolean
+}
+
+const minorUnitsLocale = 'en-US'
+
+/** A currency's minor units (2 for USD and EUR, 0 for JPY); the locale does not change them. */
+const getCurrencyFractionDigits = (currency: string) =>
+  shouldBePresent(
+    getNumberFormat({
+      locale: minorUnitsLocale,
+      style: 'currency',
+      currency,
+    }).resolvedOptions().maximumFractionDigits,
+    'currency fraction digits'
+  )
+
+/**
+ * Fiat entry for a send amount. The typed fiat text stays as typed while it
+ * still converts to the amount being sent; otherwise the field shows the fiat
+ * value of that amount at the currency's precision, truncated. Only an edit
+ * here changes the amount.
+ */
 export const FiatSendAmountInput = ({
   value,
   onChange,
   decimals,
   price,
-  ...props
+  currency,
+  ...lineProps
 }: FiatSendAmountInputProps) => {
-  const expectedInputValue =
-    value === null ? null : fromChainAmount(value, decimals) * price
+  const [typedText, setTypedText] = useState('')
+  const decimalSeparator = getDeviceDecimalSeparator()
 
-  const [inputValue, setInputValue] = useState<number | null>(
-    expectedInputValue
-  )
+  const typedAmount = fiatTextToChainAmount({
+    text: typedText,
+    price,
+    decimals,
+  })
 
-  const preservedInputValue = useMemo(() => {
-    if (inputValue === null) {
-      return null
-    }
+  const text = (() => {
+    if (typedText !== '' && typedAmount === value) return typedText
+    if (value === null) return ''
 
-    const chainInputValue = toChainAmount(inputValue / price, decimals)
-    if (chainInputValue === value) {
-      return inputValue
-    }
+    return (
+      chainAmountToFiatText({
+        amount: value,
+        decimals,
+        price,
+        fractionDigits: getCurrencyFractionDigits(currency),
+      }) ?? ''
+    )
+  })()
 
-    return expectedInputValue
-  }, [decimals, expectedInputValue, inputValue, price, value])
+  const handleTextChange = (rawText: string) => {
+    const nextText = normalizeAmountText({
+      text: rawText,
+      decimalSeparator,
+    })
+    if (nextText === undefined) return
+
+    const amount = fiatTextToChainAmount({ text: nextText, price, decimals })
+    if (amount === undefined) return
+
+    setTypedText(nextText)
+    onChange(amount)
+  }
 
   return (
-    <AmountTextInput
-      {...props}
-      value={preservedInputValue}
-      onValueChange={value => {
-        setInputValue(value)
-        onChange(value === null ? null : toChainAmount(value / price, decimals))
-      }}
+    <SendAmountLine
+      {...lineProps}
+      unit={currency}
+      text={localizeDecimalSeparator({ text, decimalSeparator })}
+      onTextChange={handleTextChange}
     />
   )
 }

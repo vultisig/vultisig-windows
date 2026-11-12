@@ -6,7 +6,6 @@ import { useCore } from '@core/ui/state/core'
 import { ActionIconButton } from '@core/ui/vault/components/action-form/ActionIconButton'
 import { AddressBookModal } from '@core/ui/vault/send/addresses/components/AddressBookModal'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
-import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { validateSendReceiver } from '@core/ui/vault/send/form/validateSendForm'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
@@ -22,7 +21,6 @@ import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { BookBookmarkFilledIcon } from '@lib/ui/icons/BookBookmarkFilledIcon'
 import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
-import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -57,7 +55,8 @@ export const ManageReceiverAddressInputField = () => {
   const [, setReceiverLabel] = useSendReceiverLabel()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const [qrView, setQrView] = useState<'scan' | 'upload'>('scan')
-  const [touched, setTouched] = useState(false)
+  // A recipient already entered shows why it is rejected as soon as the step opens.
+  const [touched, setTouched] = useState(value !== '')
   const walletCore = useAssertWalletCore()
 
   const { data } = useSendValidationQuery()
@@ -181,8 +180,6 @@ export const ManageReceiverAddressInputField = () => {
 
   return (
     <SendInputContainer>
-      <InputLabel>{t('address')}</InputLabel>
-      <HorizontalLine />
       <VStack gap={12}>
         <Text>{t('from')}</Text>
         <AddressFieldWrapper gap={2}>

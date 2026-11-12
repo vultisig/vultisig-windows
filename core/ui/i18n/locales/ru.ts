@@ -2113,4 +2113,8 @@ export const ru = {
   token_approvals_count: 'Подтверждения: {{count}}',
   transaction_not_fully_summarized:
     'Часть условий данной сделки здесь не описана. Перед подписанием ознакомьтесь с полными подробностями ниже.',
+  all_chains: 'Все сети',
+  send_step_choose_asset: 'Выберите актив',
+  send_step_enter_address: 'Введите адрес',
+  send_step_enter_amount: 'Введите сумму',
 }

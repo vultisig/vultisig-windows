@@ -1,19 +1,24 @@
 /**
  * Send Flow Page Object Model
  *
- * Handles the complete send transaction flow.
+ * Handles the complete send transaction flow: the asset, address and
+ * amount steps, then Verify.
  */
 
 import { expect, type Locator, type Page } from '@playwright/test'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 import {
   robustClick,
   waitForFormReady,
   waitForLoadingComplete,
-  waitForStackedFieldReady,
 } from '../helpers/ui-waits'
 import { BasePage } from './BasePage.po'
+
+const sendSteps = ['coin', 'address', 'amount'] as const
+
+type SendStep = (typeof sendSteps)[number]
 
 type SendCoinSelection = {
   chain: string
@@ -33,16 +38,27 @@ export class SendFlow extends BasePage {
     return this.page.locator('[data-testid="send-form"]')
   }
 
-  get coinSelector(): Locator {
-    return this.page.locator('[data-testid="coin-selector"]')
+  /** A step icon in the send step header. */
+  step(step: SendStep): Locator {
+    return this.page.getByTestId(`send-step-${step}`)
   }
 
-  get coinSelectorTrigger(): Locator {
-    return this.page.locator('[data-testid="coin-selector-trigger"]')
+  /** The asset step's chain filter button, which opens "Select chains". */
+  get chainFilterButton(): Locator {
+    return this.page.getByTestId('send-chain-filter')
+  }
+
+  get chainList(): Locator {
+    return this.page.getByTestId('send-chain-list')
+  }
+
+  /** A row of the "Select chains" page; `null` is "All chains". */
+  chainOption(chain: string | null): Locator {
+    return this.chainList.getByTestId(`send-chain-option-${chain ?? 'all'}`)
   }
 
   getCoinOption(symbol: string): Locator {
-    return this.page.locator(`[data-testid="coin-option-${symbol}"]`)
+    return this.sendForm.locator(`[data-testid="coin-option-${symbol}"]`)
   }
 
   get termsCheckboxes(): Locator {
@@ -59,15 +75,6 @@ export class SendFlow extends BasePage {
 
   get fastVaultSubmit(): Locator {
     return this.page.locator('[data-testid="fast-vault-submit"]')
-  }
-
-  /**
-   * The chain selector button within the send form.
-   * Renders as a clickable HStack with the chain name and a ChevronDownIcon.
-   * Located in the "From" row of the coin input field.
-   */
-  get chainSelectorButton(): Locator {
-    return this.coinSelector.getByRole('button').first()
   }
 
   get addressInput(): Locator {
@@ -122,7 +129,7 @@ export class SendFlow extends BasePage {
   }
 
   get feeDisplay(): Locator {
-    return this.page.locator('[data-testid="network-fee"]')
+    return this.page.locator('[data-testid="send-network-fee"]')
   }
 
   /**
@@ -134,66 +141,95 @@ export class SendFlow extends BasePage {
   }
 
   /**
-   * Map of coin symbols to their chain names as displayed in the UI.
-   * The chain selector modal shows chain names (e.g. "Ethereum"), not symbols (e.g. "ETH").
+   * Map of coin symbols to the chains the asset step's chips are keyed by.
    */
-  private static readonly SYMBOL_TO_CHAIN: Record<string, string> = {
-    BTC: 'Bitcoin',
-    ETH: 'Ethereum',
-    BNB: 'BSC',
-    SOL: 'Solana',
-    RUNE: 'THORChain',
-    ATOM: 'Cosmos',
-    MATIC: 'Polygon',
-    AVAX: 'Avalanche',
-    LTC: 'Litecoin',
-    DOGE: 'Dogecoin',
-    XRP: 'Ripple',
+  private static readonly SYMBOL_TO_CHAIN: Record<string, Chain> = {
+    BTC: Chain.Bitcoin,
+    ETH: Chain.Ethereum,
+    BNB: Chain.BSC,
+    SOL: Chain.Solana,
+    RUNE: Chain.THORChain,
+    ATOM: Chain.Cosmos,
+    MATIC: Chain.Polygon,
+    AVAX: Chain.Avalanche,
+    LTC: Chain.Litecoin,
+    DOGE: Chain.Dogecoin,
+    XRP: Chain.Ripple,
   }
 
-  private get assetPickerTitle(): Locator {
-    return this.page.getByText('Select asset', { exact: true })
-  }
-
-  private get chainPickerTitle(): Locator {
-    return this.page.getByText('Select chain', { exact: true })
-  }
-
-  private pickerForTitle(title: Locator): Locator {
-    return title.locator('xpath=../../..')
-  }
-
-  private async isActiveStackedField(locator: Locator): Promise<boolean> {
-    return (
-      (await locator.isVisible().catch(() => false)) &&
-      (await locator.locator('xpath=ancestor::*[@inert]').count()) === 0
-    )
-  }
-
-  private async ensureCoinFieldExpanded(): Promise<void> {
-    if (await this.isActiveStackedField(this.coinSelector)) return
-
-    const collapsedCoinField = this.page.getByTestId('send-coin-field')
-    if (!(await this.isActiveStackedField(collapsedCoinField))) {
-      throw new Error(
-        'Cannot inspect the selected send asset: the coin field is not visible'
-      )
+  /** The step the form shows. */
+  async currentStep(): Promise<SendStep> {
+    for (const step of sendSteps) {
+      if ((await this.step(step).getAttribute('aria-current')) === 'step') {
+        return step
+      }
     }
 
-    await collapsedCoinField.click()
-    await expect
-      .poll(() => this.isActiveStackedField(this.coinSelector))
-      .toBe(true)
-    await waitForStackedFieldReady(this.page)
+    throw new Error('The send step header marks no step as current')
   }
 
-  private async readCoinSelection(): Promise<SendCoinSelection> {
-    await this.ensureCoinFieldExpanded()
+  /**
+   * Opens a step through the header and waits for its pane to settle. Only
+   * steps the header allows can be opened: Address once an asset is chosen,
+   * Amount once the address is valid.
+   */
+  async openStep(step: SendStep): Promise<void> {
+    if ((await this.currentStep()) !== step) {
+      await expect(this.step(step)).toBeEnabled()
+      await this.step(step).click()
+    }
 
-    const chain = (await this.chainSelectorButton.innerText()).trim()
-    const ticker = (await this.coinSelectorTrigger.innerText())
-      .split(/\s+/)
-      .find(Boolean)
+    await expect(this.step(step)).toHaveAttribute('aria-current', 'step')
+    const pane = this.page.getByTestId(`send-step-pane-${step}`)
+    await expect(pane).toHaveCount(1)
+    await expect(pane).toHaveCSS('opacity', '1')
+  }
+
+  async openAddressField(): Promise<void> {
+    await this.openStep('address')
+  }
+
+  async openAmountField(): Promise<void> {
+    await this.openStep('amount')
+  }
+
+  /**
+   * Filters the asset step by a chain through the "Select chains" page;
+   * `null` clears the filter. Returns `false`, back on the asset step with
+   * the filter unchanged, when the page does not list the chain.
+   */
+  async selectChainFilter(chain: string | null): Promise<boolean> {
+    await this.openStep('coin')
+    await this.chainFilterButton.click()
+    await expect(this.chainList).toBeVisible()
+
+    const option = this.chainOption(chain)
+    if ((await option.count()) !== 1) {
+      await this.page.keyboard.press('Escape')
+      await expect(this.chainFilterButton).toBeVisible()
+      return false
+    }
+
+    await option.click()
+    await expect(this.chainFilterButton).toBeVisible()
+    return true
+  }
+
+  /**
+   * The coin being sent, read from the asset step: with every chain shown,
+   * the selected coin is pinned first. Leaves the form on the asset step.
+   */
+  async getSelectedCoin(): Promise<SendCoinSelection> {
+    await this.selectChainFilter(null)
+    const first = this.sendForm.locator('[data-testid^="coin-option-"]').first()
+    await expect(first).toBeVisible()
+
+    const ticker = (await first.getAttribute('data-testid'))?.replace(
+      'coin-option-',
+      ''
+    )
+    const lines = (await first.innerText()).split('\n').map(line => line.trim())
+    const chain = Object.values(Chain).find(value => lines.includes(value))
 
     if (!chain || !ticker) {
       throw new Error(
@@ -206,34 +242,12 @@ export class SendFlow extends BasePage {
     return { chain, ticker }
   }
 
-  private async closeCoinPickers(): Promise<void> {
-    for (let attempt = 0; attempt < 3; attempt += 1) {
-      const openPicker = (await this.chainPickerTitle
-        .isVisible()
-        .catch(() => false))
-        ? this.chainPickerTitle
-        : (await this.assetPickerTitle.isVisible().catch(() => false))
-          ? this.assetPickerTitle
-          : null
-
-      if (!openPicker) return
-      const picker = this.pickerForTitle(openPicker)
-      const closeButton = picker.getByRole('button').first()
-      await expect(closeButton).toBeVisible()
-      await closeButton.click()
-      await expect(openPicker).toHaveCount(0)
-    }
-
-    throw new Error('Could not close the send asset pickers')
-  }
-
   private async selectionFailure(
     requested: string,
     route: string[],
     expectedChain?: string
   ): Promise<never> {
-    await this.closeCoinPickers()
-    const observed = await this.readCoinSelection().catch(() => ({
+    const observed = await this.getSelectedCoin().catch(() => ({
       chain: 'unreadable',
       ticker: 'unreadable',
     }))
@@ -248,63 +262,29 @@ export class SendFlow extends BasePage {
     )
   }
 
-  private async uniqueAssetOption(
-    assetPicker: Locator,
-    ticker: string,
-    timeout = 2_000
-  ): Promise<Locator | null> {
-    const options = assetPicker.getByTestId(`coin-option-${ticker}`)
-    await options
-      .first()
-      .waitFor({ state: 'visible', timeout })
-      .catch(() => {})
-    const count = await options.count()
+  /**
+   * Returns to the step that was open before selecting a coin. Picking a coin
+   * lands on the address; the amount comes back only if the header allows it.
+   */
+  private async restoreStep(step: SendStep): Promise<void> {
+    if (step === 'coin') return
 
-    if (count > 1) {
-      await this.selectionFailure(ticker, [
-        `asset:${ticker} ambiguous (${count} matches)`,
-      ])
+    if (step === 'amount' && (await this.step('amount').isEnabled())) {
+      await this.openStep('amount')
+      return
     }
 
-    return count === 1 ? options.first() : null
-  }
-
-  private async restoreOpenField(
-    field: 'address' | 'amount' | null
-  ): Promise<void> {
-    if (!field) return
-
-    const input = field === 'address' ? this.addressInput : this.amountInput
-    if (await this.isActiveStackedField(input)) return
-
-    const collapsedField = input.locator(
-      'xpath=ancestor::*[@inert][1]/following-sibling::*[1]/*[1]'
-    )
-    await expect
-      .poll(() => this.isActiveStackedField(collapsedField))
-      .toBe(true)
-    await collapsedField.click()
-    await expect.poll(() => this.isActiveStackedField(input)).toBe(true)
-    await waitForStackedFieldReady(this.page)
-  }
-
-  async openAddressField(): Promise<void> {
-    await this.restoreOpenField('address')
-  }
-
-  async openAmountField(): Promise<void> {
-    await this.restoreOpenField('amount')
+    await this.openStep('address')
   }
 
   /**
-   * Select coin/chain to send.
+   * Select the coin to send in the asset step.
    *
-   * The send form pre-selects a coin based on navigation state.
-   * The coin section may start collapsed (showing ticker + pencil icon).
-   * To switch chains we must:
-   *   1. Expand the coin section (click collapsed row)
-   *   2. Click the chain name to open the chain selector modal
-   *   3. Pick the desired chain from the modal
+   * Picks the requested chain on the "Select chains" page, then the coin's
+   * row, and checks the result. A request that already matches the
+   * selection changes nothing.
+   * Fails, naming the route taken, when the chain or the coin is missing or
+   * when more than one row matches.
    *
    * @param coin - Coin symbol (e.g. 'ETH', 'BTC', 'BNB') or chain name (e.g. 'Ethereum')
    */
@@ -322,120 +302,62 @@ export class SendFlow extends BasePage {
         chain => chain.toLowerCase() === requested.toLowerCase()
       )
     const expectedTicker =
-      mappedChain || !requestedChain ? requestedTicker : null
-    const fieldToRestore = (await this.isActiveStackedField(this.addressInput))
-      ? 'address'
-      : (await this.isActiveStackedField(this.amountInput))
-        ? 'amount'
-        : null
+      mappedChain || !requestedChain
+        ? requestedTicker
+        : chainFeeCoin[requestedChain].ticker
+    const stepToRestore = await this.currentStep()
     const route: string[] = []
 
-    await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
-    let selected = await this.readCoinSelection()
+    let selected = await this.getSelectedCoin()
 
     const selectionMatches = () =>
       (!requestedChain ||
         selected.chain.toLowerCase() === requestedChain.toLowerCase()) &&
-      (!expectedTicker || selected.ticker.toUpperCase() === expectedTicker)
+      selected.ticker.toUpperCase() === expectedTicker
 
-    if (!selectionMatches()) {
-      await this.coinSelectorTrigger.click()
-      await expect(this.assetPickerTitle).toBeVisible()
-      const assetPicker = this.pickerForTitle(this.assetPickerTitle)
-      route.push(`asset:${requestedTicker} on ${selected.chain}`)
+    if (selectionMatches()) {
+      await this.restoreStep(stepToRestore)
+      return
+    }
 
-      if (
-        !requestedChain ||
-        selected.chain.toLowerCase() === requestedChain.toLowerCase()
-      ) {
-        const assetOption = expectedTicker
-          ? await this.uniqueAssetOption(assetPicker, expectedTicker)
-          : null
+    route.push(`asset:${requestedTicker} on ${selected.chain}`)
 
-        if (!assetOption) {
-          return this.selectionFailure(
-            requestedTicker,
-            [...route, 'missing'],
-            requestedChain
-          )
-        }
-
-        await assetOption.click()
-        await expect(this.assetPickerTitle).toBeHidden()
-      } else {
-        const chainHeader = assetPicker
-          .getByText('Chain', { exact: true })
-          .first()
-          .locator('..')
-        const nestedChainTrigger = chainHeader.getByRole('button')
-        if ((await nestedChainTrigger.count()) !== 1) {
-          await this.selectionFailure(
-            requestedTicker,
-            [...route, 'chain picker unavailable'],
-            requestedChain
-          )
-        }
-
-        await nestedChainTrigger.click()
-        await expect(this.chainPickerTitle).toBeVisible()
-        const chainPicker = this.pickerForTitle(this.chainPickerTitle)
-        const chainLabels = chainPicker.getByText(requestedChain, {
-          exact: true,
-        })
-        await chainLabels
-          .first()
-          .waitFor({ state: 'visible', timeout: 2_000 })
-          .catch(() => {})
-        const chainOptionCount = await chainLabels.count()
-        route.push(`chain:${requestedChain}`)
-
-        if (chainOptionCount !== 1) {
-          await this.selectionFailure(
-            requestedTicker,
-            [
-              ...route,
-              chainOptionCount === 0
-                ? 'missing'
-                : `ambiguous (${chainOptionCount} matches)`,
-            ],
-            requestedChain
-          )
-        }
-
-        const chainOption = chainLabels
-          .first()
-          .locator('xpath=ancestor::*[@role="button"][1]')
-        await expect(chainOption).toHaveCount(1)
-        await chainOption.click()
-        await expect(this.chainPickerTitle).toBeHidden()
-
-        if (expectedTicker) {
-          const assetOption = await this.uniqueAssetOption(
-            assetPicker,
-            expectedTicker,
-            10_000
-          )
-          if (!assetOption) {
-            return this.selectionFailure(
-              requestedTicker,
-              [...route, `asset:${expectedTicker} missing`],
-              requestedChain
-            )
-          }
-          await assetOption.click()
-          await expect(this.assetPickerTitle).toBeHidden()
-        } else {
-          await this.closeCoinPickers()
-          await expect(this.assetPickerTitle).toBeHidden()
-        }
+    if (requestedChain) {
+      route.push(`chain:${requestedChain}`)
+      if (!(await this.selectChainFilter(requestedChain))) {
+        return this.selectionFailure(
+          requestedTicker,
+          [...route, 'missing'],
+          requestedChain
+        )
       }
     }
 
-    await expect(this.assetPickerTitle).toHaveCount(0)
-    await expect(this.chainPickerTitle).toHaveCount(0)
-    selected = await this.readCoinSelection()
+    const options = this.getCoinOption(expectedTicker)
+    await options
+      .first()
+      .waitFor({ state: 'visible', timeout: 10_000 })
+      .catch(() => {})
+    const count = await options.count()
 
+    if (count !== 1) {
+      return this.selectionFailure(
+        requestedTicker,
+        [
+          ...route,
+          count === 0
+            ? `asset:${expectedTicker} missing`
+            : `asset:${expectedTicker} ambiguous (${count} matches)`,
+        ],
+        requestedChain
+      )
+    }
+
+    await options.first().click()
+    await expect(this.step('address')).toHaveAttribute('aria-current', 'step')
+
+    selected = await this.getSelectedCoin()
     if (!selectionMatches()) {
       await this.selectionFailure(
         requestedTicker,
@@ -444,13 +366,14 @@ export class SendFlow extends BasePage {
       )
     }
 
-    await this.restoreOpenField(fieldToRestore)
+    await this.restoreStep(stepToRestore === 'coin' ? 'address' : stepToRestore)
   }
 
   /**
    * Fill recipient address
    */
   async fillAddress(address: string): Promise<void> {
+    await this.openStep('address')
     await this.addressInput.clear()
     await this.addressInput.fill(address)
   }
@@ -459,6 +382,7 @@ export class SendFlow extends BasePage {
    * Fill amount to send
    */
   async fillAmount(amount: string): Promise<void> {
+    await this.openStep('amount')
     await this.amountInput.clear()
     await this.amountInput.fill(amount)
   }

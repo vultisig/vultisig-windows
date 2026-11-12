@@ -2146,4 +2146,8 @@ export const de = {
   token_approvals_count: 'Genehmigungen: {{count}}',
   transaction_not_fully_summarized:
     'Ein Teil dieser Transaktion ist hier nicht zusammengefasst. Bitte lesen Sie die vollständigen Details unten durch, bevor Sie unterschreiben.',
+  all_chains: 'Alle Chains',
+  send_step_choose_asset: 'Asset auswählen',
+  send_step_enter_address: 'Adresse eingeben',
+  send_step_enter_amount: 'Betrag eingeben',
 }

@@ -1,55 +1,50 @@
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
-import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
+import { OnClickProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-type Props = {
-  isSelected?: boolean
-  totalFiatAmount?: number
-} & ValueProp<Coin> &
-  OnClickProp &
-  IsActiveProp
+type ChainOptionProps = OnClickProp & {
+  icon: ReactNode
+  name: string
+  totalFiatAmount: number
+  isSelected: boolean
+  'data-testid': string
+}
 
+/**
+ * A chain to filter the send asset list by, with the fiat value it holds. The
+ * current filter takes a stronger background than hover.
+ */
 export const ChainOption = ({
-  value,
-  onClick,
+  icon,
+  name,
+  totalFiatAmount,
   isSelected,
-  totalFiatAmount = 0,
-}: Props) => {
-  const { chain } = value
+  ...rest
+}: ChainOptionProps) => {
   const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <Container
-      isSelected={isSelected}
-      tabIndex={0}
-      role="button"
-      onClick={onClick}
+      type="button"
+      role="option"
+      aria-selected={isSelected}
+      $isSelected={isSelected}
+      {...rest}
     >
-      <HStack alignItems="center" justifyContent="space-between">
-        <ChainDetails fullWidth alignItems="center" gap={12}>
-          <ChainEntityIcon
-            value={getChainLogoSrc(chain)}
-            style={{ fontSize: 32 }}
-          />
-          <VStack alignItems="start">
-            <Text color="contrast" size={14} weight="500">
-              {getChainDisplayName(chain)}
-            </Text>
-          </VStack>
-        </ChainDetails>
-
-        <Text size={12} color="shy" weight="500">
-          {formatFiatAmount(totalFiatAmount)}
+      <ChainDetails alignItems="center" gap={12}>
+        {icon}
+        <Text color="contrast" size={14} weight="500" cropped>
+          {name}
         </Text>
-      </HStack>
+      </ChainDetails>
+      <Text size={12} color="shy" weight="500" nowrap>
+        {formatFiatAmount(totalFiatAmount)}
+      </Text>
     </Container>
   )
 }
@@ -61,19 +56,34 @@ export const ChainOption = ({
  */
 const ChainDetails = styled(HStack)`
   min-width: 0;
+  font-size: 32px;
 `
 
-const Container = styled('div')<{ isSelected?: boolean }>`
+const Container = styled.button<{ $isSelected: boolean }>`
   ${panel()};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
   padding: 12px 20px;
+  border: none;
   border-radius: 0;
   position: relative;
   cursor: pointer;
-  background: ${({ isSelected }) =>
-    getColor(isSelected ? 'foregroundExtra' : 'foreground')};
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: ${({ $isSelected }) =>
+    getColor($isSelected ? 'foregroundExtra' : 'foreground')};
 
-  &:hover {
-    background: ${getColor('foregroundExtra')};
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:not([aria-selected='true']):hover,
+  &:not([aria-selected='true']):focus-visible {
+    background: ${getColor('foregroundDark')};
   }
 
   &::after {

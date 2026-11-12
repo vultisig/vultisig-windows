@@ -83,20 +83,12 @@ test.describe('XRP destination tag', () => {
     await vaultPage.navigateToSend()
     await sendFlow.waitForView(15_000)
     await sendFlow.selectCoin('XRP')
-    await expect(
-      sendFlow.sendForm.getByText('Ripple', { exact: true })
-    ).toBeVisible()
+    expect(await sendFlow.getSelectedCoin()).toEqual({
+      chain: 'Ripple',
+      ticker: 'XRP',
+    })
 
-    const openAddressField = async () => {
-      if (!(await sendFlow.addressInput.isVisible())) {
-        const field = page.getByTestId('send-address-field')
-        await field.scrollIntoViewIfNeeded()
-        await field.click({ force: true, position: { x: 12, y: 12 } })
-        await expect(sendFlow.addressInput).toBeVisible()
-      }
-    }
-
-    await openAddressField()
+    await sendFlow.openAddressField()
     return { page, sendFlow }
   }
 
@@ -134,8 +126,11 @@ test.describe('XRP destination tag', () => {
     await sendFlow.fillAmount('0.000001')
     await sendFlow.continue()
     await expect(page.getByText('Send Overview')).toBeVisible()
+    // The amount step under the sheet keeps its own "Destination tag" field.
     await expect(
-      page.getByText('Destination tag', { exact: true })
+      page
+        .getByLabel('Send Overview')
+        .getByText('Destination tag', { exact: true })
     ).toBeVisible()
     await expect(page.getByText('12345', { exact: true })).toBeVisible()
     await captureProof(page, 'xrp-destination-tag-overview.png')

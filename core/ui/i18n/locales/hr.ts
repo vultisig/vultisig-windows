@@ -2107,4 +2107,8 @@ export const hr = {
   token_approvals_count: 'Odobrenja: {{count}}',
   transaction_not_fully_summarized:
     'Dio ove transakcije nije ovdje sažet. Prije potpisivanja pregledajte sve detalje u nastavku.',
+  all_chains: 'Svi lanci',
+  send_step_choose_asset: 'Odaberite imovinu',
+  send_step_enter_address: 'Unesite adresu',
+  send_step_enter_amount: 'Unesite iznos',
 }

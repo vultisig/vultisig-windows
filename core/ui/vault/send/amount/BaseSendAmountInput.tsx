@@ -1,34 +1,47 @@
-import { TextInput, TextInputProps } from '@lib/ui/inputs/TextInput'
 import { InputProps } from '@lib/ui/props'
 import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import { useEffect, useRef, useState } from 'react'
 
-type BaseSendAmountInputProps = InputProps<bigint | null> &
-  Pick<TextInputProps, 'validation' | 'placeholder' | 'disabled'> & {
-    decimals: number
-  }
+import {
+  DecimalSeparator,
+  getDeviceDecimalSeparator,
+  localizeDecimalSeparator,
+  normalizeAmountText,
+} from './normalizeDecimalSeparator'
+import { SendAmountLine } from './SendAmountLine'
+
+type BaseSendAmountInputProps = InputProps<bigint | null> & {
+  decimals: number
+  ticker: string
+  placeholder: string
+  disabled?: boolean
+  isWarning?: boolean
+}
 
 type ParseSendAmountInputInput = {
   value: string
   decimals: number
+  decimalSeparator: DecimalSeparator
 }
 
 /**
  * Normalizes a raw amount input string and parses it with exact bigint math.
- * Returns `null` for a cleared input, `undefined` for a rejected one
- * (invalid characters or more fraction digits than the coin supports).
+ * A single comma is the decimal point where the locale writes one and is
+ * refused elsewhere. Returns `null` for a cleared input, `undefined` for a
+ * rejected one (invalid characters, more than one separator or more fraction
+ * digits than the coin supports).
  * Must never go through float64 — amounts with more than ~15 significant
  * digits would be silently perturbed before signing (#4488).
  */
 export const parseSendAmountInput = ({
   value,
   decimals,
+  decimalSeparator,
 }: ParseSendAmountInputInput) => {
-  let normalized = value.replace(/-/g, '')
-
-  if (normalized.startsWith('.')) {
-    normalized = `0${normalized}`
+  const normalized = normalizeAmountText({ text: value, decimalSeparator })
+  if (normalized === undefined) {
+    return undefined
   }
 
   if (normalized === '') {
@@ -57,9 +70,11 @@ export const BaseSendAmountInput = ({
   value,
   onChange,
   decimals,
-  ...inputProps
+  ticker,
+  ...lineProps
 }: BaseSendAmountInputProps) => {
   const previousValueRef = useRef<bigint | null>(null)
+  const decimalSeparator = getDeviceDecimalSeparator()
 
   const fullDecimalString =
     value !== null ? bigIntToDecimalString(value, decimals) : ''
@@ -71,17 +86,25 @@ export const BaseSendAmountInput = ({
   useEffect(() => {
     // Only update input if the value changed externally (not from user typing)
     if (value !== previousValueRef.current) {
-      const parsed = parseSendAmountInput({ value: inputValue, decimals })
+      const parsed = parseSendAmountInput({
+        value: inputValue,
+        decimals,
+        decimalSeparator,
+      })
       const currentInputAsBigInt = parsed === null ? null : parsed?.chainAmount
       if (currentInputAsBigInt !== value) {
         setInputValue(trimmedDecimalString)
       }
       previousValueRef.current = value
     }
-  }, [value, trimmedDecimalString, inputValue, decimals])
+  }, [value, trimmedDecimalString, inputValue, decimals, decimalSeparator])
 
   const handleInputValueChange = (rawValue: string) => {
-    const parsed = parseSendAmountInput({ value: rawValue, decimals })
+    const parsed = parseSendAmountInput({
+      value: rawValue,
+      decimals,
+      decimalSeparator,
+    })
 
     if (parsed === null) {
       setInputValue('')
@@ -100,18 +123,16 @@ export const BaseSendAmountInput = ({
   }
 
   return (
-    <TextInput
-      {...inputProps}
-      type="text"
-      inputMode="decimal"
-      onWheel={event => event.currentTarget.blur()}
-      value={inputValue}
-      onValueChange={handleInputValueChange}
+    <SendAmountLine
+      {...lineProps}
+      unit={ticker}
+      text={localizeDecimalSeparator({ text: inputValue, decimalSeparator })}
+      onTextChange={handleInputValueChange}
       onPaste={event => {
         event.preventDefault()
         handleInputValueChange(event.clipboardData.getData('text'))
       }}
-      data-testid="send-amount-input"
+      testId="send-amount-input"
     />
   )
 }

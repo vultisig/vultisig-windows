@@ -41,6 +41,7 @@ export const en = {
   advanced_swap_settings_gate_description:
     'Fine-tune your swaps with custom slippage, gas limit, and an external recipient address.',
   advanced_swap: 'Advanced swap',
+  all_chains: 'All chains',
   all_time_high: 'All-Time High',
   all_time_low: 'All-Time Low',
   all_vaults: 'All Vaults',
@@ -1126,6 +1127,9 @@ export const en = {
   send_invalid_receiver_address: 'Wrong address for selected chain',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
+  send_step_choose_asset: 'Choose an asset',
+  send_step_enter_address: 'Enter the address',
+  send_step_enter_amount: 'Enter the amount',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
   send_receiver_dangerous_address:

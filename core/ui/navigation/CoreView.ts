@@ -11,6 +11,7 @@ import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
+import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/reshare_message_pb'
@@ -89,16 +90,21 @@ export type CoreView =
   | { id: 'migrateVault' }
   | {
       id: 'send'
+      /** The coin to send, or a chain whose native coin is sent, and what the entry point fills in. */
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
         amount?: bigint
         destinationTag?: string
         memo?: string
         skipToVerify?: boolean
+        /** Opens on the asset step even though a coin is preselected, for entry points with no particular asset in mind. */
+        initialStep?: 'coin'
         /** TON jetton sends: pay the fee in the jetton through the relay. Unset means "decide from the TON balance". */
         tonGasless?: boolean
         /** Native Polkadot/Bittensor sends: empty the account with `transfer_allow_death`. Unset means keep it alive. */
         allowDeath?: boolean
+        /** Advanced fee settings, for the coin they were chosen for only. Unset means the chain's defaults. */
+        feeSettings?: { coin: CoinKey; value: FeeSettings }
       }
     }
   | { id: 'settings' }

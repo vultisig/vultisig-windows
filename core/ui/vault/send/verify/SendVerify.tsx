@@ -8,14 +8,13 @@ import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
-  FeeSettings,
   FeeSettingsChain,
   feeSettingsChains,
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getKeysignTonGasless } from '@vultisig/core-mpc/keysign/ton/gasless'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -45,6 +44,7 @@ import { getSendMemoError } from '../memo/sendMemoSupport'
 import { useSender } from '../sender/hooks/useSender'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
+import { useSendFeeSettings } from '../state/feeSettings'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useSendReceiverLabel } from '../state/receiverLabel'
@@ -83,9 +83,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
     address: receiver,
     chain: coin.chain,
   })
-  const [feeSettings, setFeeSettings] = useState<FeeSettings | undefined>(
-    undefined
-  )
+  const [feeSettings, setFeeSettings] = useSendFeeSettings()
   const keysignPayloadQuery = useSendKeysignPayloadQuery({
     feeSettings,
   })

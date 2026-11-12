@@ -2131,4 +2131,8 @@ export const it = {
   token_approvals_count: 'Approvazioni: {{count}}',
   transaction_not_fully_summarized:
     'Una parte di questa transazione non è riassunta qui. Si prega di leggere attentamente tutti i dettagli di seguito prima di firmare.',
+  all_chains: 'Tutte le chain',
+  send_step_choose_asset: 'Scegli un asset',
+  send_step_enter_address: "Inserisci l'indirizzo",
+  send_step_enter_amount: "Inserisci l'importo",
 }

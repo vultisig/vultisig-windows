@@ -18,12 +18,16 @@ type VaultPrimaryActionsProps = {
   coin?: CoinKey
   onReceive?: () => void
   showDepositAction?: boolean
+  /** Opens Send on the asset step. Defaults to on when no coin is given. */
+  startSendOnAsset?: boolean
 }
 
+/** The vault or chain page's Send, Swap, Buy, Deposit and Receive actions. */
 export const VaultPrimaryActions = ({
   coin: potentialCoin,
   onReceive,
   showDepositAction = true,
+  startSendOnAsset = !potentialCoin,
 }: VaultPrimaryActionsProps) => {
   const coins = usePortfolioVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
@@ -56,7 +60,10 @@ export const VaultPrimaryActions = ({
   return (
     <ActionsWrapper>
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
-      <SendPrompt coin={sendCoin} />
+      <SendPrompt
+        coin={sendCoin}
+        initialStep={startSendOnAsset ? 'coin' : undefined}
+      />
       {buyCoin && <BuyPrompt coin={buyCoin} />}
       {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
       {onReceive && <ReceivePrompt onClick={onReceive} />}
