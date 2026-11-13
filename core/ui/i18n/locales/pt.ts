@@ -2130,4 +2130,9 @@ export const pt = {
   token_approvals_count: 'Aprovações: {{count}}',
   transaction_not_fully_summarized:
     'Parte desta transação não está resumida aqui. Consulte os detalhes completos abaixo antes de assinar.',
+  move_site_to_vault_title: 'Mudar {{site}} para {{vault}}?',
+  move_site_to_vault_description:
+    '{{site}} está conectado a {{vault}}. Os outros sites continuam como estão.',
+  keep: 'Manter',
+  switch: 'Mudar',
 }

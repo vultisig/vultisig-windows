@@ -21,6 +21,11 @@ export const en = {
   rest_endpoint: 'REST Endpoint',
   rpc_endpoint: 'RPC Endpoint',
   site_wants_to_add_token: '{{site}} wants to add this token to your wallet',
+  move_site_to_vault_title: 'Switch {{site}} to {{vault}}?',
+  move_site_to_vault_description:
+    '{{site}} is connected with {{vault}}. Other sites stay as they are.',
+  keep: 'Keep',
+  switch: 'Switch',
   suggest_chain_subtitle: '{{site}} wants to add this chain to your wallet',
   suggest_chain_title: 'Add Suggested Chain',
   add_token: 'Add {{ticker}} Token',

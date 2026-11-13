@@ -2061,4 +2061,9 @@ export const ko = {
   token_approvals_count: '승인: {{count}}',
   transaction_not_fully_summarized:
     '이 거래 내역 중 일부는 여기에 요약되어 있지 않습니다. 서명하기 전에 아래의 전체 세부 정보를 검토하십시오.',
+  move_site_to_vault_title: '{{site}}을(를) {{vault}}(으)로 전환할까요?',
+  move_site_to_vault_description:
+    '{{site}}은(는) {{vault}}에 연결되어 있습니다. 다른 사이트는 그대로 유지됩니다.',
+  keep: '유지',
+  switch: '전환',
 }

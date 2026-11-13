@@ -2113,4 +2113,9 @@ export const ru = {
   token_approvals_count: 'Подтверждения: {{count}}',
   transaction_not_fully_summarized:
     'Часть условий данной сделки здесь не описана. Перед подписанием ознакомьтесь с полными подробностями ниже.',
+  move_site_to_vault_title: 'Переключить {{site}} на {{vault}}?',
+  move_site_to_vault_description:
+    '{{site}} подключён к {{vault}}. Другие сайты останутся без изменений.',
+  keep: 'Оставить',
+  switch: 'Переключить',
 }
