@@ -12,6 +12,9 @@ const featureFlagDefaults = {
   agent: false,
   mldsaKeygen: true,
   transactionHistory: true,
+  // QBTC is pre-launch: keep it out of the DeFi tab (chain picker, DeFi home,
+  // refresh, totals). Flip to re-enable. QBTC claim and governance stay intact.
+  qbtcDefi: false,
 }
 
 export const featureFlags: FeatureFlags = {

@@ -3,6 +3,7 @@ import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useSolanaStakeAccountsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaStakeAccountsQuery'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
+import { featureFlags } from '@core/ui/featureFlags'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
@@ -69,7 +70,8 @@ export const useDefiChainPortfolios = () => {
   const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
   const qbtcDelegationsQuery = useCosmosDelegationsQuery({
     chain: Chain.QBTC,
-    delegatorAddress: qbtcAddress ?? '',
+    // Skip the fetch entirely while QBTC is kept out of DeFi
+    delegatorAddress: featureFlags.qbtcDefi ? (qbtcAddress ?? '') : '',
   })
   const qbtcPricesQuery = useCoinPricesQuery({
     coins: [{ ...chainFeeCoin[Chain.QBTC], chain: Chain.QBTC }],

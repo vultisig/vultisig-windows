@@ -20,7 +20,7 @@ export const supportedDefiChains = [
   Chain.Tron,
   Chain.Terra,
   Chain.TerraClassic,
-  Chain.QBTC,
+  ...(featureFlags.qbtcDefi ? [Chain.QBTC] : []),
   Chain.Ton,
   Chain.Solana,
 ] as const satisfies readonly Chain[]
@@ -167,9 +167,11 @@ export const useToggleDefiChainWithAutoEnable = () => {
     }
 
     // Read fresh defiChains from cache to avoid stale closure after await
-    const currentDefiChains =
+    // and drop chains no longer offered (e.g. a QBTC saved before the flag)
+    const currentDefiChains = (
       queryClient.getQueryData<Chain[]>([StorageKey.defiChains]) ??
       initialDefiChains
+    ).filter(isSupportedDefiChain)
     if (!currentDefiChains.includes(chain)) {
       setDefiChains([...currentDefiChains, chain])
     }
