@@ -1,5 +1,6 @@
 import { BannerId } from '@core/ui/storage/dismissedBanners'
 import { CircleArrowUpIcon } from '@lib/ui/icons/CircleArrowUpIcon'
+import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { FireworksIcon } from '@lib/ui/icons/FireworksIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
@@ -75,6 +76,7 @@ export const homePromoBannerVisuals: Record<
   kamino: {
     accent: 'bannerAccentReferral',
     artSrc: artSrc('kamino'),
-    logoSrc: '/core/coins/solana.svg',
+    icon: CircleDollarSignIcon,
+    iconColor: 'info',
   },
 }
