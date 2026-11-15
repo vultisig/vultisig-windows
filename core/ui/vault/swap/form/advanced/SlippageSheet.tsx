@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import { AdvancedSheet } from './AdvancedSheet'
 import { SheetBackIcon } from './icons/SheetBackIcon'
 import {
-  parseCustomSlippagePercent,
+  parseCustomSlippageInput,
   SlippageMode,
   SlippageValue,
 } from './slippage'
@@ -87,12 +87,12 @@ export const SlippageSheet = ({
                 placeholder="0.00"
                 value={customText}
                 onChange={event => {
-                  const next = event.target.value
-                  setCustomText(next)
-                  setDraft({
-                    mode: 'custom',
-                    customPercent: parseCustomSlippagePercent(next),
-                  })
+                  const parsed = parseCustomSlippageInput(event.target.value)
+                  if (parsed === undefined) {
+                    return
+                  }
+                  setCustomText(parsed.text)
+                  setDraft({ mode: 'custom', customPercent: parsed.percent })
                 }}
               />
               <Text size={14} weight={400} color="shyExtra">

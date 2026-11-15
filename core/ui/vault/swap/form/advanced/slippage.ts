@@ -16,17 +16,25 @@ export const defaultSlippage: SlippageValue = {
 const maxSlippagePercent = 50
 
 /**
- * Parses a typed custom slippage into a percent clamped to [0, max].
- * A comma is read as the decimal point, so `0,5` is 0.5% rather than an
- * unparseable value that would silently fall back to Auto (#5289).
- * Anything unparseable yields 0, which `slippageToPercent` treats as Auto.
+ * Normalizes a typed custom slippage into the text the field should show and
+ * the percent it means, capped at the max. A comma is read as the decimal
+ * point, so `0,5` is 0.5% rather than an unparseable value that would
+ * silently fall back to Auto (#5289). Returns `undefined` for a rejected edit
+ * (a second separator or any other character) so the field keeps what it had
+ * and never fills with junk like `0,,,,`.
  */
-export const parseCustomSlippagePercent = (raw: string): number => {
-  const parsed = Number(raw.replace(/,/g, '.'))
-  if (!Number.isFinite(parsed)) {
-    return 0
+export const parseCustomSlippageInput = (raw: string) => {
+  const text = raw.replace(/,/g, '.')
+  const padded = text.startsWith('.') ? `0${text}` : text
+
+  if (!/^\d*\.?\d*$/.test(padded)) {
+    return undefined
   }
-  return Math.min(Math.max(parsed, 0), maxSlippagePercent)
+
+  return {
+    text: padded,
+    percent: Math.min(Number(padded), maxSlippagePercent),
+  }
 }
 
 /**
