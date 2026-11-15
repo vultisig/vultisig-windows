@@ -9,6 +9,7 @@ import {
   CosmosChain,
   EvmChain,
   OtherChain,
+  UtxoChain,
 } from '@vultisig/core-chain/Chain'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { SerializedSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
@@ -61,8 +62,10 @@ export const isEip712V4Payload = (value: unknown): value is Eip712V4Payload => {
  * a chain the custom-message signer rejects. TON is absent: a raw TON
  * signature over a 32-byte hash can authorize a transfer, so TON requests
  * come as `ton_proof` / `ton_sign_data` and the popup builds the hash itself.
+ * Bitcoin messages are UTF-8 text the popup wraps in the BIP-137 envelope.
  */
 export const rawSignMessageChains = [
+  UtxoChain.Bitcoin,
   OtherChain.Solana,
   OtherChain.Sui,
   OtherChain.Tron,
@@ -70,7 +73,10 @@ export const rawSignMessageChains = [
   OtherChain.Bittensor,
   OtherChain.Cardano,
   OtherChain.Ripple,
-] as const satisfies readonly Extract<CustomMessageSupportedChain, OtherChain>[]
+] as const satisfies readonly Extract<
+  CustomMessageSupportedChain,
+  OtherChain | UtxoChain
+>[]
 
 type RawSignMessageChain = (typeof rawSignMessageChains)[number]
 

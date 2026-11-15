@@ -5,6 +5,7 @@ import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
 import { match } from '@vultisig/lib-utils/match'
 import { keccak256, sha256 } from 'viem'
 
+import { getBitcoinSignedMessageDigest } from './bitcoin'
 import { CustomMessageSupportedChain } from './chains'
 import { getCustomMessageBytes } from './getCustomMessageBytes'
 import { getTypedDataHex } from './getTypedDataHex'
@@ -46,6 +47,9 @@ export const getCustomMessageHex = ({
   const bytes = getCustomMessageBytes(message)
 
   return match(getChainKind(chain), {
+    // BIP-137: `message` carries the `Bitcoin Signed Message:\n` envelope;
+    // the signed digest is its double SHA-256.
+    utxo: () => getBitcoinSignedMessageDigest(bytes),
     evm: () => stripHexPrefix(keccak256(bytes)),
     // ADR-36 (Keplr signArbitrary): `message` carries the canonical
     // StdSignDoc{MsgSignData} bytes; the signed digest is their sha256.

@@ -11,6 +11,7 @@ import EventEmitter from 'events'
 
 import { rebuildPsbtWithPartialSigsFromWC } from '../../utils/functions'
 import { Callback } from '../constants'
+import { signBitcoinMessage } from './bitcoin/signMessage'
 import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
 
@@ -52,6 +53,11 @@ export class UTXO extends EventEmitter {
     }
     return [address]
   }
+
+  async signMessage(message: string, type: 'ecdsa' | 'bip137' = 'ecdsa') {
+    return signBitcoinMessage({ chain: this.chain, message, type })
+  }
+
   // Keplr
   async signPSBT(
     psbt: Buffer,
@@ -111,6 +117,10 @@ export class UTXO extends EventEmitter {
 
   async request(data: RequestInput, callback?: Callback) {
     const processRequest = async () => {
+      if (data.method === 'signMessage' || data.method === 'sign_message') {
+        const [message, type] = data.params
+        return signBitcoinMessage({ chain: this.chain, message, type })
+      }
       const handlers = getSharedHandlers(this.chain)
 
       if (data.method in handlers) {

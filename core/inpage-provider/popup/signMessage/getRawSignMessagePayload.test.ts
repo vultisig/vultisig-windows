@@ -1,7 +1,7 @@
 import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
 import { isSignableCustomMessage } from '@core/ui/mpc/keysign/customMessage/isSignableCustomMessage'
-import { OtherChain } from '@vultisig/core-chain/Chain'
-import { hexlify, toUtf8Bytes } from 'ethers'
+import { OtherChain, UtxoChain } from '@vultisig/core-chain/Chain'
+import { hexlify, sha256, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
 import { getRawSignMessagePayload } from './getRawSignMessagePayload'
@@ -122,6 +122,54 @@ describe('getRawSignMessagePayload', () => {
         message: getRawSignMessagePayload({ chain: OtherChain.Tron, ...input }),
       })
     ).toBe(true)
+  })
+
+  describe('Bitcoin', () => {
+    it('wraps the UTF-8 text in the Bitcoin signed-message envelope', () => {
+      expect(
+        getRawSignMessagePayload({
+          chain: UtxoChain.Bitcoin,
+          message: 'Sign in',
+        })
+      ).toBe(
+        hexlify(
+          Buffer.concat([
+            Buffer.from([24]),
+            Buffer.from('Bitcoin Signed Message:\n'),
+            Buffer.from([7]),
+            Buffer.from('Sign in'),
+          ])
+        )
+      )
+    })
+
+    it.each(['Vires is Numeris', '0xdeadbeef'])(
+      'makes the keysign sign the text %j as a Bitcoin message',
+      message => {
+        const payload = getRawSignMessagePayload({
+          chain: UtxoChain.Bitcoin,
+          message,
+        })
+
+        expect(
+          getCustomMessageHex({
+            chain: UtxoChain.Bitcoin,
+            message: payload,
+            method: 'sign_message',
+          })
+        ).toBe(
+          sha256(
+            sha256(
+              Buffer.concat([
+                Buffer.from('\x18Bitcoin Signed Message:\n'),
+                Buffer.from([Buffer.byteLength(message)]),
+                Buffer.from(message),
+              ])
+            )
+          ).slice(2)
+        )
+      }
+    )
   })
 
   it('passes a Solana text message through unchanged', () => {

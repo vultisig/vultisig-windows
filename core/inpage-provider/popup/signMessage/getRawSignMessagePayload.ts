@@ -1,5 +1,6 @@
+import { getBitcoinSignedMessage } from '@core/ui/mpc/keysign/customMessage/bitcoin'
 import { getCustomMessageBytes } from '@core/ui/mpc/keysign/customMessage/getCustomMessageBytes'
-import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
+import { Chain, OtherChain, UtxoChain } from '@vultisig/core-chain/Chain'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { hexlify, toUtf8Bytes } from 'ethers'
 
@@ -42,6 +43,9 @@ export const getRawSignMessagePayload = ({
   // `getCustomMessageHex`); carry those exact bytes through as hex.
   if (chain === OtherChain.Ripple) {
     return hexlify(getRippleMessageBytes({ message, isHex }))
+  }
+  if (chain === UtxoChain.Bitcoin) {
+    return getBitcoinSignedMessage(message)
   }
   if (isOneOf(chain, substrateRawSignChains)) {
     return hexlify(wrapSubstrateRawBytes(getCustomMessageBytes(message)))

@@ -3,6 +3,7 @@ import { Chain, CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
 export const customMessageSupportedChains = [
   ...Object.values(EvmChain),
   ...Object.values(CosmosChain),
+  Chain.Bitcoin,
   Chain.Solana,
   Chain.Sui,
   Chain.Ton,

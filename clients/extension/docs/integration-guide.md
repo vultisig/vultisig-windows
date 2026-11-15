@@ -297,6 +297,25 @@ Accessible via `window.vultisig.bitcoin`, `window.vultisig.bitcoincash`, `window
 - `send_transaction`
 - `get_transaction_by_hash`
 
+**Message Signing (Bitcoin only):**
+
+- `signMessage(message, type?)` -- returns a base64 BIP-137 compact ECDSA signature.
+- `request({ method: "signMessage", params: [message, type?] })` -- equivalent request interface; `sign_message` is also accepted. The existing callback interface is supported.
+
+`message` is a UTF-8 string, including when it begins with `0x`. `type` defaults to `"ecdsa"`; `"bip137"` is an alias. Signing requires account authorization and user approval. The signature proves control of the connected native SegWit (P2WPKH) account and contains a BIP-137 header (39–42), followed by 32-byte `r` and `s`. Other signature schemes, including BIP-322, and message signing on other UTXO chains are rejected.
+
+```js
+const [address] = await window.vultisig.bitcoin.requestAccounts();
+const message = "Sign in to example.com";
+const signature = await window.vultisig.bitcoin.signMessage(message);
+// Verify (message, address, signature) using a BIP-137-aware verifier.
+
+const sameFormat = await window.vultisig.bitcoin.request({
+  method: "signMessage",
+  params: [message, "ecdsa"],
+});
+```
+
 **PSBT Signing (Bitcoin):**
 - `signPSBT(psbt, { inputsToSign }, broadcast)` -- sign a PSBT with optional input selection
 - `signPsbt({ psbt, broadcast, signInputs, allowedSignHash })` -- XDEFI/Ctrl-compatible PSBT signing
