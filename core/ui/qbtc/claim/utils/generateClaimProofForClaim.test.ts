@@ -9,9 +9,7 @@ vi.mock('@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService', () => ({
 }))
 
 const input = {
-  signatureR: 'aa'.repeat(32),
-  signatureS: 'bb'.repeat(32),
-  publicKey: `02${'cc'.repeat(32)}`,
+  signature: Buffer.from('1f' + 'aa'.repeat(64), 'hex').toString('base64'),
   bitcoinAddress: 'bc1qatknmeca5p0fy5decdj5704hf7prt47e0e7e9n',
   utxos: [{ txid: 'dd'.repeat(32), vout: 0 }],
   claimerAddress: 'qbtc1claimer',
@@ -26,24 +24,22 @@ describe('generateClaimProofForClaim', () => {
   })
 
   it('names the claimed Bitcoin address when the proof service broadcasts', async () => {
-    const fetchMock = vi.fn(async () =>
-      Response.json({ tx_hash: 'ee'.repeat(32) })
-    )
-    vi.stubGlobal('fetch', fetchMock)
+    vi.mocked(generateClaimProof).mockResolvedValueOnce({
+      tx_hash: 'ee'.repeat(32),
+      proof: 'ab',
+      pub_key_hash_sha256: 'cc'.repeat(32),
+      message_text: 'claim',
+      bitcoin_address: input.bitcoinAddress,
+      claimer_address: input.claimerAddress,
+      utxos: input.utxos,
+    })
 
     await expect(
       generateClaimProofForClaim({ ...input, broadcast: true })
     ).resolves.toEqual({ kind: 'server', txHash: 'ee'.repeat(32) })
 
-    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit]
-    expect(JSON.parse(String(init.body))).toEqual({
-      signature_r: input.signatureR,
-      signature_s: input.signatureS,
-      public_key: input.publicKey,
-      bitcoin_address: input.bitcoinAddress,
-      utxos: input.utxos,
-      claimer_address: input.claimerAddress,
-      chain_id: input.chainId,
+    expect(generateClaimProof).toHaveBeenCalledWith({
+      ...input,
       broadcast: true,
     })
   })

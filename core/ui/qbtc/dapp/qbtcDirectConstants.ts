@@ -4,13 +4,16 @@
  */
 
 /** Cosmos SDK chain ID used in the SignDoc. */
-export const qbtcChainId = 'qbtc'
+export const qbtcChainId = 'qbtc-1'
 
 /** Native fee denom for QBTC. */
 export const qbtcFeeDenom = 'qbtc'
 
 /** Type URL for the QBTC MLDSA public-key Any. */
-export const qbtcMldsaPubKeyTypeUrl = '/cosmos.crypto.mldsa.PubKey'
+export const qbtcMldsaPubKeyTypeUrl = '/cosmos.crypto.mldsa65.PubKey'
+
+/** QBTC custom sign mode: ML-DSA over SHA256(SignDoc). */
+export const qbtcSignMode = 1000n
 
 /**
  * Default fee for QBTC transactions when the dApp does not supply one.

@@ -7,28 +7,23 @@ import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { buildClaimTxBody } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/buildClaimTx'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
-import { type ClaimProofResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { qbtcChainId } from '../../dapp/qbtcDirectConstants'
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
-import { generateClaimProofForClaim } from '../utils/generateClaimProofForClaim'
+import { encodeClaimSignature } from '../utils/encodeClaimSignature'
+import {
+  ClaimProofResult,
+  generateClaimProofForClaim,
+} from '../utils/generateClaimProofForClaim'
 import {
   getQbtcAccountExists,
   getQbtcAccountInfoForClaim,
 } from '../utils/getQbtcAccountInfoForClaim'
 
-const proofServiceRBytes = 24
-const proofServiceSBytes = 32
 const proofServiceBaseUrl = 'https://api.vultisig.com/qbtc-proof'
-
-const padSigHex = (hex: string, bytes: number) =>
-  hex
-    .toLowerCase()
-    .replace(/^0x/, '')
-    .padStart(bytes * 2, '0')
 
 type ClaimPreparingTxResult = {
   proof: ClaimProofResult
@@ -40,8 +35,6 @@ type ClaimPreparingTxResult = {
 type ClaimPreparingTxPhaseProps = {
   utxos: ClaimableUtxo[]
   btcSig: KeysignSignature
-  compressedPubkeyHex: string
-  /** The Bitcoin address being claimed; part of the signed claim message. */
   bitcoinAddress: string
   qbtcAddress: string
   mldsaPublicKeyHex: string
@@ -80,7 +73,6 @@ type ClaimPreparingTxMutationResult =
 export const ClaimPreparingTxPhase = ({
   utxos,
   btcSig,
-  compressedPubkeyHex,
   bitcoinAddress,
   qbtcAddress,
   mldsaPublicKeyHex,
@@ -98,9 +90,7 @@ export const ClaimPreparingTxPhase = ({
       })
 
       const proofResult = await generateClaimProofForClaim({
-        signatureR: padSigHex(btcSig.r, proofServiceRBytes),
-        signatureS: padSigHex(btcSig.s, proofServiceSBytes),
-        publicKey: compressedPubkeyHex,
+        signature: encodeClaimSignature({ signature: btcSig, bitcoinAddress }),
         bitcoinAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         claimerAddress: qbtcAddress,

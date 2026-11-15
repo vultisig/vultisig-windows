@@ -1,15 +1,13 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
-import { type ClaimProofResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
-import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useState } from 'react'
 
+import { ClaimProofResult } from '../utils/generateClaimProofForClaim'
 import { getClaimAddresses } from '../utils/getClaimAddresses'
 import { getClaimMessageHashHex } from '../utils/getClaimMessageHashHex'
 import {
@@ -33,7 +31,6 @@ type ClaimRunnerPhase =
   | {
       preparingTx: {
         btcSig: KeysignSignature
-        compressedPubkeyHex: string
       }
     }
   | {
@@ -66,24 +63,13 @@ export const ClaimRunner = ({
 }: ClaimRunnerProps) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
-  const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
 
   const [claimInputs] = useState(() => {
-    const btcPublicKey = getPublicKey({
-      walletCore,
-      hexChainCode: vault.hexChainCode,
-      publicKeys: vault.publicKeys,
-      chainPublicKeys: vault.chainPublicKeys,
-      chain: Chain.Bitcoin,
-    })
-    const compressedPubkeyHex = Buffer.from(btcPublicKey.data()).toString('hex')
-
     // Same derivation a secure-vault co-signer uses, so both sign an identical
     // round-1 hash.
     const messageHashHex = getClaimMessageHashHex({ vault, walletCore })
-    const { bitcoinAddress } = getClaimAddresses({ vault, walletCore })
 
-    return { compressedPubkeyHex, messageHashHex, bitcoinAddress }
+    return { ...getClaimAddresses({ vault, walletCore }), messageHashHex }
   })
 
   const [phase, setPhase] = useState<ClaimRunnerPhase>({ btcSign: null })
@@ -105,20 +91,18 @@ export const ClaimRunner = ({
               setPhase({
                 preparingTx: {
                   btcSig,
-                  compressedPubkeyHex: claimInputs.compressedPubkeyHex,
                 },
               })
             }
             onError={onError}
           />
         ),
-        preparingTx: ({ btcSig, compressedPubkeyHex }) => (
+        preparingTx: ({ btcSig }) => (
           <ClaimPreparingTxPhase
             utxos={utxos}
             btcSig={btcSig}
-            compressedPubkeyHex={compressedPubkeyHex}
             bitcoinAddress={claimInputs.bitcoinAddress}
-            qbtcAddress={qbtcAddress}
+            qbtcAddress={claimInputs.qbtcAddress}
             mldsaPublicKeyHex={shouldBePresent(
               vault.publicKeyMldsa,
               'vault.publicKeyMldsa'
