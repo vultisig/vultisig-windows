@@ -1,4 +1,4 @@
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, SystemProgram } from '@solana/web3.js'
 import { kaminoTokenAmount } from '@vultisig/core-chain/chains/solana/kamino/amount'
 import { kaminoConfig } from '@vultisig/core-chain/chains/solana/kamino/config'
 import { kaminoVaultRegistry } from '@vultisig/core-chain/chains/solana/kamino/registry'
@@ -75,6 +75,9 @@ const firstUsdcDeposit = [
   '/wGC6dRmw0Z9LrKw2cy+tHvb9JXuHBu0d9Dar60DX6fr5AkFNTElLzITCQEJJxUECwI3BwYD',
 ].join('')
 const shareAccount = 'pTT7BQ26zy2YkBzNk3m7ywK4E4h4XD6oL2ns5SiJTnA'
+const tokenProgram = new PublicKey(
+  'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+)
 
 // A first SOL-vault deposit of 0.5 SOL: opens the wrapped-SOL and share
 // accounts, wraps, deposits, initializes the farm user state, stakes.
@@ -244,11 +247,28 @@ describe('kaminoDepositShortfall', () => {
   it('charges no rent for a share account that already exists', async () => {
     client.getMultipleAccountsInfo.mockImplementation(
       async (keys: PublicKey[]) =>
-        keys.map(key => (key.toBase58() === shareAccount ? {} : null))
+        keys.map(key =>
+          key.toBase58() === shareAccount ? { owner: tokenProgram } : null
+        )
     )
 
     expect((await kaminoDepositShortfall(input)).needed).toBe(
       5_000n + 6_400n + 5_323_840n + 650_240n
+    )
+  })
+
+  it('still charges rent for an address holding only SOL', async () => {
+    client.getMultipleAccountsInfo.mockImplementation(
+      async (keys: PublicKey[]) =>
+        keys.map(key =>
+          key.toBase58() === shareAccount
+            ? { owner: SystemProgram.programId }
+            : null
+        )
+    )
+
+    expect((await kaminoDepositShortfall(input)).needed).toBe(
+      5_000n + 6_400n + 1_488_440n + 5_323_840n + 650_240n
     )
   })
 })

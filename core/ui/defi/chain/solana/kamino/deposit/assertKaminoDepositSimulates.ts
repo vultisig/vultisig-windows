@@ -11,6 +11,7 @@ import { kaminoConfig } from '@vultisig/core-chain/chains/solana/kamino/config'
 import { KaminoVaultInfo } from '@vultisig/core-chain/chains/solana/kamino/models'
 import {
   kaminoAllowedProgram,
+  kaminoAllowedPrograms,
   kaminoInstructionAccounts,
 } from '@vultisig/core-chain/chains/solana/kamino/tx/instructions'
 import { kaminoInstructionKind } from '@vultisig/core-chain/chains/solana/kamino/tx/sequence'
@@ -18,6 +19,7 @@ import {
   resolveKaminoAccountAddresses,
   resolveKaminoLookupTables,
 } from '@vultisig/core-chain/chains/solana/kamino/tx/wire'
+import { withSolanaRpcTimeout } from '@vultisig/core-chain/chains/solana/rpcTimeout'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
@@ -31,10 +33,7 @@ export class KaminoDepositRefusedError extends Error {
   }
 }
 
-export type KaminoSimulationFailure =
-  | 'insufficientSol'
-  | 'insufficientToken'
-  | 'other'
+type KaminoSimulationFailure = 'insufficientSol' | 'insufficientToken' | 'other'
 
 // A payer with no SOL at all does not exist on chain, hence `AccountNotFound`.
 const payerSolErrors = ['AccountNotFound', 'InsufficientFundsForFee']
@@ -49,6 +48,10 @@ const tokenInsufficientFundsLog =
 const signatureFeeLamports = 5_000n
 const microLamportsPerLamport = 1_000_000n
 const walletAccountDataSize = 0
+const tokenPrograms = new Set<string>([
+  kaminoAllowedPrograms.token,
+  kaminoAllowedPrograms.token2022,
+])
 // Every mint these vaults use is classic SPL Token.
 const tokenAccountDataSize = 165
 // The farms program's `UserState`, created by `initialize_user`.
@@ -168,7 +171,10 @@ export const kaminoDepositShortfall = async ({
       client.getMultipleAccountsInfo(tokenAccounts),
     ])
 
-  const missingTokenAccounts = opened.filter(info => info === null).length
+  // Lamports alone, e.g. sent to the address before it was opened, still need the rent.
+  const missingTokenAccounts = opened.filter(
+    info => info === null || !tokenPrograms.has(info.owner.toBase58())
+  ).length
   const priorityFee =
     (BigInt(unitLimit) * unitPriceMicroLamports +
       microLamportsPerLamport -
@@ -205,7 +211,12 @@ const describeRefusal = async (
     case 'insufficientToken':
       return t('kamino_earn_insufficient_token', { ticker: input.ticker })
     case 'insufficientSol': {
-      const shortfall = await attempt(() => kaminoDepositShortfall(input))
+      const shortfall = await attempt(() =>
+        withSolanaRpcTimeout(
+          kaminoDepositShortfall(input),
+          'Kamino SOL shortfall'
+        )
+      )
       // Figures that say the wallet can pay would contradict the refusal.
       if (
         'error' in shortfall ||
@@ -230,9 +241,12 @@ const describeRefusal = async (
 export const assertKaminoDepositSimulates = async (
   input: DepositInput
 ): Promise<void> => {
-  const { value } = await getSolanaClient().simulateTransaction(
-    input.transaction,
-    { sigVerify: false, replaceRecentBlockhash: true }
+  const { value } = await withSolanaRpcTimeout(
+    getSolanaClient().simulateTransaction(input.transaction, {
+      sigVerify: false,
+      replaceRecentBlockhash: true,
+    }),
+    'Kamino deposit simulation'
   )
   if (value.err === null) return
 
