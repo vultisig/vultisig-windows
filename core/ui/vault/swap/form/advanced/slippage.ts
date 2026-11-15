@@ -12,6 +12,23 @@ export const defaultSlippage: SlippageValue = {
   customPercent: 0,
 }
 
+// Sanity cap for a manually entered slippage tolerance (percent).
+const maxSlippagePercent = 50
+
+/**
+ * Parses a typed custom slippage into a percent clamped to [0, max].
+ * A comma is read as the decimal point, so `0,5` is 0.5% rather than an
+ * unparseable value that would silently fall back to Auto (#5289).
+ * Anything unparseable yields 0, which `slippageToPercent` treats as Auto.
+ */
+export const parseCustomSlippagePercent = (raw: string): number => {
+  const parsed = Number(raw.replace(/,/g, '.'))
+  if (!Number.isFinite(parsed)) {
+    return 0
+  }
+  return Math.min(Math.max(parsed, 0), maxSlippagePercent)
+}
+
 /**
  * Human-readable label for the current slippage selection, shown on the
  * Advanced swap settings row (e.g. `Auto`, `0.5%`, `2%`).
