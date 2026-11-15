@@ -4,11 +4,6 @@ import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecima
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import { useEffect, useRef, useState } from 'react'
 
-import {
-  DecimalSeparator,
-  getLocaleDecimalSeparator,
-} from './getLocaleDecimalSeparator'
-
 type BaseSendAmountInputProps = InputProps<bigint | null> &
   Pick<TextInputProps, 'validation' | 'placeholder' | 'disabled'> & {
     decimals: number
@@ -17,30 +12,25 @@ type BaseSendAmountInputProps = InputProps<bigint | null> &
 type ParseSendAmountInputInput = {
   value: string
   decimals: number
-  decimalSeparator: DecimalSeparator
 }
 
 /**
  * Normalizes a raw amount input string and parses it with exact bigint math.
- * Returns `null` for a cleared input, `undefined` for a silently rejected one
- * (invalid characters or more fraction digits than the coin supports), and a
- * `chainAmount` of `null` for a value the field must keep showing while it
- * holds no amount — a comma the locale does not use as its decimal point.
- * A separator is never read as digit grouping: `1,5` is one and a half or
- * refused, never fifteen (#5289).
+ * Returns `null` for a cleared input and `undefined` for a rejected one
+ * (invalid characters or more fraction digits than the coin supports), which
+ * the field drops so it only ever holds a sendable amount.
+ * A comma is the decimal point, whatever the device locale: refusing it would
+ * drop the keystroke and let the next digit join the integer part, sending
+ * `1,5` as `15` (#5289). A second separator is rejected rather than read as
+ * digit grouping.
  * Must never go through float64 — amounts with more than ~15 significant
  * digits would be silently perturbed before signing (#4488).
  */
 export const parseSendAmountInput = ({
   value,
   decimals,
-  decimalSeparator,
 }: ParseSendAmountInputInput) => {
-  let normalized = value.replace(/-/g, '')
-
-  if (decimalSeparator === ',') {
-    normalized = normalized.replace(/,/g, '.')
-  }
+  let normalized = value.replace(/-/g, '').replace(/,/g, '.')
 
   if (normalized.startsWith('.')) {
     normalized = `0${normalized}`
@@ -51,11 +41,7 @@ export const parseSendAmountInput = ({
   }
 
   if (!/^\d*\.?\d*$/.test(normalized)) {
-    // Dropping a refused comma would let the next digit join the integer
-    // part, turning `1,5` into `15`, so keep it visible and hold no amount.
-    return normalized.includes(',')
-      ? { normalized, chainAmount: null }
-      : undefined
+    return undefined
   }
 
   try {
@@ -79,7 +65,6 @@ export const BaseSendAmountInput = ({
   ...inputProps
 }: BaseSendAmountInputProps) => {
   const previousValueRef = useRef<bigint | null>(null)
-  const decimalSeparator = getLocaleDecimalSeparator()
 
   const fullDecimalString =
     value !== null ? bigIntToDecimalString(value, decimals) : ''
@@ -91,25 +76,17 @@ export const BaseSendAmountInput = ({
   useEffect(() => {
     // Only update input if the value changed externally (not from user typing)
     if (value !== previousValueRef.current) {
-      const parsed = parseSendAmountInput({
-        value: inputValue,
-        decimals,
-        decimalSeparator,
-      })
+      const parsed = parseSendAmountInput({ value: inputValue, decimals })
       const currentInputAsBigInt = parsed === null ? null : parsed?.chainAmount
       if (currentInputAsBigInt !== value) {
         setInputValue(trimmedDecimalString)
       }
       previousValueRef.current = value
     }
-  }, [value, trimmedDecimalString, inputValue, decimals, decimalSeparator])
+  }, [value, trimmedDecimalString, inputValue, decimals])
 
   const handleInputValueChange = (rawValue: string) => {
-    const parsed = parseSendAmountInput({
-      value: rawValue,
-      decimals,
-      decimalSeparator,
-    })
+    const parsed = parseSendAmountInput({ value: rawValue, decimals })
 
     if (parsed === null) {
       setInputValue('')
