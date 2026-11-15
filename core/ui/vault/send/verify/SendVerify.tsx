@@ -46,8 +46,10 @@ import { useSender } from '../sender/hooks/useSender'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
-import { useSendReceiver } from '../state/receiver'
-import { useSendReceiverLabel } from '../state/receiverLabel'
+import {
+  useSendReceiverAddress,
+  useSendReceiverLabel,
+} from '../state/receiverResolution'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { ManageFee } from './ManageFee'
 import { SendAmountReducedWarning } from './SendAmountReducedWarning'
@@ -65,8 +67,8 @@ const Memo = styled.span`
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
   const { name } = useCurrentVault()
-  const [receiver] = useSendReceiver()
-  const [receiverLabel] = useSendReceiverLabel()
+  const receiver = useSendReceiverAddress()
+  const receiverLabel = useSendReceiverLabel()
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
   const coin = useCurrentSendCoin()
