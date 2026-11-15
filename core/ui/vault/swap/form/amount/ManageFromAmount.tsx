@@ -2,6 +2,7 @@ import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPric
 import { getFiatCurrencyAffixes } from '@core/ui/chain/utils/getFiatCurrencySymbol'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
+import { parseSendAmountInput } from '@core/ui/vault/send/amount/BaseSendAmountInput'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -165,32 +166,26 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
     }
   }, [value, trimmedDecimalString, inputValue, decimals, price])
 
-  const handleInputValueChange = (value: string) => {
-    value = value.replace(/-/g, '')
+  const handleInputValueChange = (rawValue: string) => {
+    // Shared with the send amount field so a comma keeps reading as the
+    // decimal point on both, rather than being dropped and letting the next
+    // digit join the integer part (#5289).
+    const parsed = parseSendAmountInput({ value: rawValue, decimals })
 
-    if (value.startsWith('.')) {
-      value = `0${value}`
-    }
-
-    if (value === '') {
+    if (parsed === null) {
       setInputValue('')
       previousValueRef.current = null
       setValue(null)
       return
     }
 
-    if (!/^\d*\.?\d*$/.test(value)) {
+    if (parsed === undefined) {
       return
     }
 
-    const chainAmount = parseAmountInputValue(value, decimals)
-    if (chainAmount === undefined) {
-      return
-    }
-
-    setInputValue(value)
-    previousValueRef.current = chainAmount
-    setValue(chainAmount)
+    setInputValue(parsed.normalized)
+    previousValueRef.current = parsed.chainAmount
+    setValue(parsed.chainAmount)
   }
 
   const handleFiatInputValueChange = (rawValue: string) => {

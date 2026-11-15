@@ -18,11 +18,13 @@ export const getFiatInputValue = (amount: number) => {
 
 /**
  * Accepts the characters a fiat amount may be typed with: digits and at most
- * one dot. Returns the normalized string, or `undefined` for a rejected edit
- * so the field keeps what it had.
+ * one decimal separator. A comma is read as that separator, since refusing it
+ * would drop the keystroke and let the next digit join the integer part,
+ * turning `1,5` into `15` (#5289). Returns the normalized string, or
+ * `undefined` for a rejected edit so the field keeps what it had.
  */
 export const parseFiatInputValue = (value: string) => {
-  const normalized = value.replace(/-/g, '')
+  const normalized = value.replace(/-/g, '').replace(/,/g, '.')
 
   if (!/^\d*\.?\d*$/.test(normalized)) {
     return undefined

@@ -36,7 +36,19 @@ describe('parseFiatInputValue', () => {
   it('strips minus signs and rejects other characters', () => {
     expect(parseFiatInputValue('-12')).toBe('12')
     expect(parseFiatInputValue('1e3')).toBeUndefined()
-    expect(parseFiatInputValue('1,000')).toBeUndefined()
     expect(parseFiatInputValue('1.2.3')).toBeUndefined()
+  })
+
+  it('reads a comma as the decimal separator (#5289)', () => {
+    // Refusing it dropped the keystroke, so the next digit joined the
+    // integer part and `1,5` became `15`.
+    expect(parseFiatInputValue('1,5')).toBe('1.5')
+    expect(parseFiatInputValue('1,')).toBe('1.')
+    expect(parseFiatInputValue(',5')).toBe('0.5')
+  })
+
+  it('never reads a separator as grouping', () => {
+    expect(parseFiatInputValue('1,000')).toBe('1.000')
+    expect(parseFiatInputValue('1,234,5')).toBeUndefined()
   })
 })
