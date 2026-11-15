@@ -1771,6 +1771,11 @@ export const zh = {
   swap_route_eta_minutes: '~{{minutes}}分',
   swap_limit_is_worth: '价值达到',
   swap_limit_when_one: '当 1',
+  kamino_earn_insufficient_sol: 'SOL 不足。请向您的保险库添加 SOL 后重试。',
+  kamino_earn_insufficient_sol_amounts:
+    'SOL 不足。该存款需要约 {{needed}}；您的保险库有 {{available}}。',
+  kamino_earn_insufficient_token: '{{ticker}} 不足。',
+  kamino_earn_simulation_failed: '该交易在 Solana 上会失败：{{reason}}',
   kamino_earn_apy_30d: 'APY（30 天）',
   kamino_earn_positions_unavailable: '余额加载失败。显示的金库信息均为最新。',
   kamino_earn_risk_conservative: '保守型',

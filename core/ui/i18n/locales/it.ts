@@ -1931,6 +1931,13 @@ export const it = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_insufficient_sol:
+    'SOL insufficienti. Aggiungi SOL al tuo vault e riprova.',
+  kamino_earn_insufficient_sol_amounts:
+    'SOL insufficienti. Questo deposito richiede circa {{needed}}; il tuo vault ha {{available}}.',
+  kamino_earn_insufficient_token: '{{ticker}} insufficienti.',
+  kamino_earn_simulation_failed:
+    'Questa transazione fallirebbe su Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30 giorni)',
   kamino_earn_positions_unavailable:
     'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',

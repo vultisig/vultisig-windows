@@ -26,6 +26,8 @@ import {
 import { SignSolanaSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
+import { assertKaminoDepositSimulates } from './assertKaminoDepositSimulates'
+
 type BuildKaminoDepositKeysignPayloadInput = {
   /** The hydrated vault being deposited into. */
   vault: KaminoVaultInfo
@@ -50,8 +52,10 @@ type BuildKaminoDepositKeysignPayloadInput = {
  * The order is load-bearing. Kamino emits no ComputeBudget instruction and no
  * memo, so both are injected here — the budget in front, the attribution memo
  * behind every instruction that moves money — then the blockhash is replaced,
- * and only then is the whole thing validated. Validating before injection
- * would check a transaction that is not the one being signed.
+ * and only then is the whole thing validated and simulated. Validating before
+ * injection would check a transaction that is not the one being signed, and a
+ * transaction the network would reject (most often a wallet without the SOL
+ * for fees and account rent) is refused here, before any co-signer's round.
  *
  * Nothing here mutates the transaction by hand: the injections, the blockhash
  * replacement and the validator all live in the chain package, and the bytes
@@ -89,12 +93,14 @@ export const buildKaminoDepositKeysignPayload = async ({
       : BigInt(sampledPrice)
   )
 
+  const unitLimit = kaminoExpectedUnitLimit({
+    operation: 'deposit',
+    descriptor: vault.descriptor,
+  })
+
   const withBudget = injectKaminoComputeBudget({
     transaction: parsed,
-    unitLimit: kaminoExpectedUnitLimit({
-      operation: 'deposit',
-      descriptor: vault.descriptor,
-    }),
+    unitLimit,
     unitPriceMicroLamports,
   })
 
@@ -108,15 +114,19 @@ export const buildKaminoDepositKeysignPayload = async ({
       operation: { deposit: amount },
       vault,
       owner: coin.address,
-      priorityFee: {
-        unitLimit: kaminoExpectedUnitLimit({
-          operation: 'deposit',
-          descriptor: vault.descriptor,
-        }),
-        unitPriceMicroLamports,
-      },
+      priorityFee: { unitLimit, unitPriceMicroLamports },
       carriesAttributionMemo: true,
     },
+  })
+
+  await assertKaminoDepositSimulates({
+    transaction,
+    vault,
+    owner: coin.address,
+    amount,
+    ticker: coin.ticker,
+    unitLimit,
+    unitPriceMicroLamports,
   })
 
   return create(KeysignPayloadSchema, {
