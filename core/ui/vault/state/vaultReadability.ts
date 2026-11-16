@@ -1,5 +1,6 @@
 import { CoreState } from '@core/ui/state/core'
 import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { areEqualRecords } from '@vultisig/lib-utils/record/areEqualRecords'
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 
 /**
@@ -34,7 +35,8 @@ type GetVaultReadabilityInputsInput = {
 /**
  * Snapshots the inputs a key-share read is about to be requested with. Taken
  * before the read starts, so a result can never be attributed to inputs it was
- * not read under.
+ * not read under. Copy key records so in-place storage updates cannot mutate
+ * the inputs a settled result was validated against.
  */
 export const getVaultReadabilityInputs = ({
   vault,
@@ -44,11 +46,15 @@ export const getVaultReadabilityInputs = ({
 }: GetVaultReadabilityInputsInput): VaultReadabilityInputs => ({
   vaultId: getVaultId(vault),
   libType: vault.libType,
-  keyShares: vault.keyShares,
-  chainKeyShares: vault.chainKeyShares,
+  keyShares: { ...vault.keyShares },
+  chainKeyShares: vault.chainKeyShares
+    ? { ...vault.chainKeyShares }
+    : undefined,
   keyShareMldsa: vault.keyShareMldsa,
-  publicKeys: vault.publicKeys,
-  chainPublicKeys: vault.chainPublicKeys,
+  publicKeys: { ...vault.publicKeys },
+  chainPublicKeys: vault.chainPublicKeys
+    ? { ...vault.chainPublicKeys }
+    : undefined,
   publicKeyMldsa: vault.publicKeyMldsa,
   hasPasscodeEncryption,
   passcode,
@@ -60,6 +66,32 @@ type HasSameReadabilityInputsInput = {
   resolved: VaultReadabilityInputs
   /** The inputs a read requested right now would use. */
   current: VaultReadabilityInputs
+}
+
+type AreEqualReadabilityValuesInput = {
+  previous: VaultReadabilityInputs[keyof VaultReadabilityInputs]
+  next: VaultReadabilityInputs[keyof VaultReadabilityInputs]
+}
+
+// Storage reloads can reconstruct identical key maps. Compare both their own
+// field names and values, including optional fields whose value is undefined.
+const areEqualReadabilityValues = ({
+  previous,
+  next,
+}: AreEqualReadabilityValuesInput) => {
+  if (previous === next) return true
+  if (
+    typeof previous !== 'object' ||
+    previous === null ||
+    typeof next !== 'object' ||
+    next === null
+  )
+    return false
+  return (
+    Object.keys(previous).every(field =>
+      Object.prototype.hasOwnProperty.call(next, field)
+    ) && areEqualRecords(previous, next)
+  )
 }
 
 /**
@@ -74,7 +106,9 @@ export const hasSameReadabilityInputs = ({
   resolved,
   current,
 }: HasSameReadabilityInputsInput) =>
-  getRecordKeys(resolved).every(key => resolved[key] === current[key])
+  getRecordKeys(resolved).every(key =>
+    areEqualReadabilityValues({ previous: resolved[key], next: current[key] })
+  )
 
 /**
  * Whether a read proven under `resolved` still vouches for the stored shares
@@ -89,6 +123,9 @@ export const canHoldProvenSharesAcrossLock = ({
 }: HasSameReadabilityInputsInput) =>
   getRecordKeys(resolved).every(
     key =>
-      resolved[key] === current[key] ||
+      areEqualReadabilityValues({
+        previous: resolved[key],
+        next: current[key],
+      }) ||
       (key === 'passcode' && current.passcode === null)
   )
