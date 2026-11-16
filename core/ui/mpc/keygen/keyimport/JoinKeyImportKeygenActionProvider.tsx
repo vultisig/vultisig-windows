@@ -9,9 +9,6 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
-import { Chain } from '@vultisig/core-chain/Chain'
-import { getChainKind } from '@vultisig/core-chain/ChainKind'
-import { signatureAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
 import {
@@ -32,7 +29,11 @@ import {
   parseKeyImportChains,
   useKeyImportChains,
 } from './state/keyImportChains'
-import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
+import {
+  getKeyImportChainKeys,
+  KeyImportChainResult,
+} from './utils/getKeyImportChainKeys'
+import { getKeyImportChainSessions } from './utils/getKeyImportChainSessions'
 import { withKeyImportServerChains } from './utils/keyImportServerChains'
 
 export const JoinKeyImportKeygenActionProvider = ({
@@ -57,6 +58,7 @@ export const JoinKeyImportKeygenActionProvider = ({
     signers,
   }) => {
     const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
+    const chainSessions = getKeyImportChainSessions(chains)
 
     const sharedDklsParams = {
       isInitiateDevice: isInitiatingDevice,
@@ -123,12 +125,9 @@ export const JoinKeyImportKeygenActionProvider = ({
             })
         : Promise.resolve(undefined)
 
-      const chainPromises = chains.map(async chain => {
-        const chainKind = getChainKind(chain)
-        const algorithm = signatureAlgorithms[chainKind]
-
+      const chainPromises = chainSessions.map(async session => {
         let result
-        if (algorithm === 'ecdsa') {
+        if (session.algorithm === 'ecdsa') {
           const chainDkls = new DKLS(
             { keyimport: true },
             sharedDklsParams.isInitiateDevice,
@@ -142,8 +141,8 @@ export const JoinKeyImportKeygenActionProvider = ({
           result = await chainDkls.startKeyImportWithRetry(
             '',
             hexChainCode,
-            chain,
-            `p-${chain}`
+            session.setupMessageId,
+            session.protocolMessageId
           )
         } else {
           const chainSchnorr = new Schnorr(
@@ -160,12 +159,12 @@ export const JoinKeyImportKeygenActionProvider = ({
           result = await chainSchnorr.startKeyImportWithRetry(
             '',
             hexChainCode,
-            chain,
-            `p-${chain}`
+            session.setupMessageId,
+            session.protocolMessageId
           )
         }
 
-        return { chain, result }
+        return { chain: session.chain, result }
       })
 
       const chainKeysPromise =
@@ -199,17 +198,12 @@ export const JoinKeyImportKeygenActionProvider = ({
           chainKeysPromise,
         ])
 
-      const chainPublicKeys: Partial<Record<Chain, string>> = {}
-      const chainKeyShares: Partial<Record<Chain, string>> = {}
       const keyShares: VaultKeyShares = {
         ecdsa: rootEcdsaResult.keyshare,
         eddsa: rootEddsaResult.keyshare,
       }
-
-      for (const { chain, result } of chainResults) {
-        chainPublicKeys[chain] = result.publicKey
-        chainKeyShares[chain] = result.keyshare
-      }
+      const { chainPublicKeys, chainKeyShares } =
+        getKeyImportChainKeys(chainResults)
 
       const baseVault: Vault = {
         name: vaultName,
@@ -233,10 +227,7 @@ export const JoinKeyImportKeygenActionProvider = ({
         publicKeyMldsa: mldsaResult?.publicKey,
         keyShareMldsa: mldsaResult?.keyshare,
       }
-      const vault = withKeyImportServerChains(
-        baseVault,
-        getKeyImportDerivationGroups(chains).map(g => g.representativeChain)
-      )
+      const vault = withKeyImportServerChains(baseVault, chains)
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -289,22 +280,13 @@ export const JoinKeyImportKeygenActionProvider = ({
         hexChainCode
       )
 
-      const chainPublicKeys: Partial<Record<Chain, string>> = {}
-      const chainKeyShares: Partial<Record<Chain, string>> = {}
       const keyShares: VaultKeyShares = {
         ecdsa: rootEcdsaResult.keyshare,
         eddsa: rootEddsaResult.keyshare,
       }
 
-      const derivationGroups = getKeyImportDerivationGroups(chains)
-
-      for (const {
-        representativeChain,
-        chains: groupChains,
-      } of derivationGroups) {
-        const chainKind = getChainKind(representativeChain)
-        const algorithm = signatureAlgorithms[chainKind]
-
+      const chainResults: KeyImportChainResult[] = []
+      for (const { chain, algorithm, setupMessageId } of chainSessions) {
         let chainResult: {
           keyshare: string
           publicKey: string
@@ -324,7 +306,7 @@ export const JoinKeyImportKeygenActionProvider = ({
           chainResult = await chainDkls.startKeyImportWithRetry(
             '',
             rootEcdsaResult.chaincode,
-            representativeChain
+            setupMessageId
           )
         } else {
           const chainSchnorr = new Schnorr(
@@ -341,15 +323,14 @@ export const JoinKeyImportKeygenActionProvider = ({
           chainResult = await chainSchnorr.startKeyImportWithRetry(
             '',
             rootEddsaResult.chaincode,
-            representativeChain
+            setupMessageId
           )
         }
 
-        for (const chain of groupChains) {
-          chainPublicKeys[chain] = chainResult.publicKey
-          chainKeyShares[chain] = chainResult.keyshare
-        }
+        chainResults.push({ chain, result: chainResult })
       }
+      const { chainPublicKeys, chainKeyShares } =
+        getKeyImportChainKeys(chainResults)
 
       let publicKeyMldsa: string | undefined
       let keyShareMldsa: string | undefined
@@ -391,10 +372,7 @@ export const JoinKeyImportKeygenActionProvider = ({
         publicKeyMldsa,
         keyShareMldsa,
       }
-      const vault = withKeyImportServerChains(
-        baseVault,
-        derivationGroups.map(g => g.representativeChain)
-      )
+      const vault = withKeyImportServerChains(baseVault, chains)
 
       await setKeygenComplete({
         serverURL: serverUrl,

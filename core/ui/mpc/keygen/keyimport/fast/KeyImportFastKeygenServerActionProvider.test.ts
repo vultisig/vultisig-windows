@@ -4,10 +4,10 @@ import { describe, expect, it } from 'vitest'
 import { KeyImportInput } from '../state/keyImportInput'
 import {
   getKeyImportServerProtocols,
-  getKeyImportServerRepresentativeChains,
+  getKeyImportServerRequestChains,
 } from './KeyImportFastKeygenServerActionProvider'
 
-describe('getKeyImportServerRepresentativeChains', () => {
+describe('getKeyImportServerRequestChains', () => {
   it('does not register per-chain server imports for Station Terra root keys', () => {
     const input: KeyImportInput = {
       kind: 'stationTerraRoot',
@@ -16,11 +16,11 @@ describe('getKeyImportServerRepresentativeChains', () => {
       chains: [Chain.Terra, Chain.TerraClassic],
     }
 
-    expect(getKeyImportServerRepresentativeChains(input)).toEqual([])
+    expect(getKeyImportServerRequestChains(input)).toEqual([])
     expect(getKeyImportServerProtocols(input)).toEqual(['ecdsa'])
   })
 
-  it('registers representative chains for mnemonic imports', () => {
+  it('registers every selected chain for mnemonic imports, including chains that share a derivation path', () => {
     const input: KeyImportInput = {
       kind: 'mnemonic',
       mnemonic:
@@ -28,9 +28,11 @@ describe('getKeyImportServerRepresentativeChains', () => {
       chains: [Chain.Terra, Chain.TerraClassic, Chain.Ethereum, Chain.BSC],
     }
 
-    expect(getKeyImportServerRepresentativeChains(input)).toEqual([
+    expect(getKeyImportServerRequestChains(input)).toEqual([
       Chain.Terra,
+      Chain.TerraClassic,
       Chain.Ethereum,
+      Chain.BSC,
     ])
     expect(getKeyImportServerProtocols(input)).toEqual(['ecdsa', 'eddsa'])
   })
