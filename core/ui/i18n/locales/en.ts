@@ -2078,4 +2078,8 @@ export const en = {
   signed_awaiting_broadcast: 'Signed, not yet sent to the network',
   signed_awaiting_broadcast_description:
     'This transaction was signed but not sent. The application that requested it is responsible for sending it to the network; the status updates once the network sees it.',
+  keysign_many_inputs_one:
+    'Signing {{count}} input. This takes longer than usual.',
+  keysign_many_inputs_other:
+    'Signing {{count}} inputs. This takes longer than usual.',
 }

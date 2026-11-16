@@ -2114,4 +2114,10 @@ export const hr = {
   token_approvals_count: 'Odobrenja: {{count}}',
   transaction_not_fully_summarized:
     'Dio ove transakcije nije ovdje sažet. Prije potpisivanja pregledajte sve detalje u nastavku.',
+  keysign_many_inputs_one:
+    'Potpisuje se {{count}} ulaz. To traje dulje nego inače.',
+  keysign_many_inputs_few:
+    'Potpisuju se {{count}} ulaza. To traje dulje nego inače.',
+  keysign_many_inputs_other:
+    'Potpisuje se {{count}} ulaza. To traje dulje nego inače.',
 }

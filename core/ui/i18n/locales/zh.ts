@@ -1959,4 +1959,6 @@ export const zh = {
   token_approvals_count: '授权：{{count}}',
   transaction_not_fully_summarized:
     '部分交易内容未在此处概述。请在签字前仔细阅读以下完整详情。',
+  keysign_many_inputs_one: '正在签名{{count}}个输入。这比平时耗时更长。',
+  keysign_many_inputs_other: '正在签名{{count}}个输入。这比平时耗时更长。',
 }
