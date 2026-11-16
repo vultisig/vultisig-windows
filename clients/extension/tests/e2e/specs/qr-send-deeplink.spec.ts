@@ -18,6 +18,43 @@ const sendDeeplinkQrPath = path.resolve(
 )
 
 test.describe('QR upload', () => {
+  test('opens Scan QR in a persistent tab from a no-vault popup (#5300)', async ({
+    context,
+    extensionId,
+  }) => {
+    await writeChromeStorageMultiple(context, {
+      hasFinishedOnboarding: true,
+      vaults: [],
+    })
+
+    const popup = await context.newPage()
+    await popup.goto(`chrome-extension://${extensionId}/index.html?view=popup`)
+    await expect(popup.getByTestId('new-vault-create')).toBeVisible()
+
+    const expandedPagePromise = context.waitForEvent('page')
+    await popup.getByRole('button', { name: 'Scan QR', exact: true }).click()
+    const expandedPage = await expandedPagePromise
+
+    await expect(expandedPage).toHaveURL(
+      `chrome-extension://${extensionId}/index.html`
+    )
+    const uploadButton = expandedPage.getByRole('button', {
+      name: 'Upload QR Code',
+    })
+    await expect(uploadButton).toBeVisible()
+    await expect(expandedPage.getByTestId('new-vault-create')).toHaveCount(0)
+
+    // Closing the popup must leave the scanner alive in the expanded tab.
+    await popup.close()
+    const otherPage = await context.newPage()
+    await otherPage.bringToFront()
+    await expandedPage.bringToFront()
+    const pageCount = context.pages().length
+    await uploadButton.click()
+    await expect(expandedPage.locator('input[type="file"]')).toHaveCount(1)
+    expect(context.pages()).toHaveLength(pageCount)
+  })
+
   test('opens a mobile send QR with the recipient and amount filled in (#5149)', async ({
     context,
     extensionId,
