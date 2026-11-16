@@ -1917,6 +1917,13 @@ export const ru = {
   swap_route_eta_minutes: '~{{minutes}}мин',
   swap_limit_is_worth: 'стоит',
   swap_limit_when_one: 'Когда 1',
+  kamino_earn_insufficient_sol:
+    'Недостаточно SOL. Пополните хранилище SOL и попробуйте снова.',
+  kamino_earn_insufficient_sol_amounts:
+    'Недостаточно SOL. Для депозита нужно около {{needed}}; в хранилище {{available}}.',
+  kamino_earn_insufficient_token: 'Недостаточно {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Эта транзакция не прошла бы в Solana: {{reason}}',
   kamino_earn_apy_30d: 'Годовая процентная доходность (30 дней)',
   kamino_earn_positions_unavailable:
     'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',

@@ -1590,6 +1590,13 @@ export const en = {
   kamino_earn_unreadable_description:
     'It reaches a Kamino vault, but this app cannot read what it does, so it will not sign it.',
   kamino_earn_unreadable_title: 'This transaction cannot be verified',
+  kamino_earn_insufficient_sol:
+    'Not enough SOL. Add SOL to your vault and try again.',
+  kamino_earn_insufficient_sol_amounts:
+    'Not enough SOL. This deposit needs about {{needed}}; your vault has {{available}}.',
+  kamino_earn_insufficient_token: 'Not enough {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'This transaction would fail on Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_card_deposit: 'Deposit',
   kamino_earn_card_withdraw: 'Withdraw',

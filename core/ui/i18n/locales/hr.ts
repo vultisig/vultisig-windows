@@ -1909,6 +1909,13 @@ export const hr = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vrijedi',
   swap_limit_when_one: 'Kada 1',
+  kamino_earn_insufficient_sol:
+    'Nema dovoljno SOL-a. Dodajte SOL u svoj trezor i pokušajte ponovno.',
+  kamino_earn_insufficient_sol_amounts:
+    'Nema dovoljno SOL-a. Ovaj polog treba oko {{needed}}; vaš trezor ima {{available}}.',
+  kamino_earn_insufficient_token: 'Nema dovoljno {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Ova transakcija bi na Solani propala: {{reason}}',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_positions_unavailable:
     'Stanje nije moguće učitati. Prikazani trezori su ažurirani.',

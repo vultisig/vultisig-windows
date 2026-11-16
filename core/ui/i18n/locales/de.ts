@@ -1945,6 +1945,13 @@ export const de = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'wert ist',
   swap_limit_when_one: 'Wenn 1',
+  kamino_earn_insufficient_sol:
+    'Nicht genug SOL. Fügen Sie Ihrem Tresor SOL hinzu und versuchen Sie es erneut.',
+  kamino_earn_insufficient_sol_amounts:
+    'Nicht genug SOL. Diese Einzahlung benötigt etwa {{needed}}; Ihr Tresor hat {{available}}.',
+  kamino_earn_insufficient_token: 'Nicht genug {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Diese Transaktion würde auf Solana fehlschlagen: {{reason}}',
   kamino_earn_apy_30d: 'Jahreszins (30 Tage)',
   kamino_earn_positions_unavailable:
     'Die Salden konnten nicht geladen werden. Die angezeigten Tresore sind aktuell.',

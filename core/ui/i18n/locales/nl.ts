@@ -1912,6 +1912,13 @@ export const nl = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'waard is',
   swap_limit_when_one: 'Wanneer 1',
+  kamino_earn_insufficient_sol:
+    'Niet genoeg SOL. Voeg SOL toe aan je kluis en probeer het opnieuw.',
+  kamino_earn_insufficient_sol_amounts:
+    'Niet genoeg SOL. Deze storting heeft ongeveer {{needed}} nodig; je kluis heeft {{available}}.',
+  kamino_earn_insufficient_token: 'Niet genoeg {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Deze transactie zou op Solana mislukken: {{reason}}',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_positions_unavailable:
     "Saldo's konden niet worden geladen. De weergegeven kluizen zijn actueel.",

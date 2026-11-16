@@ -1865,6 +1865,13 @@ export const ko = {
   swap_route_eta_minutes: '~{{minutes}}분',
   swap_limit_is_worth: '의 가치가',
   swap_limit_when_one: '1',
+  kamino_earn_insufficient_sol:
+    'SOL이 부족합니다. 볼트에 SOL을 추가한 후 다시 시도하세요.',
+  kamino_earn_insufficient_sol_amounts:
+    'SOL이 부족합니다. 이 예치에는 약 {{needed}}이(가) 필요하며, 볼트에는 {{available}}이(가) 있습니다.',
+  kamino_earn_insufficient_token: '{{ticker}}이(가) 부족합니다.',
+  kamino_earn_simulation_failed:
+    '이 트랜잭션은 Solana에서 실패합니다: {{reason}}',
   kamino_earn_apy_30d: 'APY(30일)',
   kamino_earn_positions_unavailable:
     '잔액을 불러올 수 없습니다. 표시된 볼트 목록은 최신입니다.',

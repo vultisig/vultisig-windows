@@ -1928,6 +1928,13 @@ export const es = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
+  kamino_earn_insufficient_sol:
+    'No hay suficiente SOL. Agrega SOL a tu bóveda e inténtalo de nuevo.',
+  kamino_earn_insufficient_sol_amounts:
+    'No hay suficiente SOL. Este depósito necesita unos {{needed}}; tu bóveda tiene {{available}}.',
+  kamino_earn_insufficient_token: 'No hay suficiente {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Esta transacción fallaría en Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30 días)',
   kamino_earn_positions_unavailable:
     'No se pudieron cargar los saldos. Los vaults mostrados están actualizados.',
