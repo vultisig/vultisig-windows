@@ -2138,4 +2138,8 @@ export const it = {
   token_approvals_count: 'Approvazioni: {{count}}',
   transaction_not_fully_summarized:
     'Una parte di questa transazione non è riassunta qui. Si prega di leggere attentamente tutti i dettagli di seguito prima di firmare.',
+  keysign_many_inputs_one:
+    'Firma di {{count}} input in corso. Richiede più tempo del solito.',
+  keysign_many_inputs_other:
+    'Firma di {{count}} input in corso. Richiede più tempo del solito.',
 }

@@ -2068,4 +2068,8 @@ export const ko = {
   token_approvals_count: '승인: {{count}}',
   transaction_not_fully_summarized:
     '이 거래 내역 중 일부는 여기에 요약되어 있지 않습니다. 서명하기 전에 아래의 전체 세부 정보를 검토하십시오.',
+  keysign_many_inputs_one:
+    '입력 {{count}}개에 서명하는 중입니다. 평소보다 시간이 더 걸립니다.',
+  keysign_many_inputs_other:
+    '입력 {{count}}개에 서명하는 중입니다. 평소보다 시간이 더 걸립니다.',
 }

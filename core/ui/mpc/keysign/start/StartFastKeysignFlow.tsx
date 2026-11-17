@@ -32,6 +32,7 @@ export const StartFastKeysignFlow = ({
   const [{ keysignPayload, password, toAddressLabel, swapQuote }] =
     useCoreViewState<'keysign'>()
   const [isConnected, setIsConnected] = useState(false)
+  const [messageCount, setMessageCount] = useState<number>()
   const [showProgress, setShowProgress] = useState(true)
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -55,7 +56,10 @@ export const StartFastKeysignFlow = ({
             title={t(isConnected ? 'keysign' : 'connecting_to_server')}
             hasBorder
           />
-          <KeysignSigningState isConnected={isConnected} />
+          <KeysignSigningState
+            isConnected={isConnected}
+            messageCount={messageCount}
+          />
           <PageFooter alignItems="center">
             <Text color="shy" size={12}>
               {isConnected ? `${t('version')} ${version}` : '\u00a0'}
@@ -94,6 +98,7 @@ export const StartFastKeysignFlow = ({
                           <KeysignSigningStep
                             onSettled={hideProgress}
                             onStart={showSigningProgress}
+                            onMessageCount={setMessageCount}
                             renderPending={renderPending}
                             toAddressLabel={toAddressLabel}
                           />

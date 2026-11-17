@@ -2121,4 +2121,8 @@ export const nl = {
   token_approvals_count: 'Goedkeuringen: {{count}}',
   transaction_not_fully_summarized:
     'Een deel van deze transactie wordt hier niet samengevat. Lees de volledige details hieronder door voordat u tekent.',
+  keysign_many_inputs_one:
+    '{{count}} input wordt ondertekend. Dit duurt langer dan normaal.',
+  keysign_many_inputs_other:
+    '{{count}} inputs worden ondertekend. Dit duurt langer dan normaal.',
 }

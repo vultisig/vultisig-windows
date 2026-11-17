@@ -1,5 +1,8 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
+import {
+  KeysignAction,
+  useKeysignAction,
+} from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import {
   customMessageDefaultChain,
@@ -57,11 +60,24 @@ import {
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 import { getCosmosDAppTxHash } from '../../tx/getCosmosDAppTxHash'
 
-export const useKeysignMutation = (payload: KeysignMessagePayload) => {
+type UseKeysignMutationInput = {
+  payload: KeysignMessagePayload
+  onMessageCount?: (count: number) => void
+}
+
+/** Signs and broadcasts the payload; reports the message count before signing starts. */
+export const useKeysignMutation = ({
+  payload,
+  onMessageCount,
+}: UseKeysignMutationInput) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
 
-  const keysignAction = useKeysignAction()
+  const baseKeysignAction = useKeysignAction()
+  const keysignAction: KeysignAction = input => {
+    onMessageCount?.(input.msgs.length)
+    return baseKeysignAction(input)
+  }
   const mutationListener = useKeysignMutationListener()
 
   return useMutation({

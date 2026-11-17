@@ -30,7 +30,7 @@ import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
-import { ReactNode, useEffect, useLayoutEffect } from 'react'
+import { ReactNode, useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
@@ -43,6 +43,7 @@ import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 type KeysignSigningStepProps = Partial<OnBackProp> & {
   onSettled?: () => void
   onStart?: () => void
+  onMessageCount?: (count: number) => void
   renderPending?: () => ReactNode
   toAddressLabel?: string
 }
@@ -69,6 +70,7 @@ export const KeysignSigningStep = ({
   onBack,
   onSettled,
   onStart,
+  onMessageCount,
   renderPending,
   toAddressLabel,
 }: KeysignSigningStepProps) => {
@@ -76,8 +78,14 @@ export const KeysignSigningStep = ({
   const { version, goHome } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
-  const { mutate: startKeysign, ...mutationStatus } =
-    useKeysignMutation(payload)
+  const [messageCount, setMessageCount] = useState<number>()
+  const { mutate: startKeysign, ...mutationStatus } = useKeysignMutation({
+    payload,
+    onMessageCount: count => {
+      setMessageCount(count)
+      onMessageCount?.(count)
+    },
+  })
   const [, copyToClipboard] = useCopyToClipboard()
   useLayoutEffect(() => onStart?.(), [onStart])
   useLayoutEffect(() => {
@@ -298,7 +306,7 @@ export const KeysignSigningStep = ({
               title={t('keysign')}
               hasBorder
             />
-            <KeysignSigningState />
+            <KeysignSigningState messageCount={messageCount} />
             <PageFooter alignItems="center">
               <Text color="shy" size={12}>
                 {t('version')} {version}

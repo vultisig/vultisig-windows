@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 import { KeysignLoadingAnimation } from './KeysignLoadingAnimation'
+import { KeysignManyInputsNotice } from './KeysignManyInputsNotice'
 import { getKeysignPayloadLogoSrc } from './utils/getKeysignPayloadLogoSrc'
 
 // The core keysign is a single TSS signing operation that exposes no
@@ -16,12 +17,15 @@ const signingTickMs = 200
 /**
  * Full-screen signing state shown while an MPC keysign is in progress.
  * Renders the Rive animation with the signing coin's logo (falling back to
- * the chain logo when no coin logo is available).
+ * the chain logo when no coin logo is available), plus a slow-signing notice
+ * once the number of messages being signed is known.
  */
 export const KeysignSigningState = ({
   isConnected = true,
+  messageCount,
 }: {
   isConnected?: boolean
+  messageCount?: number
 }) => {
   const payload = useKeysignMessagePayload()
   const logoSrc = getKeysignPayloadLogoSrc(payload)
@@ -50,6 +54,11 @@ export const KeysignSigningState = ({
         progress={progress}
         logoSrc={logoSrc}
       />
+      {messageCount !== undefined && (
+        <Notice>
+          <KeysignManyInputsNotice value={messageCount} />
+        </Notice>
+      )}
     </Container>
   )
 }
@@ -60,4 +69,12 @@ const Container = styled.div`
   width: 100%;
   min-height: 0;
   overflow: hidden;
+`
+
+const Notice = styled.div`
+  position: absolute;
+  inset-inline: 0;
+  bottom: 24px;
+  z-index: 1;
+  padding-inline: 16px;
 `
