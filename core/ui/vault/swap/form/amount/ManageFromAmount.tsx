@@ -1,7 +1,9 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { getFiatCurrencyAffixes } from '@core/ui/chain/utils/getFiatCurrencySymbol'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { AmountInputSource } from '@core/ui/vault/send/amount/amountInputSource'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
+import { parseSendAmountInput } from '@core/ui/vault/send/amount/BaseSendAmountInput'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -165,36 +167,37 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
     }
   }, [value, trimmedDecimalString, inputValue, decimals, price])
 
-  const handleInputValueChange = (value: string) => {
-    value = value.replace(/-/g, '')
+  const handleInputValueChange = (
+    rawValue: string,
+    source: AmountInputSource = 'typing'
+  ) => {
+    // Shared with the send amount field so a typed comma keeps reading as the
+    // decimal point on both, rather than being dropped and letting the next
+    // digit join the integer part (#5289), while a grouped-thousand paste is
+    // refused on both rather than meaning a thousandth as much.
+    const parsed = parseSendAmountInput({ value: rawValue, decimals, source })
 
-    if (value.startsWith('.')) {
-      value = `0${value}`
-    }
-
-    if (value === '') {
+    if (parsed === null) {
       setInputValue('')
       previousValueRef.current = null
       setValue(null)
       return
     }
 
-    if (!/^\d*\.?\d*$/.test(value)) {
+    if (parsed === undefined) {
       return
     }
 
-    const chainAmount = parseAmountInputValue(value, decimals)
-    if (chainAmount === undefined) {
-      return
-    }
-
-    setInputValue(value)
-    previousValueRef.current = chainAmount
-    setValue(chainAmount)
+    setInputValue(parsed.normalized)
+    previousValueRef.current = parsed.chainAmount
+    setValue(parsed.chainAmount)
   }
 
-  const handleFiatInputValueChange = (rawValue: string) => {
-    const normalized = parseFiatInputValue(rawValue)
+  const handleFiatInputValueChange = (
+    rawValue: string,
+    source: AmountInputSource = 'typing'
+  ) => {
+    const normalized = parseFiatInputValue({ value: rawValue, source })
     if (normalized === undefined) {
       return
     }
@@ -257,7 +260,8 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
                     onPaste={event => {
                       event.preventDefault()
                       handleInputValueChange(
-                        event.clipboardData.getData('text')
+                        event.clipboardData.getData('text'),
+                        'paste'
                       )
                     }}
                     data-testid="swap-from-amount-input"
@@ -289,7 +293,8 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
                         onPaste={event => {
                           event.preventDefault()
                           handleFiatInputValueChange(
-                            event.clipboardData.getData('text')
+                            event.clipboardData.getData('text'),
+                            'paste'
                           )
                         }}
                         data-testid="swap-from-fiat-amount-input"
