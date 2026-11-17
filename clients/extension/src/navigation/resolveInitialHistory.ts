@@ -11,6 +11,7 @@ const onboardingViews: ReadonlySet<AppViewId> = new Set<AppViewId>([
   'importVault',
   'importSeedphrase',
   'joinKeygen',
+  'uploadQr',
 ])
 
 type ResolveInitialHistoryInput = {
