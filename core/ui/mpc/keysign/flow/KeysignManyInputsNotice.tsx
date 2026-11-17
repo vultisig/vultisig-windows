@@ -3,7 +3,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 // Messages sign one after another, so from here on the wait is noticeably long
-const manyInputsMessageCount = 10
+const manyInputsMessageCount = 3
 
 export const KeysignManyInputsNotice = ({ value }: ValueProp<number>) => {
   const { t } = useTranslation()

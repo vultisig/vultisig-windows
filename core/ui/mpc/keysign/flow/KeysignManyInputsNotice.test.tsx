@@ -19,8 +19,8 @@ const render = (count: number) =>
   )
 
 describe('KeysignManyInputsNotice', () => {
-  it('shows the slow-signing notice from 10 messages, with the count', () => {
-    expect(render(9)).toBe('')
-    expect(render(10)).toContain('keysign_many_inputs:10')
+  it('shows the slow-signing notice from 3 messages, with the count', () => {
+    expect(render(2)).toBe('')
+    expect(render(3)).toContain('keysign_many_inputs:3')
   })
 })
