@@ -116,6 +116,7 @@ export const ClaimPreparingTxPhase = ({
       })
 
       const claimTxBodyInput = {
+        bitcoinAddress,
         claimer: qbtcAddress,
         broadcaster: qbtcAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
