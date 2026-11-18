@@ -60,6 +60,16 @@ const suppressions = [
     owner: 'vultisig/windows',
     reviewBy: '2027-01-01',
   },
+  {
+    id: 1247710,
+    advisory: 'GHSA-fc5q-39xc-vjpf',
+    package: 'picomatch',
+    path: 'dependency-cruiser > picomatch; knip > picomatch; micromatch > picomatch',
+    reason:
+      'ReDoS through single-branch repeated extglobs in picomatch (<=4.0.7). It is only reachable through build, lint and quality tooling (dependency-cruiser, knip, micromatch) matching glob patterns this repo controls, and is never bundled into the shipped desktop or extension runtime. The advisory has no patched version (first_patched_version is null) and 4.0.7 is the latest picomatch release, so there is nothing to upgrade to; suppression retained until upstream publishes a fix.',
+    owner: 'vultisig/windows',
+    reviewBy: '2027-01-01',
+  },
 ]
 
 const args = [
