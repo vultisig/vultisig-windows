@@ -1,5 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
+import { isSupportedDefiChain } from '@core/ui/storage/defiChains'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -26,7 +27,8 @@ export const useOpenThorchainStaked = () => {
 
   const selectThorchainStaked = async () => {
     const selection = resolveThorchainStakedSelection({
-      defiChains: await getDefiChains(),
+      // Drop chains no longer offered so a stale QBTC is not written back
+      defiChains: (await getDefiChains()).filter(isSupportedDefiChain),
       defiPositions: await getDefiPositions(),
     })
 
