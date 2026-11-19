@@ -104,7 +104,6 @@ The extension provides:
   - `window.cardano.vultisig` for Cardano CIP-30 dApps
   - Sui Wallet Standard registration for Sui dApps
   - `window.tonkeeper.tonconnect` for TON Connect-compatible dApps
-  - `window.injectedWeb3.bittensor` for Bittensor dApps when Vultisig is prioritized
   - Station-compatible globals for Terra dApps
   - `window.tronLink` / `window.tronWeb` for Tron dApps
   - `window.xfi` for XDEFI/Ctrl-compatible dApps
@@ -445,9 +444,9 @@ the generic provider contracts documented above:
   When prioritized, it is also available at `window.phantom.sui`.
 - **TON:** TON Connect-compatible dApps can use
   `window.vultisig.ton.tonconnect` or `window.tonkeeper.tonconnect`.
-- **Bittensor:** the direct provider is `window.vultisig.bittensor`. When
-  prioritized, Substrate-compatible dApps can also discover it at
-  `window.injectedWeb3.bittensor`.
+- **Bittensor:** the direct provider is `window.vultisig.bittensor`.
+  Substrate-compatible dApps discover it as `window.injectedWeb3.vultisig`,
+  which is not priority-gated.
 - **Terra / Station:** the direct provider is `window.vultisig.station`.
   Compatibility injection also supplies guarded `window.station` and
   `window.terra` globals, Station detection flags, and entries in the
@@ -478,7 +477,7 @@ the prioritized wallet:
 | `window.cardano.vultisig` | Cardano CIP-30 | Direct Cardano discovery |
 | Sui Wallet Standard | Sui | Registered when the current vault supports Sui |
 | `window.tonkeeper.tonconnect` | TON Connect | Guarded TON wallet discovery |
-| `window.injectedWeb3.bittensor` | Substrate | Present when Vultisig is prioritized |
+| `window.injectedWeb3.vultisig` | Substrate | Bittensor provider; not priority-gated |
 | `window.station` / `window.terra` | Station | Guarded Terra compatibility globals; not priority-gated |
 | `window.vultisig.xrpl` | Native XRPL | Direct account, message-signing, and transaction API |
 | `window.gemWallet` | GemWallet / XRPL | Guarded presence marker and request bridge; not priority-gated |
