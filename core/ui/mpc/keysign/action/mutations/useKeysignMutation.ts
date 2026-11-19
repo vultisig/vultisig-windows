@@ -80,7 +80,7 @@ export const useKeysignMutation = ({
   const baseKeysignAction = useKeysignAction()
   const keysignAction: KeysignAction = input => {
     onMessageCount?.(input.msgs.length)
-    return baseKeysignAction(input)
+    return baseKeysignAction({ ...input, onProgress })
   }
   const mutationListener = useKeysignMutationListener()
 
@@ -301,7 +301,6 @@ export const useKeysignMutation = ({
               signatureAlgorithm,
               coinType,
               chain,
-              onProgress,
             })
             const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
               Buffer.from(msg, 'base64').toString('hex')
