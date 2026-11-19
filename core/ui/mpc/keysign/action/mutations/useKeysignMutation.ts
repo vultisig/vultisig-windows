@@ -1,6 +1,7 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   KeysignAction,
+  KeysignProgress,
   useKeysignAction,
 } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
@@ -63,12 +64,15 @@ import { getCosmosDAppTxHash } from '../../tx/getCosmosDAppTxHash'
 type UseKeysignMutationInput = {
   payload: KeysignMessagePayload
   onMessageCount?: (count: number) => void
+  /** Signature progress of the transaction's own messages, as they finish. */
+  onProgress?: (progress: KeysignProgress) => void
 }
 
 /** Signs and broadcasts the payload; reports the message count before signing starts. */
 export const useKeysignMutation = ({
   payload,
   onMessageCount,
+  onProgress,
 }: UseKeysignMutationInput) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
@@ -297,6 +301,7 @@ export const useKeysignMutation = ({
               signatureAlgorithm,
               coinType,
               chain,
+              onProgress,
             })
             const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
               Buffer.from(msg, 'base64').toString('hex')

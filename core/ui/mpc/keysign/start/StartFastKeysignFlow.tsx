@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
+import { useKeysignSignatureProgress } from '@core/ui/mpc/keysign/flow/hooks/useKeysignSignatureProgress'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
@@ -24,6 +25,11 @@ import { SwapQuoteProvider } from '../state/swapQuote'
 
 const keysignSteps = ['server', 'keysign'] as const
 
+/**
+ * Fast-vault keysign: VultiServer co-signs with the password, so the flow
+ * goes straight from connecting to signing behind one persistent signing
+ * screen that this component renders above the steps.
+ */
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
@@ -34,6 +40,8 @@ export const StartFastKeysignFlow = ({
   const [isConnected, setIsConnected] = useState(false)
   const [messageCount, setMessageCount] = useState<number>()
   const [showProgress, setShowProgress] = useState(true)
+  const { signatureProgress, reportSignatureProgress } =
+    useKeysignSignatureProgress()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: goBack,
@@ -59,6 +67,7 @@ export const StartFastKeysignFlow = ({
           <KeysignSigningState
             isConnected={isConnected}
             messageCount={messageCount}
+            signatureProgress={signatureProgress}
           />
           <PageFooter alignItems="center">
             <Text color="shy" size={12}>
@@ -99,6 +108,7 @@ export const StartFastKeysignFlow = ({
                             onSettled={hideProgress}
                             onStart={showSigningProgress}
                             onMessageCount={setMessageCount}
+                            onProgress={reportSignatureProgress}
                             renderPending={renderPending}
                             toAddressLabel={toAddressLabel}
                           />
