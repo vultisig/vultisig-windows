@@ -71,7 +71,7 @@ const TabButton = styled(UnstyledButton)<{ $isActive: boolean }>`
   ${({ $isActive }) =>
     $isActive
       ? css`
-          color: ${getColor('contrast')};
+          color: ${getColor('text')};
         `
       : css`
           color: ${getColor('textShy')};
