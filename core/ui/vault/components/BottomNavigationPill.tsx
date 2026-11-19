@@ -16,23 +16,31 @@ type BottomNavigationPillProps = {
   /** Fractional tab index the pill sits on; whole numbers at rest. */
   indicator: MotionValue<number>
   tabCount: number
+  /** Space between neighbouring tabs, in px. */
+  tabGap?: number
 }
 
+/** The selected-tab highlight; it stretches like liquid as it slides between tabs. */
 export const BottomNavigationPill = ({
   indicator,
   tabCount,
+  tabGap = 0,
 }: BottomNavigationPillProps) => {
   const shouldReduceMotion = useReducedMotion() === true
   const tabShare = 100 / tabCount
+  const gapShare = tabGap / tabCount
+  const tabWidth = `(${tabShare}% - ${(tabCount - 1) * gapShare}px)`
   const stretch = useTransform(indicator, value =>
     shouldReduceMotion ? 0 : Math.sin(Math.PI * (value - Math.floor(value)))
   )
-  const left = useTransform(
-    () => `${(indicator.get() - (pillStretch * stretch.get()) / 2) * tabShare}%`
-  )
+  const left = useTransform(() => {
+    const index = indicator.get()
+    const shift = (pillStretch * stretch.get()) / 2
+    return `calc(${index * tabShare}% + ${index * gapShare}px - ${tabWidth} * ${shift})`
+  })
   const width = useTransform(
     stretch,
-    value => `${tabShare * (1 + pillStretch * value)}%`
+    value => `calc(${tabWidth} * ${1 + pillStretch * value})`
   )
   const scaleY = useTransform(stretch, value => 1 - pillSquash * value)
 
