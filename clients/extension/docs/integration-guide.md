@@ -47,7 +47,7 @@ The extension provides:
 - **`window.vultisig.ethereum`** for Ethereum and EVM chain integrations.
 - **`window.vultisig.thorchain`** for THORChain support.
 - **`window.vultisig.solana`** for Solana support and Wallet Standard registration.
-- **`window.vultisig.qbtc`** for QBTC (post-quantum ML-DSA-44) integration.
+- **`window.vultisig.qbtc`** for QBTC (post-quantum ML-DSA-65) integration.
 - **`window.cardano.vultisig`** for Cardano CIP-30 discovery.
 - **`window.vultisig.sui`** and Sui Wallet Standard registration for Sui dApps.
 - **`window.vultisig.ton.tonconnect`** for TON Connect discovery.
@@ -396,10 +396,10 @@ honestly. `Paths` is passed through and shown to the user as a routing notice.
 
 ### QBTC (`window.vultisig.qbtc` and `window.keplr`)
 
-QBTC is a post-quantum Cosmos SDK chain that signs with **ML-DSA-44** rather than secp256k1/ed25519. Vultisig exposes QBTC via two complementary surfaces:
+QBTC is a post-quantum Cosmos SDK chain that signs with **ML-DSA-65** rather than secp256k1/ed25519. Vultisig exposes QBTC via two complementary surfaces:
 
 - **`window.vultisig.qbtc`** -- recommended QBTC-native provider with explicit MLDSA semantics. Use this when you control the dApp client.
-- **`window.keplr`** (chainId `qbtc-testnet`) -- compatibility route for Keplr-shape dApps and cosmjs / cosmos-kit clients that can't be modified. The Keplr `algo` field is reported as `secp256k1` because the Keplr `Algo` union has no MLDSA enum, but the `pubKey` bytes returned are the real ML-DSA-44 key (see "Public key shape" below).
+- **`window.keplr`** (chainId `qbtc-testnet`) -- compatibility route for Keplr-shape dApps and cosmjs / cosmos-kit clients that can't be modified. The Keplr `algo` field is reported as `secp256k1` because the Keplr `Algo` union has no MLDSA enum, but the `pubKey` bytes returned are the real ML-DSA-65 key (see "Public key shape" below).
 
 **Account Management (`window.vultisig.qbtc`):**
 - `request_accounts` -- connect and return the QBTC bech32 address
@@ -422,7 +422,7 @@ Vultisig Developer Options and create a new vault.
 code: 4100 (Unauthorized)
 ```
 
-**Public key shape:** Unlike other chains, the `publicKey` (or Keplr `pubKey`) returned for QBTC is the raw ML-DSA-44 hex public key (~1312 bytes), not a 33-byte compressed secp256k1 key. dApps verifying signatures must use ML-DSA-44 verification regardless of which surface they used; the `algo: 'secp256k1'` tag reported by `window.keplr.getKey('qbtc-testnet')` is a compatibility shim and does not describe the actual signing algorithm.
+**Public key shape:** Unlike other chains, the `publicKey` (or Keplr `pubKey`) returned for QBTC is the raw ML-DSA-65 hex public key (1952 bytes), not a 33-byte compressed secp256k1 key. dApps verifying signatures must use ML-DSA-65 verification regardless of which surface they used; the `algo: 'secp256k1'` tag reported by `window.keplr.getKey('qbtc-testnet')` is a compatibility shim and does not describe the actual signing algorithm.
 
 ### Plugin Provider (`window.vultisig.plugin`)
 
@@ -641,9 +641,9 @@ const connectQbtcViaKeplr = async () => {
   await window.keplr.enable("qbtc-testnet");
   const key = await window.keplr.getKey("qbtc-testnet");
   console.log("QBTC address:", key.bech32Address);
-  // key.pubKey is the raw ML-DSA-44 public key (~1312 bytes).
+  // key.pubKey is the raw ML-DSA-65 public key (1952 bytes).
   // key.algo is reported as 'secp256k1' for Keplr API compatibility;
-  // verify signatures with ML-DSA-44 regardless.
+  // verify signatures with ML-DSA-65 regardless.
 
   const signer = window.keplr.getOfflineSigner("qbtc-testnet");
   // Use `signer` with cosmjs's StargateClient.connectWithSigner to broadcast.

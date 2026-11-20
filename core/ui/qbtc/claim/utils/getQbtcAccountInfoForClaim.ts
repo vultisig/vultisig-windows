@@ -1,3 +1,4 @@
+import { parseUint64 } from '@vultisig/core-chain/chains/cosmos/parseUint64'
 import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
@@ -60,8 +61,8 @@ type BlockResponse = {
 
 type QbtcAccountInfoForClaim = {
   address: string
-  accountNumber: number
-  sequence: number
+  accountNumber: bigint
+  sequence: bigint
   latestBlock: string
 }
 
@@ -107,18 +108,16 @@ export const getQbtcAccountInfoForClaim = async ({
   if (!isAccountResponse(data)) {
     throw new Error(`Malformed QBTC account response for ${address}`)
   }
-  const accountNumber = Number(data.account.account_number)
-  const sequence = Number(data.account.sequence)
-  if (!Number.isSafeInteger(accountNumber) || accountNumber < 0) {
-    throw new Error(
-      `Invalid QBTC account_number for ${address}: ${data.account.account_number}`
-    )
-  }
-  if (!Number.isSafeInteger(sequence) || sequence < 0) {
-    throw new Error(
-      `Invalid QBTC sequence for ${address}: ${data.account.sequence}`
-    )
-  }
+  const accountNumber = parseUint64({
+    value: data.account.account_number,
+    field: 'account_number',
+    context: 'QBTC',
+  })
+  const sequence = parseUint64({
+    value: data.account.sequence,
+    field: 'sequence',
+    context: 'QBTC',
+  })
 
   const blockTimestampStr = blockData.block.header.time
   const blockTimestampNs =

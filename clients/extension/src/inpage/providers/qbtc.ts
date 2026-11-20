@@ -32,7 +32,7 @@ const parseSendTransactionParams = (
 /**
  * Dedicated dApp provider for QBTC, exposed at `window.vultisig.qbtc`.
  *
- * QBTC is a post-quantum Cosmos SDK chain that signs with MLDSA-44 rather
+ * QBTC is a post-quantum Cosmos SDK chain that signs with MLDSA-65 rather
  * than secp256k1/ed25519. This provider is the QBTC-native surface
  * (`get_accounts`, `request_accounts`, `send_transaction`,
  * `sign_and_broadcast`, `get_transaction_by_hash`) with explicit MLDSA

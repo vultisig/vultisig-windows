@@ -107,7 +107,7 @@ The MPC keysign pipeline supports three signature algorithms:
 | EdDSA | Solana, Sui, Polkadot, etc. | `PublicKey` (WalletCore) | `@lib/schnorr/vs_wasm` |
 | MLDSA | QBTC | `vault.publicKeyMldsa` (hex string) | `@lib/mldsa/vs_wasm` |
 
-MLDSA (ML-DSA-44) is a post-quantum algorithm. WalletCore has no MLDSA key type, so MLDSA chains:
+MLDSA (ML-DSA-65) is a post-quantum algorithm. WalletCore has no MLDSA key type, so MLDSA chains:
 - Return `null` from `useCurrentVaultNullablePublicKey()` and pass the hex key via `hexPublicKeyOverride`
 - Bypass WalletCore's `TransactionCompiler` entirely (manual protobuf in `QBTCHelper.ts`)
 - Use Cosmos REST API (`restOnlyChains` pattern) instead of StargateClient for all node interactions

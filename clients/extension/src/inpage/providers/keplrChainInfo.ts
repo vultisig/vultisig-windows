@@ -24,7 +24,7 @@ export type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
 // QBTC is included here so Keplr-shaped dApps can connect via the
 // standard `window.keplr` API in addition to the dedicated
 // `window.vultisig.qbtc` provider. The signing path lies about `algo`
-// (MLDSA-44 doesn't fit Keplr's `'secp256k1' | 'ed25519'` union) — see
+// (MLDSA-65 doesn't fit Keplr's `'secp256k1' | 'ed25519'` union) — see
 // the QBTC branch in `getAccounts` inside `xdefiKeplr.ts`.
 const supportedKeplrChains = [
   CosmosChain.Cosmos,
@@ -54,7 +54,7 @@ const qbtcChainId = 'qbtc'
 
 /**
  * QBTC isn't a `CosmosChain` in the SDK (it's `OtherChain.QBTC` because it
- * signs with MLDSA-44, not secp256k1), so `getCosmosChainId` doesn't know
+ * signs with MLDSA-65, not secp256k1), so `getCosmosChainId` doesn't know
  * about it. Centralize the chainId lookup so every site that resolves
  * Keplr-known chains stays consistent.
  */
