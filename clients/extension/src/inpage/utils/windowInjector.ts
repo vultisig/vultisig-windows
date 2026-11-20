@@ -12,6 +12,7 @@ import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { installKeplrProxyBridge } from '../providers/keplrProxyBridge'
 import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
+import { installTonConnectJsBridge } from '../providers/tonConnect/installJsBridge'
 import { UTXO } from '../providers/utxo'
 import { createXrplProvider, installXrplAdapter } from '../providers/xrpl'
 import { installEip1193Delegates } from './eip1193Delegates'
@@ -101,6 +102,14 @@ export const injectToWindow = () => {
       })
     )
   }
+
+  attempt(() =>
+    installTonConnectJsBridge({
+      target: window,
+      key: currentExtensionBrandConfig.provider.tonConnectJsBridgeKey,
+      bridge: providers.ton.tonconnect,
+    })
+  )
 
   if (!window.tonkeeper) {
     attempt(() =>
