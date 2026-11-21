@@ -55,15 +55,15 @@ const getRawFallback = (data: string): SolanaTxData => ({
 })
 
 /**
- * Classifies a decoded Solana transaction by its program calls. A swap is
- * recognised from its swap instruction; a transfer is reported only when every
- * other instruction is a companion that moves none of the sender's funds,
- * since the summary would otherwise omit whatever the rest of the transaction
- * moves. Creating an associated token account counts only when the
- * instruction really is a creation and someone else pays for it: the
- * rent-exempt deposit lands in an account its owner can close to reclaim it,
- * so a vault-funded creation is a SOL movement the transfer card would hide.
- * Anything else lands in the raw review.
+ * Classifies a decoded Solana transaction by its program calls. A 1inch swap
+ * or a transfer is summarised only when every other instruction is a
+ * companion that moves none of the sender's funds, since the summary would
+ * otherwise omit whatever the rest of the transaction moves; the check covers
+ * every instruction, so ordering cannot hide one. Creating an associated
+ * token account counts only when the instruction really is a creation and
+ * someone else pays for it: the rent-exempt deposit lands in an account its
+ * owner can close to reclaim it, so a vault-funded creation is a SOL movement
+ * the summary card would hide. Anything else lands in the raw review.
  */
 export const parseProgramCall = async ({
   tx,
@@ -79,7 +79,7 @@ export const parseProgramCall = async ({
   const programOf = (instruction: Instruction) =>
     accountKeyAt(keys, shouldBePresent(instruction.programId)).toBase58()
 
-  const isTransferCompanion = (instruction: Instruction) => {
+  const isCompanion = (instruction: Instruction) => {
     const program = programOf(instruction)
     if (movementFreePrograms.has(program)) return true
     if (program !== associatedTokenProgram) return false
@@ -103,7 +103,22 @@ export const parseProgramCall = async ({
 
   for (const instruction of instructions) {
     const program = programOf(instruction)
-    if (program === oneInchSwapProgram) {
+    const isSwap = program === oneInchSwapProgram
+    if (!isSwap && program !== tokenProgram && program !== systemProgram) {
+      continue
+    }
+
+    const hasOnlyCompanions = instructions.every(
+      other => other === instruction || isCompanion(other)
+    )
+    if (!hasOnlyCompanions) {
+      console.error(
+        'summarised instruction shares the transaction with other instructions, returning raw fallback'
+      )
+      return getRawFallback(data)
+    }
+
+    if (isSwap) {
       return await parseOneInchSwapInstruction({
         instruction,
         keys,
@@ -111,18 +126,6 @@ export const parseProgramCall = async ({
         swapProvider,
         data,
       })
-    }
-
-    if (program !== tokenProgram && program !== systemProgram) continue
-
-    const hasOnlyCompanions = instructions.every(
-      other => other === instruction || isTransferCompanion(other)
-    )
-    if (!hasOnlyCompanions) {
-      console.error(
-        'transfer shares the transaction with other instructions, returning raw fallback'
-      )
-      return getRawFallback(data)
     }
 
     return program === tokenProgram
