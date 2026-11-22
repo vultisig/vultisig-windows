@@ -5,13 +5,14 @@
  * into the window object. Tests provider existence, properties, and
  * basic interface shape.
  *
- * NOTE: Some providers (phantom, keplr, tronLink, xfi, vultiConnectRouter,
- * injectedWeb3) are only injected when wallet is "prioritized" (i.e.,
+ * NOTE: Some providers (phantom, tronLink, xfi, vultiConnectRouter,
+ * injectedWeb3['polkadot-js']) are only injected when wallet is "prioritized" (i.e.,
  * getIsWalletPrioritized returns true from background). We test both the
  * always-injected providers and the conditional ones.
  */
 
 import { test, expect } from './fixtures/extension-loader'
+import { expectedExtensionArtifact } from './extension-path'
 
 const PROVIDER_TIMEOUT = 10_000
 
@@ -182,7 +183,7 @@ test.describe('UTXO Providers', () => {
       })
 
       const hasRequest = await page.evaluate(
-        (c) => typeof (window.vultisig as any)[c].request === 'function',
+        c => typeof (window.vultisig as any)[c].request === 'function',
         chain
       )
       expect(hasRequest).toBe(true)
@@ -200,8 +201,7 @@ test.describe('UTXO Providers', () => {
       })
 
       const hasMethod = await page.evaluate(
-        (c) =>
-          typeof (window.vultisig as any)[c].requestAccounts === 'function',
+        c => typeof (window.vultisig as any)[c].requestAccounts === 'function',
         chain
       )
       expect(hasMethod).toBe(true)
@@ -505,8 +505,7 @@ test.describe('Polkadot Provider', () => {
 
     const props = await page.evaluate(() => ({
       exists: !!window.vultisig.polkadot,
-      hasEnable:
-        typeof (window.vultisig.polkadot as any).enable === 'function',
+      hasEnable: typeof (window.vultisig.polkadot as any).enable === 'function',
       hasRequest:
         typeof (window.vultisig.polkadot as any).request === 'function',
     }))
@@ -662,7 +661,7 @@ test.describe('Prioritized Provider Injection (conditional)', () => {
     }
   })
 
-  test('window.injectedWeb3 exists when wallet is prioritized', async ({
+  test('window.injectedWeb3 has the brand entry regardless of priority', async ({
     context,
     testDappUrl,
   }) => {
@@ -673,29 +672,43 @@ test.describe('Prioritized Provider Injection (conditional)', () => {
       timeout: PROVIDER_TIMEOUT,
     })
 
-    const polkadotInfo = await page.evaluate(() => {
-      if (!window.injectedWeb3) return { exists: false }
+    const entry = await page.evaluate(brand => {
+      const injected = window.injectedWeb3?.[brand] as any
       return {
-        exists: true,
-        hasVultisig: !!window.injectedWeb3.vultisig,
-        hasPolkadotJs: !!window.injectedWeb3['polkadot-js'],
-        vultisigHasEnable: !!(window.injectedWeb3.vultisig as any)?.enable,
-        polkadotJsHasEnable: !!(window.injectedWeb3['polkadot-js'] as any)
-          ?.enable,
-        polkadotJsVersion: (window.injectedWeb3['polkadot-js'] as any)
-          ?.version,
+        hasEnable: typeof injected?.enable === 'function',
+        version: injected?.version,
       }
+    }, expectedExtensionArtifact.brand)
+
+    expect(entry.hasEnable).toBe(true)
+    expect(entry.version).toBe('0.46.9')
+  })
+
+  test('window.injectedWeb3 polkadot-js exists when wallet is prioritized', async ({
+    context,
+    testDappUrl,
+  }) => {
+    const page = await context.newPage()
+    await page.goto(testDappUrl)
+
+    await page.waitForFunction(() => !!window.vultisig, null, {
+      timeout: PROVIDER_TIMEOUT,
     })
 
-    if (polkadotInfo.exists) {
-      expect(polkadotInfo.hasVultisig).toBe(true)
-      expect(polkadotInfo.hasPolkadotJs).toBe(true)
-      expect(polkadotInfo.vultisigHasEnable).toBe(true)
-      expect(polkadotInfo.polkadotJsHasEnable).toBe(true)
-      if (polkadotInfo.polkadotJsVersion) {
-        expect(polkadotInfo.polkadotJsVersion).toBe('0.46.9')
+    await page.waitForFunction(
+      () => !!window.injectedWeb3?.['polkadot-js'],
+      null,
+      {
+        timeout: PROVIDER_TIMEOUT,
       }
-    }
+    )
+
+    const polkadotJs = await page.evaluate(() => ({
+      hasEnable: !!(window.injectedWeb3?.['polkadot-js'] as any)?.enable,
+      version: (window.injectedWeb3?.['polkadot-js'] as any)?.version,
+    }))
+    expect(polkadotJs.hasEnable).toBe(true)
+    expect(polkadotJs.version).toBe('0.46.9')
   })
 
   test('window.isCtrl is set when wallet is prioritized', async ({
