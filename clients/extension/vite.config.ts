@@ -335,11 +335,7 @@ export default defineConfig(async ({ mode }) => {
         viteStaticCopy({
           targets: getStaticCopyTargets(),
         }),
-        // The Firefox build keeps every module of a package in one vendor chunk,
-        // so the transaction builders in @vultisig/core-mpc and core-chain, which
-        // only lazy pages use, sit next to the modules home needs and drag
-        // WalletCore in statically. Only the Chromium build can hold this line.
-        ...(isFirefoxBuild ? [] : [assertFirstPaintEntryGraphs()]),
+        assertFirstPaintEntryGraphs(),
       ],
       build: {
         // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
@@ -359,9 +355,6 @@ export default defineConfig(async ({ mode }) => {
             assetFileNames: extensionAssetFileNames,
             chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
-            manualChunks: isFirefoxBuild
-              ? (id: string) => getFirefoxManualChunk('app', id)
-              : undefined,
           },
         },
       },
