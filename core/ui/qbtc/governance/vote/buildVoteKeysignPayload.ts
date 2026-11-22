@@ -20,7 +20,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { buildQbtcVoteMessages } from './buildVoteMessages'
 
-// A QBTC gov vote is a single message, but its ML-DSA signature (~2.4 KB) makes
+// A QBTC gov vote is a single message, but its ML-DSA signature (~3.3 KB) makes
 // the tx far heavier than a secp256k1 one. QBTC has a flat `min_tx_fee` and no
 // minimum gas price (block `max_gas = -1`), so the generous limit is free —
 // mirror the staking base limit to stay clear of the Terra-family floor.

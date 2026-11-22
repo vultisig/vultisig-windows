@@ -11,6 +11,7 @@ import {
   qbtcDefaultGasLimit,
   qbtcFeeDenom,
   qbtcMldsaPubKeyTypeUrl,
+  qbtcSignMode,
 } from './qbtcDirectConstants'
 
 export type QbtcDappCoin = {
@@ -78,7 +79,7 @@ const buildAuthInfo = ({
     protoBytes(2, pubKeyMsg)
   )
 
-  const singleMode = protoVarint(1, 1n)
+  const singleMode = protoVarint(1, qbtcSignMode)
   const modeInfo = protoBytes(1, singleMode)
   const signerInfo = concatBytes(
     protoBytes(1, pubKeyAny),

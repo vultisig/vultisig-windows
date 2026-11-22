@@ -6,6 +6,11 @@ import {
   protoVarint,
 } from '@vultisig/core-chain/chains/cosmos/qbtc/protoEncoding'
 
+import {
+  qbtcMldsaPubKeyTypeUrl,
+  qbtcSignMode,
+} from '../../dapp/qbtcDirectConstants'
+
 /**
  * Builds the AuthInfo / SignDoc / TxRaw bytes for a QBTC `MsgClaimWithProof`
  * transaction. Mirrors the format used by the existing QBTCHelper send path,
@@ -19,7 +24,6 @@ import {
  * reuse it. Tracked in vultisig/vultisig-sdk#282.
  */
 
-const pubKeyTypeURL = '/cosmos.crypto.mldsa.PubKey'
 const claimGasLimit = 300_000n
 
 type ClaimTxComponents = {
@@ -29,7 +33,7 @@ type ClaimTxComponents = {
 
 type BuildClaimAuthInfoInput = {
   mldsaPublicKey: Uint8Array
-  sequence: number
+  sequence: bigint
 }
 
 /** AuthInfo for a gas-free claim tx (no fee coins, MLDSA single signer). */
@@ -39,15 +43,15 @@ const buildClaimAuthInfo = ({
 }: BuildClaimAuthInfoInput): Uint8Array => {
   const pubKeyMsg = protoBytes(1, mldsaPublicKey)
   const pubKeyAny = concatBytes(
-    protoString(1, pubKeyTypeURL),
+    protoString(1, qbtcMldsaPubKeyTypeUrl),
     protoBytes(2, pubKeyMsg)
   )
-  const singleMode = protoVarint(1, 1n)
+  const singleMode = protoVarint(1, qbtcSignMode)
   const modeInfo = protoBytes(1, singleMode)
   const signerInfo = concatBytes(
     protoBytes(1, pubKeyAny),
     protoBytes(2, modeInfo),
-    protoVarint(3, BigInt(sequence))
+    protoVarint(3, sequence)
   )
   const fee = protoBytes(2, protoVarint(2, claimGasLimit))
   return concatBytes(protoBytes(1, signerInfo), fee)
@@ -55,7 +59,7 @@ const buildClaimAuthInfo = ({
 
 type BuildClaimSignDocInput = ClaimTxComponents & {
   chainId: string
-  accountNumber: number
+  accountNumber: bigint
 }
 
 /** `cosmos.tx.v1beta1.SignDoc` for the claim tx. */
@@ -69,7 +73,7 @@ const buildClaimSignDoc = ({
     protoBytes(1, bodyBytes),
     protoBytes(2, authInfoBytes),
     protoString(3, chainId),
-    protoVarint(4, BigInt(accountNumber))
+    protoVarint(4, accountNumber)
   )
 
 type BuildClaimPreSignHashInput = Omit<

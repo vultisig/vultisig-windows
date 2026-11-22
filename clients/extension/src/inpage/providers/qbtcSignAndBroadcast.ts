@@ -145,7 +145,7 @@ export const handleQbtcSignAndBroadcast = async (
     memo,
     fee,
     hexPublicKey,
-    sequence: BigInt(accountInfo.sequence),
+    sequence: accountInfo.sequenceBigInt,
   })
 
   const transactionDetails: TransactionDetails = {
@@ -157,7 +157,7 @@ export const handleQbtcSignAndBroadcast = async (
       bodyBytes,
       authInfoBytes,
       chainId: qbtcChainId,
-      accountNumber: String(accountInfo.accountNumber),
+      accountNumber: accountInfo.accountNumberBigInt.toString(),
     },
   }
 
