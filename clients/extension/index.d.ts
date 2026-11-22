@@ -64,6 +64,7 @@ interface Window {
   injectedWeb3?: Record<
     string,
     {
+      version?: string
       enable: (origin?: string) => Promise<{
         accounts: {
           get: () => Promise<
@@ -87,10 +88,10 @@ interface Window {
         }
         signer: {
           signPayload: (
-            payload: Record<string, unknown>
+            payload: import('./src/inpage/providers/polkadot/types').PolkadotSignerPayloadJSON
           ) => Promise<{ id: number; signature: string }>
           signRaw: (
-            payload: Record<string, unknown>
+            payload: import('./src/inpage/providers/polkadot/types').PolkadotSignerPayloadRaw
           ) => Promise<{ id: number; signature: string }>
         }
       }>
