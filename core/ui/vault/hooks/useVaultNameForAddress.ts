@@ -9,13 +9,14 @@ import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getVaultNameForAddress } from './getVaultNameForAddress'
 
 type UseVaultNameForAddressInput = {
-  address: string
+  address?: string
   chain: Chain
 }
 
 /**
  * Returns the vault name if the given address belongs to a stored or derivable
- * vault address on the given chain, otherwise null.
+ * vault address on the given chain, otherwise null (also when no address is
+ * given).
  *
  * Generic hook — not send-specific. Used across send, keysign, and address book contexts
  * anywhere the UI needs to identify whether an address is a known user vault.
@@ -30,6 +31,8 @@ export const useVaultNameForAddress = ({
   const vaults = useVaults()
   const walletCore = useAssertWalletCore()
   const tonWalletVersion = useTonWalletVersion()
+
+  if (!address) return null
 
   return getVaultNameForAddress({
     address,

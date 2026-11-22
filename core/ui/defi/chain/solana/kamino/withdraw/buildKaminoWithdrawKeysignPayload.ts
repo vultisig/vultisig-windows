@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { getSolanaClient } from '@vultisig/core-chain/chains/solana/client'
 import { getDynamicPriorityFeePrice } from '@vultisig/core-chain/chains/solana/getDynamicPriorityFeePrice'
 import { kaminoShareToTokenValue } from '@vultisig/core-chain/chains/solana/kamino/amount'
 import { KaminoVaultInfo } from '@vultisig/core-chain/chains/solana/kamino/models'
@@ -19,6 +20,7 @@ import {
   refreshKaminoRecentBlockhash,
   serializeKaminoWireTransaction,
 } from '@vultisig/core-chain/chains/solana/kamino/tx/wire'
+import { withSolanaRpcTimeout } from '@vultisig/core-chain/chains/solana/rpcTimeout'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { KeysignLibType } from '@vultisig/core-mpc/mpcLib'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -28,6 +30,9 @@ import {
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SignSolanaSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
+import { t } from 'i18next'
+
+import { classifyKaminoSimulationFailure } from '../deposit/assertKaminoDepositSimulates'
 
 type BuildKaminoWithdrawKeysignPayloadInput = {
   vault: KaminoVaultInfo
@@ -50,7 +55,7 @@ type BuildKaminoWithdrawKeysignPayloadInput = {
  * Builds the keysign payload for one Kamino Earn withdrawal.
  *
  * Same shape and the same ordering contract as the deposit builder — inject
- * the budget and the attribution memo, replace the blockhash, then validate,
+ * the budget and attribution memo, replace the blockhash, validate, simulate,
  * so what is checked is what is signed — with one asymmetry that matters: the
  * amount here is in SHARES, the inverse of deposit's unit. The API takes the
  * same `amount` field for both actions, so the typed amounts are what keep the
@@ -126,6 +131,27 @@ export const buildKaminoWithdrawKeysignPayload = async ({
       carriesAttributionMemo: true,
     },
   })
+
+  const { value } = await withSolanaRpcTimeout(
+    getSolanaClient().simulateTransaction(transaction, {
+      sigVerify: false,
+      replaceRecentBlockhash: true,
+    }),
+    'Kamino withdraw simulation'
+  )
+  if (value.err !== null) {
+    // On a withdraw the Token program's code 1 can be shares or vault liquidity, not the wallet's token.
+    throw new Error(
+      classifyKaminoSimulationFailure({
+        err: value.err,
+        logs: value.logs ?? [],
+      }) === 'insufficientSol'
+        ? t('kamino_earn_insufficient_sol')
+        : t('kamino_earn_simulation_failed', {
+            reason: JSON.stringify(value.err),
+          })
+    )
+  }
 
   return create(KeysignPayloadSchema, {
     coin: toCommCoin({ ...coin, hexPublicKey }),

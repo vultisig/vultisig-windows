@@ -225,7 +225,13 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       ? shareState
       : null
 
-  const viewId = navigationHistory?.[navigationHistory.length - 1]?.id
+  const view = navigationHistory?.[navigationHistory.length - 1]
+  const viewId = view?.id
+  const isPostQuantumKeygenView =
+    viewId === 'singleKeygenFast' ||
+    viewId === 'singleKeygenSecure' ||
+    (viewId === 'joinKeygen' &&
+      view?.state?.keygenOperation?.singleKeygen === true)
   const isImportView = viewId === 'importVault'
   const isVaultWritingView =
     viewId !== undefined && vaultWritingViews.has(viewId)
@@ -288,6 +294,27 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       const isStaleSameVault =
         held?.value !== undefined &&
         getVaultId(held.value) === getVaultId(vault)
+
+      // Quantum keygen saves under the same vault id, and sealing the vault
+      // can re-encrypt every share. Hold the entire previously proven snapshot
+      // until this save is validated, so neither device loses ceremony state.
+      // Never pair new metadata with old shares or carry a proof across a
+      // changed security context. The lock gate above still takes precedence.
+      if (
+        isStaleSameVault &&
+        isPostQuantumKeygenView &&
+        held?.proof &&
+        readabilityInputs &&
+        held.proof.source.vaultId === readabilityInputs.vaultId &&
+        held.proof.source.libType === readabilityInputs.libType &&
+        held.proof.source.passcode === readabilityInputs.passcode &&
+        held.proof.source.hasPasscodeEncryption ===
+          readabilityInputs.hasPasscodeEncryption &&
+        held.proof.source.validateLegacyVaultKeyShares ===
+          readabilityInputs.validateLegacyVaultKeyShares
+      ) {
+        return held
+      }
 
       return isVaultWritingView && !isStaleSameVault ? held : null
     }

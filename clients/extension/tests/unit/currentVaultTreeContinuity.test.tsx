@@ -8,6 +8,9 @@
  * — so that teardown dropped the user back on the vault name step, in a loop
  * that created an orphan vault per pass.
  *
+ * Also covers #5292: fresh storage records after saving a new vault and the
+ * same-vault save performed by quantum keygen must not restart either device.
+ *
  * The guarantees pinned down here:
  *
  * - a flow already running without a current vault survives the vault it just
@@ -45,14 +48,7 @@ import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { act, render, screen } from '@testing-library/react'
 import type { Vault, VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { useEffect, useState } from 'react'
-import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  onTestFinished,
-  vi,
-} from 'vitest'
+import { beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 
 const storage: {
   vaults: Vault[]
@@ -69,6 +65,8 @@ const storage: {
 // The view on top of the navigation history: a vault setup flow by default,
 // the vault page for the ordinary vault switching cases.
 let currentViewId = 'setupFastVault'
+let singleKeygen: boolean | undefined
+let validateLegacyVaultKeyShares = async () => {}
 
 let readCalls: {
   input: VaultAllKeyShares
@@ -86,10 +84,14 @@ vi.mock('@core/ui/vault/state/UnreadableVaultRecovery', () => ({
 
 // The provider only reads `validateLegacyVaultKeyShares` off the core state and
 // passes it through to the share reader, which is stubbed below.
-vi.mock('@core/ui/state/core', () => ({ useCore: () => ({}) }))
+vi.mock('@core/ui/state/core', () => ({
+  useCore: () => ({ validateLegacyVaultKeyShares }),
+}))
 
 vi.mock('@lib/ui/navigation/state', () => ({
-  useOptionalNavigationHistory: () => [{ id: currentViewId }],
+  useOptionalNavigationHistory: () => [
+    { id: currentViewId, state: { keygenOperation: { singleKeygen } } },
+  ],
 }))
 
 // Imported at module scope by `currentVault.tsx` for hooks this test does not
@@ -198,6 +200,8 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     storage.hasPasscodeEncryption = false
     storage.passcode = null
     currentViewId = 'setupFastVault'
+    singleKeygen = undefined
+    validateLegacyVaultKeyShares = async () => {}
     readCalls = []
     mountCount = 0
   })
@@ -229,6 +233,203 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     expect(screen.getByText('keygen for Vault #1')).toBeDefined()
     expect(mountCount).toBe(1)
+  })
+
+  it.each([
+    { viewId: 'setupFastVault', hasExistingVault: false },
+    { viewId: 'setupFastVault', hasExistingVault: true },
+    { viewId: 'setupSecureVault', hasExistingVault: false },
+    { viewId: 'setupSecureVault', hasExistingVault: true },
+    { viewId: 'joinKeygen', hasExistingVault: false },
+    { viewId: 'joinKeygen', hasExistingVault: true },
+  ])(
+    'preserves $viewId progress after saving and refreshing records (existing vault: $hasExistingVault)',
+    async ({ viewId, hasExistingVault }) => {
+      currentViewId = viewId
+      if (hasExistingVault) {
+        storage.vaults = [makeVault()]
+        storage.currentVaultId = vaultId
+      }
+      const { rerender } = renderTree()
+      await settle()
+      if (hasExistingVault) await resolveRead()
+      await act(async () => screen.getByText('name your vault').click())
+
+      const savedVault = makeVault({
+        publicKeys: { ecdsa: secondVaultId, eddsa: 'second-eddsa' },
+      })
+      storage.vaults = [...storage.vaults, savedVault]
+      storage.currentVaultId = secondVaultId
+      rerender(
+        <RootCurrentVaultProvider>
+          <SetupFlow />
+        </RootCurrentVaultProvider>
+      )
+      await settle()
+      await resolveRead()
+      const readsAfterSave = readCalls.length
+
+      // Storage reloads reconstruct the records even when every byte is unchanged.
+      storage.vaults = storage.vaults.map(vault => ({
+        ...vault,
+        keyShares: { ...vault.keyShares },
+        publicKeys: { ...vault.publicKeys },
+      }))
+      rerender(
+        <RootCurrentVaultProvider>
+          <SetupFlow />
+        </RootCurrentVaultProvider>
+      )
+      await settle()
+
+      expect(readCalls).toHaveLength(readsAfterSave)
+      expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+      expect(mountCount).toBe(1)
+    }
+  )
+
+  it.each(
+    ['singleKeygenFast', 'singleKeygenSecure', 'joinKeygen'].flatMap(viewId =>
+      [false, true].map(encrypted => ({ viewId, encrypted }))
+    )
+  )(
+    'keeps the validated snapshot while $viewId saves quantum keys (encrypted: $encrypted)',
+    async ({ viewId, encrypted }) => {
+      currentViewId = viewId
+      singleKeygen = true
+      storage.hasPasscodeEncryption = encrypted
+      storage.passcode = encrypted ? 'passcode' : null
+      storage.vaults = [makeVault()]
+      storage.currentVaultId = vaultId
+      const VaultSnapshot = () => {
+        const vault = useCurrentVault()
+        return (
+          <span>
+            {vault.name}: {vault.publicKeyMldsa ?? 'no quantum key'}
+          </span>
+        )
+      }
+      const children = (
+        <>
+          <SetupFlow />
+          <VaultSnapshot />
+        </>
+      )
+      const { rerender } = renderTree(children)
+      await settle()
+      await resolveRead()
+      await act(async () => screen.getByText('name your vault').click())
+
+      storage.vaults = [
+        {
+          ...storage.vaults[0],
+          name: 'Updated vault',
+          keyShares: encrypted
+            ? { ecdsa: 'resealed-ecdsa', eddsa: 'resealed-eddsa' }
+            : storage.vaults[0].keyShares,
+          publicKeyMldsa: 'new-quantum-public-key',
+          keyShareMldsa: 'stored-quantum-share',
+        },
+      ]
+      rerender(<RootCurrentVaultProvider>{children}</RootCurrentVaultProvider>)
+      await settle()
+
+      expect(readCalls).toHaveLength(2)
+      expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+      expect(screen.getByText('Vault #1: no quantum key')).toBeDefined()
+      expect(screen.queryByText(/Updated vault/)).toBeNull()
+      await resolveRead({
+        ...provenShares,
+        keyShareMldsa: 'proven-quantum-share',
+      })
+      expect(
+        screen.getByText('Updated vault: new-quantum-public-key')
+      ).toBeDefined()
+      expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+      expect(mountCount).toBe(1)
+    }
+  )
+
+  it.each([
+    'vault',
+    'library',
+    'passcode',
+    'encryption',
+    'lock',
+    'validator',
+    'regular join',
+  ])(
+    'withholds a quantum ceremony when its %s context changes',
+    async context => {
+      currentViewId = 'singleKeygenSecure'
+      singleKeygen = true
+      storage.vaults = [makeVault()]
+      storage.currentVaultId = vaultId
+      storage.hasPasscodeEncryption = true
+      storage.passcode = 'passcode'
+      const { rerender } = renderTree()
+      await settle()
+      await resolveRead()
+      await act(async () => screen.getByText('name your vault').click())
+      storage.vaults = [
+        { ...storage.vaults[0], keyShareMldsa: 'new-quantum-share' },
+      ]
+
+      if (context === 'vault') {
+        storage.vaults[0].publicKeys = {
+          ecdsa: secondVaultId,
+          eddsa: 'second-eddsa',
+        }
+        storage.currentVaultId = secondVaultId
+      }
+      if (context === 'library') storage.vaults[0].libType = 'GG20'
+      if (context === 'passcode') storage.passcode = 'different-passcode'
+      if (context === 'encryption') storage.hasPasscodeEncryption = false
+      if (context === 'lock') storage.passcode = null
+      if (context === 'validator') validateLegacyVaultKeyShares = async () => {}
+      if (context === 'regular join') {
+        currentViewId = 'joinKeygen'
+        singleKeygen = false
+      }
+      rerender(
+        <RootCurrentVaultProvider>
+          <SetupFlow />
+        </RootCurrentVaultProvider>
+      )
+      await settle()
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(screen.queryByText('keygen for Vault #1')).toBeNull()
+    }
+  )
+
+  it('surfaces a failed quantum-key read instead of keeping the held snapshot', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    onTestFinished(() => consoleError.mockRestore())
+    currentViewId = 'singleKeygenSecure'
+    storage.vaults = [makeVault()]
+    storage.currentVaultId = vaultId
+    const tree = () => (
+      <ErrorBoundary fallback={() => <div data-testid="read-error" />}>
+        <RootCurrentVaultProvider>
+          <SetupFlow />
+        </RootCurrentVaultProvider>
+      </ErrorBoundary>
+    )
+    const { rerender } = render(tree())
+    await settle()
+    await resolveRead()
+    await act(async () => screen.getByText('name your vault').click())
+    storage.vaults = [
+      { ...storage.vaults[0], keyShareMldsa: 'new-quantum-share' },
+    ]
+    rerender(tree())
+    await settle()
+    expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+    await act(async () =>
+      readCalls[1].reject(new Error('failed to read quantum share'))
+    )
+    expect(screen.getByTestId('read-error')).toBeDefined()
+    expect(screen.queryByText('keygen for Vault #1')).toBeNull()
   })
 
   it('withholds the tree until a vault present from the first render is proven', async () => {

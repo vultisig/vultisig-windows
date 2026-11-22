@@ -11,10 +11,8 @@ import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { phantomSolanaPath } from '@vultisig/core-chain/publicKey/address/deriveSolanaAddressFromMnemonic'
-import { signatureAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
 import { KeygenStep } from '@vultisig/core-mpc/keygen/KeygenStep'
@@ -39,7 +37,14 @@ import {
   KeyImportInput,
   useKeyImportInput,
 } from './state/keyImportInput'
-import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
+import {
+  getKeyImportChainKeys,
+  KeyImportChainResult,
+} from './utils/getKeyImportChainKeys'
+import {
+  getKeyImportChainSessions,
+  KeyImportChainSession,
+} from './utils/getKeyImportChainSessions'
 import {
   withKeyImportServerChains,
   withStationKeyImportRootChains,
@@ -62,7 +67,7 @@ type SharedDklsParams = {
 }
 
 type DeriveChainKeyInput = {
-  representativeChain: Chain
+  chain: Chain
   hdWallet: any
   walletCore: any
   usePhantomSolanaPath?: boolean
@@ -71,15 +76,15 @@ type DeriveChainKeyInput = {
 
 /** Derives the hex-encoded private key for a specific chain from the HD wallet. */
 const deriveChainPrivateKey = ({
-  representativeChain,
+  chain,
   hdWallet,
   walletCore,
   usePhantomSolanaPath,
   algorithm,
 }: DeriveChainKeyInput): string => {
-  const coinType = getCoinType({ chain: representativeChain, walletCore })
+  const coinType = getCoinType({ chain, walletCore })
   const chainKey =
-    representativeChain === Chain.Solana && usePhantomSolanaPath
+    chain === Chain.Solana && usePhantomSolanaPath
       ? hdWallet.getKey(coinType, phantomSolanaPath)
       : hdWallet.getKeyForCoin(coinType)
 
@@ -149,9 +154,9 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         rootEddsaPrivateKeyHex = Buffer.from(clampedKey).toString('hex')
       }
 
-      const derivationGroups = isStationTerraRoot
+      const chainSessions = isStationTerraRoot
         ? []
-        : getKeyImportDerivationGroups(chains)
+        : getKeyImportChainSessions(chains)
 
       if (isTssBatchingEnabled || isStationTerraRoot) {
         const vault = await runBatchKeyImport({
@@ -160,7 +165,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           rootEcdsaPrivateKeyHex: rootEcdsaPrivateKeyHex ?? '',
           rootEddsaPrivateKeyHex: rootEddsaPrivateKeyHex ?? '',
           includeEddsaRoot,
-          derivationGroups,
+          chainSessions,
           hdWallet,
           walletCore,
           keyImportInput,
@@ -224,24 +229,17 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         )
       }
 
-      const chainPublicKeys: Partial<Record<Chain, string>> = {}
-      const chainKeyShares: Partial<Record<Chain, string>> = {}
       const keyShares: VaultKeyShares = {
         ecdsa: rootEcdsaResult.keyshare,
         eddsa: rootEddsaResult?.keyshare ?? '',
       }
 
-      for (const {
-        representativeChain,
-        chains: groupChains,
-      } of derivationGroups) {
-        const chainKind = getChainKind(representativeChain)
-        const algorithm = signatureAlgorithms[chainKind]
-
+      const chainResults: KeyImportChainResult[] = []
+      for (const { chain, algorithm, setupMessageId } of chainSessions) {
         let chainPrivateKeyHex: string | undefined
         if (isInitiatingDevice && hdWallet) {
           chainPrivateKeyHex = deriveChainPrivateKey({
-            representativeChain,
+            chain,
             hdWallet,
             walletCore,
             usePhantomSolanaPath: isStationTerraRoot
@@ -266,7 +264,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           chainResult = await chainDkls.startKeyImportWithRetry(
             chainPrivateKeyHex ?? '',
             rootEcdsaResult.chaincode,
-            representativeChain
+            setupMessageId
           )
         } else {
           const chainSchnorr = new Schnorr(
@@ -283,15 +281,14 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           chainResult = await chainSchnorr.startKeyImportWithRetry(
             chainPrivateKeyHex ?? '',
             rootEddsaResult?.chaincode ?? '',
-            representativeChain
+            setupMessageId
           )
         }
 
-        for (const chain of groupChains) {
-          chainPublicKeys[chain] = chainResult.publicKey
-          chainKeyShares[chain] = chainResult.keyshare
-        }
+        chainResults.push({ chain, result: chainResult })
       }
+      const { chainPublicKeys, chainKeyShares } =
+        getKeyImportChainKeys(chainResults)
 
       if (hdWallet) {
         hdWallet.delete()
@@ -317,11 +314,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         chainPublicKeys,
         chainKeyShares,
       }
-      const vaultWithServerChains = withKeyImportServerChains(
-        baseVault,
-        derivationGroups.map(g => g.representativeChain)
-      )
-      const vault = vaultWithServerChains
+      const vault = withKeyImportServerChains(baseVault, chains)
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -364,7 +357,7 @@ type BatchKeyImportInput = {
   rootEcdsaPrivateKeyHex: string
   rootEddsaPrivateKeyHex: string
   includeEddsaRoot: boolean
-  derivationGroups: ReturnType<typeof getKeyImportDerivationGroups>
+  chainSessions: KeyImportChainSession[]
   hdWallet: any
   walletCore: any
   keyImportInput: KeyImportInput
@@ -381,17 +374,11 @@ type BatchKeyImportInput = {
   onStepComplete: (step: KeygenStep) => void
 }
 
-type ChainKeygenResult = {
-  chains: Chain[]
-  result: KeyShareResult
-}
-
 type DklsProtocolSpec = {
   instance: DKLS
   privateKeyHex: string
   setupMessageId: string | undefined
   protocolMessageId: string
-  chains?: Chain[]
 }
 
 type SchnorrProtocolSpec = {
@@ -399,14 +386,13 @@ type SchnorrProtocolSpec = {
   privateKeyHex: string
   setupMessageId: string
   protocolMessageId: string
-  chains?: Chain[]
 }
 
 type RunDklsTrackInput = {
   sharedDklsParams: SharedDklsParams
   hexChainCode: string
   rootEcdsaPrivateKeyHex: string
-  ecdsaGroups: ReturnType<typeof getKeyImportDerivationGroups>
+  ecdsaSessions: KeyImportChainSession[]
   hdWallet: any
   walletCore: any
   isInitiatingDevice: boolean
@@ -435,7 +421,7 @@ async function runDklsTrack({
   sharedDklsParams,
   hexChainCode,
   rootEcdsaPrivateKeyHex,
-  ecdsaGroups,
+  ecdsaSessions,
   hdWallet,
   walletCore,
   isInitiatingDevice,
@@ -443,7 +429,7 @@ async function runDklsTrack({
   onStepComplete,
 }: RunDklsTrackInput): Promise<{
   rootResult: KeyShareResult
-  chainResults: ChainKeygenResult[]
+  chainResults: KeyImportChainResult[]
 }> {
   const makeDkls = () =>
     new DKLS(
@@ -457,44 +443,41 @@ async function runDklsTrack({
       sharedDklsParams.hexEncryptionKey
     )
 
-  const protocols: DklsProtocolSpec[] = [
-    {
+  const rootSpec: DklsProtocolSpec = {
+    instance: makeDkls(),
+    privateKeyHex: rootEcdsaPrivateKeyHex,
+    setupMessageId: undefined,
+    protocolMessageId: 'p-ecdsa',
+  }
+  const chainSpecs = ecdsaSessions.map(
+    ({ chain, setupMessageId, protocolMessageId }) => ({
+      chain,
       instance: makeDkls(),
-      privateKeyHex: rootEcdsaPrivateKeyHex,
-      setupMessageId: undefined,
-      protocolMessageId: 'p-ecdsa',
-    },
-    ...ecdsaGroups.map(({ representativeChain, chains: groupChains }) => {
-      const privateKeyHex =
+      privateKeyHex:
         isInitiatingDevice && hdWallet
           ? deriveChainPrivateKey({
-              representativeChain,
+              chain,
               hdWallet,
               walletCore,
               usePhantomSolanaPath,
               algorithm: 'ecdsa',
             })
-          : ''
+          : '',
+      setupMessageId,
+      protocolMessageId,
+    })
+  )
 
-      return {
-        instance: makeDkls(),
-        privateKeyHex,
-        setupMessageId: representativeChain,
-        protocolMessageId: `p-${representativeChain}`,
-        chains: groupChains,
-      }
-    }),
-  ]
-
-  for (const { instance, privateKeyHex, setupMessageId } of protocols) {
+  for (const { instance, privateKeyHex, setupMessageId } of [
+    rootSpec,
+    ...chainSpecs,
+  ]) {
     await instance.prepareKeyImportSetup(
       privateKeyHex,
       hexChainCode,
       setupMessageId
     )
   }
-
-  const [rootSpec, ...chainSpecs] = protocols
 
   const rootResult = await rootSpec.instance.startKeyImportWithRetry(
     rootSpec.privateKeyHex,
@@ -504,13 +487,13 @@ async function runDklsTrack({
   )
   onStepComplete('ecdsa')
 
-  const chainResults: ChainKeygenResult[] = []
+  const chainResults: KeyImportChainResult[] = []
   for (const {
+    chain,
     instance,
     privateKeyHex,
     setupMessageId,
     protocolMessageId,
-    chains: groupChains,
   } of chainSpecs) {
     const result = await instance.startKeyImportWithRetry(
       privateKeyHex,
@@ -518,7 +501,7 @@ async function runDklsTrack({
       setupMessageId,
       protocolMessageId
     )
-    chainResults.push({ chains: groupChains!, result })
+    chainResults.push({ chain, result })
   }
 
   return { rootResult, chainResults }
@@ -528,7 +511,7 @@ type RunSchnorrTrackInput = {
   sharedDklsParams: SharedDklsParams
   hexChainCode: string
   rootEddsaPrivateKeyHex: string
-  eddsaGroups: ReturnType<typeof getKeyImportDerivationGroups>
+  eddsaSessions: KeyImportChainSession[]
   hdWallet: any
   walletCore: any
   isInitiatingDevice: boolean
@@ -544,7 +527,7 @@ async function runSchnorrTrack({
   sharedDklsParams,
   hexChainCode,
   rootEddsaPrivateKeyHex,
-  eddsaGroups,
+  eddsaSessions,
   hdWallet,
   walletCore,
   isInitiatingDevice,
@@ -552,7 +535,7 @@ async function runSchnorrTrack({
   onStepComplete,
 }: RunSchnorrTrackInput): Promise<{
   rootResult: KeyShareResult
-  chainResults: ChainKeygenResult[]
+  chainResults: KeyImportChainResult[]
 }> {
   const makeSchnorr = () =>
     new Schnorr(
@@ -567,44 +550,41 @@ async function runSchnorrTrack({
       new Uint8Array()
     )
 
-  const protocols: SchnorrProtocolSpec[] = [
-    {
+  const rootSpec: SchnorrProtocolSpec = {
+    instance: makeSchnorr(),
+    privateKeyHex: rootEddsaPrivateKeyHex,
+    setupMessageId: 'eddsa_key_import',
+    protocolMessageId: 'p-eddsa',
+  }
+  const chainSpecs = eddsaSessions.map(
+    ({ chain, setupMessageId, protocolMessageId }) => ({
+      chain,
       instance: makeSchnorr(),
-      privateKeyHex: rootEddsaPrivateKeyHex,
-      setupMessageId: 'eddsa_key_import',
-      protocolMessageId: 'p-eddsa',
-    },
-    ...eddsaGroups.map(({ representativeChain, chains: groupChains }) => {
-      const privateKeyHex =
+      privateKeyHex:
         isInitiatingDevice && hdWallet
           ? deriveChainPrivateKey({
-              representativeChain,
+              chain,
               hdWallet,
               walletCore,
               usePhantomSolanaPath,
               algorithm: 'eddsa',
             })
-          : ''
+          : '',
+      setupMessageId,
+      protocolMessageId,
+    })
+  )
 
-      return {
-        instance: makeSchnorr(),
-        privateKeyHex,
-        setupMessageId: representativeChain,
-        protocolMessageId: `p-${representativeChain}`,
-        chains: groupChains,
-      }
-    }),
-  ]
-
-  for (const { instance, privateKeyHex, setupMessageId } of protocols) {
+  for (const { instance, privateKeyHex, setupMessageId } of [
+    rootSpec,
+    ...chainSpecs,
+  ]) {
     await instance.prepareKeyImportSetup(
       privateKeyHex,
       hexChainCode,
       setupMessageId
     )
   }
-
-  const [rootSpec, ...chainSpecs] = protocols
 
   const rootResult = await rootSpec.instance.startKeyImportWithRetry(
     rootSpec.privateKeyHex,
@@ -614,13 +594,13 @@ async function runSchnorrTrack({
   )
   onStepComplete('eddsa')
 
-  const chainResults: ChainKeygenResult[] = []
+  const chainResults: KeyImportChainResult[] = []
   for (const {
+    chain,
     instance,
     privateKeyHex,
     setupMessageId,
     protocolMessageId,
-    chains: groupChains,
   } of chainSpecs) {
     const result = await instance.startKeyImportWithRetry(
       privateKeyHex,
@@ -628,7 +608,7 @@ async function runSchnorrTrack({
       setupMessageId,
       protocolMessageId
     )
-    chainResults.push({ chains: groupChains!, result })
+    chainResults.push({ chain, result })
   }
 
   return { rootResult, chainResults }
@@ -647,7 +627,7 @@ async function runBatchKeyImport({
   rootEcdsaPrivateKeyHex,
   rootEddsaPrivateKeyHex,
   includeEddsaRoot,
-  derivationGroups,
+  chainSessions,
   hdWallet,
   walletCore,
   keyImportInput,
@@ -669,15 +649,13 @@ async function runBatchKeyImport({
   // uses `memoizeAsync` which only caches on completion — concurrent calls before
   // the first one finishes will double-instantiate the WASM modules and corrupt
   // pointers inside Rust sessions ("memory access out of bounds" on outputMessage).
-  const ecdsaGroups = derivationGroups.filter(
-    ({ representativeChain }) =>
-      signatureAlgorithms[getChainKind(representativeChain)] === 'ecdsa'
+  const ecdsaSessions = chainSessions.filter(
+    ({ algorithm }) => algorithm === 'ecdsa'
   )
-  const eddsaGroups = derivationGroups.filter(
-    ({ representativeChain }) =>
-      signatureAlgorithms[getChainKind(representativeChain)] === 'eddsa'
+  const eddsaSessions = chainSessions.filter(
+    ({ algorithm }) => algorithm === 'eddsa'
   )
-  const includeSchnorrTrack = includeEddsaRoot || eddsaGroups.length > 0
+  const includeSchnorrTrack = includeEddsaRoot || eddsaSessions.length > 0
 
   await initializeMpcLib('ecdsa')
   if (includeSchnorrTrack) {
@@ -691,7 +669,7 @@ async function runBatchKeyImport({
   if (includeSchnorrTrack) {
     onStepStart('eddsa')
   }
-  if (derivationGroups.length > 0) {
+  if (chainSessions.length > 0) {
     onStepStart('chainKeys')
   }
   if (includeMldsa) {
@@ -702,7 +680,7 @@ async function runBatchKeyImport({
     sharedDklsParams,
     hexChainCode,
     rootEcdsaPrivateKeyHex,
-    ecdsaGroups,
+    ecdsaSessions,
     hdWallet,
     walletCore,
     isInitiatingDevice,
@@ -717,7 +695,7 @@ async function runBatchKeyImport({
         sharedDklsParams,
         hexChainCode,
         rootEddsaPrivateKeyHex,
-        eddsaGroups,
+        eddsaSessions,
         hdWallet,
         walletCore,
         isInitiatingDevice,
@@ -751,13 +729,18 @@ async function runBatchKeyImport({
     mldsaPromise,
   ])
 
-  if (derivationGroups.length > 0) {
+  if (chainSessions.length > 0) {
     onStepComplete('chainKeys')
   }
 
   const rootEcdsaResult = dklsTrack.rootResult
   const rootEddsaResult = schnorrTrack?.rootResult
 
+  const { chainPublicKeys: sessionPublicKeys, chainKeyShares } =
+    getKeyImportChainKeys([
+      ...dklsTrack.chainResults,
+      ...(schnorrTrack?.chainResults ?? []),
+    ])
   const chainPublicKeys: Partial<Record<Chain, string>> =
     isStationTerraRootKeyImportInput(keyImportInput)
       ? Object.fromEntries(
@@ -766,21 +749,10 @@ async function runBatchKeyImport({
             keyImportInput.publicKeyHex,
           ])
         )
-      : {}
-  const chainKeyShares: Partial<Record<Chain, string>> = {}
+      : sessionPublicKeys
   const keyShares: VaultKeyShares = {
     ecdsa: rootEcdsaResult.keyshare,
     eddsa: rootEddsaResult?.keyshare ?? '',
-  }
-
-  for (const { chains: groupChains, result } of [
-    ...dklsTrack.chainResults,
-    ...(schnorrTrack?.chainResults ?? []),
-  ]) {
-    for (const chain of groupChains) {
-      chainPublicKeys[chain] = result.publicKey
-      chainKeyShares[chain] = result.keyshare
-    }
   }
 
   const baseVault: Vault = {
@@ -805,7 +777,7 @@ async function runBatchKeyImport({
   }
   const vaultWithServerChains = withKeyImportServerChains(
     baseVault,
-    derivationGroups.map(g => g.representativeChain)
+    chainSessions.map(({ chain }) => chain)
   )
   const vault = isStationTerraRootKeyImportInput(keyImportInput)
     ? withStationKeyImportRootChains(

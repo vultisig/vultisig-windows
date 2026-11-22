@@ -13,6 +13,9 @@ vi.mock('@vultisig/core-chain/chains/solana/kamino/tx/wire', () => ({
 vi.mock('@vultisig/core-chain/chains/solana/kamino/tx/validate', () => ({
   validateKaminoTransactionOnline: vi.fn(),
 }))
+vi.mock('./assertKaminoDepositSimulates', () => ({
+  assertKaminoDepositSimulates: vi.fn(),
+}))
 vi.mock(
   '@vultisig/core-chain/chains/solana/getDynamicPriorityFeePrice',
   () => ({
@@ -35,6 +38,7 @@ import {
   serializeKaminoWireTransaction,
 } from '@vultisig/core-chain/chains/solana/kamino/tx/wire'
 
+import { assertKaminoDepositSimulates } from './assertKaminoDepositSimulates'
 import { buildKaminoDepositKeysignPayload } from './buildKaminoDepositKeysignPayload'
 
 const [steakhouse] = kaminoVaultRegistry
@@ -77,6 +81,7 @@ beforeEach(() => {
   vi.mocked(validateKaminoTransactionOnline).mockResolvedValue(undefined)
   vi.mocked(serializeKaminoWireTransaction).mockReturnValue('signable')
   vi.mocked(getDynamicPriorityFeePrice).mockResolvedValue(50_000)
+  vi.mocked(assertKaminoDepositSimulates).mockResolvedValue(undefined)
 })
 
 describe('buildKaminoDepositKeysignPayload', () => {
@@ -103,6 +108,30 @@ describe('buildKaminoDepositKeysignPayload', () => {
     expect(vi.mocked(serializeKaminoWireTransaction)).toHaveBeenCalledWith(
       'fresh'
     )
+  })
+
+  it('simulates the validated bytes before building a payload', async () => {
+    await buildKaminoDepositKeysignPayload(input)
+
+    expect(
+      vi.mocked(assertKaminoDepositSimulates).mock.calls[0][0]
+    ).toMatchObject({ transaction: 'fresh', owner, ticker: 'USDC' })
+    expect(
+      vi.mocked(assertKaminoDepositSimulates).mock.invocationCallOrder[0]
+    ).toBeGreaterThan(
+      vi.mocked(validateKaminoTransactionOnline).mock.invocationCallOrder[0]
+    )
+  })
+
+  it('builds no payload for a deposit the network would refuse', async () => {
+    vi.mocked(assertKaminoDepositSimulates).mockRejectedValue(
+      new Error('Not enough SOL')
+    )
+
+    await expect(buildKaminoDepositKeysignPayload(input)).rejects.toThrow(
+      'Not enough SOL'
+    )
+    expect(vi.mocked(serializeKaminoWireTransaction)).not.toHaveBeenCalled()
   })
 
   it('signs exactly the bytes it validated', async () => {

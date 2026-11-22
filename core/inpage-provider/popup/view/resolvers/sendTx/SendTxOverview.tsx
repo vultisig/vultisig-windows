@@ -27,10 +27,13 @@ import { useIsTronContractCallDecoding } from '@core/ui/chain/tx/utils/useIsTron
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { getKeysignFeeAmount } from '@core/ui/mpc/keysign/fee/tronMemoFee'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { CosmosSignDataTransfers } from '@core/ui/mpc/keysign/tx/components/CosmosSignDataTransfers'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
+import { getCosmosSignDataNativeAmount } from '@core/ui/mpc/keysign/tx/cosmos/getCosmosSignDataNativeAmount'
+import { getCosmosSignDataReview } from '@core/ui/mpc/keysign/tx/cosmos/getCosmosSignDataReview'
 import { SignRippleDisplay } from '@core/ui/mpc/keysign/tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '@core/ui/mpc/keysign/tx/sui/parser'
 import { SignSuiDisplay } from '@core/ui/mpc/keysign/tx/sui/SignSuiDisplay'
@@ -246,15 +249,19 @@ export const SendTxOverview = ({
     // must not be added to the native fee. Ton Connect also batches up to
     // `maxMessages` transfers into a single request while `toAmount` carries
     // only the first, so sum every message's native amount for the Ton gate.
+    const cosmosSignDataReview = getCosmosSignDataReview(payload)
+
     const nativeValue =
       payload.signData.case === 'signTon'
         ? payload.signData.value.tonMessages.reduce(
             (sum, message) => sum + BigInt(message.amount),
             0n
           )
-        : isChainOfKind(chain, 'evm') || isFeeCoin(coin)
-          ? BigInt(payload.toAmount)
-          : 0n
+        : cosmosSignDataReview
+          ? getCosmosSignDataNativeAmount(cosmosSignDataReview)
+          : isChainOfKind(chain, 'evm') || isFeeCoin(coin)
+            ? BigInt(payload.toAmount)
+            : 0n
 
     if (nativeValue + fee > nativeBalance) {
       return nativeValue > 0n
@@ -348,6 +355,8 @@ export const SendTxOverview = ({
         success={({ keysignPayload, gasEstimation: estimatedGas }) => {
           const hasSwapPayload =
             keysignPayload.swapPayload && keysignPayload.swapPayload.value
+
+          const cosmosSignDataReview = getCosmosSignDataReview(keysignPayload)
 
           const evmSpecific = isChainOfKind(chain, 'evm')
             ? getBlockchainSpecificValue(
@@ -611,13 +620,13 @@ export const SendTxOverview = ({
                       <List>
                         <CosmosTxTypeRow keysignPayload={keysignPayload} />
                         <ListItem description={address} title={t('from')} />
-                        {keysignPayload.toAddress && (
+                        {!cosmosSignDataReview && keysignPayload.toAddress && (
                           <ListItem
                             description={keysignPayload.toAddress}
                             title={t('to')}
                           />
                         )}
-                        {keysignPayload.toAmount && (
+                        {!cosmosSignDataReview && keysignPayload.toAmount && (
                           <ListItem
                             description={`${formatUnits(
                               keysignPayload.toAmount,
@@ -631,8 +640,18 @@ export const SendTxOverview = ({
                           title={t('network')}
                         />
                       </List>
+                      {cosmosSignDataReview ? (
+                        <CosmosSignDataTransfers value={cosmosSignDataReview} />
+                      ) : null}
                       <TronContractCallSection value={keysignPayload} />
-                      <MemoSection memo={keysignPayload.memo} chain={chain} />
+                      <MemoSection
+                        memo={
+                          cosmosSignDataReview
+                            ? cosmosSignDataReview.memo
+                            : keysignPayload.memo
+                        }
+                        chain={chain}
+                      />
                       <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}

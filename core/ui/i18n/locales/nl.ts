@@ -437,8 +437,8 @@ export const nl = {
   vault_backup_banner_title: 'Vraag volledige controle over je kluis aan',
   referral_banner_caption: 'Mis deze beloningen niet!',
   referral_banner_title: 'Voeg je verwijzingscode toe',
-  kamino_banner_caption: 'Nieuw op Solana',
-  kamino_banner_title: 'Begin met geld verdienen via Kamino',
+  kamino_banner_caption: 'Met Kamino',
+  kamino_banner_title: 'Laat ongebruikte USDC voor je werken',
   from: 'Van',
   freeze: 'Freeze',
   function_arguments: 'Functie-argumenten',
@@ -1912,6 +1912,13 @@ export const nl = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'waard is',
   swap_limit_when_one: 'Wanneer 1',
+  kamino_earn_insufficient_sol:
+    'Niet genoeg SOL. Voeg SOL toe aan je kluis en probeer het opnieuw.',
+  kamino_earn_insufficient_sol_amounts:
+    'Niet genoeg SOL. Deze storting heeft ongeveer {{needed}} nodig; je kluis heeft {{available}}.',
+  kamino_earn_insufficient_token: 'Niet genoeg {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Deze transactie zou op Solana mislukken: {{reason}}',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_positions_unavailable:
     "Saldo's konden niet worden geladen. De weergegeven kluizen zijn actueel.",
@@ -2112,4 +2119,10 @@ export const nl = {
   revoke_approval_new_allowance: 'Nieuwe bestedingslimiet',
   revoke_approvals: 'Goedkeuringen intrekken',
   token_approvals_count: 'Goedkeuringen: {{count}}',
+  transaction_not_fully_summarized:
+    'Een deel van deze transactie wordt hier niet samengevat. Lees de volledige details hieronder door voordat u tekent.',
+  keysign_many_inputs_one:
+    '{{count}} input wordt ondertekend. Dit duurt langer dan normaal.',
+  keysign_many_inputs_other:
+    '{{count}} inputs worden ondertekend. Dit duurt langer dan normaal.',
 }

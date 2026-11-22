@@ -448,8 +448,8 @@ export const de = {
   vault_backup_banner_title: 'Volle Kontrolle über Ihren Tresor anfordern',
   referral_banner_caption: 'Verpassen Sie keine Belohnungen',
   referral_banner_title: 'Fügen Sie Ihren Empfehlungscode hinzu',
-  kamino_banner_caption: 'Neu bei Solana',
-  kamino_banner_title: 'Verdienen Sie Geld mit Kamino',
+  kamino_banner_caption: 'Mit Kamino',
+  kamino_banner_title: 'Ungenutzte USDC arbeiten lassen',
   from: 'Von',
   freeze: 'Einfrieren',
   function_arguments: 'Funktionsargumente',
@@ -1945,6 +1945,13 @@ export const de = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'wert ist',
   swap_limit_when_one: 'Wenn 1',
+  kamino_earn_insufficient_sol:
+    'Nicht genug SOL. Fügen Sie Ihrem Tresor SOL hinzu und versuchen Sie es erneut.',
+  kamino_earn_insufficient_sol_amounts:
+    'Nicht genug SOL. Diese Einzahlung benötigt etwa {{needed}}; Ihr Tresor hat {{available}}.',
+  kamino_earn_insufficient_token: 'Nicht genug {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Diese Transaktion würde auf Solana fehlschlagen: {{reason}}',
   kamino_earn_apy_30d: 'Jahreszins (30 Tage)',
   kamino_earn_positions_unavailable:
     'Die Salden konnten nicht geladen werden. Die angezeigten Tresore sind aktuell.',
@@ -2144,4 +2151,10 @@ export const de = {
   revoke_approval_new_allowance: 'Neue Ausgabenobergrenze',
   revoke_approvals: 'Genehmigungen widerrufen',
   token_approvals_count: 'Genehmigungen: {{count}}',
+  transaction_not_fully_summarized:
+    'Ein Teil dieser Transaktion ist hier nicht zusammengefasst. Bitte lesen Sie die vollständigen Details unten durch, bevor Sie unterschreiben.',
+  keysign_many_inputs_one:
+    '{{count}} Input wird signiert. Das dauert länger als üblich.',
+  keysign_many_inputs_other:
+    '{{count}} Inputs werden signiert. Das dauert länger als üblich.',
 }

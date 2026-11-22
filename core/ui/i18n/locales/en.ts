@@ -530,8 +530,8 @@ export const en = {
   vault_backup_banner_title: 'Request full vault custody',
   referral_banner_caption: 'Don’t miss rewards',
   referral_banner_title: 'Add your referral code',
-  kamino_banner_caption: 'New on Solana',
-  kamino_banner_title: 'Start earning with Kamino',
+  kamino_banner_caption: 'With Kamino',
+  kamino_banner_title: 'Put idle USDC to work',
   from: 'From',
   freeze: 'Freeze',
   function_arguments: 'Function Arguments',
@@ -1458,6 +1458,8 @@ export const en = {
   track: 'Track',
   transaction: 'Transaction',
   transaction_details: 'Transaction Details',
+  transaction_not_fully_summarized:
+    "Part of this transaction isn't summarized here. Review the full details below before you sign.",
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_failed: 'Transaction <error>failed</error>',
@@ -1588,6 +1590,13 @@ export const en = {
   kamino_earn_unreadable_description:
     'It reaches a Kamino vault, but this app cannot read what it does, so it will not sign it.',
   kamino_earn_unreadable_title: 'This transaction cannot be verified',
+  kamino_earn_insufficient_sol:
+    'Not enough SOL. Add SOL to your vault and try again.',
+  kamino_earn_insufficient_sol_amounts:
+    'Not enough SOL. This deposit needs about {{needed}}; your vault has {{available}}.',
+  kamino_earn_insufficient_token: 'Not enough {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'This transaction would fail on Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_card_deposit: 'Deposit',
   kamino_earn_card_withdraw: 'Withdraw',
@@ -2069,4 +2078,8 @@ export const en = {
   signed_awaiting_broadcast: 'Signed, not yet sent to the network',
   signed_awaiting_broadcast_description:
     'This transaction was signed but not sent. The application that requested it is responsible for sending it to the network; the status updates once the network sees it.',
+  keysign_many_inputs_one:
+    'Signing {{count}} input. This takes longer than usual.',
+  keysign_many_inputs_other:
+    'Signing {{count}} inputs. This takes longer than usual.',
 }

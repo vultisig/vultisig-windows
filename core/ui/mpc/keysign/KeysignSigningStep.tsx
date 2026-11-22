@@ -4,6 +4,7 @@ import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
+import { useKeysignSignatureProgress } from '@core/ui/mpc/keysign/flow/hooks/useKeysignSignatureProgress'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { KeysignTxDoneScreen } from '@core/ui/mpc/keysign/tx/KeysignTxDoneScreen'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
@@ -30,11 +31,12 @@ import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
-import { ReactNode, useEffect, useLayoutEffect } from 'react'
+import { ReactNode, useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { KeysignProgress } from './action/state/keysignAction'
 import { BroadcastRefusedError } from './assertReadyToBroadcast'
 import { BroadcastError } from './broadcastKeysignTx'
 import { KeysignBroadcastRefusal } from './KeysignBroadcastRefusal'
@@ -43,6 +45,9 @@ import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 type KeysignSigningStepProps = Partial<OnBackProp> & {
   onSettled?: () => void
   onStart?: () => void
+  onMessageCount?: (count: number) => void
+  /** For a parent that renders its own signing state through `renderPending`. */
+  onProgress?: (progress: KeysignProgress) => void
   renderPending?: () => ReactNode
   toAddressLabel?: string
 }
@@ -65,10 +70,17 @@ const isDklsMaliciousPartyError = (error: unknown) => {
   return extractErrorMsg(error).includes('DKLS keysign aborted because party')
 }
 
+/**
+ * Runs the keysign for the current payload and shows its signing, done or
+ * error screen. The signing screen's bar follows finished signatures when the
+ * transaction has several.
+ */
 export const KeysignSigningStep = ({
   onBack,
   onSettled,
   onStart,
+  onMessageCount,
+  onProgress,
   renderPending,
   toAddressLabel,
 }: KeysignSigningStepProps) => {
@@ -76,8 +88,20 @@ export const KeysignSigningStep = ({
   const { version, goHome } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
-  const { mutate: startKeysign, ...mutationStatus } =
-    useKeysignMutation(payload)
+  const [messageCount, setMessageCount] = useState<number>()
+  const { signatureProgress, reportSignatureProgress } =
+    useKeysignSignatureProgress()
+  const { mutate: startKeysign, ...mutationStatus } = useKeysignMutation({
+    payload,
+    onMessageCount: count => {
+      setMessageCount(count)
+      onMessageCount?.(count)
+    },
+    onProgress: progress => {
+      reportSignatureProgress(progress)
+      onProgress?.(progress)
+    },
+  })
   const [, copyToClipboard] = useCopyToClipboard()
   useLayoutEffect(() => onStart?.(), [onStart])
   useLayoutEffect(() => {
@@ -298,7 +322,10 @@ export const KeysignSigningStep = ({
               title={t('keysign')}
               hasBorder
             />
-            <KeysignSigningState />
+            <KeysignSigningState
+              messageCount={messageCount}
+              signatureProgress={signatureProgress}
+            />
             <PageFooter alignItems="center">
               <Text color="shy" size={12}>
                 {t('version')} {version}

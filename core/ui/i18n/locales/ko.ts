@@ -431,8 +431,8 @@ export const ko = {
   vault_backup_banner_title: '볼트 전체 보관 권한 요청',
   referral_banner_caption: '보상을 놓치지 마세요',
   referral_banner_title: '추천 코드 추가',
-  kamino_banner_caption: 'Solana 신규',
-  kamino_banner_title: 'Kamino로 수익 시작하기',
+  kamino_banner_caption: 'Kamino와 함께',
+  kamino_banner_title: '잠자는 USDC를 굴려보세요',
   from: '보내는 곳',
   freeze: '동결',
   function_arguments: '함수 인자',
@@ -1865,6 +1865,13 @@ export const ko = {
   swap_route_eta_minutes: '~{{minutes}}분',
   swap_limit_is_worth: '의 가치가',
   swap_limit_when_one: '1',
+  kamino_earn_insufficient_sol:
+    'SOL이 부족합니다. 볼트에 SOL을 추가한 후 다시 시도하세요.',
+  kamino_earn_insufficient_sol_amounts:
+    'SOL이 부족합니다. 이 예치에는 약 {{needed}}이(가) 필요하며, 볼트에는 {{available}}이(가) 있습니다.',
+  kamino_earn_insufficient_token: '{{ticker}}이(가) 부족합니다.',
+  kamino_earn_simulation_failed:
+    '이 트랜잭션은 Solana에서 실패합니다: {{reason}}',
   kamino_earn_apy_30d: 'APY(30일)',
   kamino_earn_positions_unavailable:
     '잔액을 불러올 수 없습니다. 표시된 볼트 목록은 최신입니다.',
@@ -2059,4 +2066,10 @@ export const ko = {
   revoke_approval_new_allowance: '새 지출 한도',
   revoke_approvals: '승인 취소',
   token_approvals_count: '승인: {{count}}',
+  transaction_not_fully_summarized:
+    '이 거래 내역 중 일부는 여기에 요약되어 있지 않습니다. 서명하기 전에 아래의 전체 세부 정보를 검토하십시오.',
+  keysign_many_inputs_one:
+    '입력 {{count}}개에 서명하는 중입니다. 평소보다 시간이 더 걸립니다.',
+  keysign_many_inputs_other:
+    '입력 {{count}}개에 서명하는 중입니다. 평소보다 시간이 더 걸립니다.',
 }

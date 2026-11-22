@@ -442,8 +442,8 @@ export const pt = {
   vault_backup_banner_title: 'Solicitar custódia total do cofre.',
   referral_banner_caption: 'Não perca as recompensas',
   referral_banner_title: 'Adicione seu código de indicação',
-  kamino_banner_caption: 'Novidades em Solana',
-  kamino_banner_title: 'Comece a ganhar dinheiro com a Kamino',
+  kamino_banner_caption: 'Com a Kamino',
+  kamino_banner_title: 'Coloque seus USDC parados para render',
   from: 'De',
   freeze: 'Freeze',
   function_arguments: 'Argumentos da função',
@@ -1930,6 +1930,13 @@ export const pt = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valer',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_insufficient_sol:
+    'SOL insuficiente. Adicione SOL ao seu cofre e tente novamente.',
+  kamino_earn_insufficient_sol_amounts:
+    'SOL insuficiente. Este depósito precisa de cerca de {{needed}}; seu cofre tem {{available}}.',
+  kamino_earn_insufficient_token: '{{ticker}} insuficiente.',
+  kamino_earn_simulation_failed:
+    'Esta transação falharia na Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30 dias)',
   kamino_earn_positions_unavailable:
     'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
@@ -2128,4 +2135,10 @@ export const pt = {
   revoke_approval_new_allowance: 'Novo limite de gastos',
   revoke_approvals: 'Revogar aprovações',
   token_approvals_count: 'Aprovações: {{count}}',
+  transaction_not_fully_summarized:
+    'Parte desta transação não está resumida aqui. Consulte os detalhes completos abaixo antes de assinar.',
+  keysign_many_inputs_one:
+    'Assinando {{count}} entrada. Isso leva mais tempo que o normal.',
+  keysign_many_inputs_other:
+    'Assinando {{count}} entradas. Isso leva mais tempo que o normal.',
 }

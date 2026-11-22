@@ -442,8 +442,8 @@ export const es = {
   vault_backup_banner_title: 'Solicitar custodia total de la bóveda',
   referral_banner_caption: 'No te pierdas las recompensas',
   referral_banner_title: 'Agrega tu código de referido',
-  kamino_banner_caption: 'Novedades en Solana',
-  kamino_banner_title: 'Empieza a ganar dinero con Kamino.',
+  kamino_banner_caption: 'Con Kamino',
+  kamino_banner_title: 'Pon a trabajar tus USDC inactivos',
   from: 'De',
   freeze: 'Congelar',
   function_arguments: 'Argumentos de función',
@@ -1928,6 +1928,13 @@ export const es = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
+  kamino_earn_insufficient_sol:
+    'No hay suficiente SOL. Agrega SOL a tu bóveda e inténtalo de nuevo.',
+  kamino_earn_insufficient_sol_amounts:
+    'No hay suficiente SOL. Este depósito necesita unos {{needed}}; tu bóveda tiene {{available}}.',
+  kamino_earn_insufficient_token: 'No hay suficiente {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Esta transacción fallaría en Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30 días)',
   kamino_earn_positions_unavailable:
     'No se pudieron cargar los saldos. Los vaults mostrados están actualizados.',
@@ -2123,4 +2130,10 @@ export const es = {
   revoke_approval_new_allowance: 'Nuevo límite de gasto',
   revoke_approvals: 'Revocar aprobaciones',
   token_approvals_count: 'Aprobaciones: {{count}}',
+  transaction_not_fully_summarized:
+    'Parte de esta transacción no se resume aquí. Revise todos los detalles a continuación antes de firmar.',
+  keysign_many_inputs_one:
+    'Firmando {{count}} entrada. Esto tarda más de lo habitual.',
+  keysign_many_inputs_other:
+    'Firmando {{count}} entradas. Esto tarda más de lo habitual.',
 }

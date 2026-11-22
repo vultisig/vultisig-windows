@@ -438,8 +438,8 @@ export const ru = {
   vault_backup_banner_title: 'Запросить полный контроль над хранилищем',
   referral_banner_caption: 'Не упустите награды!',
   referral_banner_title: 'Введите свой реферальный код',
-  kamino_banner_caption: 'Новое на Солане',
-  kamino_banner_title: 'Начните зарабатывать с Kamino!',
+  kamino_banner_caption: 'С Kamino',
+  kamino_banner_title: 'Заставьте свободные USDC работать',
   from: 'От',
   freeze: 'Freeze',
   function_arguments: 'Аргументы функции',
@@ -1917,6 +1917,13 @@ export const ru = {
   swap_route_eta_minutes: '~{{minutes}}мин',
   swap_limit_is_worth: 'стоит',
   swap_limit_when_one: 'Когда 1',
+  kamino_earn_insufficient_sol:
+    'Недостаточно SOL. Пополните хранилище SOL и попробуйте снова.',
+  kamino_earn_insufficient_sol_amounts:
+    'Недостаточно SOL. Для депозита нужно около {{needed}}; в хранилище {{available}}.',
+  kamino_earn_insufficient_token: 'Недостаточно {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Эта транзакция не прошла бы в Solana: {{reason}}',
   kamino_earn_apy_30d: 'Годовая процентная доходность (30 дней)',
   kamino_earn_positions_unavailable:
     'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',
@@ -2111,4 +2118,14 @@ export const ru = {
   revoke_approval_new_allowance: 'Новый лимит расходов',
   revoke_approvals: 'Отозвать разрешения',
   token_approvals_count: 'Подтверждения: {{count}}',
+  transaction_not_fully_summarized:
+    'Часть условий данной сделки здесь не описана. Перед подписанием ознакомьтесь с полными подробностями ниже.',
+  keysign_many_inputs_one:
+    'Подписывается {{count}} вход. Это занимает больше времени, чем обычно.',
+  keysign_many_inputs_few:
+    'Подписываются {{count}} входа. Это занимает больше времени, чем обычно.',
+  keysign_many_inputs_many:
+    'Подписывается {{count}} входов. Это занимает больше времени, чем обычно.',
+  keysign_many_inputs_other:
+    'Подписывается {{count}} входа. Это занимает больше времени, чем обычно.',
 }

@@ -18,7 +18,7 @@
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "5.2.0",
     "@vultisig/lib-utils": "0.10.7",
-    "bitcoinjs-lib": "^7.0.1",
+    "bitcoinjs-lib": "^7.0.2",
     "cosmjs-types": "^0.11.0",
     "ethers": "^6.16.0",
     "framer-motion": "^12.40.0",

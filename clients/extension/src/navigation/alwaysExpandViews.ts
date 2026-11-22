@@ -3,6 +3,8 @@ import { AppViewId } from './AppView'
 const alwaysExpandViews: ReadonlySet<AppViewId> = new Set<AppViewId>([
   'importVault',
   'setupVault',
+  'uploadQr',
+  'joinKeygen',
 ])
 
 /**

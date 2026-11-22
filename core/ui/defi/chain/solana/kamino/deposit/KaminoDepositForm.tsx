@@ -14,6 +14,7 @@ import {
   KaminoTokenAmount,
   kaminoTokenAmount,
 } from '@vultisig/core-chain/chains/solana/kamino/amount'
+import { kaminoConfig } from '@vultisig/core-chain/chains/solana/kamino/config'
 import { KaminoVaultInfo } from '@vultisig/core-chain/chains/solana/kamino/models'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
@@ -22,6 +23,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { KaminoAmountField } from '../KaminoAmountField'
+
+// A first SOL deposit's fees, rent and wallet minimum come to 9,305,960 lamports.
+const nativeSolDepositReserve = 10_000_000n
 
 type KaminoDepositFormProps = OnFinishProp<KaminoTokenAmount> & {
   vault: KaminoVaultInfo
@@ -48,9 +52,15 @@ export const KaminoDepositForm = ({
   const formatFiatAmount = useFormatFiatAmount()
   const [value, setValue] = useState<number | null>(null)
 
-  const { data: balanceUnits = 0n } = useBalanceQuery(
+  const { data: walletUnits = 0n } = useBalanceQuery(
     extractAccountCoinKey(coin)
   )
+  const reserveUnits =
+    vault.descriptor.tokenMint === kaminoConfig.wrappedSolMint
+      ? nativeSolDepositReserve
+      : 0n
+  const balanceUnits =
+    walletUnits > reserveUnits ? walletUnits - reserveUnits : 0n
   const balance = fromChainAmount(balanceUnits, coin.decimals)
   const minDeposit = fromChainAmount(
     vault.minDeposit.baseUnits,
