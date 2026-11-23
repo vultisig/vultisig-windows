@@ -60,6 +60,7 @@ import {
 } from '../../cowswap/cowSwapKeysign'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 import { getCosmosDAppTxHash } from '../../tx/getCosmosDAppTxHash'
+import { getKeysignTxHash } from '../../tx/getKeysignTxHash'
 
 type UseKeysignMutationInput = {
   payload: KeysignMessagePayload
@@ -367,7 +368,7 @@ export const useKeysignMutation = ({
               const lastValidBlockHeight =
                 getKeysignLastValidBlockHeight(payload)
 
-              await chainPromises(
+              const broadcastTxHashes = await chainPromises(
                 txs.map(
                   ({ data }) =>
                     () =>
@@ -378,6 +379,17 @@ export const useKeysignMutation = ({
                       })
                 )
               )
+
+              return {
+                txs: txs.map((tx, index) => ({
+                  ...tx,
+                  hash: getKeysignTxHash({
+                    chain,
+                    tx,
+                    broadcastTxHash: broadcastTxHashes[index],
+                  }),
+                })),
+              }
             }
 
             return { txs }
