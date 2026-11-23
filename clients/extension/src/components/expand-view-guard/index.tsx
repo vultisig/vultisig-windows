@@ -1,4 +1,4 @@
-import { shouldAlwaysExpand } from '@clients/extension/src/navigation/alwaysExpandViews'
+import { shouldAlwaysExpandView } from '@clients/extension/src/navigation/alwaysExpandViews'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
@@ -24,7 +24,7 @@ export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
   const currentView = shouldBePresent(getLastItem(history)) as AppView
 
   const shouldRedirect = useMemo(() => {
-    const alwaysExpand = shouldAlwaysExpand(currentView.id)
+    const alwaysExpand = shouldAlwaysExpandView(currentView)
     const isPopup = isPopupView()
 
     if (alwaysExpand && isPopup) {
@@ -32,7 +32,7 @@ export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
     }
 
     return !isWindowsOs() && isPopup
-  }, [currentView.id])
+  }, [currentView])
 
   useEffect(() => {
     if (shouldRedirect) {
