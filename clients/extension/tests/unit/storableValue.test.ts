@@ -30,6 +30,18 @@ describe('storable value', () => {
     expect(fromStorableValue(value)).toEqual(value)
   })
 
+  it('keeps ordinary records that look like markers intact', () => {
+    const value = {
+      exact: { __storable: 'bigint', value: '1' },
+      partial: { __storable: 'bytes', value: 'AQID', label: 'kept' },
+      escapedLookalike: { '~__storable': 'x', '~~__storable': 'y' },
+      list: [{ __storable: 'invoice', value: 'abc' }],
+      amount: 7n,
+    }
+
+    expect(fromStorableValue(toStorableValue(value))).toEqual(value)
+  })
+
   it('keeps the JSON form of values with toJSON', () => {
     const date = new Date('2026-01-02T03:04:05.000Z')
 
