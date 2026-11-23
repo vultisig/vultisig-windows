@@ -1,3 +1,4 @@
+import { TW } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { Tx } from '@vultisig/core-chain/tx'
 import { describe, expect, it, vi } from 'vitest'
@@ -8,8 +9,10 @@ vi.mock('@vultisig/core-chain/chains/ton/gasless/request', () => ({
 
 import { getKeysignTxHash } from './getKeysignTxHash'
 
-const tonTx = (encoded: string) =>
-  ({ hash: 'body-hash', data: { encoded } }) as unknown as Tx
+const tonTx = (encoded: string): Tx<typeof Chain.Ton> => ({
+  hash: 'body-hash',
+  data: TW.TheOpenNetwork.Proto.SigningOutput.create({ encoded }),
+})
 
 describe('getKeysignTxHash', () => {
   it('uses the relay hash for a gasless TON request', () => {
@@ -35,13 +38,15 @@ describe('getKeysignTxHash', () => {
   it('keeps the compiled hash on other chains', () => {
     expect(
       getKeysignTxHash({
-        chain: Chain.Ethereum,
+        chain: Chain.Solana,
         tx: {
-          hash: '0xcompiled',
-          data: { encoded: 'gasless-boc' },
-        } as unknown as Tx,
-        broadcastTxHash: '0xnetwork',
+          hash: 'compiled-signature',
+          data: TW.Solana.Proto.SigningOutput.create({
+            encoded: 'gasless-boc',
+          }),
+        },
+        broadcastTxHash: 'network-signature',
       })
-    ).toBe('0xcompiled')
+    ).toBe('compiled-signature')
   })
 })
