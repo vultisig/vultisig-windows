@@ -21,8 +21,8 @@ type BondLastRewardAmountProps = {
 
 /**
  * What the latest churn paid the vault on a bonded node. Shows a dash when
- * the vault had not bonded by then or the read failed, rather than a made-up
- * zero.
+ * the vault had not bonded by then, the read failed, or the churn is too old
+ * to read and nothing was saved for it, rather than a made-up zero.
  */
 export const BondLastRewardAmount = ({
   chain,

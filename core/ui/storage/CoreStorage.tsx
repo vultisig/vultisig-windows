@@ -1,6 +1,7 @@
 import { AddressBookStorage } from './addressBook'
 import { BalanceVisibilityStorage } from './balanceVisibility'
 import { BlockaidStorage } from './blockaid'
+import { BondRewardHistoryStorage } from './bondRewardHistory'
 import { CircleVisibilityStorage } from './circleVisibility'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
@@ -54,4 +55,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   TonW5EnabledStorage &
   CustomRpcOverridesStorage &
   SolanaMoveStakeDestinationsStorage &
+  BondRewardHistoryStorage &
   TransactionHistoryStorage
