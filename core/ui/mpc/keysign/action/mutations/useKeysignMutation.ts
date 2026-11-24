@@ -381,14 +381,16 @@ export const useKeysignMutation = ({
               )
 
               return {
-                txs: txs.map((tx, index) => ({
-                  ...tx,
-                  hash: getKeysignTxHash({
-                    chain,
-                    tx,
-                    broadcastTxHash: broadcastTxHashes[index],
-                  }),
-                })),
+                txs: await Promise.all(
+                  txs.map(async (tx, index) => ({
+                    ...tx,
+                    hash: await getKeysignTxHash({
+                      chain,
+                      tx,
+                      broadcastTxHash: broadcastTxHashes[index],
+                    }),
+                  }))
+                ),
               }
             }
 
