@@ -105,7 +105,7 @@ The extension provides:
   - `window.phantom` for Phantom-compatible dApps
   - `window.cardano.vultisig` for Cardano CIP-30 dApps
   - Sui Wallet Standard registration for Sui dApps
-  - `window.vultisigTonWallet.tonconnect` (and a guarded
+  - `window.vultisigTonWallet.tonconnect` (and a
     `window.tonkeeper.tonconnect` alias) for TON Connect-compatible dApps
   - Station-compatible globals for Terra dApps
   - `window.tronLink` / `window.tronWeb` for Tron dApps
@@ -448,9 +448,11 @@ the generic provider contracts documented above:
 - **TON:** the bridge is injected under the `vultisigTonWallet` JS bridge key.
   `@tonconnect/sdk` dApps list it as "Vultisig" once that key is registered in
   ton-connect/wallets-list; until then only the SDK's QA mode finds it. The
-  same bridge is also exposed at
-  `window.vultisig.ton.tonconnect` and the guarded `window.tonkeeper.tonconnect`
-  alias.
+  same bridge is also exposed at `window.vultisig.ton.tonconnect` and the
+  `window.tonkeeper.tonconnect` alias. The alias is only set at initial
+  injection when no other wallet has claimed `window.tonkeeper`, but when
+  Vultisig is prioritized it replaces `window.tonkeeper` regardless. dApps
+  must not assume the alias still points to another wallet's bridge.
 - **Bittensor:** the direct provider is `window.vultisig.bittensor`.
   Substrate-compatible dApps discover it as `window.injectedWeb3.vultisig`,
   which is not priority-gated.
@@ -484,7 +486,7 @@ the prioritized wallet:
 | `window.cardano.vultisig` | Cardano CIP-30 | Direct Cardano discovery |
 | Sui Wallet Standard | Sui | Registered when the current vault supports Sui |
 | `window.vultisigTonWallet.tonconnect` | TON Connect | Own JS bridge key (wallets-list `bridge.key`); enumerable for SDK QA mode |
-| `window.tonkeeper.tonconnect` | TON Connect | Guarded Tonkeeper alias |
+| `window.tonkeeper.tonconnect` | TON Connect | Tonkeeper alias; set only if absent at injection, replaced by Vultisig when prioritized |
 | `window.injectedWeb3.vultisig` | Substrate | Bittensor provider; not priority-gated |
 | `window.station` / `window.terra` | Station | Guarded Terra compatibility globals; not priority-gated |
 | `window.vultisig.xrpl` | Native XRPL | Direct account, message-signing, and transaction API |
