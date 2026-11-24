@@ -20,7 +20,7 @@ type StaticViewId =
   | 'migrateVault'
 
 const appCustomViewLoaders: ViewLoaders<
-  Exclude<AppViewId, SharedViewId | StaticViewId>
+  Exclude<AppViewId, SharedViewId | StaticViewId> | 'uploadQr'
 > = {
   connectedDapps: () =>
     import('@clients/extension/src/pages/connected-dapps').then(
@@ -35,8 +35,8 @@ const appCustomViewLoaders: ViewLoaders<
       ({ ImportVaultView }) => ImportVaultView
     ),
   joinKeygen: () =>
-    import('@clients/extension/src/mpc/keygen/join/JoinKeygenPage').then(
-      ({ JoinKeygenPage }) => JoinKeygenPage
+    import('./views/JoinKeygenView').then(
+      ({ JoinKeygenView }) => JoinKeygenView
     ),
   joinKeysign: () =>
     import('@clients/extension/src/mpc/keysign/join/JoinKeysignPage').then(
@@ -87,6 +87,8 @@ const appCustomViewLoaders: ViewLoaders<
     import('./views/SetupVaultView').then(
       ({ SetupVaultView }) => SetupVaultView
     ),
+  uploadQr: () =>
+    import('./views/UploadQrView').then(({ UploadQrView }) => UploadQrView),
   stationMigration: () =>
     import('./views/StationMigrationView').then(
       ({ StationMigrationView }) => StationMigrationView

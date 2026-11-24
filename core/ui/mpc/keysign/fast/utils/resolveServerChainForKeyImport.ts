@@ -10,7 +10,7 @@ type ResolveServerChainForKeyImportInput = {
 /**
  * Maps a sign-time chain to a chain Vultiserver actually has stored.
  *
- * The extension's KeyImport fast keygen sends one chain per derivation
+ * Older extension KeyImport fast vaults sent one chain per derivation
  * group to Vultiserver (the representative), so the server's
  * `Vault.ChainPublicKeys` only has entries for those representatives. The
  * actual list is persisted in the vault as `keyImportServerChains`.

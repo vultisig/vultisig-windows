@@ -440,8 +440,8 @@ export const hr = {
   vault_backup_banner_title: 'Zatražite potpuno skrbništvo nad trezorom',
   referral_banner_caption: 'Ne propustite nagrade',
   referral_banner_title: 'Dodajte svoj referalni kod',
-  kamino_banner_caption: 'Novo na Solani',
-  kamino_banner_title: 'Počnite zarađivati ​​s Kaminom',
+  kamino_banner_caption: 'Uz Kamino',
+  kamino_banner_title: 'Neka neiskorišteni USDC radi za vas',
   from: 'Iz',
   freeze: 'Zamrzni',
   function_arguments: 'Argumenti funkcije',
@@ -1909,6 +1909,13 @@ export const hr = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vrijedi',
   swap_limit_when_one: 'Kada 1',
+  kamino_earn_insufficient_sol:
+    'Nema dovoljno SOL-a. Dodajte SOL u svoj trezor i pokušajte ponovno.',
+  kamino_earn_insufficient_sol_amounts:
+    'Nema dovoljno SOL-a. Ovaj polog treba oko {{needed}}; vaš trezor ima {{available}}.',
+  kamino_earn_insufficient_token: 'Nema dovoljno {{ticker}}.',
+  kamino_earn_simulation_failed:
+    'Ova transakcija bi na Solani propala: {{reason}}',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_positions_unavailable:
     'Stanje nije moguće učitati. Prikazani trezori su ažurirani.',
@@ -2112,4 +2119,10 @@ export const hr = {
     '{{site}} je povezan s {{vault}}. Ostale stranice ostaju nepromijenjene.',
   keep: 'Zadrži',
   switch: 'Prebaci',
+  keysign_many_inputs_one:
+    'Potpisuje se {{count}} ulaz. To traje dulje nego inače.',
+  keysign_many_inputs_few:
+    'Potpisuju se {{count}} ulaza. To traje dulje nego inače.',
+  keysign_many_inputs_other:
+    'Potpisuje se {{count}} ulaza. To traje dulje nego inače.',
 }

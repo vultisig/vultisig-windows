@@ -110,4 +110,65 @@ describe('hasSameReadabilityInputs', () => {
       ).toBe(false)
     })
   })
+
+  it('accepts a storage refresh with identical public keys and shares in new records', () => {
+    expect(
+      hasSameReadabilityInputs({
+        resolved: inputsOf(),
+        current: inputsOf({
+          vault: {
+            ...vault,
+            publicKeys: { ...vault.publicKeys },
+            keyShares: { ...vault.keyShares },
+            chainPublicKeys: vault.chainPublicKeys
+              ? { ...vault.chainPublicKeys }
+              : undefined,
+            chainKeyShares: { ...vault.chainKeyShares },
+          },
+        }),
+      })
+    ).toBe(true)
+  })
+
+  it('snapshots key records so in-place replacement invalidates the settled read', () => {
+    const storedVault = { ...vault, keyShares: { ...vault.keyShares } }
+    const resolved = inputsOf({ vault: storedVault })
+    storedVault.keyShares.ecdsa = 'replacement-share'
+    expect(
+      hasSameReadabilityInputs({
+        resolved,
+        current: inputsOf({ vault: storedVault }),
+      })
+    ).toBe(false)
+  })
+
+  it('invalidates when a chain share is added during a refresh', () => {
+    expect(
+      hasSameReadabilityInputs({
+        resolved: inputsOf(),
+        current: inputsOf({
+          vault: {
+            ...vault,
+            chainKeyShares: {
+              ...vault.chainKeyShares,
+              [Chain.Bitcoin]: 'new-bitcoin-share',
+            },
+          },
+        }),
+      })
+    ).toBe(false)
+  })
+
+  it('distinguishes record keys even when their values are undefined', () => {
+    expect(
+      hasSameReadabilityInputs({
+        resolved: inputsOf({
+          vault: { ...vault, chainPublicKeys: { [Chain.Bitcoin]: undefined } },
+        }),
+        current: inputsOf({
+          vault: { ...vault, chainPublicKeys: { [Chain.Cosmos]: undefined } },
+        }),
+      })
+    ).toBe(false)
+  })
 })

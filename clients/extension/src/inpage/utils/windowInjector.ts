@@ -15,6 +15,10 @@ import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
 import { createXrplProvider, installXrplAdapter } from '../providers/xrpl'
 import { installEip1193Delegates } from './eip1193Delegates'
+import {
+  installSubstrateDiscovery,
+  substrateExtensionVersion,
+} from './substrateDiscovery'
 
 // Wallet-picker descriptor pushed to `window.terraWallets` /
 // `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
@@ -219,6 +223,11 @@ export const injectToWindow = () => {
     attempt(() => installXrplAdapter())
   }
 
+  // Ungated like Station: no other wallet claims the brand key, and dApps read `injectedWeb3` on load.
+  attempt(() =>
+    installSubstrateDiscovery(origin => providers.bittensor.enable(origin))
+  )
+
   setupContentScriptMessenger(providers)
 }
 
@@ -336,11 +345,7 @@ async function setupContentScriptMessenger(
             ...(window.injectedWeb3 || {}),
             'polkadot-js': {
               enable: (origin?: string) => providers.polkadot.enable(origin),
-              version: '0.46.9',
-            },
-            bittensor: {
-              enable: (origin?: string) => providers.bittensor.enable(origin),
-              version: '0.46.9',
+              version: substrateExtensionVersion,
             },
           },
           configurable: true,

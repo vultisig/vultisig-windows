@@ -3,8 +3,8 @@ import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 /**
  * Extension-only metadata: the chains the extension sent to Vultiserver
- * during KeyImport keygen (`representativeChains` — one per derivation
- * group). Persisted alongside the vault so sign-time chain rewrites can
+ * during KeyImport keygen (one per derivation group on older vaults).
+ * Persisted alongside the vault so sign-time chain rewrites can
  * pick a chain the server actually has stored.
  *
  * The SDK `Vault` type doesn't declare this field; we attach it directly

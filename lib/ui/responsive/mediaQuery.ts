@@ -23,7 +23,7 @@ export const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
  * breakpoint distinguishes it — size against this instead of assuming a phone
  * has the room a phone usually does.
  */
-export const extensionPopupWidth = 360
+export const extensionPopupWidth = 430
 
 export const mediaQuery: Record<SupportedMedias, string> = {
   mobileDeviceAndDown: `(max-width: ${mediaBreakPoints.mobileDevice - 1}px)`,

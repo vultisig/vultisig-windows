@@ -23,6 +23,10 @@ import { BottomNavigationTab } from './BottomNavigationTab'
 const navHeight = 66
 const cameraButtonSize = 56
 const cameraButtonInset = 28
+/** Extension: the camera sits centred between the tabs and rises above the bar. */
+const extensionCameraClearance = 3
+const extensionTabsGap = cameraButtonSize + 2 * extensionCameraClearance
+const extensionCameraOverhang = 12
 
 const tabs = ['wallet', 'defi'] as const
 type Tab = (typeof tabs)[number]
@@ -65,6 +69,7 @@ export const AgentBottomNavigationContent = ({
     setSelectedIndex(Math.round(value))
   )
 
+  const tabGap = isExtension ? extensionTabsGap : 0
   const labels: Record<Tab, string> = { wallet: t('wallet'), defi: t('earn') }
   const icons: Record<Tab, ReactNode> = {
     wallet: <StationWalletFilledIcon />,
@@ -75,11 +80,12 @@ export const AgentBottomNavigationContent = ({
     <NavContainer data-testid="bottom-navigation">
       <NavSurface $isExtension={isExtension} />
       <TabsRow $isExtension={isExtension} data-testid="bottom-navigation-tabs">
-        <TabsTrack>
+        <TabsTrack $gap={tabGap}>
           {activeIndex === -1 ? null : (
             <BottomNavigationPill
               indicator={clampedIndicator}
               tabCount={tabs.length}
+              tabGap={tabGap}
             />
           )}
           {tabs.map((tab, index) => (
@@ -154,23 +160,25 @@ const TabsRow = styled.div<{ $isExtension: boolean }>`
     $isExtension ? 0 : cameraButtonSize + cameraButtonInset}px;
 `
 
-const TabsTrack = styled.div`
+const TabsTrack = styled.div<{ $gap: number }>`
   position: relative;
   display: flex;
   flex: 1;
   min-width: 0;
+  gap: ${({ $gap }) => $gap}px;
 `
 
 const FloatingCamera = styled(UnstyledButton)<{ $isExtension: boolean }>`
-  position: ${({ $isExtension }) => ($isExtension ? 'fixed' : 'absolute')};
-  right: ${cameraButtonInset}px;
+  position: absolute;
   ${({ $isExtension }) =>
     $isExtension
       ? css`
-          bottom: 80px;
+          top: -${extensionCameraOverhang}px;
+          left: calc(50% - ${cameraButtonSize / 2}px);
         `
       : css`
           top: 5px;
+          right: ${cameraButtonInset}px;
         `}
   z-index: 35;
   ${borderRadius.pill};
@@ -182,7 +190,7 @@ const FloatingCamera = styled(UnstyledButton)<{ $isExtension: boolean }>`
       : '#4879fd'};
   font-size: 24px;
   color: ${getColor('text')};
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.2s;
 
   &:hover {
@@ -191,12 +199,4 @@ const FloatingCamera = styled(UnstyledButton)<{ $isExtension: boolean }>`
         ? theme.colors.buttonHover.toCssValue()
         : '#5a8aff'};
   }
-
-  ${({ $isExtension }) =>
-    $isExtension &&
-    css`
-      @supports (bottom: calc(0px + env(safe-area-inset-bottom))) {
-        bottom: calc(80px + env(safe-area-inset-bottom));
-      }
-    `}
 `

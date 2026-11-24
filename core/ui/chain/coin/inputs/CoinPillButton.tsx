@@ -80,7 +80,13 @@ const Body = styled(HStack)`
  * pill, where the amount field takes more of the row than the read-only To
  * amount does. The pill itself keeps its automatic minimum for the same
  * reason: below it the chevron sits outside the pill and reads as missing.
+ *
+ * `max-width: none` lifts the global `svg { max-width: 100% }`. Firefox counts
+ * an SVG with a percentage max-width as zero wide when sizing the pill from
+ * its content, so the pill came out one chevron short and the chevron hung
+ * off its right edge (#5321).
  */
 const Chevron = styled(ChevronRightIcon)`
   flex-shrink: 0;
+  max-width: none;
 `

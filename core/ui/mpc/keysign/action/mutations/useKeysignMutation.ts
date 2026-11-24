@@ -1,5 +1,9 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
+import {
+  KeysignAction,
+  KeysignProgress,
+  useKeysignAction,
+} from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import {
   customMessageDefaultChain,
@@ -56,12 +60,29 @@ import {
 } from '../../cowswap/cowSwapKeysign'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 import { getCosmosDAppTxHash } from '../../tx/getCosmosDAppTxHash'
+import { getKeysignTxHash } from '../../tx/getKeysignTxHash'
 
-export const useKeysignMutation = (payload: KeysignMessagePayload) => {
+type UseKeysignMutationInput = {
+  payload: KeysignMessagePayload
+  onMessageCount?: (count: number) => void
+  /** Signature progress of the transaction's own messages, as they finish. */
+  onProgress?: (progress: KeysignProgress) => void
+}
+
+/** Signs and broadcasts the payload; reports the message count before signing starts. */
+export const useKeysignMutation = ({
+  payload,
+  onMessageCount,
+  onProgress,
+}: UseKeysignMutationInput) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
 
-  const keysignAction = useKeysignAction()
+  const baseKeysignAction = useKeysignAction()
+  const keysignAction: KeysignAction = input => {
+    onMessageCount?.(input.msgs.length)
+    return baseKeysignAction({ ...input, onProgress })
+  }
   const mutationListener = useKeysignMutationListener()
 
   return useMutation({
@@ -347,7 +368,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               const lastValidBlockHeight =
                 getKeysignLastValidBlockHeight(payload)
 
-              await chainPromises(
+              const broadcastTxHashes = await chainPromises(
                 txs.map(
                   ({ data }) =>
                     () =>
@@ -358,6 +379,17 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                       })
                 )
               )
+
+              return {
+                txs: txs.map((tx, index) => ({
+                  ...tx,
+                  hash: getKeysignTxHash({
+                    chain,
+                    tx,
+                    broadcastTxHash: broadcastTxHashes[index],
+                  }),
+                })),
+              }
             }
 
             return { txs }

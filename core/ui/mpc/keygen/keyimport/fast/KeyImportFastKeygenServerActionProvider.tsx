@@ -4,6 +4,7 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
 import { keyImportWithServer } from '@vultisig/core-mpc/fast/api/keyImportWithServer'
 import { sequentialKeyImportWithServer } from '@vultisig/core-mpc/fast/api/sequentialKeyImportWithServer'
@@ -16,17 +17,12 @@ import {
   KeyImportInput,
   useKeyImportInput,
 } from '../state/keyImportInput'
-import { getKeyImportDerivationGroups } from '../utils/getKeyImportDerivationGroups'
 
-export const getKeyImportServerRepresentativeChains = (
+/** Every selected chain; Station Terra root imports have none. */
+export const getKeyImportServerRequestChains = (
   keyImportInput: KeyImportInput
-) => {
-  if (isStationTerraRootKeyImportInput(keyImportInput)) return []
-
-  return getKeyImportDerivationGroups(keyImportInput.chains).map(
-    group => group.representativeChain
-  )
-}
+): Chain[] =>
+  isStationTerraRootKeyImportInput(keyImportInput) ? [] : keyImportInput.chains
 
 export const getKeyImportServerProtocols = (keyImportInput: KeyImportInput) =>
   isStationTerraRootKeyImportInput(keyImportInput)
@@ -47,8 +43,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
   const isStationTerraRoot = isStationTerraRootKeyImportInput(keyImportInput)
 
   const action = async () => {
-    const representativeChains =
-      getKeyImportServerRepresentativeChains(keyImportInput)
+    const chains = getKeyImportServerRequestChains(keyImportInput)
     const protocols = [...getKeyImportServerProtocols(keyImportInput)]
 
     if (isTssBatchingEnabled || isStationTerraRoot) {
@@ -61,7 +56,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
         hex_encryption_key: hexEncryptionKey,
         lib_type: toLibType('KeyImport'),
         protocols,
-        chains: representativeChains,
+        chains,
       })
     } else {
       await sequentialKeyImportWithServer({
@@ -73,7 +68,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
         hex_encryption_key: hexEncryptionKey,
         hex_chain_code: hexChainCode,
         lib_type: toLibType('KeyImport'),
-        chains: representativeChains,
+        chains,
       })
     }
   }

@@ -447,8 +447,8 @@ export const it = {
   vault_backup_banner_title: 'Richiedi la custodia completa del vault',
   referral_banner_caption: 'Non perderti i premi',
   referral_banner_title: 'Inserisci il tuo codice referral',
-  kamino_banner_caption: 'Novità su Solana',
-  kamino_banner_title: 'Inizia a guadagnare con Kamino',
+  kamino_banner_caption: 'Con Kamino',
+  kamino_banner_title: 'Fai fruttare i tuoi USDC inattivi',
   from: 'Da',
   freeze: 'Freeze',
   function_arguments: 'Argomenti della funzione',
@@ -1931,6 +1931,13 @@ export const it = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_insufficient_sol:
+    'SOL insufficienti. Aggiungi SOL al tuo vault e riprova.',
+  kamino_earn_insufficient_sol_amounts:
+    'SOL insufficienti. Questo deposito richiede circa {{needed}}; il tuo vault ha {{available}}.',
+  kamino_earn_insufficient_token: '{{ticker}} insufficienti.',
+  kamino_earn_simulation_failed:
+    'Questa transazione fallirebbe su Solana: {{reason}}',
   kamino_earn_apy_30d: 'APY (30 giorni)',
   kamino_earn_positions_unavailable:
     'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',
@@ -2136,4 +2143,8 @@ export const it = {
     '{{site}} è connesso con {{vault}}. Gli altri siti restano invariati.',
   keep: 'Mantieni',
   switch: 'Cambia',
+  keysign_many_inputs_one:
+    'Firma di {{count}} input in corso. Richiede più tempo del solito.',
+  keysign_many_inputs_other:
+    'Firma di {{count}} input in corso. Richiede più tempo del solito.',
 }

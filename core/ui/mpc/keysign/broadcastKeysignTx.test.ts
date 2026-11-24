@@ -11,14 +11,14 @@ import { BroadcastError, broadcastKeysignTx } from './broadcastKeysignTx'
 const input = { chain: 'Ton', tx: { encoded: 'boc' } } as never
 
 describe('broadcastKeysignTx', () => {
-  it('resolves when the network accepted the transaction', async () => {
+  it('resolves to the reported hash when the network accepted the transaction', async () => {
     broadcastTxMock.mockResolvedValue({
       status: 'accepted',
       finality: 'pending',
       txHash: 'hash',
     })
 
-    await expect(broadcastKeysignTx(input)).resolves.toBeUndefined()
+    await expect(broadcastKeysignTx(input)).resolves.toBe('hash')
   })
 
   it('turns a failed broadcast result into a BroadcastError carrying the on-chain cause', async () => {

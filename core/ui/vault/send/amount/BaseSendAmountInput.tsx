@@ -4,6 +4,8 @@ import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecima
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import { useEffect, useRef, useState } from 'react'
 
+import { AmountInputSource, isAmbiguousGroupedPaste } from './amountInputSource'
+
 type BaseSendAmountInputProps = InputProps<bigint | null> &
   Pick<TextInputProps, 'validation' | 'placeholder' | 'disabled'> & {
     decimals: number
@@ -12,20 +14,33 @@ type BaseSendAmountInputProps = InputProps<bigint | null> &
 type ParseSendAmountInputInput = {
   value: string
   decimals: number
+  source?: AmountInputSource
 }
 
 /**
  * Normalizes a raw amount input string and parses it with exact bigint math.
- * Returns `null` for a cleared input, `undefined` for a rejected one
- * (invalid characters or more fraction digits than the coin supports).
+ * Returns `null` for a cleared input and `undefined` for a rejected one
+ * (invalid characters, a second separator, or more fraction digits than the
+ * coin supports), which the field drops so it only ever holds a sendable
+ * amount.
+ * A typed comma is the decimal point, whatever the device locale: refusing it
+ * would drop the keystroke and let the next digit join the integer part,
+ * sending `1,5` as `15` (#5289). A paste that reads as one grouped thousand
+ * is refused instead of silently meaning a thousandth as much — pass
+ * `source: 'paste'` from an `onPaste` handler for that.
  * Must never go through float64 — amounts with more than ~15 significant
  * digits would be silently perturbed before signing (#4488).
  */
 export const parseSendAmountInput = ({
   value,
   decimals,
+  source = 'typing',
 }: ParseSendAmountInputInput) => {
-  let normalized = value.replace(/-/g, '')
+  if (isAmbiguousGroupedPaste({ value, source })) {
+    return undefined
+  }
+
+  let normalized = value.replace(/-/g, '').replace(/,/g, '.')
 
   if (normalized.startsWith('.')) {
     normalized = `0${normalized}`
@@ -80,8 +95,11 @@ export const BaseSendAmountInput = ({
     }
   }, [value, trimmedDecimalString, inputValue, decimals])
 
-  const handleInputValueChange = (rawValue: string) => {
-    const parsed = parseSendAmountInput({ value: rawValue, decimals })
+  const handleInputValueChange = (
+    rawValue: string,
+    source: AmountInputSource = 'typing'
+  ) => {
+    const parsed = parseSendAmountInput({ value: rawValue, decimals, source })
 
     if (parsed === null) {
       setInputValue('')
@@ -109,7 +127,7 @@ export const BaseSendAmountInput = ({
       onValueChange={handleInputValueChange}
       onPaste={event => {
         event.preventDefault()
-        handleInputValueChange(event.clipboardData.getData('text'))
+        handleInputValueChange(event.clipboardData.getData('text'), 'paste')
       }}
       data-testid="send-amount-input"
     />

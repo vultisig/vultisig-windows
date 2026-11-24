@@ -22,6 +22,10 @@ import {
 
 const eddsaPlaceholderChainPath = 'm'
 
+/**
+ * Provides the DKLS keysign action: MLDSA signs every message in one round,
+ * ECDSA and EdDSA sign them one after another and report progress after each.
+ */
 export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
@@ -36,7 +40,16 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     signatureAlgorithm,
     coinType,
     chain,
+    onProgress,
   }) => {
+    const total = msgs.length
+    // MLDSA signs every message in one round, so only the one-by-one path
+    // below reports progress. Reporting the count before the engine loads
+    // lets the signing screen switch to it as early as possible.
+    if (signatureAlgorithm !== 'mldsa') {
+      onProgress?.({ done: 0, total })
+    }
+
     await loadMpcEngine()
 
     const stationRootChains = getStationKeyImportRootChains(vault)
@@ -93,21 +106,23 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     }
 
     return chainPromises(
-      msgs.map(
-        message => async () =>
-          keysign({
-            keyShare,
-            signatureAlgorithm,
-            message,
-            chainPath,
-            localPartyId: vault.localPartyId,
-            peers,
-            serverUrl,
-            sessionId,
-            hexEncryptionKey: encryptionKeyHex,
-            isInitiatingDevice,
-          })
-      )
+      msgs.map((message, index) => async () => {
+        const signature = await keysign({
+          keyShare,
+          signatureAlgorithm,
+          message,
+          chainPath,
+          localPartyId: vault.localPartyId,
+          peers,
+          serverUrl,
+          sessionId,
+          hexEncryptionKey: encryptionKeyHex,
+          isInitiatingDevice,
+        })
+        onProgress?.({ done: index + 1, total })
+
+        return signature
+      })
     )
   }
 

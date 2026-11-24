@@ -28,10 +28,11 @@ export class BroadcastError extends Error {
  * Broadcasts a signed keysign transaction, re-throwing any RPC rejection as a
  * {@link BroadcastError}. The signing step is already complete by the time this
  * runs, so a failure here is an on-chain rejection — never an MPC failure.
+ * Resolves to the hash the network reported, when it reported one.
  */
 export const broadcastKeysignTx = async (
   input: Parameters<typeof broadcastTx>[0]
-): Promise<void> => {
+): Promise<string | undefined> => {
   const result = await attempt(() => broadcastTx(input))
   if ('error' in result) {
     throw new BroadcastError(result.error)
@@ -43,6 +44,8 @@ export const broadcastKeysignTx = async (
   if (result.data.status === 'failed') {
     throw new BroadcastError(result.data.cause)
   }
+
+  return result.data.txHash
 }
 
 const extractBroadcastReason = (cause: unknown): string => {
