@@ -1,7 +1,6 @@
-import { describe, expect, it } from 'vitest'
-
 import { AppView } from '@clients/extension/src/navigation/AppView'
 import { resolveInitialHistory } from '@clients/extension/src/navigation/resolveInitialHistory'
+import { describe, expect, it } from 'vitest'
 
 const vaultView: AppView = { id: 'vault' }
 const setupVaultView: AppView = { id: 'setupVault', state: {} }
@@ -58,6 +57,31 @@ describe('resolveInitialHistory', () => {
         resolveInitialHistory({
           initialView: null,
           persistedView: null,
+          hasVaults: false,
+        })
+      ).toEqual([vaultView])
+    })
+
+    it('honors the scanner handoff without restoring an abandoned setup', () => {
+      const scannerView: AppView = {
+        id: 'uploadQr',
+        state: { title: 'Scan QR' },
+      }
+
+      expect(
+        resolveInitialHistory({
+          initialView: scannerView,
+          persistedView: setupVaultView,
+          hasVaults: false,
+        })
+      ).toEqual([vaultView, scannerView])
+    })
+
+    it('does not restore an abandoned scanner without an explicit handoff', () => {
+      expect(
+        resolveInitialHistory({
+          initialView: null,
+          persistedView: { id: 'uploadQr', state: {} },
           hasVaults: false,
         })
       ).toEqual([vaultView])

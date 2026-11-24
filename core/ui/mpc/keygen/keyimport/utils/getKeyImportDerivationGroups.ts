@@ -31,8 +31,7 @@ type DerivationKey =
 
 /**
  * Returns a stable key identifying which derivation path a chain uses.
- * Chains with the same key derive the same private key from a mnemonic,
- * so they can share a single MPC KeyImport session.
+ * Chains with the same key derive the same private key from a mnemonic.
  */
 const getDerivationKey = (chain: Chain): DerivationKey => {
   if (evmChainValues.has(chain)) return sharedDerivationPath.evm
@@ -54,8 +53,7 @@ type DerivationGroup = {
 }
 
 /**
- * Groups chains by their BIP44 derivation path so that only one MPC
- * KeyImport session is needed per unique private key.
+ * Groups chains by their BIP44 derivation path.
  */
 export const getKeyImportDerivationGroups = (
   chains: Chain[]

@@ -12,6 +12,31 @@ export const defaultSlippage: SlippageValue = {
   customPercent: 0,
 }
 
+// Sanity cap for a manually entered slippage tolerance (percent).
+const maxSlippagePercent = 50
+
+/**
+ * Normalizes a typed custom slippage into the text the field should show and
+ * the percent it means, capped at the max. A comma is read as the decimal
+ * point, so `0,5` is 0.5% rather than an unparseable value that would
+ * silently fall back to Auto (#5289). Returns `undefined` for a rejected edit
+ * (a second separator or any other character) so the field keeps what it had
+ * and never fills with junk like `0,,,,`.
+ */
+export const parseCustomSlippageInput = (raw: string) => {
+  const text = raw.replace(/,/g, '.')
+  const padded = text.startsWith('.') ? `0${text}` : text
+
+  if (!/^\d*\.?\d*$/.test(padded)) {
+    return undefined
+  }
+
+  return {
+    text: padded,
+    percent: Math.min(Number(padded), maxSlippagePercent),
+  }
+}
+
 /**
  * Human-readable label for the current slippage selection, shown on the
  * Advanced swap settings row (e.g. `Auto`, `0.5%`, `2%`).

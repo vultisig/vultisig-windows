@@ -2137,4 +2137,8 @@ export const pt = {
   token_approvals_count: 'Aprovações: {{count}}',
   transaction_not_fully_summarized:
     'Parte desta transação não está resumida aqui. Consulte os detalhes completos abaixo antes de assinar.',
+  keysign_many_inputs_one:
+    'Assinando {{count}} entrada. Isso leva mais tempo que o normal.',
+  keysign_many_inputs_other:
+    'Assinando {{count}} entradas. Isso leva mais tempo que o normal.',
 }

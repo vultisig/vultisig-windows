@@ -2153,4 +2153,8 @@ export const de = {
   token_approvals_count: 'Genehmigungen: {{count}}',
   transaction_not_fully_summarized:
     'Ein Teil dieser Transaktion ist hier nicht zusammengefasst. Bitte lesen Sie die vollständigen Details unten durch, bevor Sie unterschreiben.',
+  keysign_many_inputs_one:
+    '{{count}} Input wird signiert. Das dauert länger als üblich.',
+  keysign_many_inputs_other:
+    '{{count}} Inputs werden signiert. Das dauert länger als üblich.',
 }

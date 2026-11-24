@@ -3,6 +3,7 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountIdempotentInstruction,
   createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
   getAssociatedTokenAddressSync,
 } from '@solana/spl-token'
 import {
@@ -12,6 +13,8 @@ import {
   SystemProgram,
   Transaction,
   TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
 } from '@solana/web3.js'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -24,6 +27,7 @@ import { SolanaSpecificSchema } from '@vultisig/core-mpc/types/vultisig/keysign/
 import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { oneInchSwapProgram } from './parseProgramCall/swapPrograms'
 import { parseSolanaTx } from './parser'
 
 vi.mock('@vultisig/core-chain/security/blockaid/tx/simulation', () => ({
@@ -145,6 +149,81 @@ const transferWithRecoverNested = serialize(
   }),
   transferTo(recipient)
 )
+const serializeV0 = (...instructions: TransactionInstruction[]) => [
+  Buffer.from(
+    new VersionedTransaction(
+      new TransactionMessage({
+        payerKey: sender,
+        recentBlockhash: wsol,
+        instructions,
+      }).compileToV0Message()
+    ).serialize()
+  ).toString('base64'),
+]
+const formats = [
+  ['legacy', serialize],
+  ['v0', serializeV0],
+] as const
+const oneInchInAmount = 1000000n
+const oneInchOutAmount = 5000000n
+// The 1inch parser reads the source mint, maker and destination mint from
+// accounts 2, 5 and 7, and the amounts from data bytes 12 and 20.
+const oneInchSwap = () => {
+  const programData = Buffer.alloc(28)
+  programData.writeBigUInt64LE(oneInchInAmount, 12)
+  programData.writeBigUInt64LE(oneInchOutAmount, 20)
+  const account = (pubkey: PublicKey, isSigner = false) => ({
+    pubkey,
+    isSigner,
+    isWritable: isSigner,
+  })
+  return new TransactionInstruction({
+    programId: new PublicKey(oneInchSwapProgram),
+    keys: [
+      account(unknownProgram),
+      account(unknownProgram),
+      account(new PublicKey(mint)),
+      account(unknownProgram),
+      account(unknownProgram),
+      account(sender, true),
+      account(unknownProgram),
+      account(new PublicKey(wsol)),
+    ],
+    data: programData,
+  })
+}
+const tokenTransferTo = (to: PublicKey) =>
+  createTransferInstruction(
+    getAssociatedTokenAddressSync(new PublicKey(mint), sender),
+    getAssociatedTokenAddressSync(new PublicKey(mint), to),
+    sender,
+    1
+  )
+const unknownInstruction = () =>
+  new TransactionInstruction({
+    programId: unknownProgram,
+    keys: [],
+    data: Buffer.alloc(0),
+  })
+const swapWithHiddenInstructions: [string, () => TransactionInstruction[]][] = [
+  ['1inch then SOL transfer', () => [oneInchSwap(), transferTo(recipient)]],
+  ['SOL transfer then 1inch', () => [transferTo(recipient), oneInchSwap()]],
+  [
+    '1inch then token transfer',
+    () => [oneInchSwap(), tokenTransferTo(recipient)],
+  ],
+  [
+    'token transfer then 1inch',
+    () => [tokenTransferTo(recipient), oneInchSwap()],
+  ],
+  ['1inch then unknown program', () => [oneInchSwap(), unknownInstruction()]],
+  ['unknown program then 1inch', () => [unknownInstruction(), oneInchSwap()]],
+  [
+    '1inch then vault-funded token account',
+    () => [oneInchSwap(), createTokenAccount(sender)],
+  ],
+  ['two 1inch instructions', () => [oneInchSwap(), oneInchSwap()]],
+]
 const fromCoin = create(CoinSchema, {
   chain: Chain.Solana,
   address: sender.toBase58(),
@@ -340,6 +419,95 @@ describe('Solana approval with the shared simulation parser', () => {
           outAmount: scenario.output,
           rawTransactions: data,
         },
+      })
+    }
+  )
+})
+
+describe('Solana approval of a 1inch swap', () => {
+  const blockaidWithoutVerdict = [
+    [
+      'the simulation service is unavailable',
+      () =>
+        vi
+          .mocked(getTxBlockaidSimulation)
+          .mockRejectedValue(new Error('Unavailable')),
+    ],
+    [
+      'the simulation reports no movement',
+      () => vi.mocked(getTxBlockaidSimulation).mockResolvedValue(noMovement),
+    ],
+  ] as const
+
+  describe.each(blockaidWithoutVerdict)('when %s', (_, mockBlockaid) => {
+    beforeEach(() => {
+      mockBlockaid()
+    })
+
+    describe.each(formats)('in a %s transaction', (_, toTransactions) => {
+      it.each([
+        ['alone', () => [oneInchSwap()]],
+        [
+          'with compute-budget instructions',
+          () => [
+            ComputeBudgetProgram.setComputeUnitLimit({ units: 200000 }),
+            ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 1 }),
+            oneInchSwap(),
+          ],
+        ],
+      ])('summarises the swap %s', async (_, instructions) => {
+        const transactions = toTransactions(...instructions())
+        await expect(parse(transactions)).resolves.toMatchObject({
+          swap: {
+            authority: sender.toBase58(),
+            inAmount: oneInchInAmount.toString(),
+            inputCoin: { id: mint },
+            outAmount: oneInchOutAmount.toString(),
+            outputCoin: { ticker: 'SOL' },
+            rawTransactions: transactions,
+          },
+        })
+      })
+
+      it.each(swapWithHiddenInstructions)(
+        'keeps %s on raw review',
+        async (_, instructions) => {
+          const transactions = toTransactions(...instructions())
+          await expect(parse(transactions)).resolves.toEqual({
+            raw: expect.objectContaining({ transactions }),
+          })
+        }
+      )
+    })
+  })
+
+  describe.each(formats)(
+    'when the simulation reports movements for a %s transaction with a hidden transfer',
+    (_, toTransactions) => {
+      const transactions = toTransactions(oneInchSwap(), transferTo(recipient))
+
+      it('takes the swap amounts from the simulation, not the 1inch instruction', async () => {
+        vi.mocked(getTxBlockaidSimulation).mockResolvedValue(
+          simulation(1000000000n, -1000000n)
+        )
+        await expect(parse(transactions)).resolves.toMatchObject({
+          swap: {
+            inAmount: '1000000',
+            outAmount: '997960720',
+            rawTransactions: transactions,
+          },
+        })
+      })
+
+      it('reports the simulated transfer without naming a destination', async () => {
+        vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(1n))
+        await expect(parse(transactions)).resolves.toMatchObject({
+          transfer: {
+            inAmount: '1',
+            receiverAddress: '',
+            rawTransactions: transactions,
+          },
+        })
       })
     }
   )

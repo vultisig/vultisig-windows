@@ -107,7 +107,6 @@ The extension provides:
   - Sui Wallet Standard registration for Sui dApps
   - `window.vultisigTonWallet.tonconnect` (and a guarded
     `window.tonkeeper.tonconnect` alias) for TON Connect-compatible dApps
-  - `window.injectedWeb3.bittensor` for Bittensor dApps when Vultisig is prioritized
   - Station-compatible globals for Terra dApps
   - `window.tronLink` / `window.tronWeb` for Tron dApps
   - `window.xfi` for XDEFI/Ctrl-compatible dApps
@@ -452,9 +451,9 @@ the generic provider contracts documented above:
   same bridge is also exposed at
   `window.vultisig.ton.tonconnect` and the guarded `window.tonkeeper.tonconnect`
   alias.
-- **Bittensor:** the direct provider is `window.vultisig.bittensor`. When
-  prioritized, Substrate-compatible dApps can also discover it at
-  `window.injectedWeb3.bittensor`.
+- **Bittensor:** the direct provider is `window.vultisig.bittensor`.
+  Substrate-compatible dApps discover it as `window.injectedWeb3.vultisig`,
+  which is not priority-gated.
 - **Terra / Station:** the direct provider is `window.vultisig.station`.
   Compatibility injection also supplies guarded `window.station` and
   `window.terra` globals, Station detection flags, and entries in the
@@ -486,7 +485,7 @@ the prioritized wallet:
 | Sui Wallet Standard | Sui | Registered when the current vault supports Sui |
 | `window.vultisigTonWallet.tonconnect` | TON Connect | Own JS bridge key (wallets-list `bridge.key`); enumerable for SDK QA mode |
 | `window.tonkeeper.tonconnect` | TON Connect | Guarded Tonkeeper alias |
-| `window.injectedWeb3.bittensor` | Substrate | Present when Vultisig is prioritized |
+| `window.injectedWeb3.vultisig` | Substrate | Bittensor provider; not priority-gated |
 | `window.station` / `window.terra` | Station | Guarded Terra compatibility globals; not priority-gated |
 | `window.vultisig.xrpl` | Native XRPL | Direct account, message-signing, and transaction API |
 | `window.gemWallet` | GemWallet / XRPL | Guarded presence marker and request bridge; not priority-gated |
