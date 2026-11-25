@@ -22,13 +22,18 @@ vi.mock('@vultisig/core-chain/coin/chainFeeCoin', () => ({
   },
 }))
 
-vi.mock('@ton/core', () => ({
-  Address: {
-    parse: vi.fn((addr: string) => ({
-      toRawString: () => addr,
-    })),
-  },
-}))
+vi.mock('@ton/core', async importOriginal => {
+  const actual = await importOriginal<typeof import('@ton/core')>()
+  return {
+    Address: {
+      isFriendly: actual.Address.isFriendly,
+      parseFriendly: actual.Address.parseFriendly,
+      parse: vi.fn((addr: string) => ({
+        toRawString: () => addr,
+      })),
+    },
+  }
+})
 
 vi.mock(
   '@clients/extension/src/inpage/providers/tonConnect/walletManifest',
@@ -161,6 +166,28 @@ describe('TonConnectBridge.send', () => {
       expect((result as any).error.message).toBe(
         'At least one transaction message is required'
       )
+    })
+
+    it('rejects a testnet-only recipient in a later message before opening approval', async () => {
+      const result = await bridge.send(
+        makeSendTxRequest({
+          valid_until: validUntil(),
+          messages: [
+            {
+              address: 'UQCXhTIYi7zucgALWCxYRAHjwJbLDyZVUZVOa-FzD7UA5P5O',
+              amount: '1000000',
+            },
+            {
+              address: '0QCXhTIYi7zucgALWCxYRAHjwJbLDyZVUZVOa-FzD7UA5EXE',
+              amount: '1000000',
+            },
+          ],
+        })
+      )
+      expect(result).toMatchObject({
+        error: { code: 1, message: expect.stringContaining('testnet-only') },
+      })
+      expect(mockCallPopup).not.toHaveBeenCalled()
     })
 
     it('should reject message without address', async () => {

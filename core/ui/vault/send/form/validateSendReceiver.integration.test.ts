@@ -1,3 +1,4 @@
+import { Address } from '@ton/core'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { TFunction } from 'i18next'
@@ -16,6 +17,47 @@ describe('validateSendReceiver WalletCore integration', () => {
 
   beforeAll(async () => {
     walletCore = await initWasm()
+  })
+
+  it.each(
+    [true, false].flatMap(bounceable =>
+      [true, false].map(urlSafe =>
+        Address.parse(
+          '0:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+        ).toString({ bounceable, urlSafe, testOnly: true })
+      )
+    )
+  )(
+    'rejects testnet-only TON destination %s with real WalletCore',
+    receiverAddress => {
+      expect(
+        walletCore.AnyAddress.isValid(receiverAddress, walletCore.CoinType.ton)
+      ).toBe(true)
+      expect(
+        validateSendReceiver({
+          receiverAddress,
+          senderAddress: 'sender',
+          chain: Chain.Ton,
+          walletCore,
+          t,
+        })
+      ).toContain('send_invalid_receiver_address')
+    }
+  )
+
+  it.each([
+    'UQCXhTIYi7zucgALWCxYRAHjwJbLDyZVUZVOa-FzD7UA5P5O',
+    '0:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+  ])('accepts mainnet TON destination %s', receiverAddress => {
+    expect(
+      validateSendReceiver({
+        receiverAddress,
+        senderAddress: 'sender',
+        chain: Chain.Ton,
+        walletCore,
+        t,
+      })
+    ).toBeUndefined()
   })
 
   it('names the off-curve Solana Incinerator instead of a format error', () => {

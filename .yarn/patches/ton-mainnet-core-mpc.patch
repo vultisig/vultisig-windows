@@ -1,0 +1,44 @@
+diff --git a/dist/keysign/signingInputs/resolvers/ton/jetton.js b/dist/keysign/signingInputs/resolvers/ton/jetton.js
+index 5ae4cdbaea99087887e4d812baf3805c1b25a61f..982c6dfdfa684778c46ff6d6b1b179535ab02f91 100644
+--- a/dist/keysign/signingInputs/resolvers/ton/jetton.js
++++ b/dist/keysign/signingInputs/resolvers/ton/jetton.js
+@@ -1,3 +1,4 @@
++import { assertTonMainnetAddress } from '@vultisig/core-chain/chains/ton/address';
+ import { validateTonComment } from '@vultisig/core-chain/chains/ton/comment';
+ import { tonConfig } from '@vultisig/core-chain/chains/ton/config';
+ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent';
+@@ -19,6 +20,8 @@ export const buildJettonTransfer = ({ keysignPayload, walletCore, jettonAddress,
+     if (!jettonAddress.trim()) {
+         throw new Error('Cannot build a TON Jetton transfer: the sender jetton wallet address is missing');
+     }
++    assertTonMainnetAddress(keysignPayload.toAddress);
++    assertTonMainnetAddress(jettonAddress);
+     const coin = getKeysignCoin(keysignPayload);
+     const destinationAddress = walletCore.TONAddressConverter.toUserFriendly(keysignPayload.toAddress, true, false);
+     const amount = shouldBePresent(getKeysignAmount(keysignPayload));
+diff --git a/dist/keysign/signingInputs/resolvers/ton/native.js b/dist/keysign/signingInputs/resolvers/ton/native.js
+index cbc91971a9b0e98df097ee5b4d96f7b8834c8b46..e1a9690c16cc0d45768a8d97200193170c4f4e1a 100644
+--- a/dist/keysign/signingInputs/resolvers/ton/native.js
++++ b/dist/keysign/signingInputs/resolvers/ton/native.js
+@@ -1,4 +1,5 @@
+ import { Buffer } from 'buffer';
++import { assertTonMainnetAddress } from '@vultisig/core-chain/chains/ton/address';
+ import { validateTonComment } from '@vultisig/core-chain/chains/ton/comment';
+ import { numberToEvenHex } from '@vultisig/lib-utils/hex/numberToHex';
+ import { match } from '@vultisig/lib-utils/match';
+@@ -67,6 +68,7 @@ export const getTonSendMode = (walletVersion) => match(walletVersion, {
+  * send mode then draws on.
+  */
+ export const buildNativeTonTransfer = ({ keysignPayload, bounceable, walletVersion, }) => {
++    assertTonMainnetAddress(keysignPayload.toAddress);
+     const comment = keysignPayload.memo || '';
+     validateTonComment({ memo: comment });
+     return TW.TheOpenNetwork.Proto.Transfer.create({
+@@ -82,6 +84,7 @@ export const buildNativeTonTransfer = ({ keysignPayload, bounceable, walletVersi
+  * message carries its own payload/stateInit, so no comment is attached here.
+  */
+ export const buildNativeTonTransferFromMessage = ({ to, amount, payload = '', stateInit, bounceable, walletVersion, }) => {
++    assertTonMainnetAddress(to);
+     return TW.TheOpenNetwork.Proto.Transfer.create({
+         dest: to,
+         amount: tonAmountToBytes(amount),
