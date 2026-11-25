@@ -470,7 +470,8 @@ export type DefiPositionsStorage = {
   setDefiPositions: SetDefiPositionsFunction
 }
 
-const useDefiPositionsQuery = () => {
+/** The stored DeFi position selection for every chain. */
+export const useDefiPositionsQuery = () => {
   const { getDefiPositions } = useCore()
 
   return useQuery({

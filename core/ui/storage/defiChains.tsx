@@ -57,7 +57,8 @@ export type DefiChainsStorage = {
   setDefiChains: SetDefiChainsFunction
 }
 
-const useDefiChainsQuery = () => {
+/** The stored DeFi chain selection, before filtering to the current vault. */
+export const useDefiChainsQuery = () => {
   const { getDefiChains } = useCore()
 
   return useQuery({

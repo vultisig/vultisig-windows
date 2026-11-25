@@ -18,6 +18,19 @@ type GetHomeBalanceQueryInput = {
   walletHeldDefiFiat: number
 }
 
+type GetDefiNotInWalletFiatInput = {
+  defiFiat: number | undefined
+  /** DeFi value the wallet total already counts (wallet-held receipt tokens). */
+  walletHeldDefiFiat: number
+}
+
+/** DeFi value the wallet total doesn't already hold, so receipt tokens never count twice. */
+export const getDefiNotInWalletFiat = ({
+  defiFiat,
+  walletHeldDefiFiat,
+}: GetDefiNotInWalletFiatInput): number | undefined =>
+  defiFiat === undefined ? undefined : defiFiat - walletHeldDefiFiat
+
 /** `combined` adds only DeFi value the wallet total doesn't already hold, so receipt tokens never count twice. */
 export const getHomeBalanceQuery = ({
   display,
@@ -40,7 +53,7 @@ export const getHomeBalanceQuery = ({
 
   const isDefiFailed = defi.error !== null && defi.error !== undefined
   const defiNotInWallet =
-    defi.data === undefined ? 0 : defi.data - walletHeldDefiFiat
+    getDefiNotInWalletFiat({ defiFiat: defi.data, walletHeldDefiFiat }) ?? 0
 
   return {
     data: wallet.data === undefined ? undefined : wallet.data + defiNotInWallet,
