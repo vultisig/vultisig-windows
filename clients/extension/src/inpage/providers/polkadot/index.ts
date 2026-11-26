@@ -87,6 +87,7 @@ export class Polkadot extends EventEmitter {
           serialized: {
             data: [JSON.stringify(payload)],
             chain: OtherChain.Polkadot,
+            skipBroadcast: true,
           },
         },
       },
