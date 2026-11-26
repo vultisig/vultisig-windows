@@ -1,7 +1,4 @@
-import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShareCoin'
-import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
-import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
-import { withoutThorchainLpCoins } from '@core/ui/chain/coin/thorchain/isThorchainLpCoin'
+import { withoutDefiOnlyCoins } from '@core/ui/chain/coin/withoutDefiOnlyCoins'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useTonWalletVersion } from '@core/ui/storage/tonW5Enabled'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -37,13 +34,7 @@ export const useCurrentVaultCoins = () => {
  * legacy receipt/LP row).
  */
 export const usePortfolioVaultCoins = () =>
-  withoutKaminoShareCoins(
-    withoutThorchainLpCoins(
-      withoutBondedRuneReceiptCoins(
-        withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
-      )
-    )
-  )
+  withoutDefiOnlyCoins(useCurrentVaultCoins())
 
 export const usePortfolioVaultChainCoins = (chain: string) =>
   usePortfolioVaultCoins().filter(coin => coin.chain === chain)
