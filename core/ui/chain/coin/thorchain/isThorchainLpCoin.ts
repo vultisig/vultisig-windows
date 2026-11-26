@@ -8,10 +8,11 @@ const bowLpDenomPrefix = 'x/bow-'
 /**
  * THORChain (Rujira) liquidity-provider tokens. Their bank denoms are minted
  * by the BOW AMM under `x/bow-…` (e.g. `x/bow-xyk-gaia-atom-eth-usdc-0x…`),
- * which is the primary classifier. The `LP-…` ticker (e.g.
- * `LP-THOR.RUJI/ETH.USDC-XYK`, the on-chain bank-denom metadata `symbol`) is
- * kept as a fallback for rows without a denom. The ticker alone is not
- * enough: `@vultisig/core-chain`'s known-token list names the same denoms
+ * which is the primary classifier. An `LP-…` ticker (e.g.
+ * `LP-THOR.RUJI/ETH.USDC-XYK`, the on-chain bank-denom metadata `symbol`) also
+ * classifies any row, with or without a denom, so LP rows stored under another
+ * denom form stay hidden as before. The ticker alone is not enough:
+ * `@vultisig/core-chain`'s known-token list names the same denoms
  * `ATOM/USDC.ETH`, and coin discovery prefers that metadata.
  *
  * **First principles:** LP tokens are DeFi positions, not spendable wallet
