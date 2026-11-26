@@ -3,6 +3,7 @@ import { CoreStorage } from '@core/ui/storage/CoreStorage'
 import { addressBookStorage } from './addressBook'
 import { balanceVisibilityStorage } from './balanceVisibility'
 import { blockaidStorage } from './blockaid'
+import { bondRewardHistoryStorage } from './bondRewardHistory'
 import { circleVisibilityStorage } from './circleVisibility'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
@@ -57,5 +58,6 @@ export const storage: CoreStorage = {
   ...tonW5EnabledStorage,
   ...customRpcOverridesStorage,
   ...solanaMoveStakeDestinationsStorage,
+  ...bondRewardHistoryStorage,
   ...transactionHistoryStorage,
 }

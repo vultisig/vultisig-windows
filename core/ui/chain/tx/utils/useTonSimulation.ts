@@ -29,11 +29,11 @@ const getTonApiEmulateUrl = (kind: 'events' | 'traces') =>
 /**
  * Emulates a TON Connect transaction on TonAPI before it is signed, so the
  * keysign UI can warn when the emulator expects it to fail and can show a
- * recognized jetton swap as a quote instead of the raw messages. The wallet
+ * recognized jetton swap as a supplementary quote alongside all messages. The wallet
  * contract is resolved from the sender address the way the signer resolves
  * it, so V4R2 and W5 accounts are each emulated as themselves. A transport or
- * emulator error leaves the query in its error state and the UI falls back to
- * the decoded messages.
+ * emulator error leaves the query in its error state; the complete message
+ * list remains visible throughout.
  */
 export const useTonSimulation = ({
   fromAddress,

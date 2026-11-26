@@ -18,7 +18,6 @@ import {
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
-import { Collapse } from '@lib/ui/layout/Collapse'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -27,7 +26,6 @@ import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
-import { Address } from '@ton/core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
@@ -38,6 +36,8 @@ import { formatUnits } from 'ethers'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
+
+import { TonMessageDetails } from './TonMessageDetails'
 
 type Styles = {
   color: ThemeColor
@@ -74,16 +74,6 @@ type FormatSwapAmountInput = {
 const formatSwapAmount = ({ amount, coin }: FormatSwapAmountInput) =>
   formatAmount(Number(formatUnits(amount, coin.decimals)), coin)
 
-const normalizeTonAddress = (address?: string) => {
-  if (!address) return null
-
-  try {
-    return Address.parse(address).toString()
-  } catch {
-    return address
-  }
-}
-
 type OperationTitleInput = {
   decoded: DecodedTonMessage
   t: TFunction
@@ -95,40 +85,6 @@ const operationTitle = ({ decoded, t }: OperationTitleInput): string => {
   if (decoded.intent?.kind === 'nftTransfer') return t('nft_transfer')
   if (decoded.intent?.kind === 'excesses') return t('excess_gas_refund')
   return t('transfer')
-}
-
-const RawPayloadDetails = ({ payload }: { payload?: string }) => {
-  const { t } = useTranslation()
-
-  if (!payload) return null
-
-  return (
-    <Collapse title={t('transaction_details')}>
-      <VStack gap={4}>
-        <Text color="shy" size={12}>
-          {t('raw_payload')}
-        </Text>
-        <Text
-          color="primary"
-          family="mono"
-          size={12}
-          style={{ wordBreak: 'break-all' }}
-        >
-          {payload}
-        </Text>
-      </VStack>
-    </Collapse>
-  )
-}
-
-const RawPayloadDetailsPanel = ({ payload }: { payload?: string }) => {
-  if (!payload) return null
-
-  return (
-    <Panel>
-      <RawPayloadDetails payload={payload} />
-    </Panel>
-  )
 }
 
 const TonSwapAmount = ({
@@ -240,7 +196,7 @@ const TonSimulationSwapItem = ({ swap }: { swap: TonSimulationSwap }) => {
 
 const TonMessageItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
   const { t } = useTranslation()
-  const { message, intent, jettonCoin } = decoded
+  const { intent, jettonCoin } = decoded
 
   if (intent?.kind === 'jettonTransfer') {
     const amountLabel = jettonCoin ? (
@@ -278,45 +234,13 @@ const TonMessageItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
     )
   }
 
-  return (
-    <List>
-      <ListItem description={message.to} title={t('to')} />
-      <ListItem description={formatTon(message.amount)} title={t('amount')} />
-    </List>
-  )
-}
-
-type IsSwapSidecarTransferInput = {
-  entry: DecodedTonMessage
-  fromAddress?: string
-}
-
-const isSwapSidecarTransfer = ({
-  entry,
-  fromAddress,
-}: IsSwapSidecarTransferInput) => {
-  if (entry.swapIntent) return false
-
-  const from = normalizeTonAddress(fromAddress)
-  const to = normalizeTonAddress(entry.message.to)
-
-  if (from && to !== from) return false
-
-  try {
-    return BigInt(entry.message.amount) <= 10_000_000n
-  } catch {
-    return false
-  }
+  return null
 }
 
 /**
- * Renders the keysign verify/done view for a TON transaction. Decodes each
- * outgoing TON message body, resolves jetton metadata, and either displays a
- * TonAPI-simulated swap card or per-message details (jetton transfer, NFT
- * transfer, gas refund, or generic). When the emulation expects the
- * transaction to fail, a warning says so above whatever is shown, so the user
- * decides with that verdict in view. The raw BOC payload is always available
- * under a collapsible details section.
+ * Keeps every outgoing message visible in signing order. Decoded intent and
+ * emulation explain the request, but never replace its destinations, attached
+ * amounts or per-message payload/deployment data.
  */
 export const SignTonDisplay = ({
   signTon,
@@ -337,46 +261,51 @@ export const SignTonDisplay = ({
   })
   const simulationFailure = tonSimulationQuery.data?.failure
   const simulationSwap = hasSwap ? null : tonSimulationQuery.data?.swap
-  const isSimulationResolving = !hasSwap && tonSimulationQuery.isFetching
-  const visibleEntries =
-    simulationSwap || isSimulationResolving
-      ? []
-      : hasSwap
-        ? decoded.filter(
-            entry =>
-              entry.swapIntent || !isSwapSidecarTransfer({ entry, fromAddress })
-          )
-        : decoded
 
   return (
     <VStack gap={16}>
       {simulationFailure ? (
         <TonSimulationFailureWarning failure={simulationFailure} />
       ) : null}
-      {simulationSwap ? (
-        <VStack gap={12}>
-          <TonSimulationSwapItem swap={simulationSwap} />
-          <RawPayloadDetailsPanel payload={signTon.tonMessages[0]?.payload} />
-        </VStack>
-      ) : null}
-      {visibleEntries.map((entry, index) =>
-        entry.swapIntent ? (
-          <VStack gap={12} key={index}>
-            <TonSwapItem decoded={entry} />
-            <RawPayloadDetailsPanel payload={entry.message.payload} />
-          </VStack>
-        ) : (
-          <Panel key={index}>
-            <VStack gap={12}>
-              <StyledTitle color="text" fontSize={14}>
-                {operationTitle({ decoded: entry, t })}
-              </StyledTitle>
-              <TonMessageItem decoded={entry} />
-              <RawPayloadDetails payload={entry.message.payload} />
-            </VStack>
-          </Panel>
-        )
+      {simulationSwap ? <TonSimulationSwapItem swap={simulationSwap} /> : null}
+      {decoded.map((entry, index) =>
+        entry.swapIntent ? <TonSwapItem key={index} decoded={entry} /> : null
       )}
+      {decoded.map((entry, index) => (
+        <Panel key={index}>
+          <VStack gap={12}>
+            <StyledTitle color="text" fontSize={14}>
+              {t('message')} {index + 1} ·{' '}
+              {operationTitle({ decoded: entry, t })}
+            </StyledTitle>
+            <List>
+              <ListItem
+                description={
+                  <Text size={12} style={{ overflowWrap: 'anywhere' }}>
+                    {entry.message.to}
+                  </Text>
+                }
+                title={t('destination_address')}
+              />
+              <ListItem
+                description={formatTon(entry.message.amount)}
+                title={t('amount')}
+              />
+            </List>
+            <TonMessageItem decoded={entry} />
+            <TonMessageDetails message={entry.message} />
+          </VStack>
+        </Panel>
+      ))}
+      {tonSimulationQuery.isFetching ? (
+        <Text color="shy" size={12}>
+          {t('blockaid_simulation_pending')}
+        </Text>
+      ) : tonSimulationQuery.isError ? (
+        <Text color="shy" size={12}>
+          {t('blockaid_simulation_failed')}
+        </Text>
+      ) : null}
     </VStack>
   )
 }

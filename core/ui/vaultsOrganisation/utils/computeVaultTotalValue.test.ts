@@ -42,6 +42,7 @@ describe('computeVaultTotalValue', () => {
         'Ethereum:ETH': 2_000,
         'Ethereum:0xusdc': 1,
       },
+      defiNotInWalletFiat: undefined,
     })
 
     expect(result).toBeCloseTo(2_500, 6)
@@ -53,6 +54,7 @@ describe('computeVaultTotalValue', () => {
         coins: [baseCoin()],
         balances: {},
         prices: {},
+        defiNotInWalletFiat: undefined,
       })
     ).toBe(0)
   })
@@ -88,6 +90,7 @@ describe('computeVaultTotalValue', () => {
         'Ethereum:ETH': 2_000,
         'Ethereum:ZERO': 0,
       },
+      defiNotInWalletFiat: undefined,
     })
 
     // Only the ETH line contributes: 2 * 2000 = 4000
@@ -107,7 +110,21 @@ describe('computeVaultTotalValue', () => {
         coins: [coin],
         balances: {},
         prices: { 'Ethereum:ETH': 2_000 },
+        defiNotInWalletFiat: undefined,
       })
     ).toBe(0)
+  })
+
+  it('adds the DeFi value the wallet coins do not hold', () => {
+    const eth = baseCoin({ address: '0xwallet' })
+
+    expect(
+      computeVaultTotalValue({
+        coins: [eth],
+        balances: { 'Ethereum:ETH:0xwallet': 1_000_000_000_000_000_000n },
+        prices: { 'Ethereum:ETH': 2_000 },
+        defiNotInWalletFiat: 750,
+      })
+    ).toBeCloseTo(2_750, 6)
   })
 })

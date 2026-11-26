@@ -10,6 +10,7 @@ import {
   customMessageSupportedChains,
 } from '@core/ui/mpc/keysign/customMessage/chains'
 import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
+import { getPolkadotSignedExtrinsicHash } from '@core/ui/polkadot/dapp/getPolkadotSignedExtrinsicHash'
 import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import {
   buildQBTCSignDoc,
@@ -258,8 +259,20 @@ export const useKeysignMutation = ({
                   signatureFormat: signatureFormats[getChainKind(chain)],
                 })
 
+                const publicKey = getPublicKey({
+                  chain,
+                  walletCore,
+                  hexChainCode: vault.hexChainCode,
+                  publicKeys: vault.publicKeys,
+                  chainPublicKeys: vault.chainPublicKeys,
+                })
+
                 const tx: Tx = {
-                  hash: '',
+                  hash: getPolkadotSignedExtrinsicHash({
+                    payload: signerPayload,
+                    publicKey: publicKey.data(),
+                    signature: signatureBytes,
+                  }),
                   data: deserializeSigningOutput(chain, {
                     encoded: Buffer.from(signatureBytes).toString('base64'),
                   }),

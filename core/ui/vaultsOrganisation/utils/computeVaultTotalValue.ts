@@ -14,6 +14,8 @@ type ComputeVaultTotalValueInput = {
   // Maps `coinKeyToString(coin)` -> fiat price. Matches the shape produced
   // by `useCoinPricesQuery`.
   prices: Record<string, number>
+  /** DeFi value the wallet coins don't hold; `undefined` leaves the total wallet-only. */
+  defiNotInWalletFiat: number | undefined
 }
 
 // Pure helper used by `useVaultsTotalBalances`. Extracted so the arithmetic
@@ -22,8 +24,9 @@ export const computeVaultTotalValue = ({
   coins,
   balances,
   prices,
-}: ComputeVaultTotalValueInput): number =>
-  coins.reduce((sum, coin) => {
+  defiNotInWalletFiat,
+}: ComputeVaultTotalValueInput): number => {
+  const walletValue = coins.reduce((sum, coin) => {
     const priceKey = coinKeyToString(coin)
     const balanceKey = accountCoinKeyToString(extractAccountCoinKey(coin))
 
@@ -47,3 +50,8 @@ export const computeVaultTotalValue = ({
       })
     )
   }, 0)
+
+  return defiNotInWalletFiat === undefined
+    ? walletValue
+    : walletValue + defiNotInWalletFiat
+}

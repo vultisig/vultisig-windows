@@ -1,4 +1,5 @@
 import { OnCloseProp } from '@lib/ui/props'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +20,8 @@ type BondRewardHistorySheetProps = OnCloseProp & {
 /**
  * Total Rewards Earned on one bonded node: the churn payouts summed, the
  * share still accruing toward the next churn, then one row per past churn,
- * newest first. The history loads when the sheet opens.
+ * newest first, leaving out churns that paid nothing. The history loads when
+ * the sheet opens.
  */
 export const BondRewardHistorySheet = ({
   chain,
@@ -35,6 +37,9 @@ export const BondRewardHistorySheet = ({
     nodeAddress,
     churns: recentChurns,
   })
+  const rewardsQuery = useTransformQueryData(historyQuery, rewards =>
+    rewards.filter(({ amount }) => amount > 0n)
+  )
 
   return (
     <RewardHistorySheet
@@ -43,7 +48,7 @@ export const BondRewardHistorySheet = ({
         address: formatWalletAddress(nodeAddress),
       })}
       upcomingReward={nextReward}
-      historyQuery={historyQuery}
+      historyQuery={rewardsQuery}
       onClose={onClose}
     />
   )

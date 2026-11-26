@@ -21,7 +21,39 @@ describe('isThorchainLpCoin', () => {
     ).toBe(true)
   })
 
+  it('returns true for BOW LP denoms whatever the ticker', () => {
+    expect(
+      isThorchainLpCoin({
+        chain: Chain.THORChain,
+        id: 'x/bow-xyk-gaia-atom-eth-usdc-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        ticker: 'ATOM/USDC.ETH',
+      })
+    ).toBe(true)
+    expect(
+      isThorchainLpCoin({
+        chain: Chain.THORChain,
+        id: 'X/BOW-XYK-BTC-BTC-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48',
+      })
+    ).toBe(true)
+  })
+
   it('returns false for regular tokens and other chains', () => {
+    expect(isThorchainLpCoin({ chain: Chain.THORChain, ticker: 'RUNE' })).toBe(
+      false
+    )
+    expect(
+      isThorchainLpCoin({
+        chain: Chain.THORChain,
+        id: 'btc-btc',
+        ticker: 'BTC',
+      })
+    ).toBe(false)
+    expect(
+      isThorchainLpCoin({
+        chain: Chain.Ethereum,
+        id: 'x/bow-xyk-gaia-atom-eth-usdc-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      })
+    ).toBe(false)
     expect(
       isThorchainLpCoin({
         chain: Chain.THORChain,

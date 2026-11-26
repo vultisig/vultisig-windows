@@ -1,5 +1,7 @@
 import { AppView } from '@clients/extension/src/navigation/AppView'
 
+import { fromStorableValue, toStorableValue } from './storableValue'
+
 const initialViewKey = 'initialView'
 
 // Session storage stays in memory: the handed-off view can carry key import
@@ -8,14 +10,15 @@ const initialViewKey = 'initialView'
 /** Reads the view an expanded tab should open on, handed off from the popup. */
 export const getInitialView = async (): Promise<AppView | null> => {
   const result = await chrome.storage.session.get<{
-    [initialViewKey]?: AppView
+    [initialViewKey]?: unknown
   }>(initialViewKey)
-  return result[initialViewKey] ?? null
+  const view = result[initialViewKey]
+  return view ? fromStorableValue<AppView>(view) : null
 }
 
 /** Hands a view off to the next extension page that opens. */
 export const setInitialView = async (view: AppView) => {
-  await chrome.storage.session.set({ [initialViewKey]: view })
+  await chrome.storage.session.set({ [initialViewKey]: toStorableValue(view) })
 }
 
 /** Clears the handed-off view once it has been consumed. */

@@ -1,6 +1,6 @@
 import { nanosecondsInSecond } from '../../constants/time'
 import { parseNumber } from '../utils/parsers'
-import { bondRewardHistoryLimit } from './config'
+import { bondRewardFetchWindow, bondRewardHistoryLimit } from './config'
 
 /** A past churn: the block that paid the node award, and when it landed. */
 export type BondChurn = {
@@ -26,3 +26,15 @@ export const toRecentBondChurns = (entries: ChurnEntry[]): BondChurn[] =>
     .filter(({ height, date }) => height > 0 && date.getTime() > 0)
     .sort((a, b) => b.height - a.height)
     .slice(0, bondRewardHistoryLimit)
+
+type IsWithinBondRewardFetchWindowInput = {
+  churn: BondChurn
+  now: number
+}
+
+/** Whether the node still holds the state a churn's reward is read from. */
+export const isWithinBondRewardFetchWindow = ({
+  churn,
+  now,
+}: IsWithinBondRewardFetchWindowInput) =>
+  now - churn.date.getTime() <= bondRewardFetchWindow

@@ -39,13 +39,11 @@ const appCustomViewLoaders: ViewLoaders<
       ({ JoinKeygenView }) => JoinKeygenView
     ),
   joinKeysign: () =>
-    import('@clients/extension/src/mpc/keysign/join/JoinKeysignPage').then(
-      ({ JoinKeysignPage }) => JoinKeysignPage
+    import('./views/JoinKeysignView').then(
+      ({ JoinKeysignView }) => JoinKeysignView
     ),
   keysign: () =>
-    import('@core/extension/keysign/start/StartKeysignView').then(
-      ({ StartKeysignView }) => StartKeysignView
-    ),
+    import('./views/KeysignView').then(({ KeysignView }) => KeysignView),
   notificationSettings: () =>
     import('../components/notifications/ExtensionNotificationSettingsPage').then(
       ({ ExtensionNotificationSettingsPage }) =>

@@ -51,6 +51,20 @@ const encodeCheckMetadataHash = ({
 }
 
 /**
+ * The signed extensions' explicit bytes, `era + compact(nonce) + compact(tip)
+ * + u8(mode)`: signed after the call, and carried in the extrinsic itself.
+ */
+export const constructPolkadotExtrinsicExtra = (
+  payload: PolkadotSignerPayloadJSON
+): Uint8Array =>
+  u8aConcat(
+    hexToU8a(payload.era),
+    compactToU8a(parseInt(payload.nonce, 16)),
+    compactToU8a(payload.tip ? BigInt(payload.tip) : 0n),
+    encodeCheckMetadataHash(payload).extra
+  )
+
+/**
  * Construct the raw signing payload bytes from a Polkadot SignerPayloadJSON.
  *
  * Follows the Polkadot extrinsic payload v4 encoding with the
@@ -70,11 +84,7 @@ export const constructPolkadotSigningPayload = (
   payload: PolkadotSignerPayloadJSON
 ): Uint8Array => {
   const method = hexToU8a(payload.method)
-  const era = hexToU8a(payload.era)
-  const nonce = compactToU8a(parseInt(payload.nonce, 16))
-  const tip = compactToU8a(payload.tip ? BigInt(payload.tip) : 0n)
-  const { extra: mode, implicit: metadataHash } =
-    encodeCheckMetadataHash(payload)
+  const { implicit: metadataHash } = encodeCheckMetadataHash(payload)
 
   const specVersion = new Uint8Array(4)
   new DataView(specVersion.buffer).setUint32(
@@ -95,10 +105,7 @@ export const constructPolkadotSigningPayload = (
 
   const raw = u8aConcat(
     method,
-    era,
-    nonce,
-    tip,
-    mode,
+    constructPolkadotExtrinsicExtra(payload),
     specVersion,
     transactionVersion,
     genesisHash,
