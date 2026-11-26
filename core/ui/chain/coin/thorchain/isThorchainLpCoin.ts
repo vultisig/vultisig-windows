@@ -3,11 +3,16 @@ import type { CoinKey } from '@vultisig/core-chain/coin/Coin'
 
 type ThorchainLpInput = CoinKey & { ticker?: string }
 
+const bowLpDenomPrefix = 'x/bow-'
+
 /**
- * THORChain (Rujira) liquidity-provider tokens — e.g.
- * `LP-THOR.RUJI/ETH.USDC-XYK`, `LP-GAIA.ATOM/ETH.USDC-XYK`. Their on-chain
- * bank-denom metadata `symbol` is the `LP-…` string surfaced here as the
- * ticker, so the prefix is a reliable, metadata-driven classifier.
+ * THORChain (Rujira) liquidity-provider tokens. Their bank denoms are minted
+ * by the BOW AMM under `x/bow-…` (e.g. `x/bow-xyk-gaia-atom-eth-usdc-0x…`),
+ * which is the primary classifier. The `LP-…` ticker (e.g.
+ * `LP-THOR.RUJI/ETH.USDC-XYK`, the on-chain bank-denom metadata `symbol`) is
+ * kept as a fallback for rows without a denom. The ticker alone is not
+ * enough: `@vultisig/core-chain`'s known-token list names the same denoms
+ * `ATOM/USDC.ETH`, and coin discovery prefers that metadata.
  *
  * **First principles:** LP tokens are DeFi positions, not spendable wallet
  * tokens. They belong in the DeFi tab (`DeFi → LPs`, fed independently from
@@ -21,9 +26,17 @@ type ThorchainLpInput = CoinKey & { ticker?: string }
  * instead of calling `withoutThorchainLpCoins` at each call site. Mirrors the
  * {@link isRujiStakingReceiptCoin} pattern.
  */
-export const isThorchainLpCoin = (coin: ThorchainLpInput): boolean =>
-  coin.chain === Chain.THORChain &&
-  coin.ticker?.toUpperCase().startsWith('LP-') === true
+export const isThorchainLpCoin = (coin: ThorchainLpInput): boolean => {
+  if (coin.chain !== Chain.THORChain) {
+    return false
+  }
+
+  if (coin.id?.toLowerCase().startsWith(bowLpDenomPrefix)) {
+    return true
+  }
+
+  return coin.ticker?.toUpperCase().startsWith('LP-') === true
+}
 
 /**
  * Drops THORChain LP entries. Returns the input array instance when nothing is
