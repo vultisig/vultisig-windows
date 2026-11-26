@@ -1,7 +1,12 @@
+import { create } from '@bufbuild/protobuf'
 import {
   fromStorableValue,
   toStorableValue,
 } from '@clients/extension/src/storage/storableValue'
+import { EthereumSpecificSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { SwapKitSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/swapkit_swap_payload_pb'
 import { Buffer } from 'buffer'
 import { describe, expect, it } from 'vitest'
 
@@ -46,5 +51,51 @@ describe('storable value', () => {
     const date = new Date('2026-01-02T03:04:05.000Z')
 
     expect(toStorableValue({ date })).toEqual({ date: date.toISOString() })
+  })
+
+  it('round-trips a keysign payload with bigint and bytes fields', () => {
+    const txPayload = new Uint8Array([0, 1, 127, 128, 255])
+    const nonce = 18446744073709551615n
+    const payload = {
+      keysign: create(KeysignPayloadSchema, {
+        toAmount: '1000000000000000000',
+        blockchainSpecific: {
+          case: 'ethereumSpecific',
+          value: create(EthereumSpecificSchema, { nonce, gasLimit: '21000' }),
+        },
+        swapPayload: {
+          case: 'swapkitSwapPayload',
+          value: create(SwapKitSwapPayloadSchema, { txPayload }),
+        },
+      }),
+    }
+
+    const restored = fromStorableValue<typeof payload>(
+      JSON.parse(JSON.stringify(toStorableValue(payload)))
+    )
+
+    expect(restored).toEqual(payload)
+    const { blockchainSpecific, swapPayload } = restored.keysign
+    expect(blockchainSpecific.case).toBe('ethereumSpecific')
+    expect(blockchainSpecific.value?.nonce).toBe(nonce)
+    expect(swapPayload.case).toBe('swapkitSwapPayload')
+    expect(swapPayload.value?.txPayload).toBeInstanceOf(Uint8Array)
+    expect(swapPayload.value?.txPayload).toEqual(txPayload)
+  })
+
+  it('round-trips a custom message payload', () => {
+    const payload = {
+      custom: create(CustomMessagePayloadSchema, {
+        method: 'personal_sign',
+        message: '0x48656c6c6f',
+        vaultPublicKeyEcdsa: 'ecdsa-public-key',
+        vaultLocalPartyId: 'local-party',
+        chain: 'Ethereum',
+      }),
+    }
+
+    expect(
+      fromStorableValue(JSON.parse(JSON.stringify(toStorableValue(payload))))
+    ).toEqual(payload)
   })
 })
