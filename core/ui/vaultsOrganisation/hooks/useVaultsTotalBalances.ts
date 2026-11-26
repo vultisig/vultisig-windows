@@ -3,6 +3,8 @@ import { getBalanceQueryOptions } from '@core/ui/chain/coin/queries/useBalancesQ
 import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShareCoin'
 import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
+import { useCachedVaultsDefiNotInWalletFiat } from '@core/ui/defi/home/vaultDefiNotInWalletFiat'
+import { useHomeDisplay } from '@core/ui/storage/homeDisplay'
 import { useVaults } from '@core/ui/storage/vaults'
 import { computeVaultTotalValue } from '@core/ui/vaultsOrganisation/utils/computeVaultTotalValue'
 import { balanceQueryStaleTime } from '@lib/ui/query/utils/options'
@@ -37,7 +39,9 @@ type UseVaultsTotalBalancesInput = {
 /**
  * Fiat total per vault. A vault appears in `totals` once every one of its
  * coins has a balance, so rows fill in one by one and a failed read leaves out
- * only its own vault. Use `sumVaultTotals` for totals spanning several vaults.
+ * only its own vault. Under the `combined` home display a vault's cached DeFi
+ * value is added; one with none cached stays wallet-only. Use `sumVaultTotals`
+ * for totals spanning several vaults.
  */
 export const useVaultsTotalBalances = ({
   vaults: scopedVaults,
@@ -98,6 +102,11 @@ export const useVaultsTotalBalances = ({
     })),
   })
 
+  const isCombined = useHomeDisplay() === 'combined'
+  const defiNotInWalletFiat = useCachedVaultsDefiNotInWalletFiat(
+    isCombined ? vaultCoinEntries.map(({ vaultId }) => vaultId) : []
+  )
+
   const priceError =
     'error' in priceQuery ? priceQuery.error : (priceQuery.errors[0] ?? null)
 
@@ -127,6 +136,7 @@ export const useVaultsTotalBalances = ({
           coins,
           balances: mergedBalances,
           prices,
+          defiNotInWalletFiat: defiNotInWalletFiat[vaultId],
         })
       }
     })
@@ -134,6 +144,7 @@ export const useVaultsTotalBalances = ({
     return result
   }, [
     balanceQueries,
+    defiNotInWalletFiat,
     enabled,
     priceError,
     priceQuery.data,
