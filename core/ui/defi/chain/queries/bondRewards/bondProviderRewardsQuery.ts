@@ -26,7 +26,9 @@ type GetBondProviderRewardsQueryOptionsInput = NodeAtHeightInput & {
  * Query options for every bond provider's payout from the award a node held
  * at a past block. A past block never changes, so the result is cached by
  * node and height and never goes stale; the card's Last Reward and the
- * reward history share it.
+ * reward history share it. A failed read is tried once more: the gateway
+ * often serves a retained height on the second try, while a pruned height
+ * fails every time, so further retries only delay the partial history.
  */
 export const getBondProviderRewardsQueryOptions = ({
   chain,
@@ -36,4 +38,5 @@ export const getBondProviderRewardsQueryOptions = ({
   queryKey: ['defi', chain, 'bondProviderRewards', { nodeAddress, height }],
   queryFn: () => bondProviderRewardsFetchers[chain]({ nodeAddress, height }),
   staleTime: Infinity,
+  retry: 1,
 })

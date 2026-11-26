@@ -364,6 +364,8 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     setSolanaMoveStakeDestinations: async destinations => {
       qaSolanaMoveStakeDestinations = destinations
     },
+    getBondRewardHistories: async () => ({}),
+    setBondRewardHistories: noop,
     getTransactionRecords: async () => [],
     saveTransactionRecord: noop,
     updateTransactionRecord: noop,

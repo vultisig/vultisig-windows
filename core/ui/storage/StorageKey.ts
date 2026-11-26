@@ -31,4 +31,5 @@ export enum StorageKey {
   keplrSuggestedChainsByHost = 'keplrSuggestedChainsByHost',
   customRpcOverrides = 'customRpcOverrides',
   solanaMoveStakeDestinations = 'solanaMoveStakeDestinations',
+  bondRewardHistory = 'bondRewardHistory',
 }
