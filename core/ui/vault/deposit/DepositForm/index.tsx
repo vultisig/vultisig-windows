@@ -132,6 +132,9 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     solanaStakingActions
   )
   const formValues = watch()
+  // Rewards Payout compares with the on-chain share, not the form's default.
+  const isBondYieldUnchanged =
+    Number(formValues.payoutPercentage) * 100 === Number(formValues.currentBps)
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
   const shouldUseBondYieldRedesign = isBondYieldAction && entryPoint === 'defi'
@@ -474,9 +477,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         ) : (
           <PageFooter>
             <Button
-              disabled={
-                !isValid || (isBondYieldAction && !dirtyFields.payoutPercentage)
-              }
+              disabled={!isValid || (isBondYieldAction && isBondYieldUnchanged)}
               type="submit"
             >
               {t('continue')}

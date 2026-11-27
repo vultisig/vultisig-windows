@@ -17,6 +17,7 @@ type SliderProps = InputProps<number> & {
   maxLabel?: string
   showDots?: boolean
   dotPositions?: number[]
+  ariaLabel?: string
 }
 
 export const Slider = ({
@@ -30,6 +31,7 @@ export const Slider = ({
   maxLabel = '100%',
   showDots = true,
   dotPositions = [15, 33, 50, 68, 85],
+  ariaLabel,
 }: SliderProps) => {
   const trackRef = useRef<HTMLDivElement>(null)
 
@@ -75,6 +77,7 @@ export const Slider = ({
             step={step}
             value={value}
             onChange={handleInputChange}
+            aria-label={ariaLabel}
           />
           <Thumb
             style={{

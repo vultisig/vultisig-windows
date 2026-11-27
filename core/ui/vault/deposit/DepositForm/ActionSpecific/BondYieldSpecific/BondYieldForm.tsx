@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
@@ -70,7 +71,11 @@ export const BondYieldForm = ({ formValues }: BondYieldFormProps) => {
           </Text>
           <PercentageValue>{percentage}%</PercentageValue>
         </HStack>
-        <Slider value={percentage} onChange={setPercentage} />
+        <Slider
+          value={percentage}
+          onChange={setPercentage}
+          ariaLabel={t('payout_percentage')}
+        />
         <HStack gap={12}>
           {payoutShortcuts.map(share => (
             <Shortcut
@@ -93,15 +98,19 @@ export const BondYieldForm = ({ formValues }: BondYieldFormProps) => {
           {formatWalletAddress(String(formValues.nodeAddress))}
         </BondYieldInfoRow>
         <BondYieldInfoRow label={t('bonded')}>
-          {formatRune(
-            fromChainAmount(
-              BigInt(String(formValues.bondedAmount)),
-              coin.decimals
-            )
-          )}
+          <BalanceVisibilityAware>
+            {formatRune(
+              fromChainAmount(
+                BigInt(String(formValues.bondedAmount)),
+                coin.decimals
+              )
+            )}
+          </BalanceVisibilityAware>
         </BondYieldInfoRow>
         <BondYieldInfoRow label={t('next_reward')}>
-          {formatRune(Number(formValues.nextReward))}
+          <BalanceVisibilityAware>
+            {formatRune(Number(formValues.nextReward))}
+          </BalanceVisibilityAware>
         </BondYieldInfoRow>
       </NodeInfo>
     </VStack>

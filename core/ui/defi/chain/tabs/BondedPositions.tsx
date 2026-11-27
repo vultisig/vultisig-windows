@@ -212,6 +212,7 @@ export const BondedPositions = () => {
           payoutPercentage: Math.floor(
             shouldBePresent(position.payoutBps) / 100
           ),
+          currentBps: position.payoutBps,
           bondedAmount: position.amount.toString(),
           nextReward: position.nextReward,
         },

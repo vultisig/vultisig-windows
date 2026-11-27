@@ -1,9 +1,10 @@
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { ReactNode } from 'react'
 
 type BondYieldInfoRowProps = {
   label: string
-  children: string
+  children: ReactNode
 }
 
 /** One label and value row of the Rewards Payout node summary. */
