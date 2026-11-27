@@ -1,6 +1,4 @@
-import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShareCoin'
-import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
-import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
+import { withoutDefiOnlyCoins } from '@core/ui/chain/coin/withoutDefiOnlyCoins'
 import { useCreateCoinsMutation } from '@core/ui/storage/coins'
 import { useCoinFinderQuery } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -16,6 +14,11 @@ import { useEffect } from 'react'
 import { useCoinFinderIgnore } from '../../../../storage/coinFinderIgnore'
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 
+/**
+ * Saves coins discovered on the vault's addresses that aren't stored yet.
+ * DeFi-only coins (staking receipts, LP tokens, Kamino shares) are skipped, as
+ * they're surfaced under DeFi rather than as wallet tokens.
+ */
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()
 
@@ -30,9 +33,7 @@ export const CoinFinder = () => {
   useEffect(() => {
     if (!data) return
 
-    const newCoins = withoutKaminoShareCoins(
-      withoutBondedRuneReceiptCoins(withoutRujiStakingReceiptCoins(data))
-    )
+    const newCoins = withoutDefiOnlyCoins(data)
       .filter(coin => !coinFinderIgnore.some(c => areEqualCoins(c, coin)))
       .map(coin => {
         const existingCoinInfo = coins.find(c => areEqualCoins(c, coin))

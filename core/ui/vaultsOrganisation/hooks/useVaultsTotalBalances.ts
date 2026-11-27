@@ -1,8 +1,6 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryOptions } from '@core/ui/chain/coin/queries/useBalancesQuery'
-import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShareCoin'
-import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
-import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
+import { withoutDefiOnlyCoins } from '@core/ui/chain/coin/withoutDefiOnlyCoins'
 import { useCachedVaultsDefiNotInWalletFiat } from '@core/ui/defi/home/vaultDefiNotInWalletFiat'
 import { useHomeDisplay } from '@core/ui/storage/homeDisplay'
 import { useVaults } from '@core/ui/storage/vaults'
@@ -55,11 +53,7 @@ export const useVaultsTotalBalances = ({
 
     return vaults.map(vault => ({
       vaultId: getVaultId(vault),
-      coins: withoutKaminoShareCoins(
-        withoutBondedRuneReceiptCoins(
-          withoutRujiStakingReceiptCoins(vault.coins ?? [])
-        )
-      ),
+      coins: withoutDefiOnlyCoins(vault.coins ?? []),
     }))
   }, [enabled, vaults])
 
