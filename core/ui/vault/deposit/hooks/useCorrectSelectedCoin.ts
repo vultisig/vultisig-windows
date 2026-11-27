@@ -87,6 +87,8 @@ export const useCorrectSelectedCoin = () => {
           shouldBePresent(findByTicker({ coins, ticker: 'RUJI' })),
         unstake: selectStakeableCoin,
         unbond: () => shouldBePresent(findByTicker({ coins, ticker: 'RUNE' })),
+        bond_yield: () =>
+          shouldBePresent(findByTicker({ coins, ticker: 'RUNE' })),
         leave: () =>
           findByTicker({ coins, ticker: 'RUNE' }) ||
           findByTicker({ coins, ticker: 'CACAO' }),

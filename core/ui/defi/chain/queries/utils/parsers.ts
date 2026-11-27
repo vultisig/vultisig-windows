@@ -54,6 +54,12 @@ const unbondableNodeStatuses = new Set(['standby', 'disabled', 'whitelisted'])
 export const canUnbondNode = (status: string) =>
   unbondableNodeStatuses.has(toBondStatusLabel(status))
 
+const bondYieldNodeStatuses = new Set(['active', 'ready', 'standby'])
+
+/** Whether THORChain accepts a BONDYIELD memo for a node in this status. */
+export const canSetBondYield = (status: string) =>
+  bondYieldNodeStatuses.has(toBondStatusLabel(status))
+
 type EstimateNextChurnInput = {
   nextChurnHeight?: number
   currentHeight: number

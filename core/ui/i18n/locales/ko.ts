@@ -627,6 +627,13 @@ export const ko = {
   available_nodes: '사용 가능한 노드',
   request_to_bond: '본드 요청',
   wait_until_node_churned: '노드가 처닝으로 제외될 때까지 기다리세요',
+  bond_yield: '보상 지급',
+  rewards_payout_description: '본드 보상의 일부를 RUNE으로 지급받으세요.',
+  payout_asset: '지급 자산',
+  payout_percentage: '지급 비율',
+  rewards_payout_caption:
+    '본드 보상의 {{percentage}}%가 지급됩니다. 나머지는 본드 금액에 다시 추가됩니다.',
+  rewards_payout_caption_none: '본드 보상 전액이 본드 금액에 다시 추가됩니다.',
   unstake_available_on: '언스테이킹은 {{date}}에 가능합니다.',
   bond_to_node: '노드에 본딩',
   liquidity_pools: '유동성 풀',

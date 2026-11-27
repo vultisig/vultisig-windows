@@ -25,6 +25,7 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   },
   unbond: { showBalance: false, showTicker: false },
   leave: { showBalance: false, showTicker: false },
+  bond_yield: { showBalance: false, showTicker: false },
   custom: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   bond_with_lp: { showBalance: false, showTicker: false },
   unbond_with_lp: { showBalance: false, showTicker: false },

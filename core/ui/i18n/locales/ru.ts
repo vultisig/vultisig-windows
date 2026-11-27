@@ -640,6 +640,15 @@ export const ru = {
   available_nodes: 'Доступные ноды',
   request_to_bond: 'Запрос на бонд',
   wait_until_node_churned: 'Дождитесь, пока нода будет выведена (churned out)',
+  bond_yield: 'Выплата наград',
+  rewards_payout_description:
+    'Получайте часть наград за бонд в виде выплаты в RUNE.',
+  payout_asset: 'Актив выплаты',
+  payout_percentage: 'Доля выплаты',
+  rewards_payout_caption:
+    '{{percentage}}% ваших наград за бонд выплачивается. Остальное добавляется к сумме в бонде.',
+  rewards_payout_caption_none:
+    'Все ваши награды за бонд добавляются к сумме в бонде.',
   unstake_available_on: 'Вывод из стейкинга доступен с {{date}}',
   bond_to_node: 'Внести бонд в узел',
   liquidity_pools: 'Пулы ликвидности',

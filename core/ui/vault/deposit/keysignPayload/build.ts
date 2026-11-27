@@ -557,10 +557,12 @@ export const buildDepositKeysignPayload = async ({
     return keysignPayload
   }
 
-  if (isOneOf(action, ['leave', 'unbond', 'bond', 'ibc_transfer'])) {
-    // THORChain UNBOND requires zero coin amount - the unbond amount is only in the memo
+  if (
+    isOneOf(action, ['leave', 'unbond', 'bond', 'bond_yield', 'ibc_transfer'])
+  ) {
+    // THORChain UNBOND and BONDYIELD require a zero coin amount; their values live in the memo
     const toAmountForAction =
-      action === 'unbond'
+      action === 'unbond' || action === 'bond_yield'
         ? '0'
         : hasAmount && amountUnits
           ? amountUnits

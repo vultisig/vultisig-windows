@@ -31,6 +31,8 @@ const useMockBondPositions = false
 type BondProvider = {
   bond_address?: string
   bond?: string
+  // Omitted by THORNode when the provider has no Bond Yield set, which means 0.
+  bps?: number
 }
 
 type BondedNodesResponse = {
@@ -118,6 +120,15 @@ export const fetchHealth = () =>
 export const fetchNetwork = () =>
   queryUrl<{ vaults_migrating?: boolean }>(`${thornodeBaseUrl}/network`)
 
+/** The vault's Bond Yield share in basis points; undefined when the vault is not a provider of the node. */
+export const getProviderPayoutBps = (
+  myProviders: BondProvider[]
+): number | undefined => {
+  const [provider] = myProviders
+  if (!provider) return undefined
+  return provider.bps ?? 0
+}
+
 const calculateBondMetrics = async (
   nodeAddress: string,
   bondAddress: string,
@@ -126,9 +137,13 @@ const calculateBondMetrics = async (
   const details = await getNodeDetails(nodeAddress)
 
   const providers = details?.bond_providers?.providers ?? []
-  const myBond = providers
-    .filter(p => p.bond_address?.toLowerCase() === bondAddress.toLowerCase())
-    .reduce((acc, provider) => acc + parseBigint(provider.bond), 0n)
+  const myProviders = providers.filter(
+    p => p.bond_address?.toLowerCase() === bondAddress.toLowerCase()
+  )
+  const myBond = myProviders.reduce(
+    (acc, provider) => acc + parseBigint(provider.bond),
+    0n
+  )
 
   const myAward = fromChainAmount(
     getBondProviderReward({
@@ -156,6 +171,7 @@ const calculateBondMetrics = async (
     myBond,
     myAward,
     apy,
+    payoutBps: getProviderPayoutBps(myProviders),
     status: toBondStatusLabel(details?.status),
   }
 }
@@ -244,6 +260,7 @@ export const fetchBondPositions = async (
       status,
       fiatBasis: getRuneFiatBasis(amount),
       canUnbond: chainAllowsUnbond && canUnbondNode(status),
+      payoutBps: metrics?.payoutBps,
     })
   }
 

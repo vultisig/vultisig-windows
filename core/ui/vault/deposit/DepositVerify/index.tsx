@@ -117,15 +117,20 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
         ? voteOptionLabels[rawValue]
         : String(rawValue)
 
+    const isAmount =
+      (field.type === 'number' || field.type === 'percentage') &&
+      field.name === 'amount'
+    const getDisplayValue = (): string => {
+      if (isAmount) return `${value} ${amountTicker}`
+      if (field.name === 'payoutPercentage') return `${value}%`
+      return value
+    }
+
     return [
       {
         key: field.name,
         label: field.label,
-        value:
-          (field.type === 'number' || field.type === 'percentage') &&
-          field.name === 'amount'
-            ? `${value} ${amountTicker}`
-            : value,
+        value: getDisplayValue(),
       },
     ]
   })

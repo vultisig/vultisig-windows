@@ -43,6 +43,7 @@ export const useAvailableChainActions = (chain: Chain) => {
         bond: () => true,
         unbond: () => true,
         leave: () => true,
+        bond_yield: () => true,
         custom: () => true,
         bond_with_lp: hasCacao,
         unbond_with_lp: hasCacao,

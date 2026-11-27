@@ -155,6 +155,24 @@ export const generateMemo = ({
         ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
         : `UNBOND:${nodeAddress}:${amountInUnits}`
     },
+    // The payout always targets the vault itself: with a non-zero share and no
+    // target, THORChain keeps paying whatever target was stored before.
+    bond_yield: () => {
+      const node = shouldBePresent(nodeAddress, 'Node address')
+      const percentage = depositFormData.payoutPercentage
+      if (
+        !node ||
+        typeof percentage !== 'number' ||
+        !Number.isInteger(percentage) ||
+        percentage < 0 ||
+        percentage > 100
+      ) {
+        throw new Error('Invalid Rewards Payout input')
+      }
+      return percentage === 0
+        ? `BONDYIELD:${node}:0`
+        : `BONDYIELD:${node}:${percentage * 100}:${coin.address}`
+    },
     custom: () => shouldBePresent(customMemo, 'Custom memo'),
     leave: () => `LEAVE:${nodeAddress}`,
     // A governance vote is a typed MsgVote carried in signDirect bytes (see

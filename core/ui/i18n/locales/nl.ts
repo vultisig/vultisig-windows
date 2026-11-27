@@ -639,6 +639,15 @@ export const nl = {
   available_nodes: 'Beschikbare nodes',
   request_to_bond: 'Verzoek om te bonden',
   wait_until_node_churned: 'Wacht tot de node is uitgechurned',
+  bond_yield: 'Uitbetaling van beloningen',
+  rewards_payout_description:
+    'Ontvang een deel van je bondbeloningen als uitbetaling in RUNE.',
+  payout_asset: 'Uitbetalingsasset',
+  payout_percentage: 'Uitbetalingspercentage',
+  rewards_payout_caption:
+    '{{percentage}}% van je bondbeloningen wordt uitbetaald. De rest wordt aan je gebonde bedrag toegevoegd.',
+  rewards_payout_caption_none:
+    'Al je bondbeloningen worden aan je gebonde bedrag toegevoegd.',
   unstake_available_on: 'Unstake beschikbaar op {{date}}',
   bond_to_node: 'Bonden naar node',
   liquidity_pools: 'Liquiditeitspools',
