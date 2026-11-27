@@ -42,6 +42,7 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
@@ -51,6 +52,7 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text, TextColor } from '@lib/ui/text'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import {
@@ -60,6 +62,7 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { match } from '@vultisig/lib-utils/match'
 import { ReactNode } from 'react'
@@ -578,6 +581,30 @@ const SwapTryAgainButton = ({ record }: { record: SwapTransactionRecord }) => {
   )
 }
 
+const CopyExplorerLinkButton = ({ explorerUrl }: { explorerUrl: string }) => {
+  const { t } = useTranslation()
+  const { addToast } = useToast()
+
+  const copyLink = async () => {
+    const result = await attempt(() =>
+      navigator.clipboard.writeText(explorerUrl)
+    )
+
+    if ('error' in result) {
+      addToast({ message: t('failed_to_copy_link'), status: 'error' })
+      return
+    }
+
+    addToast({ message: t('link_copied') })
+  }
+
+  return (
+    <Button kind="secondary" onClick={copyLink} icon={<ClipboardCopyIcon />}>
+      {t('copy_link')}
+    </Button>
+  )
+}
+
 /** Displays detailed information for a single transaction record, including amounts, addresses, status, and an explorer link. */
 export const TransactionDetailPage = () => {
   const goBack = useNavigateBack()
@@ -705,13 +732,16 @@ export const TransactionDetailPage = () => {
 
         {record.type === 'swap' ? <SwapTryAgainButton record={record} /> : null}
 
-        <Button
-          kind="secondary"
-          onClick={() => openExternalUrl(explorerUrl)}
-          icon={<SquareArrowOutUpRightIcon />}
-        >
-          {t('view_on_explorer')}
-        </Button>
+        <HStack gap={12} fullWidth>
+          <Button
+            kind="secondary"
+            onClick={() => openExternalUrl(explorerUrl)}
+            icon={<SquareArrowOutUpRightIcon />}
+          >
+            {t('view_on_explorer')}
+          </Button>
+          <CopyExplorerLinkButton explorerUrl={explorerUrl} />
+        </HStack>
 
         {record.type === 'limitSwap' ? (
           <LimitOrderCancelActions record={record} />
