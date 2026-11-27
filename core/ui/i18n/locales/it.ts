@@ -649,6 +649,15 @@ export const it = {
   available_nodes: 'Nodi disponibili',
   request_to_bond: 'Richiedi bond',
   wait_until_node_churned: 'Attendi che il nodo venga churnato',
+  bond_yield: 'Pagamento ricompense',
+  rewards_payout_description:
+    'Ricevi parte delle ricompense del bond come pagamento in RUNE.',
+  payout_asset: 'Asset di pagamento',
+  payout_percentage: 'Percentuale di pagamento',
+  rewards_payout_caption:
+    'Il {{percentage}}% delle tue ricompense del bond viene pagato. Il resto viene aggiunto al tuo importo in bond.',
+  rewards_payout_caption_none:
+    'Tutte le ricompense del bond vengono aggiunte al tuo importo in bond.',
   unstake_available_on: 'Sblocco disponibile il {{date}}',
   bond_to_node: 'Bond al nodo',
   liquidity_pools: 'Pool di liquidità',

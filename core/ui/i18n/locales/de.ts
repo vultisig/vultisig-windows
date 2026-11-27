@@ -653,6 +653,15 @@ export const de = {
   available_nodes: 'Verfügbare Knoten',
   request_to_bond: 'Bond anfordern',
   wait_until_node_churned: 'Warten Sie, bis der Node rotiert wird',
+  bond_yield: 'Auszahlung der Belohnungen',
+  rewards_payout_description:
+    'Erhalte einen Teil deiner Bond-Belohnungen als RUNE-Auszahlung.',
+  payout_asset: 'Auszahlungs-Asset',
+  payout_percentage: 'Auszahlungsanteil',
+  rewards_payout_caption:
+    '{{percentage}} % deiner Bond-Belohnungen werden ausgezahlt. Der Rest wird deinem gebondeten Betrag hinzugefügt.',
+  rewards_payout_caption_none:
+    'Alle deine Bond-Belohnungen werden deinem gebondeten Betrag hinzugefügt.',
   unstake_available_on: 'Unstake verfügbar am {{date}}',
   bond_to_node: 'An Node bonden',
   liquidity_pools: 'Liquiditätspools',

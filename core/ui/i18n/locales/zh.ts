@@ -595,6 +595,13 @@ export const zh = {
   available_nodes: '可用节点',
   request_to_bond: '申请绑定',
   wait_until_node_churned: '请等待节点被轮换出',
+  bond_yield: '奖励发放',
+  rewards_payout_description: '将部分绑定奖励以 RUNE 形式发放给你。',
+  payout_asset: '发放资产',
+  payout_percentage: '发放比例',
+  rewards_payout_caption:
+    '{{percentage}}% 的绑定奖励将被发放，其余部分将加回到你的绑定金额中。',
+  rewards_payout_caption_none: '所有绑定奖励都将加回到你的绑定金额中。',
   unstake_available_on: '{{date}}可解除质押',
   bond_to_node: '绑定到节点',
   liquidity_pools: '流动性池',

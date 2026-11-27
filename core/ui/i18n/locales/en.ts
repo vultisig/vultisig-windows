@@ -758,6 +758,15 @@ export const en = {
   available_nodes: 'Available Nodes',
   request_to_bond: 'Request to bond',
   wait_until_node_churned: 'Wait until node is churned out',
+  bond_yield: 'Rewards Payout',
+  rewards_payout_description:
+    'Receive part of your bond rewards as a RUNE payout.',
+  payout_asset: 'Payout asset',
+  payout_percentage: 'Payout percentage',
+  rewards_payout_caption:
+    '{{percentage}}% of your bond rewards are paid out. The rest is added back to your bonded amount.',
+  rewards_payout_caption_none:
+    'All of your bond rewards are added back to your bonded amount.',
   unstake_available_on: 'Unstake available on {{date}}',
   bond_to_node: 'Bond to Node',
   liquidity_pools: 'Liquidity Pools',

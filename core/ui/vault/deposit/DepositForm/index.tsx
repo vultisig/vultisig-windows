@@ -3,6 +3,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
+import { BondYieldForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondYieldSpecific/BondYieldForm'
 import { CosmosStakingFooterButton } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/CosmosStakingSpecific/CosmosStakingFooterButton'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import {
@@ -115,6 +116,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
 
   const isBondAction = selectedChainAction === 'bond'
   const isUnbondAction = selectedChainAction === 'unbond'
+  const isBondYieldAction = selectedChainAction === 'bond_yield'
   const isStakeAction = selectedChainAction === 'stake'
   const isUnstakeAction = selectedChainAction === 'unstake'
   const isMintAction = selectedChainAction === 'mint'
@@ -132,6 +134,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
+  const shouldUseBondYieldRedesign = isBondYieldAction && entryPoint === 'defi'
   const shouldUseStakeRedesign =
     (isStakeAction || isUnstakeAction || isMintAction || isRedeemAction) &&
     entryPoint === 'defi'
@@ -146,6 +149,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const shouldUseActionForm =
     shouldUseBondRedesign ||
     shouldUseUnbondRedesign ||
+    shouldUseBondYieldRedesign ||
     shouldUseStakeRedesign ||
     shouldUseCosmosStakingRedesign ||
     shouldUseSolanaStakingRedesign
@@ -156,6 +160,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const defiActionPageTitle: Record<string, string> = {
     bond: t('bond'),
     unbond: t('unbond'),
+    bond_yield: t('bond_yield'),
     stake: t('stake'),
     unstake: t('unstake'),
     mint: t('mint'),
@@ -185,6 +190,8 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
       entryPoint === 'defi'
         ? defiActionPageTitle[selectedChainAction]
         : undefined
+
+    if (isBondYieldAction && defiLabel) return defiLabel
 
     if (defiLabel) {
       return `${defiLabel} ${coin.ticker ?? ''}`.trim()
@@ -225,6 +232,8 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                   formValues={formValues}
                 />
               </DepositDataProvider>
+            ) : shouldUseBondYieldRedesign ? (
+              <BondYieldForm formValues={formValues} />
             ) : shouldUseUnbondRedesign ? (
               <DepositDataProvider value={formValues}>
                 <UnbondForm
@@ -464,7 +473,12 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
           </PageFooter>
         ) : (
           <PageFooter>
-            <Button disabled={!isValid} type="submit">
+            <Button
+              disabled={
+                !isValid || (isBondYieldAction && !dirtyFields.payoutPercentage)
+              }
+              type="submit"
+            >
               {t('continue')}
             </Button>
           </PageFooter>

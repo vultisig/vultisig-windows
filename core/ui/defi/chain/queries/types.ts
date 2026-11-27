@@ -36,6 +36,8 @@ export type RawThorchainBondPosition = {
   status: string
   fiatBasis: PositionFiatBasis
   canUnbond: boolean
+  /** Share of future rewards paid out (THORChain Bond Yield); undefined when it could not be read. */
+  payoutBps?: number
 }
 
 /** Bond position with its fiat value joined from live prices. */

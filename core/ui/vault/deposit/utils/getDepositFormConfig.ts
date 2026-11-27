@@ -452,6 +452,26 @@ export const getDepositFormConfig = ({
           ),
       }),
     }),
+    bond_yield: () => ({
+      fields: [
+        {
+          name: 'nodeAddress',
+          type: 'text',
+          label: t('node_address'),
+          required: true,
+        },
+        {
+          name: 'payoutPercentage',
+          type: 'number',
+          label: t('payout_percentage'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        nodeAddress: z.string().min(1, t('required_node_address')),
+        payoutPercentage: z.number().int().min(0).max(100),
+      }),
+    }),
     custom: () => ({
       fields: [
         {

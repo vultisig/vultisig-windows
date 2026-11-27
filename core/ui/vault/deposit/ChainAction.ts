@@ -33,6 +33,7 @@ export type SolanaStakingAction = (typeof solanaStakingActions)[number]
 export type ChainAction =
   | 'bond'
   | 'unbond'
+  | 'bond_yield'
   | 'leave'
   | 'custom'
   | 'bond_with_lp'

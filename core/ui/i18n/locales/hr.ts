@@ -642,6 +642,14 @@ export const hr = {
   available_nodes: 'Dostupni čvorovi',
   request_to_bond: 'Zatraži vezanje',
   wait_until_node_churned: 'Pričekajte dok čvor završi rotaciju',
+  bond_yield: 'Isplata nagrada',
+  rewards_payout_description: 'Primi dio nagrada od bonda kao isplatu u RUNE.',
+  payout_asset: 'Imovina isplate',
+  payout_percentage: 'Postotak isplate',
+  rewards_payout_caption:
+    '{{percentage}}% tvojih nagrada od bonda se isplaćuje. Ostatak se dodaje tvom vezanom iznosu.',
+  rewards_payout_caption_none:
+    'Sve tvoje nagrade od bonda dodaju se tvom vezanom iznosu.',
   unstake_available_on: 'Unstake dostupan {{date}}',
   bond_to_node: 'Veži na čvor',
   liquidity_pools: 'Likvidnosni poolovi',

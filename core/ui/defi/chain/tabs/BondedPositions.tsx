@@ -17,6 +17,7 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { sum } from '@vultisig/lib-utils/array/sum'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,7 +26,9 @@ import styled from 'styled-components'
 import { BondedSummaryCard } from '../components/bond/BondedSummaryCard'
 import { BondNodeItem } from '../components/bond/BondNodeItem'
 import { bondChains } from '../queries/bondRewards/config'
+import { ThorchainBondPosition } from '../queries/types'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
+import { canSetBondYield } from '../queries/utils/parsers'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 import { DefiPositionErrorState } from './DefiPositionErrorState'
@@ -193,6 +196,29 @@ export const BondedPositions = () => {
     })
   }
 
+  const navigateToRewardsPayout = async (position: ThorchainBondPosition) => {
+    if (!hasBondCoin) {
+      await autoEnableCoinIfNeeded()
+    }
+
+    navigate({
+      id: 'deposit',
+      state: {
+        coin: bondCoin,
+        action: 'bond_yield',
+        entryPoint: 'defi',
+        form: {
+          nodeAddress: position.nodeAddress,
+          payoutPercentage: Math.floor(
+            shouldBePresent(position.payoutBps) / 100
+          ),
+          bondedAmount: position.amount.toString(),
+          nextReward: position.nextReward,
+        },
+      },
+    })
+  }
+
   return (
     <VStack gap={16}>
       <BondedSummaryCard
@@ -252,6 +278,16 @@ export const BondedPositions = () => {
                     canUnbond={position.canUnbond}
                     fiatValue={position.fiatValue}
                     isBondingDisabled={isBondingDisabled}
+                    rewardsPayout={
+                      chain === Chain.THORChain
+                        ? {
+                            onClick: () => navigateToRewardsPayout(position),
+                            disabled:
+                              position.payoutBps === undefined ||
+                              !canSetBondYield(position.status),
+                          }
+                        : undefined
+                    }
                   />
                 </SectionItem>
               ))

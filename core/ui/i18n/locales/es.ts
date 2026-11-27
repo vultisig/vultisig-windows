@@ -645,6 +645,15 @@ export const es = {
   available_nodes: 'Nodos disponibles',
   request_to_bond: 'Solicitar vinculación',
   wait_until_node_churned: 'Espera a que el nodo salga del conjunto activo',
+  bond_yield: 'Pago de recompensas',
+  rewards_payout_description:
+    'Recibe parte de tus recompensas de bond como pago en RUNE.',
+  payout_asset: 'Activo de pago',
+  payout_percentage: 'Porcentaje de pago',
+  rewards_payout_caption:
+    'Se paga el {{percentage}}% de tus recompensas de bond. El resto se añade a tu monto vinculado.',
+  rewards_payout_caption_none:
+    'Todas tus recompensas de bond se añaden a tu monto vinculado.',
   unstake_available_on: 'Desbloqueo disponible el {{date}}',
   bond_to_node: 'Vincular al nodo',
   liquidity_pools: 'Pools de liquidez',

@@ -3,6 +3,7 @@ import {
   formatDateShort,
   formatStatusLabel,
 } from '@core/ui/defi/shared/formatters'
+import { Button } from '@lib/ui/buttons/Button'
 import { CalendarBlankIcon } from '@lib/ui/icons/CalendarBlankIcon'
 import { ChainLinkIcon3 } from '@lib/ui/icons/ChainLinkIcon3'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
@@ -41,12 +42,21 @@ type Props = {
   fiatValue: number
   isBondingDisabled?: boolean
   actionsDisabledReason?: string
+  rewardsPayout?: {
+    onClick: () => void
+    disabled: boolean
+  }
 }
 
 const Divider = styled.div`
   width: 100%;
   height: 1px;
   background: ${getColor('foregroundExtra')};
+`
+
+const RewardsPayoutButton = styled(Button)`
+  height: 42px;
+  min-height: 42px;
 `
 
 const ButtonRow = styled(HStack)`
@@ -56,7 +66,8 @@ const ButtonRow = styled(HStack)`
 
 /**
  * One bonded node on the Bonded tab: the vault's bond, APY and next churn,
- * its Next and Last Reward, and the Bond / Unbond actions.
+ * its Next and Last Reward, the Bond / Unbond actions and, for THORChain,
+ * Rewards Payout.
  */
 export const BondNodeItem = ({
   chain,
@@ -74,6 +85,7 @@ export const BondNodeItem = ({
   fiatValue,
   isBondingDisabled,
   actionsDisabledReason,
+  rewardsPayout,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
@@ -209,6 +221,16 @@ export const BondNodeItem = ({
         <Text size={12} color="shy">
           {t('wait_until_node_churned')}
         </Text>
+      )}
+
+      {rewardsPayout && (
+        <RewardsPayoutButton
+          kind="secondary"
+          onClick={rewardsPayout.onClick}
+          disabled={rewardsPayout.disabled}
+        >
+          {t('bond_yield')}
+        </RewardsPayoutButton>
       )}
     </VStack>
   )
