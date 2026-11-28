@@ -2138,6 +2138,11 @@ export const it = {
   token_approvals_count: 'Approvazioni: {{count}}',
   transaction_not_fully_summarized:
     'Una parte di questa transazione non è riassunta qui. Si prega di leggere attentamente tutti i dettagli di seguito prima di firmare.',
+  move_site_to_vault_title: 'Passare {{site}} a {{vault}}?',
+  move_site_to_vault_description:
+    '{{site}} è connesso con {{vault}}. Gli altri siti restano invariati.',
+  keep: 'Mantieni',
+  switch: 'Cambia',
   keysign_many_inputs_one:
     'Firma di {{count}} input in corso. Richiede più tempo del solito.',
   keysign_many_inputs_other:

@@ -40,6 +40,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../state/core'
+import { clearVaultPick, markVaultPicked } from './pickedVault'
 import { sumVaultTotals } from './utils/sumVaultTotals'
 
 type FolderEntry = {
@@ -153,10 +154,13 @@ export const VaultsPage = ({
   const handleManage = () => navigate({ id: 'manageVaults' })
   const handleCreateVault = () => navigate({ id: 'newVault' })
 
-  const handleSelectVault = (vaultId: string) =>
+  const handleSelectVault = (vaultId: string) => {
+    if (vaultId !== currentVaultId) markVaultPicked(vaultId)
     mutate(vaultId, {
       onSuccess: onFinish ?? goHome,
+      onError: clearVaultPick,
     })
+  }
 
   const openSearch = () => setIsSearchOpen(true)
   const closeSearch = () => {

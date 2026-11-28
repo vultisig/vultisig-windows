@@ -2153,6 +2153,11 @@ export const de = {
   token_approvals_count: 'Genehmigungen: {{count}}',
   transaction_not_fully_summarized:
     'Ein Teil dieser Transaktion ist hier nicht zusammengefasst. Bitte lesen Sie die vollständigen Details unten durch, bevor Sie unterschreiben.',
+  move_site_to_vault_title: '{{site}} zu {{vault}} wechseln?',
+  move_site_to_vault_description:
+    '{{site}} ist mit {{vault}} verbunden. Andere Websites bleiben unverändert.',
+  keep: 'Behalten',
+  switch: 'Wechseln',
   keysign_many_inputs_one:
     '{{count}} Input wird signiert. Das dauert länger als üblich.',
   keysign_many_inputs_other:

@@ -1959,6 +1959,11 @@ export const zh = {
   token_approvals_count: '授权：{{count}}',
   transaction_not_fully_summarized:
     '部分交易内容未在此处概述。请在签字前仔细阅读以下完整详情。',
+  move_site_to_vault_title: '将 {{site}} 切换到 {{vault}}？',
+  move_site_to_vault_description:
+    '{{site}} 已连接到 {{vault}}。其他网站保持不变。',
+  keep: '保留',
+  switch: '切换',
   keysign_many_inputs_one: '正在签名{{count}}个输入。这比平时耗时更长。',
   keysign_many_inputs_other: '正在签名{{count}}个输入。这比平时耗时更长。',
 }

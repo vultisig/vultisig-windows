@@ -336,13 +336,16 @@ export class Station {
       addBackgroundEventListener('disconnect', () => {
         this.emitWalletChange()
       })
+      addBackgroundEventListener('accountsChanged', () => {
+        this.emitWalletChange()
+      })
     }
   }
 
   /**
    * Singleton accessor — Terra dApps expect `window.station` and `window.terra`
-   * to share the same provider, and the constructor wires a single
-   * `disconnect` listener that must not be duplicated on re-injection.
+   * to share the same provider, and the constructor wires the `disconnect`
+   * and `accountsChanged` listeners that must not be duplicated on re-injection.
    */
   static getInstance(keplrProvider: XDEFIKeplrProvider): Station {
     if (!Station.instance) {

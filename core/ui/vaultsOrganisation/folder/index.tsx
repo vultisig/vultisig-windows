@@ -16,6 +16,10 @@ import {
 } from '@core/ui/vaultsOrganisation/components'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
+import {
+  clearVaultPick,
+  markVaultPicked,
+} from '@core/ui/vaultsOrganisation/pickedVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -60,10 +64,13 @@ export const VaultFolderPage = () => {
     return parts.join(' • ')
   }, [folderTotal, formatFiatAmount, t, vaults.length])
 
-  const handleSelectVault = (vaultId: string) =>
+  const handleSelectVault = (vaultId: string) => {
+    if (vaultId !== currentVaultId) markVaultPicked(vaultId)
     mutate(vaultId, {
       onSuccess: () => navigate({ id: 'vault' }),
+      onError: clearVaultPick,
     })
+  }
 
   const openSearch = () => setIsSearchOpen(true)
   const closeSearch = () => {

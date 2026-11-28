@@ -547,13 +547,17 @@ export class XDEFIKeplrProvider extends Keplr {
     // `keplr_keystorechange` is Keplr's stale-key signal — dApps re-fetch
     // `getKey` when they see it. The background fires `disconnect` when
     // the host's appSession is removed (either via our `disable` /
-    // `signOut` flow or because the user revoked the dApp grant). Until
+    // `signOut` flow or because the user revoked the dApp grant), and
+    // `accountsChanged` when the host moves to another vault. Until
     // now, the dispatch lived on the Station provider's constructor, so
     // dApps that loaded only `window.keplr` (no Terra Station) never
     // saw the event. Skip on the wallet's own UI to avoid wiring the
     // listener inside the extension popup.
     if (!validateUrl(window.location.href)) {
       addBackgroundEventListener('disconnect', () => {
+        this.emitAccountsChanged()
+      })
+      addBackgroundEventListener('accountsChanged', () => {
         this.emitAccountsChanged()
       })
     }

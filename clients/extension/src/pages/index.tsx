@@ -1,6 +1,7 @@
 import '../polyfills/installFirefoxProcessGlobal'
 import '@core/ui/animations/configureRiveRuntime'
 
+import { MoveActiveSiteToVaultPrompt } from '@clients/extension/src/components/move-active-site/MoveActiveSiteToVaultPrompt'
 import { SidePanelPopupHost } from '@clients/extension/src/components/side-panel/SidePanelPopupHost'
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import {
@@ -97,6 +98,7 @@ const App = () => {
       <ActiveView views={views} />
       <PrefetchViews loaders={prefetchLoaders} priority={prefetchPriority} />
       <ExtensionNotificationManager />
+      <MoveActiveSiteToVaultPrompt />
       {isPopup ? null : <SidePanelPopupHost />}
     </ExtensionCoreApp>
   )
