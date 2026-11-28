@@ -26,6 +26,8 @@ type ExtensionProviderBrandConfig = {
   eip6963Rdns: string
   icon: `data:image/${string}`
   solanaName: string
+  /** `window` key of the TON Connect JS bridge; must match the wallets-list `bridge.key`. */
+  tonConnectJsBridgeKey: string
   walletPickerIdentifier: string
   walletPickerName: string
 }
@@ -63,6 +65,7 @@ const vultisigExtensionBrandConfig: ExtensionBrandConfig = {
     eip6963Rdns: 'me.vultisig',
     icon: vultisigIconDataUri,
     solanaName: 'Vultisig',
+    tonConnectJsBridgeKey: 'vultisigTonWallet',
     walletPickerIdentifier: 'vultisig',
     walletPickerName: 'Vultisig',
   },
@@ -88,6 +91,7 @@ const stationExtensionBrandConfig: ExtensionBrandConfig = {
     eip6963Rdns: 'money.station',
     icon: stationIconDataUri,
     solanaName: 'Station',
+    tonConnectJsBridgeKey: 'stationTonWallet',
     walletPickerIdentifier: 'station',
     walletPickerName: 'Station',
   },

@@ -50,7 +50,9 @@ The extension provides:
 - **`window.vultisig.qbtc`** for QBTC (post-quantum ML-DSA-44) integration.
 - **`window.cardano.vultisig`** for Cardano CIP-30 discovery.
 - **`window.vultisig.sui`** and Sui Wallet Standard registration for Sui dApps.
-- **`window.vultisig.ton.tonconnect`** for TON Connect discovery.
+- **`window.vultisigTonWallet.tonconnect`** for TON Connect discovery (the
+  `@tonconnect/sdk` JS bridge key); also reachable at
+  `window.vultisig.ton.tonconnect`.
 - **`window.vultisig.bittensor`** for Bittensor dApps.
 - **`window.vultisig.station`** for Terra and Station-compatible dApps.
 - **`window.vultisig.xrpl`** plus a guarded GemWallet-compatible message bridge
@@ -103,7 +105,8 @@ The extension provides:
   - `window.phantom` for Phantom-compatible dApps
   - `window.cardano.vultisig` for Cardano CIP-30 dApps
   - Sui Wallet Standard registration for Sui dApps
-  - `window.tonkeeper.tonconnect` for TON Connect-compatible dApps
+  - `window.vultisigTonWallet.tonconnect` (and a
+    `window.tonkeeper.tonconnect` alias) for TON Connect-compatible dApps
   - Station-compatible globals for Terra dApps
   - `window.tronLink` / `window.tronWeb` for Tron dApps
   - `window.xfi` for XDEFI/Ctrl-compatible dApps
@@ -442,8 +445,14 @@ the generic provider contracts documented above:
 - **Sui:** the provider is available directly at `window.vultisig.sui` and is
   registered through Sui Wallet Standard when the current vault supports Sui.
   When prioritized, it is also available at `window.phantom.sui`.
-- **TON:** TON Connect-compatible dApps can use
-  `window.vultisig.ton.tonconnect` or `window.tonkeeper.tonconnect`.
+- **TON:** the bridge is injected under the `vultisigTonWallet` JS bridge key.
+  `@tonconnect/sdk` dApps list it as "Vultisig" once that key is registered in
+  ton-connect/wallets-list; until then only the SDK's QA mode finds it. The
+  same bridge is also exposed at `window.vultisig.ton.tonconnect` and the
+  `window.tonkeeper.tonconnect` alias. The alias is only set at initial
+  injection when no other wallet has claimed `window.tonkeeper`, but when
+  Vultisig is prioritized it replaces `window.tonkeeper` regardless. dApps
+  must not assume the alias still points to another wallet's bridge.
 - **Bittensor:** the direct provider is `window.vultisig.bittensor`.
   Substrate-compatible dApps discover it as `window.injectedWeb3.vultisig`,
   which is not priority-gated.
@@ -476,7 +485,8 @@ the prioritized wallet:
 | `window.phantom` | Phantom | Prioritized only; Solana and Sui require those chains in the current vault |
 | `window.cardano.vultisig` | Cardano CIP-30 | Direct Cardano discovery |
 | Sui Wallet Standard | Sui | Registered when the current vault supports Sui |
-| `window.tonkeeper.tonconnect` | TON Connect | Guarded TON wallet discovery |
+| `window.vultisigTonWallet.tonconnect` | TON Connect | Own JS bridge key (wallets-list `bridge.key`); enumerable for SDK QA mode |
+| `window.tonkeeper.tonconnect` | TON Connect | Tonkeeper alias; set only if absent at injection, replaced by Vultisig when prioritized |
 | `window.injectedWeb3.vultisig` | Substrate | Bittensor provider; not priority-gated |
 | `window.station` / `window.terra` | Station | Guarded Terra compatibility globals; not priority-gated |
 | `window.vultisig.xrpl` | Native XRPL | Direct account, message-signing, and transaction API |
