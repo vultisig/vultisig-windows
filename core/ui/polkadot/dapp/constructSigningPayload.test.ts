@@ -4,13 +4,18 @@ import {
   cryptoWaitReady,
   signatureVerify,
 } from '@polkadot/util-crypto'
+import { OtherChain } from '@vultisig/core-chain/Chain'
 import { beforeAll, describe, expect, it } from 'vitest'
 
 import { constructPolkadotSigningPayload } from './constructSigningPayload'
 import { PolkadotSignerPayloadJSON } from './PolkadotSignerPayload'
+import { substrateGenesisHash } from './substrateGenesisHash'
 
-const bittensorGenesisHash =
-  '0x2f0555cc76fc2840a25a6ea3b9637146806f1f44b090c175ffde2a7e5ab36c03'
+const bittensorGenesisHash = substrateGenesisHash[OtherChain.Bittensor]
+
+// Every fixture below is a Bittensor payload.
+const buildBittensorPayload = (payload: PolkadotSignerPayloadJSON) =>
+  constructPolkadotSigningPayload({ payload, chain: OtherChain.Bittensor })
 
 const bittensorRuntime = {
   genesisHash: bittensorGenesisHash,
@@ -137,7 +142,7 @@ describe('constructPolkadotSigningPayload', () => {
     it.each(onChainFixtures)(
       '$name',
       ({ payload, signerPublicKey, signature }) => {
-        const message = constructPolkadotSigningPayload(payload)
+        const message = buildBittensorPayload(payload)
 
         const result = signatureVerify(message, signature, signerPublicKey)
 
@@ -148,7 +153,7 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('rejects the layout without CheckMetadataHash', () => {
       const { payload, signerPublicKey, signature } = balancesTransferKeepAlive
-      const withExtension = constructPolkadotSigningPayload(payload)
+      const withExtension = buildBittensorPayload(payload)
       const modeOffset =
         hexToU8a(payload.method).length +
         hexToU8a(payload.era).length +
@@ -167,7 +172,7 @@ describe('constructPolkadotSigningPayload', () => {
 
   describe('CheckMetadataHash layout', () => {
     it('places mode=0 after the tip and Option::None after the block hash', () => {
-      const result = constructPolkadotSigningPayload({
+      const result = buildBittensorPayload({
         ...layoutPayload,
         mode: 0,
         metadataHash: null,
@@ -186,7 +191,7 @@ describe('constructPolkadotSigningPayload', () => {
     })
 
     it('places mode=1 after the tip and Option::Some(hash) after the block hash', () => {
-      const result = constructPolkadotSigningPayload({
+      const result = buildBittensorPayload({
         ...layoutPayload,
         mode: 1,
         metadataHash: sampleMetadataHash,
@@ -207,12 +212,12 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('is 34 bytes longer with a metadata hash than the pre-extension layout', () => {
       const withoutExtension = layoutPrefix.length + layoutImplicit.length
-      const withHash = constructPolkadotSigningPayload({
+      const withHash = buildBittensorPayload({
         ...layoutPayload,
         mode: 1,
         metadataHash: sampleMetadataHash,
       })
-      const withoutHash = constructPolkadotSigningPayload({
+      const withoutHash = buildBittensorPayload({
         ...layoutPayload,
         mode: 0,
         metadataHash: null,
@@ -223,8 +228,8 @@ describe('constructPolkadotSigningPayload', () => {
     })
 
     it('defaults to mode=0 and Option::None when the payload omits both fields', () => {
-      const omitted = constructPolkadotSigningPayload(layoutPayload)
-      const explicit = constructPolkadotSigningPayload({
+      const omitted = buildBittensorPayload(layoutPayload)
+      const explicit = buildBittensorPayload({
         ...layoutPayload,
         mode: 0,
         metadataHash: null,
@@ -235,13 +240,13 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('rejects a mode other than 0 or 1', () => {
       expect(() =>
-        constructPolkadotSigningPayload({ ...layoutPayload, mode: 2 })
+        buildBittensorPayload({ ...layoutPayload, mode: 2 })
       ).toThrow('Invalid CheckMetadataHash mode')
     })
 
     it('rejects a metadata hash that is not 32 bytes', () => {
       expect(() =>
-        constructPolkadotSigningPayload({
+        buildBittensorPayload({
           ...layoutPayload,
           mode: 1,
           metadataHash: '0x2222',
@@ -251,15 +256,15 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('rejects an empty metadata hash instead of treating it as None', () => {
       expect(() =>
-        constructPolkadotSigningPayload({
+        buildBittensorPayload({
           ...layoutPayload,
           mode: 1,
           metadataHash: '',
         })
-      ).toThrow('Invalid metadataHash length')
+      ).toThrow('Invalid metadataHash')
 
       expect(() =>
-        constructPolkadotSigningPayload({
+        buildBittensorPayload({
           ...layoutPayload,
           mode: 0,
           metadataHash: '',
@@ -269,11 +274,11 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('rejects mode=1 without a metadata hash', () => {
       expect(() =>
-        constructPolkadotSigningPayload({ ...layoutPayload, mode: 1 })
+        buildBittensorPayload({ ...layoutPayload, mode: 1 })
       ).toThrow('mode 1 does not match metadataHash absence')
 
       expect(() =>
-        constructPolkadotSigningPayload({
+        buildBittensorPayload({
           ...layoutPayload,
           mode: 1,
           metadataHash: null,
@@ -283,7 +288,7 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('rejects mode=0 with a metadata hash', () => {
       expect(() =>
-        constructPolkadotSigningPayload({
+        buildBittensorPayload({
           ...layoutPayload,
           mode: 0,
           metadataHash: sampleMetadataHash,
@@ -291,11 +296,103 @@ describe('constructPolkadotSigningPayload', () => {
       ).toThrow('mode 0 does not match metadataHash presence')
 
       expect(() =>
-        constructPolkadotSigningPayload({
+        buildBittensorPayload({
           ...layoutPayload,
           metadataHash: sampleMetadataHash,
         })
       ).toThrow('mode 0 does not match metadataHash presence')
+    })
+  })
+
+  describe('fixed-width hashes', () => {
+    const hashOfLength = (bytes: number) => `0x${'11'.repeat(bytes)}`
+
+    it.each([31, 33, 0])('rejects a %i-byte block hash', bytes => {
+      expect(() =>
+        buildBittensorPayload({
+          ...layoutPayload,
+          blockHash: hashOfLength(bytes),
+        })
+      ).toThrow(`Invalid blockHash length: expected 32 bytes, got ${bytes}`)
+    })
+
+    // `hexToU8a` decodes each of these to 32 bytes, so only checking the
+    // decoded length would let them through.
+    it.each([
+      ['an odd-length', `0x${'1'.repeat(63)}`],
+      ['a non-hex', `0x${'zz'.repeat(32)}`],
+      ['an unprefixed', '11'.repeat(32)],
+      ['an empty', ''],
+    ])('rejects %s block hash', (_, blockHash) => {
+      expect(() =>
+        buildBittensorPayload({ ...layoutPayload, blockHash })
+      ).toThrow('Invalid blockHash')
+    })
+
+    it('rejects an odd-length metadata hash that decodes to 32 bytes', () => {
+      expect(() =>
+        buildBittensorPayload({
+          ...layoutPayload,
+          mode: 1,
+          metadataHash: `0x${'2'.repeat(63)}`,
+        })
+      ).toThrow('Invalid metadataHash')
+    })
+
+    it.each([31, 33])('rejects a %i-byte genesis hash', bytes => {
+      expect(() =>
+        buildBittensorPayload({
+          ...layoutPayload,
+          genesisHash: hashOfLength(bytes),
+        })
+      ).toThrow(`Invalid genesisHash length: expected 32 bytes, got ${bytes}`)
+    })
+  })
+
+  describe('genesis hash pinning', () => {
+    it('rejects a Polkadot payload signed as Bittensor', () => {
+      expect(() =>
+        constructPolkadotSigningPayload({
+          payload: {
+            ...layoutPayload,
+            genesisHash: substrateGenesisHash[OtherChain.Polkadot],
+          },
+          chain: OtherChain.Bittensor,
+        })
+      ).toThrow('is not the Bittensor genesis hash')
+    })
+
+    it('rejects a Bittensor payload signed as Polkadot', () => {
+      expect(() =>
+        constructPolkadotSigningPayload({
+          payload: layoutPayload,
+          chain: OtherChain.Polkadot,
+        })
+      ).toThrow('is not the Polkadot genesis hash')
+    })
+
+    it('accepts a Polkadot payload signed as Polkadot', () => {
+      const result = constructPolkadotSigningPayload({
+        payload: {
+          ...layoutPayload,
+          genesisHash: substrateGenesisHash[OtherChain.Polkadot],
+        },
+        chain: OtherChain.Polkadot,
+      })
+
+      expect(u8aToHex(result)).toContain(
+        substrateGenesisHash[OtherChain.Polkadot].slice(2)
+      )
+    })
+
+    it('accepts the chain genesis hash in upper case', () => {
+      const upperCase = `0x${bittensorGenesisHash.slice(2).toUpperCase()}`
+
+      expect(
+        u8aToHex(
+          buildBittensorPayload({ ...layoutPayload, genesisHash: upperCase })
+        )
+      ).toBe(u8aToHex(buildBittensorPayload(layoutPayload)))
     })
   })
 
@@ -329,7 +426,7 @@ describe('constructPolkadotSigningPayload', () => {
 
       expect(raw.length).toBe(256 + 33)
 
-      const result = constructPolkadotSigningPayload(payload)
+      const result = buildBittensorPayload(payload)
 
       expect(result.length).toBe(32)
       expect(u8aToHex(result)).toBe(u8aToHex(blake2AsU8a(raw, 256)))
@@ -337,7 +434,7 @@ describe('constructPolkadotSigningPayload', () => {
 
     it('leaves a payload that lands exactly on 256 bytes unhashed', () => {
       const shorterMethod = `0x${'ab'.repeat(methodLength - 1)}`
-      const result = constructPolkadotSigningPayload({
+      const result = buildBittensorPayload({
         ...layoutPayload,
         method: shorterMethod,
         mode: 0,

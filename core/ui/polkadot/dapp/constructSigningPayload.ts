@@ -1,8 +1,12 @@
-import { compactToU8a, hexToU8a, u8aConcat } from '@polkadot/util'
+import { compactToU8a, hexToU8a, isHex, u8aConcat, u8aEq } from '@polkadot/util'
 import { blake2AsU8a } from '@polkadot/util-crypto'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
-import { PolkadotSignerPayloadJSON } from './PolkadotSignerPayload'
+import {
+  PolkadotSignerPayloadJSON,
+  SubstrateChain,
+} from './PolkadotSignerPayload'
+import { substrateGenesisHash } from './substrateGenesisHash'
 
 const polkadotSigningPayloadHashThreshold = 256
 
@@ -10,7 +14,31 @@ const polkadotSigningPayloadHashThreshold = 256
 // nothing else, so any other value can only produce an unusable signature.
 const checkMetadataHashModes = [0, 1] as const
 
-const metadataHashLength = 32
+const substrateHashLength = 32
+
+type DecodeSubstrateHashInput = {
+  name: 'blockHash' | 'genesisHash' | 'metadataHash'
+  value: string
+}
+
+// The payload concatenates these hashes with no length prefix, so a hash of
+// any other width shifts every byte after it and the runtime can never
+// reconstruct what was signed. `hexToU8a` pads odd-length input and decodes
+// non-hex characters without complaint, so the string itself is checked too.
+const decodeSubstrateHash = ({ name, value }: DecodeSubstrateHashInput) => {
+  if (!isHex(value)) {
+    throw new Error(`Invalid ${name}: ${value} is not 0x-prefixed hex`)
+  }
+
+  const hash = hexToU8a(value)
+  if (hash.length !== substrateHashLength) {
+    throw new Error(
+      `Invalid ${name} length: expected ${substrateHashLength} bytes, got ${hash.length}`
+    )
+  }
+
+  return hash
+}
 
 type CheckMetadataHashInput = Pick<
   PolkadotSignerPayloadJSON,
@@ -40,12 +68,10 @@ const encodeCheckMetadataHash = ({
     return { extra, implicit: new Uint8Array([0]) }
   }
 
-  const hash = hexToU8a(metadataHash)
-  if (hash.length !== metadataHashLength) {
-    throw new Error(
-      `Invalid metadataHash length: expected ${metadataHashLength} bytes, got ${hash.length}`
-    )
-  }
+  const hash = decodeSubstrateHash({
+    name: 'metadataHash',
+    value: metadataHash,
+  })
 
   return { extra, implicit: u8aConcat(new Uint8Array([1]), hash) }
 }
@@ -64,6 +90,31 @@ export const constructPolkadotExtrinsicExtra = (
     encodeCheckMetadataHash(payload).extra
   )
 
+type ConstructPolkadotSigningPayloadInput = {
+  payload: PolkadotSignerPayloadJSON
+  chain: SubstrateChain
+}
+
+// Polkadot and Bittensor sign with the same key, so a payload for the other
+// chain would verify there while the user reviewed it as this one.
+const decodeGenesisHash = ({
+  payload,
+  chain,
+}: ConstructPolkadotSigningPayloadInput) => {
+  const genesisHash = decodeSubstrateHash({
+    name: 'genesisHash',
+    value: payload.genesisHash,
+  })
+
+  if (!u8aEq(genesisHash, hexToU8a(substrateGenesisHash[chain]))) {
+    throw new Error(
+      `genesisHash ${payload.genesisHash} is not the ${chain} genesis hash`
+    )
+  }
+
+  return genesisHash
+}
+
 /**
  * Construct the raw signing payload bytes from a Polkadot SignerPayloadJSON.
  *
@@ -76,13 +127,15 @@ export const constructPolkadotExtrinsicExtra = (
  * `mode` defaults to 0 and `metadataHash` to `None` when the payload omits
  * them, which is what the runtime reconstructs for a dApp that did not opt
  * into metadata-hash verification. A `mode` outside {0, 1}, a `metadataHash`
- * that disagrees with `mode`, or one that is not 32 bytes is rejected.
+ * that disagrees with `mode`, a `blockHash` or `metadataHash` that is not 32
+ * bytes, or a `genesisHash` other than `chain`'s own is rejected.
  *
  * If the payload exceeds 256 bytes, it is blake2b-256 hashed before signing.
  */
-export const constructPolkadotSigningPayload = (
-  payload: PolkadotSignerPayloadJSON
-): Uint8Array => {
+export const constructPolkadotSigningPayload = ({
+  payload,
+  chain,
+}: ConstructPolkadotSigningPayloadInput): Uint8Array => {
   const method = hexToU8a(payload.method)
   const { implicit: metadataHash } = encodeCheckMetadataHash(payload)
 
@@ -100,8 +153,11 @@ export const constructPolkadotSigningPayload = (
     true
   )
 
-  const genesisHash = hexToU8a(payload.genesisHash)
-  const blockHash = hexToU8a(payload.blockHash)
+  const genesisHash = decodeGenesisHash({ payload, chain })
+  const blockHash = decodeSubstrateHash({
+    name: 'blockHash',
+    value: payload.blockHash,
+  })
 
   const raw = u8aConcat(
     method,

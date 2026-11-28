@@ -6,7 +6,10 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
-import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import {
+  PolkadotSignerPayloadJSON,
+  substrateChains,
+} from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { buildQBTCSignDoc } from '@core/ui/qbtc/dapp/buildQBTCSignedTxFromDirect'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { fromBase64 } from '@cosmjs/encoding'
@@ -15,7 +18,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { useMutation } from '@tanstack/react-query'
-import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
@@ -139,10 +142,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
           }
 
           // Substrate dApp signPayload — bypass TW, send raw payload hash
-          if (
-            isOneOf(chain, [OtherChain.Polkadot, OtherChain.Bittensor]) &&
-            keysignPayload.memo
-          ) {
+          if (isOneOf(chain, substrateChains) && keysignPayload.memo) {
             const parseResult = attempt(
               () =>
                 JSON.parse(keysignPayload.memo!) as PolkadotSignerPayloadJSON
@@ -152,9 +152,10 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
               parseResult.data.method &&
               parseResult.data.genesisHash
             ) {
-              const signingBytes = constructPolkadotSigningPayload(
-                parseResult.data
-              )
+              const signingBytes = constructPolkadotSigningPayload({
+                payload: parseResult.data,
+                chain,
+              })
               const messages = [Buffer.from(signingBytes).toString('hex')]
 
               return signWithServer({
