@@ -252,8 +252,18 @@ describe('THORChain bond and unbond validation', () => {
     ])
   })
 
+  it.each(['1e309', '-1e309', 'abc', Number.POSITIVE_INFINITY])(
+    'rejects a fee entry of %s instead of dropping it',
+    fee => {
+      expect(issueMessages(parseBond({ operatorFee: fee }))).toEqual([
+        'operator_fee_range_error',
+      ])
+    }
+  )
+
   it('treats an empty fee input as no fee', () => {
     expect(parseBond({ operatorFee: '' }).success).toBe(true)
+    expect(parseBond({ operatorFee: '  ' }).success).toBe(true)
     expect(parseBond({ operatorFee: Number.NaN }).success).toBe(true)
   })
 

@@ -91,13 +91,26 @@ const validatorAddressSchema = (t: TFunction, chain: Chain) =>
 // whole number from 0 to 10000 is the only fee THORChain can apply.
 const maxOperatorFeeBasisPoints = 10_000
 
+// Unlike toOptionalNumber, a non-empty entry that is not a finite number
+// ('1e309', 'abc') is kept so the schema rejects it instead of silently
+// dropping the fee. Only an empty input (or the NaN a cleared number input
+// reports) means "no fee".
+const toOptionalOperatorFee = (value: unknown) => {
+  if (value === undefined || value === null) return undefined
+  if (typeof value === 'number') return Number.isNaN(value) ? undefined : value
+  if (typeof value === 'string') {
+    return value.trim() === '' ? undefined : Number(value)
+  }
+  return value
+}
+
 const operatorFeeSchema = (t: TFunction) => {
   const message = t('operator_fee_range_error')
 
   return z.preprocess(
-    toOptionalNumber,
+    toOptionalOperatorFee,
     z
-      .number()
+      .number({ error: message })
       .int(message)
       .min(0, message)
       .max(maxOperatorFeeBasisPoints, message)
