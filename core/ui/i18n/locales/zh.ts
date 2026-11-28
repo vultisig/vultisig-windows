@@ -502,6 +502,7 @@ export const zh = {
   invalid_email: '请输入有效的电子邮件地址',
   invalid_file_format: '文件格式无效',
   invalid_node_address: '节点地址无效',
+  invalid_provider_address: '提供者地址无效',
   incorrect_passcode: '密码错误。',
   invalid_passcode: '密码无效',
   join_keygen: '加入密钥生成',
@@ -625,6 +626,7 @@ export const zh = {
   onboarding_description_4:
     '{{productName}}是一款无需助记词的钱包，改用易于管理的保险库份额。每台设备都有自己独有的保险库份额，需要单独备份。',
   operator_fee: '运营者手续费',
+  operator_fee_range_error: '运营者手续费必须是 0 到 10000 之间的整数基点',
   basis_points: '基点',
   optionalDevice: '可选设备',
   other: '其他',

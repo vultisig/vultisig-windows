@@ -550,6 +550,7 @@ export const de = {
   invalid_email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
   invalid_file_format: 'Ungültiges Dateiformat',
   invalid_node_address: 'Die Knotenadresse ist ungültig.',
+  invalid_provider_address: 'Die Anbieteradresse ist ungültig.',
   incorrect_passcode: 'Falscher Passcode.',
   invalid_passcode: 'Ungültiger Passcode',
   join_keygen: 'Keygen beitreten',
@@ -683,6 +684,8 @@ export const de = {
   onboarding_description_4:
     '{{productName}} ist eine Wallet ohne Seed-Phrasen. Stattdessen verwendet sie einfach zu verwaltende Tresoranteile. Jedes Gerät hat einen eigenen Tresoranteil, der separat gesichert werden muss.',
   operator_fee: 'Betreibergebühr',
+  operator_fee_range_error:
+    'Die Betreibergebühr muss eine ganze Zahl von 0 bis 10000 Basispunkten sein',
   basis_points: 'Basispunkte',
   optionalDevice: 'Optionales Gerät',
   other: 'Andere',

@@ -539,6 +539,7 @@ export const nl = {
   invalid_email: 'Voer een geldig e-mailadres in',
   invalid_file_format: 'Ongeldig bestandsformaat',
   invalid_node_address: 'Node-adres is ongeldig',
+  invalid_provider_address: 'Provider-adres is ongeldig',
   incorrect_passcode: 'Onjuiste toegangscode.',
   invalid_passcode: 'Ongeldige pincode',
   join_keygen: 'Deelnemen aan Keygen',
@@ -669,6 +670,8 @@ export const nl = {
   onboarding_description_4:
     '{{productName}} is een wallet zonder seedphrases. In plaats daarvan gebruikt het eenvoudig te beheren kluisdelen. Elk apparaat heeft een eigen kluisdeel waarvan je apart een back-up moet maken.',
   operator_fee: 'Operatorkosten',
+  operator_fee_range_error:
+    'Operatorkosten moeten een geheel getal van 0 tot 10000 basispunten zijn',
   basis_points: 'Basispunten',
   optionalDevice: 'Optioneel apparaat',
   other: 'Overig',

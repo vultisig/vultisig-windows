@@ -545,6 +545,7 @@ export const pt = {
   invalid_email: 'Por favor, insira um endereço de e-mail válido.',
   invalid_file_format: 'Formato de arquivo inválido',
   invalid_node_address: 'O endereço do nó é inválido.',
+  invalid_provider_address: 'O endereço do fornecedor é inválido.',
   incorrect_passcode: 'Código de acesso incorreto.',
   invalid_passcode: 'Código de acesso inválido',
   join_keygen: 'Junte-se ao Keygen',
@@ -676,6 +677,8 @@ export const pt = {
   onboarding_description_4:
     '{{productName}} é uma carteira sem frases-semente. Em vez disso, usa partes do cofre fáceis de gerenciar. Cada dispositivo tem sua própria parte do cofre, que precisa de um backup separado.',
   operator_fee: 'Taxa de Operador',
+  operator_fee_range_error:
+    'A taxa de operador deve ser um número inteiro de 0 a 10000 pontos base',
   basis_points: 'Pontos base',
   optionalDevice: 'Dispositivo opcional',
   other: 'Outro',

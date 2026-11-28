@@ -87,6 +87,45 @@ const validatorAddressSchema = (t: TFunction, chain: Chain) =>
     .min(1, t('validator_address'))
     .regex(validatorAddressPattern(chain), t('invalid_validator_address'))
 
+// The bond memo's fee segment is basis points of the node's rewards, so a
+// whole number from 0 to 10000 is the only fee THORChain can apply.
+const maxOperatorFeeBasisPoints = 10_000
+
+const operatorFeeSchema = (t: TFunction) => {
+  const message = t('operator_fee_range_error')
+
+  return z.preprocess(
+    toOptionalNumber,
+    z
+      .number()
+      .int(message)
+      .min(0, message)
+      .max(maxOperatorFeeBasisPoints, message)
+      .optional()
+  )
+}
+
+type BondProviderSchemaInput = {
+  t: TFunction
+  chain: Chain
+  walletCore: WalletCore
+}
+
+// The provider goes into the memo verbatim, so anything entered has to be an
+// address on the bonding chain. Empty means "no provider".
+const bondProviderSchema = ({
+  t,
+  chain,
+  walletCore,
+}: BondProviderSchemaInput) =>
+  z
+    .string()
+    .optional()
+    .refine(
+      address => !address || isValidAddress({ chain, address, walletCore }),
+      { message: t('invalid_provider_address') }
+    )
+
 type GetChainActionConfigParams = {
   t: TFunction
   coin: AccountCoin
@@ -269,8 +308,8 @@ export const getDepositFormConfig = ({
               message: t('invalid_node_address'),
             }
           ),
-        provider: z.string().optional(),
-        operatorFee: z.preprocess(toOptionalNumber, z.number().optional()),
+        provider: bondProviderSchema({ t, chain, walletCore }),
+        operatorFee: operatorFeeSchema(t),
         amount: positiveAmountSchema({
           maxValue: totalAmountAvailable,
           t,
@@ -371,7 +410,7 @@ export const getDepositFormConfig = ({
           t,
           chainAmountMax: amountMax,
         }),
-        provider: z.string().optional(),
+        provider: bondProviderSchema({ t, chain, walletCore }),
       }),
     }),
     unbond_with_lp: () => ({

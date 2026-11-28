@@ -61,6 +61,78 @@ describe('generateMemo', () => {
     expect(memo).toBe(tronWithdrawExpireUnfreezeMemo)
   })
 
+  describe('THORChain bond', () => {
+    const bondMemo = (depositFormData: Record<string, unknown>) =>
+      generateMemo({
+        selectedChainAction: 'bond',
+        depositFormData: { nodeAddress: 'thor1node', ...depositFormData },
+        bondableAsset: 'THOR.RUNE',
+        chain: Chain.THORChain,
+        coin: runeCoin,
+      })
+
+    it.each([
+      { name: 'node only', input: {}, memo: 'BOND:thor1node' },
+      {
+        name: 'node + provider',
+        input: { provider: 'thor1provider' },
+        memo: 'BOND:thor1node:thor1provider',
+      },
+      {
+        name: 'node + provider + fee',
+        input: { provider: 'thor1provider', operatorFee: 500 },
+        memo: 'BOND:thor1node:thor1provider:500',
+      },
+      {
+        // #5342: the fee used to land in the provider slot
+        name: 'node + fee',
+        input: { operatorFee: 500 },
+        memo: 'BOND:thor1node::500',
+      },
+    ])('encodes $name', ({ input, memo }) => {
+      expect(bondMemo(input)).toBe(memo)
+    })
+
+    it('keeps the provider slot open when the provider field is empty', () => {
+      expect(bondMemo({ provider: '', operatorFee: 500 })).toBe(
+        'BOND:thor1node::500'
+      )
+    })
+
+    it('leaves a zero fee out, as iOS and Android do', () => {
+      expect(bondMemo({ operatorFee: 0 })).toBe('BOND:thor1node')
+      expect(bondMemo({ provider: 'thor1provider', operatorFee: 0 })).toBe(
+        'BOND:thor1node:thor1provider'
+      )
+    })
+
+    it('encodes the fee the Function form holds as a digit string', () => {
+      expect(bondMemo({ operatorFee: '500' })).toBe('BOND:thor1node::500')
+    })
+
+    it('treats the NaN of an empty DeFi fee input as no fee', () => {
+      expect(bondMemo({ provider: '', operatorFee: Number.NaN })).toBe(
+        'BOND:thor1node'
+      )
+    })
+  })
+
+  it('encodes a MayaChain LP bond as asset, units and node', () => {
+    const memo = generateMemo({
+      selectedChainAction: 'bond_with_lp',
+      depositFormData: { nodeAddress: 'maya1node', lpUnits: 1000 },
+      bondableAsset: 'BTC.BTC',
+      chain: Chain.MayaChain,
+      coin: {
+        chain: Chain.MayaChain,
+        ticker: 'CACAO',
+        decimals: 10,
+      } as AccountCoin,
+    })
+
+    expect(memo).toBe('BOND:BTC.BTC:1000:maya1node')
+  })
+
   describe('add_maya_lp', () => {
     const cacaoCoin = {
       chain: Chain.MayaChain,
