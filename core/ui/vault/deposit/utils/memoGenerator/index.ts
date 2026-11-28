@@ -16,6 +16,7 @@ import {
 } from '../../tron/withdrawExpireUnfreeze'
 import { MayaChainPool } from '../../types/mayaChain'
 import { sourceChannelByChain } from '../getDepositFormConfig'
+import { toOptionalNumber } from '../validationHelpers'
 
 type MemoParams = {
   selectedChainAction: ChainAction
@@ -25,6 +26,11 @@ type MemoParams = {
   coin: AccountCoin
 }
 
+/**
+ * Builds the memo a deposit-flow action signs. It runs on raw form values
+ * while the user is still typing (for the fee preview) as well as on the
+ * schema-parsed values after submit, so it has to tolerate both shapes.
+ */
 export const generateMemo = ({
   selectedChainAction,
   depositFormData,
@@ -126,23 +132,23 @@ export const generateMemo = ({
           )
         },
       }),
-    bond_with_lp: () => {
-      if (provider) {
-        return operatorFee
-          ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
-          : `BOND:${nodeAddress}:${provider}`
-      }
-      return `BOND:${bondableAsset}:${lpUnits}:${nodeAddress}`
-    },
+    bond_with_lp: () => `BOND:${bondableAsset}:${lpUnits}:${nodeAddress}`,
     bond: () => {
-      if (provider) {
-        return operatorFee
-          ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
-          : `BOND:${nodeAddress}:${provider}`
+      // The form hands over a number, a digit string or NaN depending on the
+      // input that produced it, so normalize before deciding.
+      const fee = toOptionalNumber(operatorFee)
+      // iOS and Android leave a zero fee out of the memo; match them.
+      const hasFee = fee !== undefined && fee !== 0
+
+      // THORChain reads BOND:<node>:<provider>:<fee> by position, so a fee
+      // without a provider keeps the provider slot open rather than letting
+      // the fee slide into it.
+      if (hasFee) {
+        return `BOND:${nodeAddress}:${provider ?? ''}:${fee}`
       }
 
-      return operatorFee
-        ? `BOND:${nodeAddress}:${operatorFee}`
+      return provider
+        ? `BOND:${nodeAddress}:${provider}`
         : `BOND:${nodeAddress}`
     },
     unbond_with_lp: () => `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`,
@@ -248,7 +254,7 @@ function extractFormValues(formData: FieldValues) {
     percentage: formData.percentage as number | null,
     affiliateFee: formData.affiliateFee as number | null,
     provider: formData.provider as string | null,
-    operatorFee: formData.operatorFee as string | null,
+    operatorFee: formData.operatorFee as number | string | undefined,
     destinationChain: formData.destinationChain as string | null,
     destinationChannel: formData.destinationChannel as string | null,
     coin: formData.coin as Coin | null,

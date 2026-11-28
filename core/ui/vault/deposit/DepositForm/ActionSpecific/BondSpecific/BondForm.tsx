@@ -328,14 +328,15 @@ export const BondForm = ({
                       ({t('basis_points')})
                     </Text>
                   </TertiaryLabel>
+                  {/* Text, not number: a number input reports unparseable
+                      entries such as `1e` as empty, which would drop the fee
+                      from the memo instead of failing validation. */}
                   <FilledTextInput
-                    onWheel={event => event.currentTarget.blur()}
                     validation={errors.operatorFee ? 'warning' : undefined}
-                    type="number"
-                    step="any"
-                    inputMode="decimal"
+                    type="text"
+                    inputMode="numeric"
                     placeholder={t('operator_fee')}
-                    {...register('operatorFee', { valueAsNumber: true })}
+                    {...register('operatorFee')}
                   />
                   {errors.operatorFee && (
                     <ErrorText color="danger" size={13}>

@@ -549,6 +549,7 @@ export const it = {
   invalid_email: 'Inserisci un indirizzo email valido',
   invalid_file_format: 'Formato file non valido',
   invalid_node_address: "L'indirizzo del nodo non è valido",
+  invalid_provider_address: "L'indirizzo del fornitore non è valido",
   incorrect_passcode: 'Codice di accesso errato.',
   invalid_passcode: 'Codice di accesso non valido',
   join_keygen: 'Unisciti a Keygen',
@@ -679,6 +680,8 @@ export const it = {
   onboarding_description_4:
     '{{productName}} è un wallet senza frase seed. Usa invece quote del vault facili da gestire. Ogni dispositivo ha la sua quota unica, che richiede un backup separato.',
   operator_fee: "Tariffa dell'operatore",
+  operator_fee_range_error:
+    "La tariffa dell'operatore deve essere un numero intero da 0 a 10000 punti base",
   basis_points: 'Punti base',
   optionalDevice: 'Dispositivo opzionale',
   other: 'Altro',

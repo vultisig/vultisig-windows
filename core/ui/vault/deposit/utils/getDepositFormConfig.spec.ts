@@ -5,6 +5,7 @@ import { TFunction } from 'i18next'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { getDepositFormConfig } from './getDepositFormConfig'
+import { generateMemo } from './memoGenerator'
 
 vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
   isValidAddress: vi.fn(),
@@ -190,5 +191,138 @@ describe('Ripple open trust line affordability', () => {
   it('does not block while the cost is still unknown', () => {
     // A pending quote must not gate the form on a figure it does not have.
     expect(parseTrustLine({ spendableXrp: 0 }).success).toBe(true)
+  })
+})
+
+describe('THORChain bond and unbond validation', () => {
+  const runeCoin: AccountCoin = {
+    chain: Chain.THORChain,
+    ticker: 'RUNE',
+    decimals: 8,
+    address: 'thor1sender',
+  }
+
+  beforeEach(() => {
+    vi.mocked(isValidAddress).mockReset()
+    vi.mocked(isValidAddress).mockImplementation(
+      ({ chain, address }) =>
+        chain === Chain.THORChain && address.startsWith('thor1')
+    )
+  })
+
+  const getSchema = (selectedChainAction: 'bond' | 'unbond') =>
+    getDepositFormConfig({
+      t,
+      coin: runeCoin,
+      walletCore: {} as any,
+      totalAmountAvailable: 10,
+      totalAmountAvailableUnits: null,
+      selectedChainAction,
+    }).schema
+
+  const parseBond = (input: Record<string, unknown>) =>
+    getSchema('bond').safeParse({
+      nodeAddress: 'thor1node',
+      amount: '1',
+      ...input,
+    })
+
+  const issueMessages = (result: ReturnType<typeof parseBond>) =>
+    result.error?.issues.map(issue => issue.message) ?? []
+
+  it('accepts a bond with no provider and no fee', () => {
+    expect(parseBond({}).success).toBe(true)
+  })
+
+  it.each([0, 1, 2000, 10000])('accepts an operator fee of %s', fee => {
+    expect(parseBond({ operatorFee: fee }).success).toBe(true)
+  })
+
+  it.each([-1, 10001, 12.5])('rejects an operator fee of %s', fee => {
+    const result = parseBond({ operatorFee: fee })
+
+    expect(result.success).toBe(false)
+    expect(issueMessages(result)).toEqual(['operator_fee_range_error'])
+  })
+
+  it('reads the Function form fee string as basis points', () => {
+    expect(parseBond({ operatorFee: '10000' }).success).toBe(true)
+    expect(issueMessages(parseBond({ operatorFee: '10001' }))).toEqual([
+      'operator_fee_range_error',
+    ])
+  })
+
+  // The bond form's fee is a text input, so partial entries a number input
+  // would have reported as empty reach the schema as typed.
+  it.each(['1e309', '-1e309', 'abc', '1e', '-', '.', Number.POSITIVE_INFINITY])(
+    'rejects a fee entry of %s instead of dropping it',
+    fee => {
+      expect(issueMessages(parseBond({ operatorFee: fee }))).toEqual([
+        'operator_fee_range_error',
+      ])
+    }
+  )
+
+  it('treats an empty fee input as no fee', () => {
+    expect(parseBond({ operatorFee: '' }).success).toBe(true)
+    expect(parseBond({ operatorFee: '  ' }).success).toBe(true)
+    expect(parseBond({ operatorFee: Number.NaN }).success).toBe(true)
+  })
+
+  it('accepts a THORChain provider address', () => {
+    expect(parseBond({ provider: 'thor1provider' }).success).toBe(true)
+    expect(isValidAddress).toHaveBeenCalledWith(
+      expect.objectContaining({
+        chain: Chain.THORChain,
+        address: 'thor1provider',
+      })
+    )
+  })
+
+  it('rejects a provider that is not a THORChain address', () => {
+    const result = parseBond({ provider: 'bc1qnotthor' })
+
+    expect(result.success).toBe(false)
+    expect(issueMessages(result)).toEqual(['invalid_provider_address'])
+  })
+
+  it('treats an empty provider as no provider', () => {
+    expect(parseBond({ provider: '' }).success).toBe(true)
+  })
+
+  it('validates the unbond provider the same way', () => {
+    const parseUnbond = (provider: string) =>
+      getSchema('unbond').safeParse({
+        nodeAddress: 'thor1node',
+        amount: '1',
+        provider,
+      })
+
+    expect(parseUnbond('thor1provider').success).toBe(true)
+    expect(parseUnbond('').success).toBe(true)
+    expect(
+      parseUnbond('bc1qnotthor').error?.issues.map(issue => issue.message)
+    ).toEqual(['invalid_provider_address'])
+  })
+
+  it('submits a fee-only bond as a memo with an empty provider slot', () => {
+    // The Function form holds raw strings; what it submits is the schema's
+    // parsed output, which is what the memo is built from.
+    const result = parseBond({ provider: '', operatorFee: '500' })
+    if (!result.success) throw result.error
+    const { data } = result
+    if (typeof data !== 'object' || data === null) {
+      throw new Error('Expected parsed bond form values')
+    }
+
+    const memo = generateMemo({
+      selectedChainAction: 'bond',
+      depositFormData: { ...data },
+      bondableAsset: 'THOR.RUNE',
+      chain: Chain.THORChain,
+      coin: runeCoin,
+    })
+
+    expect(memo).toBe('BOND:thor1node::500')
   })
 })

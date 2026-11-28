@@ -544,6 +544,7 @@ export const es = {
   invalid_email: 'Ingresa una dirección de correo electrónico válida',
   invalid_file_format: 'Formato de archivo no válido',
   invalid_node_address: 'La dirección del nodo no es válida',
+  invalid_provider_address: 'La dirección del proveedor no es válida',
   incorrect_passcode: 'Código de acceso incorrecto.',
   invalid_passcode: 'Código de acceso no válido',
   join_keygen: 'Unirse al Keygen',
@@ -675,6 +676,8 @@ export const es = {
   onboarding_description_4:
     '{{productName}} es una billetera sin frases semilla. En su lugar, usa fragmentos de bóveda fáciles de gestionar. Cada dispositivo tiene su propio fragmento, que necesita una copia de seguridad aparte.',
   operator_fee: 'Comisión del operador',
+  operator_fee_range_error:
+    'La comisión del operador debe ser un número entero de 0 a 10000 puntos básicos',
   basis_points: 'Puntos básicos',
   optionalDevice: 'Dispositivo opcional',
   other: 'Otro',

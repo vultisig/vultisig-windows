@@ -530,6 +530,7 @@ export const ko = {
   invalid_email: '유효한 이메일 주소를 입력하세요',
   invalid_file_format: '잘못된 파일 형식',
   invalid_node_address: '노드 주소가 올바르지 않습니다',
+  invalid_provider_address: '제공업체 주소가 올바르지 않습니다',
   incorrect_passcode: '패스코드가 올바르지 않습니다.',
   invalid_passcode: '잘못된 패스코드입니다',
   join_keygen: '키 생성 참여',
@@ -657,6 +658,8 @@ export const ko = {
   onboarding_description_4:
     '{{productName}}은(는) 시드 문구가 없는 지갑입니다. 대신 관리하기 쉬운 볼트 셰어를 사용합니다. 모든 기기는 고유한 볼트 셰어를 가지며, 각각 별도로 백업해야 합니다.',
   operator_fee: '운영자 수수료',
+  operator_fee_range_error:
+    '운영자 수수료는 0에서 10000 사이의 정수 베이시스 포인트여야 합니다',
   basis_points: '베이시스 포인트',
   optionalDevice: '선택 기기',
   other: '기타',

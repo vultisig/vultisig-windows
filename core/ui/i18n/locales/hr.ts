@@ -541,6 +541,7 @@ export const hr = {
   invalid_email: 'Molimo unesite važeću adresu e-pošte',
   invalid_file_format: 'Nevažeći format datoteke',
   invalid_node_address: 'Adresa čvora nije važeća',
+  invalid_provider_address: 'Adresa pružatelja usluga nije važeća',
   incorrect_passcode: 'Netočan pristupni kod.',
   invalid_passcode: 'Nevažeći pristupni kod',
   join_keygen: 'Pridružite se Keygenu',
@@ -672,6 +673,8 @@ export const hr = {
   onboarding_description_4:
     '{{productName}} je novčanik bez seed fraza. Umjesto njih koristi udjele trezora kojima se lako upravlja. Svaki uređaj ima svoj jedinstveni udio trezora za koji je potrebna zasebna sigurnosna kopija.',
   operator_fee: 'Naknada operatera',
+  operator_fee_range_error:
+    'Naknada operatera mora biti cijeli broj od 0 do 10000 baznih bodova',
   basis_points: 'Bazni bodovi',
   optionalDevice: 'Dodatni uređaj',
   other: 'Ostalo',

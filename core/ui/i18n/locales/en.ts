@@ -630,6 +630,7 @@ export const en = {
   invalid_email: 'Please enter a valid email address',
   invalid_file_format: 'Invalid File Format',
   invalid_node_address: 'Node Address is invalid',
+  invalid_provider_address: 'Provider Address is invalid',
   incorrect_passcode: 'Incorrect passcode.',
   invalid_passcode: 'Invalid passcode',
   join_keygen: 'Join Keygen',
@@ -796,6 +797,8 @@ export const en = {
   onboarding_description_4:
     '{{productName}} is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   operator_fee: "Operator's Fee",
+  operator_fee_range_error:
+    "Operator's Fee must be a whole number from 0 to 10000 basis points",
   basis_points: 'Basis Points',
   optionalDevice: 'Optional Device',
   other: 'Other',

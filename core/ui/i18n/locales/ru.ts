@@ -540,6 +540,7 @@ export const ru = {
   invalid_email: 'Введите корректный e-mail адрес',
   invalid_file_format: 'Неверный формат файла',
   invalid_node_address: 'Неверный адрес ноды',
+  invalid_provider_address: 'Неверный адрес провайдера',
   incorrect_passcode: 'Неверный код доступа.',
   invalid_passcode: 'Неверный пин-код',
   join_keygen: 'Присоединиться к Keygen',
@@ -670,6 +671,8 @@ export const ru = {
   onboarding_description_4:
     '{{productName}} — кошелёк без сид-фразы. Вместо неё используются удобные доли хранилища. У каждого устройства своя доля, и для каждой нужна отдельная резервная копия.',
   operator_fee: 'Комиссия оператора',
+  operator_fee_range_error:
+    'Комиссия оператора должна быть целым числом от 0 до 10000 базисных пунктов',
   basis_points: 'Базисные пункты',
   optionalDevice: 'Необязательное устройство',
   other: 'Другое',
