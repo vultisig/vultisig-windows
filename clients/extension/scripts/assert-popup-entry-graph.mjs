@@ -11,14 +11,10 @@ import { fileURLToPath } from 'node:url'
 // the SDK and the WalletCore glue moved behind loadMpcEngine / loadWalletCore
 // (the Vite build also rejects those two packages in the graph by module id);
 // raise the budget only for code that genuinely belongs on home. popup.html,
-// the dApp request window, shares the shell and so the budget.
-//
-// The Firefox build groups each package into one vendor chunk, which keeps
-// WalletCore on the static path through the core-mpc and core-chain chunks
-// (see vite.config.ts), so it gets its own, looser budget; it measured 11.2 MB
-// with WalletCore static and the SDK still loaded on demand.
+// the dApp request window, shares the shell and so the budget. The Firefox
+// app build splits the same way and holds the same budget.
 const isFirefoxBuild = process.env.VULTISIG_EXTENSION_TARGET === 'firefox'
-const maxEntryGraphBytes = (isFirefoxBuild ? 12 : 9) * 1024 * 1024
+const maxEntryGraphBytes = 9 * 1024 * 1024
 
 const brand = process.argv[2] ?? 'vultisig'
 const currentDir = path.dirname(fileURLToPath(import.meta.url))

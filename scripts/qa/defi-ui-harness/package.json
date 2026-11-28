@@ -19,7 +19,7 @@
     "styled-components": "6.4.4"
   },
   "devDependencies": {
-    "vite": "7.3.1",
+    "vite": "8.3.6",
     "vite-plugin-static-copy": "3.3.0",
     "vite-tsconfig-paths": "^6.1.1"
   }

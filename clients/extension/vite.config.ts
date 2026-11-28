@@ -252,8 +252,17 @@ export default defineConfig(async ({ mode }) => {
         break
     }
 
+    // In iife output Rolldown leaves a UMD module's `typeof require` guard as a
+    // runtime check instead of resolving it, as Rollup's CommonJS plugin did.
+    // A web page has no global `require`, so WalletCore's generated protos
+    // never export `TW` and the inpage script throws before injecting.
+    const inpageDefines =
+      chunk === 'inpage' && format === 'iife'
+        ? { 'typeof require': JSON.stringify('function') }
+        : {}
+
     return {
-      define: defines,
+      define: { ...defines, ...inpageDefines },
       resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [
         preserveDefineDataProperty(),
@@ -292,6 +301,14 @@ export default defineConfig(async ({ mode }) => {
             chunkFileNames: `assets/${chunk}-[name].js`,
             entryFileNames: '[name].js',
             format,
+            // Rolldown splits the worker into many statically imported chunks.
+            // The top-level-await wrapper then gates the entry body, including
+            // the push listeners, on those chunks' WASM init, and keeps a real
+            // import() for them, which a service worker rejects. One file keeps
+            // the listeners in the worker's first synchronous evaluation.
+            ...(chunk === 'background' && !isFirefoxBuild
+              ? { codeSplitting: false }
+              : {}),
             manualChunks: isFirefoxBuild
               ? (id: string) => getFirefoxManualChunk(chunk, id)
               : undefined,
@@ -318,11 +335,7 @@ export default defineConfig(async ({ mode }) => {
         viteStaticCopy({
           targets: getStaticCopyTargets(),
         }),
-        // The Firefox build keeps every module of a package in one vendor chunk,
-        // so the transaction builders in @vultisig/core-mpc and core-chain, which
-        // only lazy pages use, sit next to the modules home needs and drag
-        // WalletCore in statically. Only the Chromium build can hold this line.
-        ...(isFirefoxBuild ? [] : [assertFirstPaintEntryGraphs()]),
+        assertFirstPaintEntryGraphs(),
       ],
       build: {
         // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
@@ -342,9 +355,6 @@ export default defineConfig(async ({ mode }) => {
             assetFileNames: extensionAssetFileNames,
             chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
-            manualChunks: isFirefoxBuild
-              ? (id: string) => getFirefoxManualChunk('app', id)
-              : undefined,
           },
         },
       },
