@@ -2,6 +2,7 @@ import type {
   PolkadotSignerPayloadJSON,
   SubstrateChain,
 } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import { substrateGenesisHash } from '@core/ui/polkadot/dapp/substrateGenesisHash'
 import type { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -13,6 +14,7 @@ import type { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import type { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { Psbt } from 'bitcoinjs-lib'
@@ -33,15 +35,8 @@ type RegularTxData = IKeysignTransactionPayload & {
   coin: Coin
 }
 
-const bittensorGenesisHash =
-  '0x2f0555cc76fc2840a25a6ea3b9637146806f1f44b090c175ffde2a7e5ab36c03'
-const polkadotGenesisHash =
-  '0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3'
-
-const substrateChainByGenesisHash: Record<string, SubstrateChain> = {
-  [bittensorGenesisHash]: OtherChain.Bittensor,
-  [polkadotGenesisHash]: OtherChain.Polkadot,
-}
+const substrateChainByGenesisHash: Partial<Record<string, SubstrateChain>> =
+  mirrorRecord(substrateGenesisHash)
 
 const getSubstrateChain = (genesisHash: unknown): SubstrateChain => {
   if (typeof genesisHash !== 'string') {

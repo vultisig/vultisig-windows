@@ -1,7 +1,13 @@
 import { OtherChain } from '@vultisig/core-chain/Chain'
 
 /** The Substrate chains whose dApp signer payloads this app accepts. */
-export type SubstrateChain = OtherChain.Polkadot | OtherChain.Bittensor
+export const substrateChains = [
+  OtherChain.Polkadot,
+  OtherChain.Bittensor,
+] as const
+
+/** One of {@link substrateChains}. */
+export type SubstrateChain = (typeof substrateChains)[number]
 
 /**
  * Standard Polkadot signer payload for dApp transaction signing.

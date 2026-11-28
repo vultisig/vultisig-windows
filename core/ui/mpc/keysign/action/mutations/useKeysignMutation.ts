@@ -11,7 +11,10 @@ import {
 } from '@core/ui/mpc/keysign/customMessage/chains'
 import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
 import { getPolkadotSignedExtrinsicHash } from '@core/ui/polkadot/dapp/getPolkadotSignedExtrinsicHash'
-import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import {
+  PolkadotSignerPayloadJSON,
+  substrateChains,
+} from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import {
   buildQBTCSignDoc,
   buildQBTCSignedTxFromDirect,
@@ -20,7 +23,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { fromBase64 } from '@cosmjs/encoding'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { useMutation } from '@tanstack/react-query'
-import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
@@ -226,10 +229,7 @@ export const useKeysignMutation = ({
             }
 
             // Substrate dApp signPayload — bypass TW, sign raw payload
-            if (
-              isOneOf(chain, [OtherChain.Polkadot, OtherChain.Bittensor]) &&
-              payload.memo
-            ) {
+            if (isOneOf(chain, substrateChains) && payload.memo) {
               const parseResult = attempt(
                 () => JSON.parse(payload.memo!) as PolkadotSignerPayloadJSON
               )
@@ -240,8 +240,10 @@ export const useKeysignMutation = ({
                 parseResult.data.genesisHash
               ) {
                 const signerPayload = parseResult.data
-                const signingBytes =
-                  constructPolkadotSigningPayload(signerPayload)
+                const signingBytes = constructPolkadotSigningPayload({
+                  payload: signerPayload,
+                  chain,
+                })
                 const hexMessage = Buffer.from(signingBytes).toString('hex')
 
                 const signatureAlgorithm = getSignatureAlgorithm(chain)
