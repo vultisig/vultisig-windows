@@ -252,7 +252,9 @@ describe('THORChain bond and unbond validation', () => {
     ])
   })
 
-  it.each(['1e309', '-1e309', 'abc', Number.POSITIVE_INFINITY])(
+  // The bond form's fee is a text input, so partial entries a number input
+  // would have reported as empty reach the schema as typed.
+  it.each(['1e309', '-1e309', 'abc', '1e', '-', '.', Number.POSITIVE_INFINITY])(
     'rejects a fee entry of %s instead of dropping it',
     fee => {
       expect(issueMessages(parseBond({ operatorFee: fee }))).toEqual([
