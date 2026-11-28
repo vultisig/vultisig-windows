@@ -92,9 +92,9 @@ const validatorAddressSchema = (t: TFunction, chain: Chain) =>
 const maxOperatorFeeBasisPoints = 10_000
 
 // Unlike toOptionalNumber, a non-empty entry that is not a finite number
-// ('1e309', 'abc') is kept so the schema rejects it instead of silently
-// dropping the fee. Only an empty input (or the NaN a cleared number input
-// reports) means "no fee".
+// ('1e309', 'abc', '1e') is kept so the schema rejects it instead of silently
+// dropping the fee. Only an empty entry means "no fee". BondForm sends the
+// typed text; NaN is still read as empty for callers that set a number.
 const toOptionalOperatorFee = (value: unknown) => {
   if (value === undefined || value === null) return undefined
   if (typeof value === 'number') return Number.isNaN(value) ? undefined : value
