@@ -1,0 +1,112 @@
+diff --git a/dist/chains/ton/address.d.ts b/dist/chains/ton/address.d.ts
+index 0bad89ae0e42b25ae79ba559f9297e7b57ab5857..0b994e31028ba8dc7fa1e558335c51657bd01460 100644
+--- a/dist/chains/ton/address.d.ts
++++ b/dist/chains/ton/address.d.ts
+@@ -1,3 +1,5 @@
++/** Rejects testnet-only friendly destinations before mainnet address normalization. */
++export declare const assertTonMainnetAddress: (address: string) => void;
+ /**
+  * Converts a user-friendly TON address (EQ.../UQ...) to raw format (workchain:hex).
+  * The toncenter v3 API requires raw addresses.
+diff --git a/dist/chains/ton/address.js b/dist/chains/ton/address.js
+index e73daa806afd6d4c51a02e7df261f51da815f368..c50f3456f72e4c8fbed36f5895c8a7508d3c8277 100644
+--- a/dist/chains/ton/address.js
++++ b/dist/chains/ton/address.js
+@@ -1,6 +1,16 @@
+ import { Address } from '@ton/core';
+ import { attempt } from '@vultisig/lib-utils/attempt';
+ import { fromBase64 } from '@vultisig/lib-utils/fromBase64';
++/** Rejects testnet-only friendly destinations before mainnet address normalization. */
++export const assertTonMainnetAddress = (address) => {
++    // Raw spellings carry no network flag; retain the signer's existing syntax rules.
++    if (!Address.isFriendly(address))
++        return;
++    const parsed = Address.parseFriendly(address);
++    if (parsed.isTestOnly) {
++        throw new Error('A testnet-only TON address cannot be used on mainnet');
++    }
++};
+ /** Converts base64url encoding to standard base64 so `Buffer.from` can decode it. */
+ const fromBase64Url = (value) => {
+     const standardBase64 = value.replace(/-/g, '+').replace(/_/g, '/');
+@@ -11,6 +21,7 @@ const fromBase64Url = (value) => {
+  * The toncenter v3 API requires raw addresses.
+  */
+ export const tonAddressToRaw = (userFriendlyAddress) => {
++    assertTonMainnetAddress(userFriendlyAddress);
+     const decoded = fromBase64Url(userFriendlyAddress);
+     const workchain = decoded[1] >= 128 ? decoded[1] - 256 : decoded[1];
+     const hash = decoded.subarray(2, 34).toString('hex');
+@@ -25,6 +36,7 @@ export const tonAddressToRaw = (userFriendlyAddress) => {
+  * already in user-friendly form are returned re-encoded as bounceable.
+  */
+ export const tonAddressToBounceable = (address) => {
++    assertTonMainnetAddress(address);
+     const parsed = address.includes(':') ? Address.parseRaw(address) : Address.parse(address);
+     return parsed.toString({ bounceable: true, testOnly: false, urlSafe: true });
+ };
+diff --git a/dist/chains/ton/gasless/request.js b/dist/chains/ton/gasless/request.js
+index e26f7bd3840c78d94a2373f49b410330755ab6bd..44ac7c1133f03ea796e965a35f902869a197f199 100644
+--- a/dist/chains/ton/gasless/request.js
++++ b/dist/chains/ton/gasless/request.js
+@@ -1,5 +1,6 @@
+ import { Address, beginCell, Cell, external, internal, loadMessage, loadStateInit, SendMode, storeMessage, storeOutList, } from '@ton/core';
+ import { attempt } from '@vultisig/lib-utils/attempt';
++import { assertTonMainnetAddress } from '../address.js';
+ import { tonPayloadToBase64 } from '../messageBody/decode.js';
+ import { getTonMessageBounceable } from '../messageBounce.js';
+ import { tonV5R1WalletId } from '../walletV5R1.js';
+@@ -26,6 +27,7 @@ const cellFromPayload = (payload) => {
+  * every co-signer derives the same bit.
+  */
+ export const toTonGaslessInternalMessage = ({ to, amount, payload, stateInit, }) => {
++    assertTonMainnetAddress(to);
+     const stateInitCell = cellFromPayload(stateInit);
+     return internal({
+         to: Address.parse(to),
+diff --git a/dist/chains/ton/jetton/transferBody.js b/dist/chains/ton/jetton/transferBody.js
+index 82f506a94d4b00deb95f01e92d194af88caafe62..e5a2254c2d80d3133f4bae4f9c76e6d2e35efa8d 100644
+--- a/dist/chains/ton/jetton/transferBody.js
++++ b/dist/chains/ton/jetton/transferBody.js
+@@ -1,4 +1,5 @@
+ import { Address, beginCell } from '@ton/core';
++import { assertTonMainnetAddress } from '../address.js';
+ import { TonOp } from '../messageBody/opcodes.js';
+ /** The 32-bit zero opcode that opens a TON text comment. */
+ const textCommentOpcode = 0;
+@@ -9,6 +10,8 @@ const textCommentOpcode = 0;
+  * the cell; callers validate the length up front with `validateTonComment`.
+  */
+ export const buildTonJettonTransferBody = ({ amount, destination, responseDestination, forwardTonAmount, comment, queryId = 0n, }) => {
++    assertTonMainnetAddress(destination);
++    assertTonMainnetAddress(responseDestination);
+     const body = beginCell()
+         .storeUint(TonOp.JETTON_TRANSFER, 32)
+         .storeUint(queryId, 64)
+diff --git a/dist/utils/isValidAddress.js b/dist/utils/isValidAddress.js
+index e26d8936434306ba5d9fd6a7fff3d07146d77bbd..667f095695f316f40608896d4dc459ffe1175ab8 100644
+--- a/dist/utils/isValidAddress.js
++++ b/dist/utils/isValidAddress.js
+@@ -4,6 +4,7 @@ import { getCoinType } from '@vultisig/core-chain/coin/coinType';
+ import { isAddress } from 'viem';
+ import { isNearAccountId } from '../chains/near/accountId.js';
+ import { isValidRippleXAddress } from '../chains/ripple/address.js';
++import { assertTonMainnetAddress } from '../chains/ton/address.js';
+ import { decodeBech32 } from './decodeBech32.js';
+ import { hasUniformEvmAddressCase, isEvmHexAddress } from './getEvmChecksumMismatchHint.js';
+ export const isValidAddress = ({ chain, address, walletCore }) => {
+@@ -21,6 +22,14 @@ export const isValidAddress = ({ chain, address, walletCore }) => {
+     if (chain === Chain.Near) {
+         return isNearAccountId(address);
+     }
++    if (chain === Chain.Ton) {
++        try {
++            assertTonMainnetAddress(address);
++        }
++        catch {
++            return false;
++        }
++    }
+     const coinType = getCoinType({
+         walletCore,
+         chain,

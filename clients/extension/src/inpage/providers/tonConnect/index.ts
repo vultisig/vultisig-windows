@@ -22,6 +22,7 @@ import type {
 } from '@tonconnect/protocol'
 import { CHAIN } from '@tonconnect/protocol'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { assertTonMainnetAddress } from '@vultisig/core-chain/chains/ton/address'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
@@ -574,6 +575,12 @@ export class TonConnectBridge {
       if (!msg || typeof msg.address !== 'string' || !msg.address) {
         return getBadRequestError(
           `Message ${i + 1}: recipient address is required`
+        )
+      }
+      const addressResult = attempt(() => assertTonMainnetAddress(msg.address))
+      if ('error' in addressResult) {
+        return getBadRequestError(
+          `Message ${i + 1}: ${String(addressResult.error)}`
         )
       }
       if (typeof msg.amount !== 'string' || !msg.amount) {
